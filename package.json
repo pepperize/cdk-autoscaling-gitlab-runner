@@ -15,27 +15,31 @@
     "bump": "npx projen bump",
     "unbump": "npx projen unbump",
     "publish:github": "npx projen publish:github",
-    "upgrade": "npx projen upgrade",
-    "upgrade-projen": "npx projen upgrade-projen",
     "default": "npx projen default",
     "watch": "npx projen watch",
     "package": "npx projen package",
     "eslint": "npx projen eslint",
     "compat": "npx projen compat",
     "publish:npm": "npx projen publish:npm",
+    "publish:maven": "npx projen publish:maven",
+    "publish:pypi": "npx projen publish:pypi",
+    "publish:nuget": "npx projen publish:nuget",
+    "publish:golang": "npx projen publish:golang",
     "docgen": "npx projen docgen",
     "release": "npx projen release",
+    "upgrade": "npx projen upgrade",
+    "upgrade-projen": "npx projen upgrade-projen",
     "projen": "npx projen"
   },
   "author": {
     "name": "Ivan Ovdiienko",
-    "email": "johnny.unerty@gmail.com",
-    "organization": false
+    "email": "ivan.ovdiienko@pepperize.com",
+    "organization": "Pepperize"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.95.2",
+    "@aws-cdk/assert": "1.128.0",
     "@types/jest": "^27.0.2",
-    "@types/node": "^10.17.0",
+    "@types/node": "^14.17.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "eslint": "^8.0.1",
@@ -100,7 +104,7 @@
     "preset": "ts-jest",
     "globals": {
       "ts-jest": {
-        "tsconfig": "tsconfig.jest.json"
+        "tsconfig": "tsconfig.dev.json"
       }
     }
   },
@@ -108,7 +112,14 @@
   "stability": "stable",
   "jsii": {
     "outdir": "dist",
-    "targets": {},
+    "targets": {
+      "java": {
+        "maven": {}
+      },
+      "python": {},
+      "dotnet": {},
+      "go": {}
+    },
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"
