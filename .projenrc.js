@@ -20,25 +20,26 @@ const project = new AwsCdkConstructLibrary({
   release: {
     releaseEveryCommit: true,
   },
-  releaseToNpm: {
+  releaseToNpm: true,
+  a: {
     distTag: "latest",
     registry: "registry.npmjs.org",
   },
   publishToNuget: {
-    dotNetNamespace: "",
-    packageId: "",
+    dotNetNamespace: "Organization.Namespace",
+    packageId: "Package.Name",
   },
   publishToPypi: {
-    distName: "",
-    module: "",
+    distName: "<distribution-name>",
+    module: "<module_name>",
   },
   publishToMaven: {
-    javaPackage: "",
-    mavenGroupId: "",
-    mavenArtifactId: "",
+    javaPackage: "<your_java_package>",
+    mavenGroupId: "<your_package_group_id",
+    mavenArtifactId: "<your_package_target_id>",
   },
   publishToGo: {
-    moduleName: "",
+    moduleName: "github.com/owner/repo/subdir",
   },
   eslint: true,
   eslintOptions: {
