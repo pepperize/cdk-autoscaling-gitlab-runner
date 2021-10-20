@@ -1,4 +1,4 @@
-const { AwsCdkConstructLibrary, NodePackageManager, JsiiProject } = require('projen');
+const { AwsCdkConstructLibrary, NodePackageManager } = require('projen');
 
 const project = new AwsCdkConstructLibrary({
   author: 'Ivan Ovdiienko',
