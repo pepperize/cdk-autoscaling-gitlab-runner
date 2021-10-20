@@ -1,4 +1,5 @@
-const { AwsCdkConstructLibrary, NodePackageManager } = require('projen');
+const { AwsCdkConstructLibrary, NodePackageManager, JsiiProject } = require('projen');
+
 const project = new AwsCdkConstructLibrary({
   author: 'Ivan Ovdiienko',
   authorAddress: 'ivan.ovdiienko@pepperize.com',
@@ -28,5 +29,5 @@ const project = new AwsCdkConstructLibrary({
   publishToPypi: {},
   publishToMaven: {},
   publishToGo: {},
-});
+});x
 project.synth();
