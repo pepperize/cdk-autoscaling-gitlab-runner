@@ -29,7 +29,8 @@
     "release": "npx projen release",
     "upgrade": "npx projen upgrade",
     "upgrade-projen": "npx projen upgrade-projen",
-    "projen": "npx projen"
+    "projen": "npx projen",
+    "format": "prettier --write 'src/*.ts' '.projenrc.js' 'README.md'"
   },
   "author": {
     "name": "Ivan Ovdiienko",
@@ -43,9 +44,11 @@
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.3.1",
     "jest-junit": "^12",
     "jsii": "^1.39.0",
@@ -54,6 +57,7 @@
     "jsii-pacmak": "^1.39.0",
     "json-schema": "^0.3.0",
     "npm-check-updates": "^11",
+    "prettier": "^2.4.1",
     "projen": "^0.30.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.7",
@@ -114,11 +118,23 @@
     "outdir": "dist",
     "targets": {
       "java": {
-        "maven": {}
+        "package": "",
+        "maven": {
+          "groupId": "",
+          "artifactId": ""
+        }
       },
-      "python": {},
-      "dotnet": {},
-      "go": {}
+      "python": {
+        "distName": "",
+        "module": ""
+      },
+      "dotnet": {
+        "namespace": "",
+        "packageId": ""
+      },
+      "go": {
+        "moduleName": ""
+      }
     },
     "tsc": {
       "outDir": "lib",

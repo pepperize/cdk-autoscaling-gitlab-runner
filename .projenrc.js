@@ -1,14 +1,14 @@
-const { AwsCdkConstructLibrary, NodePackageManager } = require('projen');
+const { AwsCdkConstructLibrary, NodePackageManager } = require("projen");
 
 const project = new AwsCdkConstructLibrary({
-  author: 'Ivan Ovdiienko',
-  authorAddress: 'ivan.ovdiienko@pepperize.com',
+  author: "Ivan Ovdiienko",
+  authorAddress: "ivan.ovdiienko@pepperize.com",
   authorOrganization: "Pepperize",
-  cdkVersion: '1.128.0',
+  cdkVersion: "1.128.0",
   cdkVersionPinning: true,
-  defaultReleaseBranch: 'main',
-  name: 'cdk-gitlab-runner',
-  repositoryUrl: 'https://github.com/pepperize/cdk-gitlab-runner.git',
+  defaultReleaseBranch: "main",
+  name: "cdk-gitlab-runner",
+  repositoryUrl: "https://github.com/pepperize/cdk-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
 
   // cdkDependencies: undefined,      /* Which AWS CDK modules (those that start with "@aws-cdk/") does this library require when consumed? */
@@ -21,13 +21,32 @@ const project = new AwsCdkConstructLibrary({
     releaseEveryCommit: true,
   },
   releaseToNpm: {
-    distTag: 'latest',
-    npmTokenSecret: 'NPM_TOKEN', // Default: "NPM_TOKEN" or "GITHUB_TOKEN" if registry is set to npm.pkg.github.com.
-    registry: 'registry.npmjs.org',
+    distTag: "latest",
+    registry: "registry.npmjs.org",
   },
-  publishToNuget: {},
-  publishToPypi: {},
-  publishToMaven: {},
-  publishToGo: {},
+  publishToNuget: {
+    dotNetNamespace: "",
+    packageId: "",
+  },
+  publishToPypi: {
+    distName: "",
+    module: "",
+  },
+  publishToMaven: {
+    javaPackage: "",
+    mavenGroupId: "",
+    mavenArtifactId: "",
+  },
+  publishToGo: {
+    moduleName: "",
+  },
+  eslint: true,
+  eslintOptions: {
+    prettier: true,
+  },
 });
+project.setScript(
+  "format",
+  "prettier --write 'src/*.ts' '.projenrc.js' 'README.md'"
+);
 project.synth();

@@ -328,7 +328,7 @@
           "exec": "npm install"
         },
         {
-          "exec": "npm update @aws-cdk/assert @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates standard-version ts-jest typescript constructs"
+          "exec": "npm update @aws-cdk/assert @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates prettier standard-version ts-jest typescript constructs"
         },
         {
           "exec": "npx projen"
