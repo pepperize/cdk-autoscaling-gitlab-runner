@@ -29,5 +29,5 @@ const project = new AwsCdkConstructLibrary({
   publishToPypi: {},
   publishToMaven: {},
   publishToGo: {},
-});x
+});
 project.synth();
