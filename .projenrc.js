@@ -10,7 +10,11 @@ const project = new AwsCdkConstructLibrary({
   name: "cdk-gitlab-runner",
   repositoryUrl: "https://github.com/pepperize/cdk-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
-  cdkDependencies: ["@aws-cdk/aws-s3", "@aws-cdk/aws-ec2"],
+  cdkDependencies: [
+    "@aws-cdk/aws-s3",
+    "@aws-cdk/aws-s3-deployment",
+    "@aws-cdk/aws-ec2",
+  ],
   // deps: ["package-name", ...]
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */

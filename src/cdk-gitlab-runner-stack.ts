@@ -1,4 +1,9 @@
 import { IMachineImage, Instance, InstanceType, Vpc } from "@aws-cdk/aws-ec2";
+import { Bucket, BucketEncryption, LifecycleRule } from "@aws-cdk/aws-s3";
+import {
+  BucketDeployment,
+  ServerSideEncryption,
+} from "@aws-cdk/aws-s3-deployment";
 import { Construct, Stack, StackProps } from "@aws-cdk/core";
 
 export interface GitlabRunnerStackProps extends StackProps {
@@ -7,7 +12,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   machineImage: IMachineImage;
   /** These props come from "Parameters:" from runner.yml CFN template */
   cacheBucketName: string;
-  cacheExpirationInDays: any; // todo: Provide some type
+  cacheExpirationInDays: number;
   vpcId: any; // todo: Provide some type
   availabilityZone: any; // todo: Provide some type
   subnetId: any; // todo: Provide some type
@@ -31,13 +36,43 @@ export interface GitlabRunnerStackProps extends StackProps {
 }
 
 export class GitlabRunnerStack extends Stack {
+  private cacheBucketExpirationDate: Date;
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
 
-    new Instance(this, "GitlabRunnerInstance", {
+    const instance = new Instance(this, "GitlabRunnerInstance", {
       instanceType: new InstanceType(props.instanceTypeIdentifier),
       vpc: props.vpc,
       machineImage: props.machineImage,
     });
+
+    // Transformation cacheExpirationInDays --> expirationDate
+    const today = new Date();
+    const cacheBucketExpirationDate = new Date();
+    cacheBucketExpirationDate.setDate(
+      today.getDate() + props.cacheExpirationInDays
+    );
+
+    const cacheBucket = new Bucket(this, "GitlabRunnerCacheBucket", {
+      bucketName: props.cacheBucketName,
+      lifecycleRules: [
+        {
+          enabled: true,
+          expirationDate: cacheBucketExpirationDate,
+        },
+      ],
+      encryption: BucketEncryption.KMS,
+      bucketKeyEnabled: true,
+    });
+
+    const cacheBucketDeployment = new BucketDeployment(
+      this,
+      "GitlabRunnerCacheBucketDeployment",
+      {
+        sources: null, // todo: configure it
+        destinationBucket: cacheBucket,
+        serverSideEncryption: ServerSideEncryption.AES_256,
+      }
+    );
   }
 }

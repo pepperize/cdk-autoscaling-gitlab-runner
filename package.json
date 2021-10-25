@@ -66,11 +66,13 @@
   "peerDependencies": {
     "@aws-cdk/aws-ec2": "1.128.0",
     "@aws-cdk/aws-s3": "1.128.0",
+    "@aws-cdk/aws-s3-deployment": "1.128.0",
     "constructs": "^3.2.27"
   },
   "dependencies": {
     "@aws-cdk/aws-ec2": "1.128.0",
-    "@aws-cdk/aws-s3": "1.128.0"
+    "@aws-cdk/aws-s3": "1.128.0",
+    "@aws-cdk/aws-s3-deployment": "1.128.0"
   },
   "bundledDependencies": [],
   "keywords": [
