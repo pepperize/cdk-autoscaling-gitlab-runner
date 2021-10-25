@@ -15,33 +15,40 @@
     "bump": "npx projen bump",
     "unbump": "npx projen unbump",
     "publish:github": "npx projen publish:github",
-    "upgrade": "npx projen upgrade",
-    "upgrade-projen": "npx projen upgrade-projen",
     "default": "npx projen default",
     "watch": "npx projen watch",
     "package": "npx projen package",
     "eslint": "npx projen eslint",
     "compat": "npx projen compat",
     "publish:npm": "npx projen publish:npm",
+    "publish:maven": "npx projen publish:maven",
+    "publish:pypi": "npx projen publish:pypi",
+    "publish:nuget": "npx projen publish:nuget",
+    "publish:golang": "npx projen publish:golang",
     "docgen": "npx projen docgen",
     "release": "npx projen release",
-    "projen": "npx projen"
+    "upgrade": "npx projen upgrade",
+    "upgrade-projen": "npx projen upgrade-projen",
+    "projen": "npx projen",
+    "format": "prettier --write 'src/*.ts' '.projenrc.js' 'README.md'"
   },
   "author": {
     "name": "Ivan Ovdiienko",
-    "email": "johnny.unerty@gmail.com",
-    "organization": false
+    "email": "ivan.ovdiienko@pepperize.com",
+    "organization": "Pepperize"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.95.2",
+    "@aws-cdk/assert": "1.128.0",
     "@types/jest": "^27.0.2",
-    "@types/node": "^10.17.0",
+    "@types/node": "^14.17.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.3.1",
     "jest-junit": "^12",
     "jsii": "^1.39.0",
@@ -50,13 +57,20 @@
     "jsii-pacmak": "^1.39.0",
     "json-schema": "^0.3.0",
     "npm-check-updates": "^11",
+    "prettier": "^2.4.1",
     "projen": "^0.30.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.7",
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
+    "@aws-cdk/aws-ec2": "1.128.0",
+    "@aws-cdk/aws-s3": "1.128.0",
     "constructs": "^3.2.27"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-ec2": "1.128.0",
+    "@aws-cdk/aws-s3": "1.128.0"
   },
   "bundledDependencies": [],
   "keywords": [
@@ -100,7 +114,7 @@
     "preset": "ts-jest",
     "globals": {
       "ts-jest": {
-        "tsconfig": "tsconfig.jest.json"
+        "tsconfig": "tsconfig.dev.json"
       }
     }
   },
@@ -108,7 +122,26 @@
   "stability": "stable",
   "jsii": {
     "outdir": "dist",
-    "targets": {},
+    "targets": {
+      "java": {
+        "package": "<your_java_package>",
+        "maven": {
+          "groupId": "<your_package_group_id",
+          "artifactId": "<your_package_target_id>"
+        }
+      },
+      "python": {
+        "distName": "<distribution-name>",
+        "module": "<module_name>"
+      },
+      "dotnet": {
+        "namespace": "Organization.Namespace",
+        "packageId": "Package.Name"
+      },
+      "go": {
+        "moduleName": "github.com/owner/repo/subdir"
+      }
+    },
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"
