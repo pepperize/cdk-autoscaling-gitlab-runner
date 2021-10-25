@@ -40,24 +40,33 @@ export class GitlabRunnerStack extends Stack {
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
 
-    const instance = new Instance(this, "GitlabRunnerInstance", {
+    /** EC2 Configuration */
+    /* Manager instance */
+    const instance = new Instance(this, "GitlabRunnerInstance", { // todo: finish this
       instanceType: new InstanceType(props.instanceTypeIdentifier),
       vpc: props.vpc,
       machineImage: props.machineImage,
     });
+    /* Gitlab Runner instance */
+    // todo: implement this
+    
+    /** End EC2 Configuration */
 
-    // Transformation cacheExpirationInDays --> expirationDate
+    /** CacheBucket Configuration */
+    /* Transformation cacheExpirationInDays --> expirationDate */
     const today = new Date();
     const cacheBucketExpirationDate = new Date();
     cacheBucketExpirationDate.setDate(
       today.getDate() + props.cacheExpirationInDays
     );
 
+    const lifeCycleRuleEnabled = props.cacheExpirationInDays === 0;
+
     const cacheBucket = new Bucket(this, "GitlabRunnerCacheBucket", {
       bucketName: props.cacheBucketName,
       lifecycleRules: [
         {
-          enabled: true,
+          enabled: lifeCycleRuleEnabled,
           expirationDate: cacheBucketExpirationDate,
         },
       ],
@@ -74,5 +83,6 @@ export class GitlabRunnerStack extends Stack {
         serverSideEncryption: ServerSideEncryption.AES_256,
       }
     );
+    /** End CacheBucket Configuration */
   }
 }
