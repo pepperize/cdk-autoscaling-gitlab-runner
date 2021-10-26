@@ -39,27 +39,27 @@ export class GitlabRunnerStack extends Stack {
   private cacheBucketExpirationDate: Date;
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
-    
+
     /*
      * #############################
      * ### GitLab Runner Manager ###
      * #############################
-     * 
+     *
      * ManagerSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup'
-     * 
+     *
      * ManagerRole:
      * Type: 'AWS::IAM::Role'
-     * 
+     *
      * ManagerSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup'
-     * 
+     *
      * ManagerInstanceProfile:
      * Type: 'AWS::IAM::InstanceProfile'
-     * 
+     *
      * Manager:
      * Type: 'AWS::EC2::Instance'
-     * 
+     *
      * ManagerEIP:
      * Type: 'AWS::EC2::EIP'
      */
@@ -68,38 +68,36 @@ export class GitlabRunnerStack extends Stack {
      * ######################
      * ### GitLab Runners ###
      * ######################
-     * 
+     *
      * RunnersRole:
      * Type: 'AWS::IAM::Role'
-     * 
+     *
      * RunnersInstanceProfile:
      * Type: 'AWS::IAM::InstanceProfile'
-     * 
+     *
      * RunnersSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup'
      */
 
-
     /** EC2 Configuration */
     /* Manager instance */
-    const instance = new Instance(this, "Instance", { // todo: finish this
+    const instance = new Instance(this, "Instance", {
+      // todo: finish this
       instanceType: new InstanceType(props.instanceTypeIdentifier),
       vpc: props.vpc,
       machineImage: props.machineImage,
     });
 
     /*
-    * ####################################
-    * ### S3 Bucket for Runners' cache ###
-    * ####################################
-    */
-    
+     * ####################################
+     * ### S3 Bucket for Runners' cache ###
+     * ####################################
+     */
+
     /* Transformation cacheExpirationInDays into expirationDate */
     const today = new Date().getDate();
     const cacheBucketExpirationDate = new Date();
-    cacheBucketExpirationDate.setDate(
-      today + props.cacheExpirationInDays
-    );
+    cacheBucketExpirationDate.setDate(today + props.cacheExpirationInDays);
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. */
     const lifeCycleRuleEnabled = props.cacheExpirationInDays === 0;
