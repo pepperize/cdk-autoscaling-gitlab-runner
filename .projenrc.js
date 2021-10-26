@@ -14,6 +14,7 @@ const project = new AwsCdkConstructLibrary({
     "@aws-cdk/aws-s3",
     "@aws-cdk/aws-s3-deployment",
     "@aws-cdk/aws-ec2",
+    "@aws-cdk/aws-iam",
   ],
   // deps: ["package-name", ...]
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */

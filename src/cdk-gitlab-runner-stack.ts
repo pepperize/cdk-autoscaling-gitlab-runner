@@ -1,4 +1,19 @@
-import { IMachineImage, Instance, InstanceType, Vpc } from "@aws-cdk/aws-ec2";
+import {
+  IMachineImage,
+  Instance,
+  InstanceType,
+  Port,
+  Protocol,
+  SecurityGroup,
+  Vpc,
+} from "@aws-cdk/aws-ec2";
+import {
+  CfnInstanceProfile,
+  ManagedPolicy,
+  PolicyDocument,
+  Role,
+  ServicePrincipal,
+} from "@aws-cdk/aws-iam";
 import { Bucket, BucketEncryption, LifecycleRule } from "@aws-cdk/aws-s3";
 import {
   BucketDeployment,
@@ -13,26 +28,25 @@ export interface GitlabRunnerStackProps extends StackProps {
   /** These props come from "Parameters:" from runner.yml CFN template */
   cacheBucketName: string;
   cacheExpirationInDays: number;
-  vpcId: any; // todo: Provide some type
-  availabilityZone: any; // todo: Provide some type
-  subnetId: any; // todo: Provide some type
-  managerImageId: any; // todo: Provide some type
-  managerInstanceType: any; // todo: Provide some type
-  managerKeyPair: any; // todo: Provide some type
-  gitlabUrl: any; // todo: Provide some type
-  gitlabToken: any; // todo: Provide some type
-  gitlabRunnerInstanceType: any; // todo: Provide some type
-  gitlabDockerImage: any; // todo: Provide some type
-  gitlabMaxBuilds: any; // todo: Provide some type
-  gitlabMaxConcurrentBuilds: any; // todo: Provide some type
-  gitlabIdleCount: any; // todo: Provide some type
-  gitlabIdleTime: any; // todo: Provide some type
-  gitlabOffPeakTimezone: any; // todo: Provide some type
-  gitlabOffPeakIdleCount: any; // todo: Provide some type
-  gitlabOffPeakIdleTime: any; // todo: Provide some type
-  gitlabCheckInterval: any; // todo: Provide some type
-  gitlabRunnerSpotInstance: any; // todo: Provide some type
-  gitlabRunnerSpotInstancePrice: any; // todo: Provide some type
+  availabilityZone: any; // @TODO: Provide some type
+  subnetId: any; // @TODO: Provide some type
+  managerImageId: any; // @TODO: Provide some type
+  managerInstanceType: any; // @TODO: Provide some type
+  managerKeyPair: any; // @TODO: Provide some type
+  gitlabUrl: any; // @TODO: Provide some type
+  gitlabToken: any; // @TODO: Provide some type
+  gitlabRunnerInstanceType: any; // @TODO: Provide some type
+  gitlabDockerImage: any; // @TODO: Provide some type
+  gitlabMaxBuilds: any; // @TODO: Provide some type
+  gitlabMaxConcurrentBuilds: any; // @TODO: Provide some type
+  gitlabIdleCount: any; // @TODO: Provide some type
+  gitlabIdleTime: any; // @TODO: Provide some type
+  gitlabOffPeakTimezone: any; // @TODO: Provide some type
+  gitlabOffPeakIdleCount: any; // @TODO: Provide some type
+  gitlabOffPeakIdleTime: any; // @TODO: Provide some type
+  gitlabCheckInterval: any; // @TODO: Provide some type
+  gitlabRunnerSpotInstance: any; // @TODO: Provide some type
+  gitlabRunnerSpotInstancePrice: any; // @TODO: Provide some type
 }
 
 export class GitlabRunnerStack extends Stack {
@@ -44,23 +58,74 @@ export class GitlabRunnerStack extends Stack {
      * #############################
      * ### GitLab Runner Manager ###
      * #############################
-     *
+     */
+    /*
      * ManagerSecurityGroup:
-     * Type: 'AWS::EC2::SecurityGroup'
-     *
+     * Type: 'AWS::EC2::SecurityGroup
+     */
+    const managerSecurityGroup = new SecurityGroup(
+      this,
+      "ManagerSecurityGroup",
+      {
+        vpc: props.vpc,
+        securityGroupName: `${this.stackName}-ManagerSecurityGroup`,
+        description: "Security group for GitLab Runners Manager.",
+      }
+    );
+    managerSecurityGroup.addIngressRule(
+      null, // @TODO: Set this
+      new Port({
+        protocol: Protocol.TCP,
+        stringRepresentation: null, // @TODO: Set this
+        fromPort: 22,
+        toPort: 22,
+      }),
+      "SSH traffic"
+    );
+    /*
      * ManagerRole:
      * Type: 'AWS::IAM::Role'
-     *
-     * ManagerSecurityGroup:
-     * Type: 'AWS::EC2::SecurityGroup'
-     *
+     */
+    const managerRole = new Role(this, "ManagerRole", {
+      assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
+      managedPolicies: [
+        ManagedPolicy.fromManagedPolicyArn(
+          this,
+          "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM",
+          "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+        ),
+      ],
+      inlinePolicies: {
+        Cache: PolicyDocument.fromJson({}), // @TODO: Set this
+        Runners: PolicyDocument.fromJson({}), // @TODO: Set this
+      },
+    });
+
+    /*
      * ManagerInstanceProfile:
      * Type: 'AWS::IAM::InstanceProfile'
-     *
-     * Manager:
+     */
+    const managerInstanceProfile = new CfnInstanceProfile(
+      this,
+      "ManagerInstanceProfile",
+      {
+        roles: [managerRole.roleName],
+      }
+    );
+
+    /* Manager:
      * Type: 'AWS::EC2::Instance'
-     *
-     * ManagerEIP:
+     */
+    const instance = new Instance(this, "Instance", {
+      // @TODO: finish this, set the missing values
+      instanceType: new InstanceType(props.instanceTypeIdentifier),
+      vpc: props.vpc,
+      machineImage: props.machineImage,
+    });
+    instance.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
+    instance.instance.iamInstanceProfile =
+      managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
+    /* ManagerEIP:
      * Type: 'AWS::EC2::EIP'
      */
 
@@ -81,12 +146,6 @@ export class GitlabRunnerStack extends Stack {
 
     /** EC2 Configuration */
     /* Manager instance */
-    const instance = new Instance(this, "Instance", {
-      // todo: finish this
-      instanceType: new InstanceType(props.instanceTypeIdentifier),
-      vpc: props.vpc,
-      machineImage: props.machineImage,
-    });
 
     /*
      * ####################################
@@ -118,7 +177,7 @@ export class GitlabRunnerStack extends Stack {
       this,
       "GitlabRunnerCacheBucketDeployment",
       {
-        sources: null, // todo: configure it
+        sources: null, // @TODO: configure it
         destinationBucket: cacheBucket,
         serverSideEncryption: ServerSideEncryption.AES_256,
       }
