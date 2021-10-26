@@ -49,17 +49,18 @@ export class GitlabRunnerStack extends Stack {
     });
     /* Gitlab Runner instance */
     // todo: implement this
-    
+
     /** End EC2 Configuration */
 
     /** CacheBucket Configuration */
-    /* Transformation cacheExpirationInDays --> expirationDate */
-    const today = new Date();
+    /* Transformation cacheExpirationInDays into expirationDate */
+    const today = new Date().getDate();
     const cacheBucketExpirationDate = new Date();
     cacheBucketExpirationDate.setDate(
-      today.getDate() + props.cacheExpirationInDays
+      today + props.cacheExpirationInDays
     );
 
+    /* Enabled if not 0. If 0 - cache doesnt't expire. */
     const lifeCycleRuleEnabled = props.cacheExpirationInDays === 0;
 
     const cacheBucket = new Bucket(this, "GitlabRunnerCacheBucket", {
