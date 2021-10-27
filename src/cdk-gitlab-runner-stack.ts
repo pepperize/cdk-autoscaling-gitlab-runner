@@ -28,25 +28,25 @@ export interface GitlabRunnerStackProps extends StackProps {
   /** These props come from "Parameters:" from runner.yml CFN template */
   cacheBucketName: string;
   cacheExpirationInDays: number;
-  availabilityZone: any; // @TODO: Provide some type
-  subnetId: any; // @TODO: Provide some type
-  managerImageId: any; // @TODO: Provide some type
-  managerInstanceType: any; // @TODO: Provide some type
-  managerKeyPair: any; // @TODO: Provide some type
-  gitlabUrl: any; // @TODO: Provide some type
-  gitlabToken: any; // @TODO: Provide some type
-  gitlabRunnerInstanceType: any; // @TODO: Provide some type
-  gitlabDockerImage: any; // @TODO: Provide some type
-  gitlabMaxBuilds: any; // @TODO: Provide some type
-  gitlabMaxConcurrentBuilds: any; // @TODO: Provide some type
-  gitlabIdleCount: any; // @TODO: Provide some type
-  gitlabIdleTime: any; // @TODO: Provide some type
-  gitlabOffPeakTimezone: any; // @TODO: Provide some type
-  gitlabOffPeakIdleCount: any; // @TODO: Provide some type
-  gitlabOffPeakIdleTime: any; // @TODO: Provide some type
-  gitlabCheckInterval: any; // @TODO: Provide some type
-  gitlabRunnerSpotInstance: any; // @TODO: Provide some type
-  gitlabRunnerSpotInstancePrice: any; // @TODO: Provide some type
+  availabilityZone: any; // TODO: Provide some type
+  subnetId: any; // TODO: Provide some type
+  managerImageId: any; // TODO: Provide some type
+  managerInstanceType: any; // TODO: Provide some type
+  managerKeyPair: any; // TODO: Provide some type
+  gitlabUrl: any; // TODO: Provide some type
+  gitlabToken: any; // TODO: Provide some type
+  gitlabRunnerInstanceType: any; // TODO: Provide some type
+  gitlabDockerImage: any; // TODO: Provide some type
+  gitlabMaxBuilds: any; // TODO: Provide some type
+  gitlabMaxConcurrentBuilds: any; // TODO: Provide some type
+  gitlabIdleCount: any; // TODO: Provide some type
+  gitlabIdleTime: any; // TODO: Provide some type
+  gitlabOffPeakTimezone: any; // TODO: Provide some type
+  gitlabOffPeakIdleCount: any; // TODO: Provide some type
+  gitlabOffPeakIdleTime: any; // TODO: Provide some type
+  gitlabCheckInterval: any; // TODO: Provide some type
+  gitlabRunnerSpotInstance: any; // TODO: Provide some type
+  gitlabRunnerSpotInstancePrice: any; // TODO: Provide some type
 }
 
 export class GitlabRunnerStack extends Stack {
@@ -73,10 +73,10 @@ export class GitlabRunnerStack extends Stack {
       }
     );
     managerSecurityGroup.addIngressRule(
-      null, // @TODO: Set this
+      null, // TODO: Set this
       new Port({
         protocol: Protocol.TCP,
-        stringRepresentation: null, // @TODO: Set this
+        stringRepresentation: null, // TODO: Set this
         fromPort: 22,
         toPort: 22,
       }),
@@ -96,8 +96,8 @@ export class GitlabRunnerStack extends Stack {
         ),
       ],
       inlinePolicies: {
-        Cache: PolicyDocument.fromJson({}), // @TODO: Set this
-        Runners: PolicyDocument.fromJson({}), // @TODO: Set this
+        Cache: PolicyDocument.fromJson({}), // TODO: Set this
+        Runners: PolicyDocument.fromJson({}), // TODO: Set this
       },
     });
 
@@ -117,7 +117,7 @@ export class GitlabRunnerStack extends Stack {
      * Type: 'AWS::EC2::Instance'
      */
     const instance = new Instance(this, "Instance", {
-      // @TODO: finish this, set the missing values
+      // TODO: finish this, set the missing values
       instanceType: new InstanceType(props.instanceTypeIdentifier),
       vpc: props.vpc,
       machineImage: props.machineImage,
@@ -177,7 +177,7 @@ export class GitlabRunnerStack extends Stack {
       this,
       "GitlabRunnerCacheBucketDeployment",
       {
-        sources: null, // @TODO: configure it
+        sources: null, // TODO: configure it
         destinationBucket: cacheBucket,
         serverSideEncryption: ServerSideEncryption.AES_256,
       }
