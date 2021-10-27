@@ -3,6 +3,7 @@ import {
   IMachineImage,
   Instance,
   InstanceType,
+  Peer,
   Port,
   Protocol,
   SecurityGroup,
@@ -61,6 +62,7 @@ export class GitlabRunnerStack extends Stack {
      * ### GitLab Runner Manager ###
      * #############################
      */
+    
     /*
      * ManagerSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup
@@ -74,22 +76,20 @@ export class GitlabRunnerStack extends Stack {
         description: "Security group for GitLab Runners Manager.",
       }
     );
-    managerSecurityGroup.addIngressRule(
-      null, // TODO: Set this
-      new Port({
-        protocol: Protocol.TCP,
-        stringRepresentation: null, // TODO: Set this
-        fromPort: 22,
-        toPort: 22,
-      }),
+    managerSecurityGroup.connections.allowFrom(
+      Peer.ipv4('0.0.0.0/0'),
+      Port.tcp(22),
       "SSH traffic"
     );
+
     /*
      * ManagerRole:
      * Type: 'AWS::IAM::Role'
      */
+    const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
+
     const managerRole = new Role(this, "ManagerRole", {
-      assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
+      assumedBy: ec2ServicePrincipal,
       managedPolicies: [
         ManagedPolicy.fromManagedPolicyArn(
           this,
@@ -107,7 +107,7 @@ export class GitlabRunnerStack extends Stack {
      * ManagerInstanceProfile:
      * Type: 'AWS::IAM::InstanceProfile'
      */
-    const managerInstanceProfile = new CfnInstanceProfile(
+    const managerInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
       this,
       "ManagerInstanceProfile",
       {
@@ -127,10 +127,13 @@ export class GitlabRunnerStack extends Stack {
     manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
-    /* ManagerEIP:
+
+    /*
+     * ManagerEIP:
      * Type: 'AWS::EC2::EIP'
      */
-    const managerEip = new CfnEIP(this, "ManagerEIP", { // TODO: refactor this low level code
+    const managerEip = new CfnEIP(this, "ManagerEIP", {
+      // TODO: refactor this low level code
       domain: "vpc",
       instanceId: manager.instanceId,
     });
@@ -139,20 +142,46 @@ export class GitlabRunnerStack extends Stack {
      * ######################
      * ### GitLab Runners ###
      * ######################
-     *
+     */
+
+    /*
      * RunnersRole:
      * Type: 'AWS::IAM::Role'
-     *
+     */
+
+    const runnersRole = new Role(this, "RunnersRole", {
+      assumedBy: ec2ServicePrincipal,
+    });
+
+    /*
      * RunnersInstanceProfile:
      * Type: 'AWS::IAM::InstanceProfile'
-     *
+     */
+    const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
+      this,
+      "RunnersInstanceProfile",
+      {
+        roles: [runnersRole.roleName],
+      }
+    );
+
+    /*
      * RunnersSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup'
      */
+    const runnersSecurityGroup = SecurityGroup.fromSecurityGroupId(this, "RunnersSecurityGroup", managerSecurityGroup.securityGroupId);
 
-    /** EC2 Configuration */
-    /* Manager instance */
-
+    runnersSecurityGroup.connections.allowFrom(
+      Peer.anyIpv4(),
+      Port.tcp(22),
+      "SSH traffic from Manager",
+    );
+    runnersSecurityGroup.connections.allowFrom(
+      Peer.anyIpv4(),
+      Port.tcp(2376),
+      "SSH traffic from Docker"
+    );
+    
     /*
      * ####################################
      * ### S3 Bucket for Runners' cache ###
