@@ -3,6 +3,7 @@ import {
   IMachineImage,
   Instance,
   InstanceType,
+  MultipartUserData,
   Peer,
   Port,
   Protocol,
@@ -62,7 +63,7 @@ export class GitlabRunnerStack extends Stack {
      * ### GitLab Runner Manager ###
      * #############################
      */
-    
+
     /*
      * ManagerSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup
@@ -72,12 +73,11 @@ export class GitlabRunnerStack extends Stack {
       "ManagerSecurityGroup",
       {
         vpc: props.vpc,
-        securityGroupName: `${this.stackName}-ManagerSecurityGroup`,
         description: "Security group for GitLab Runners Manager.",
       }
     );
     managerSecurityGroup.connections.allowFrom(
-      Peer.ipv4('0.0.0.0/0'),
+      Peer.ipv4("0.0.0.0/0"),
       Port.tcp(22),
       "SSH traffic"
     );
@@ -118,11 +118,19 @@ export class GitlabRunnerStack extends Stack {
     /* Manager:
      * Type: 'AWS::EC2::Instance'
      */
+    const userData = new MultipartUserData({});
+    userData.addCommands(
+      "yum update -y aws-cfn-bootstrap", // !/bin/bash -xe
+      "/opt/aws/bin/cfn-init --stack '${AWS::StackName}' --region '${AWS::Region}' --resource Manager --configsets default", // Install the files and packages from the metadata
+      "/opt/aws/bin/cfn-signal -e $? --stack '${AWS::StackName}' --region '${AWS::Region}' --resource Manager" // Signal the status from cfn-init
+    );
+
     const manager = new Instance(this, "Instance", {
       // TODO: finish this, set the missing values
       instanceType: new InstanceType(props.instanceTypeIdentifier),
       vpc: props.vpc,
       machineImage: props.machineImage,
+      userData: userData,
     });
     manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
     manager.instance.iamInstanceProfile =
@@ -169,19 +177,23 @@ export class GitlabRunnerStack extends Stack {
      * RunnersSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup'
      */
-    const runnersSecurityGroup = SecurityGroup.fromSecurityGroupId(this, "RunnersSecurityGroup", managerSecurityGroup.securityGroupId);
+    const runnersSecurityGroup = SecurityGroup.fromSecurityGroupId(
+      this,
+      "RunnersSecurityGroup",
+      managerSecurityGroup.securityGroupId
+    );
 
     runnersSecurityGroup.connections.allowFrom(
       Peer.anyIpv4(),
       Port.tcp(22),
-      "SSH traffic from Manager",
+      "SSH traffic from Manager"
     );
     runnersSecurityGroup.connections.allowFrom(
       Peer.anyIpv4(),
       Port.tcp(2376),
       "SSH traffic from Docker"
     );
-    
+
     /*
      * ####################################
      * ### S3 Bucket for Runners' cache ###
