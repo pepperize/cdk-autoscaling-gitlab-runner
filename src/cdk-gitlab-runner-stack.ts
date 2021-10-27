@@ -1,4 +1,5 @@
 import {
+  CfnEIP,
   IMachineImage,
   Instance,
   InstanceType,
@@ -20,6 +21,7 @@ import {
   ServerSideEncryption,
 } from "@aws-cdk/aws-s3-deployment";
 import { Construct, Stack, StackProps } from "@aws-cdk/core";
+import { Domain } from "domain";
 
 export interface GitlabRunnerStackProps extends StackProps {
   instanceTypeIdentifier: string;
@@ -116,18 +118,22 @@ export class GitlabRunnerStack extends Stack {
     /* Manager:
      * Type: 'AWS::EC2::Instance'
      */
-    const instance = new Instance(this, "Instance", {
+    const manager = new Instance(this, "Instance", {
       // TODO: finish this, set the missing values
       instanceType: new InstanceType(props.instanceTypeIdentifier),
       vpc: props.vpc,
       machineImage: props.machineImage,
     });
-    instance.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
-    instance.instance.iamInstanceProfile =
+    manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
+    manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
     /* ManagerEIP:
      * Type: 'AWS::EC2::EIP'
      */
+    const managerEip = new CfnEIP(this, "ManagerEIP", { // TODO: refactor this low level code
+      domain: "vpc",
+      instanceId: manager.instanceId,
+    });
 
     /*
      * ######################
