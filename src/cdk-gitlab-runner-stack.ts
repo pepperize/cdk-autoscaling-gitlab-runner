@@ -120,9 +120,9 @@ export class GitlabRunnerStack extends Stack {
      */
     const userData = new MultipartUserData({});
     userData.addCommands(
-      "yum update -y aws-cfn-bootstrap", // !/bin/bash -xe
-      "/opt/aws/bin/cfn-init --stack '${AWS::StackName}' --region '${AWS::Region}' --resource Manager --configsets default", // Install the files and packages from the metadata
-      "/opt/aws/bin/cfn-signal -e $? --stack '${AWS::StackName}' --region '${AWS::Region}' --resource Manager" // Signal the status from cfn-init
+      `yum update -y aws-cfn-bootstrap`, // !/bin/bash -xe
+      `/opt/aws/bin/cfn-init --stack '${this.stackName}' --region '${this.region}' --resource Manager --configsets default`, // Install the files and packages from the metadata
+      `/opt/aws/bin/cfn-signal -e $? --stack '${this.region}' --region '${this.region}' --resource Manager` // Signal the status from cfn-init
     );
 
     const manager = new Instance(this, "Instance", {
