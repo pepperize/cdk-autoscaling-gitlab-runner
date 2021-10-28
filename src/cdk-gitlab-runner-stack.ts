@@ -1,6 +1,7 @@
 import {
   CfnEIP,
   IMachineImage,
+  InitFile,
   Instance,
   InstanceType,
   MultipartUserData,
@@ -141,6 +142,8 @@ export class GitlabRunnerStack extends Stack {
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
     // manager.node.addMetadata(); TODO: add metadata
     // manager.instance.addDependsOn(runnersSecurityGroup); // TODO: maybe remove it because we already have securityGroup configured
+
+    // const init... = new Init...(); // TODO: discover Init resources
 
     /*
      * ManagerEIP:
