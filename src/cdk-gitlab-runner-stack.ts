@@ -153,7 +153,7 @@ export class GitlabRunnerStack extends Stack {
     // const init... = new Init...(); // TODO: discover Init resources
 
     const initConfig = new InitConfig([
-      // Probably it should create files instead of reading them
+      // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
       InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", {
         // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
         owner: "gitlab-runner",
