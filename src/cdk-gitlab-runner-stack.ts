@@ -131,10 +131,16 @@ export class GitlabRunnerStack extends Stack {
       vpc: props.vpc,
       machineImage: props.machineImage,
       userData: userData,
+      // keyName: props.managerKeyPair, // TODO: set type in props
+      // IamInstanceProfile: // TODO: set this
+      securityGroup: managerSecurityGroup,
+      // SubnetId: // TODO: maybe remove because we already have vpc
     });
     manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
+    // manager.node.addMetadata(); TODO: add metadata
+    // manager.instance.addDependsOn(runnersSecurityGroup); // TODO: maybe remove it because we already have securityGroup configured
 
     /*
      * ManagerEIP:
