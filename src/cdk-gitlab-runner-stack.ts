@@ -9,6 +9,8 @@ import {
   Port,
   Protocol,
   SecurityGroup,
+  SubnetSelection,
+  SubnetType,
   Vpc,
 } from "@aws-cdk/aws-ec2";
 import {
@@ -34,7 +36,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   cacheBucketName: string;
   cacheExpirationInDays: number;
   availabilityZone: any; // TODO: Provide some type
-  subnetId: any; // TODO: Provide some type
+  vpcSubnet: SubnetSelection;
   managerImageId: any; // TODO: Provide some type
   managerInstanceType: any; // TODO: Provide some type
   managerKeyPair: any; // TODO: Provide some type
@@ -135,7 +137,9 @@ export class GitlabRunnerStack extends Stack {
       // keyName: props.managerKeyPair, // TODO: set type in props
       // IamInstanceProfile: // TODO: set this
       securityGroup: managerSecurityGroup,
-      // SubnetId: // TODO: maybe remove because we already have vpc
+      vpcSubnets: props.vpcSubnet ?? {
+        subnetType: SubnetType.PUBLIC,
+      },
     });
     manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
     manager.instance.iamInstanceProfile =
