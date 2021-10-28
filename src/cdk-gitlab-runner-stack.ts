@@ -153,12 +153,12 @@ export class GitlabRunnerStack extends Stack {
     // const init... = new Init...(); // TODO: discover Init resources
 
     const initConfig = new InitConfig([
-      InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", { // TODO: Provide configuration // TODO: ecide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
+      InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", { // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
         owner: "gitlab-runner",
         group: "gitlab-runner",
         mode: "000600",
       }),
-      InitFile.fromAsset("25-gitlab-runner.conf", "/etc/rsyslog.d/", { // TODO: Provide configuration // TODO: ecide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
+      InitFile.fromAsset("25-gitlab-runner.conf", "/etc/rsyslog.d/", { // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
         owner: "root",
         group: "root",
         mode: "000644",
