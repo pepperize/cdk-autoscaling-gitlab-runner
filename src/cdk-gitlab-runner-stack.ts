@@ -134,7 +134,7 @@ export class GitlabRunnerStack extends Stack {
       vpc: props.vpc,
       machineImage: props.machineImage,
       userData: userData,
-      // keyName: props.managerKeyPair, // TODO: set type in props
+      keyName: props.managerKeyPair, // TODO: set type in props
       // IamInstanceProfile: // TODO: set this
       securityGroup: managerSecurityGroup,
       vpcSubnets: props.vpcSubnet ?? {
