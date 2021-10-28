@@ -1,7 +1,11 @@
 import {
   CfnEIP,
   IMachineImage,
+  InitConfig,
+  InitElement,
   InitFile,
+  InitService,
+  InitServiceRestartHandle,
   Instance,
   InstanceType,
   MultipartUserData,
@@ -147,6 +151,29 @@ export class GitlabRunnerStack extends Stack {
     // manager.instance.addDependsOn(runnersSecurityGroup); // TODO: maybe remove it because we already have securityGroup configured
 
     // const init... = new Init...(); // TODO: discover Init resources
+
+    const initConfig = new InitConfig([
+      InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", { // TODO: Provide configuration
+        owner: "gitlab-runner",
+        group: "gitlab-runner",
+        mode: "000600",
+      }),
+      InitFile.fromAsset("25-gitlab-runner.conf", "/etc/rsyslog.d/", { // TODO: Provide configuration
+        owner: "root",
+        group: "root",
+        mode: "000644",
+      }),
+      InitService.enable("gitlab-runner", {
+        ensureRunning: true,
+        enabled: true,
+        // files: ['/etc/gitlab-runner/config.toml']
+      }),
+      InitService.enable("gitlab-runner", {
+        ensureRunning: true,
+        enabled: true,
+        // files: ['/etc/rsyslog.d/25-gitlab-runner.conf']
+      }),
+    ]);
 
     /*
      * ManagerEIP:
