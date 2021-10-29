@@ -149,7 +149,7 @@ export class GitlabRunnerStack extends Stack {
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
 
-    // const init... = new Init...(); // TODO: discover Init resources // ImplementConfigSets
+    // const init... = new Init...(); // ImplementConfigSets
 
     new InitConfigSe
 
