@@ -4,6 +4,7 @@ import {
   InitConfig,
   InitElement,
   InitFile,
+  InitPackage,
   InitService,
   InitServiceRestartHandle,
   Instance,
@@ -149,6 +150,10 @@ export class GitlabRunnerStack extends Stack {
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
 
     // const init... = new Init...(); // TODO: discover Init resources
+
+
+    const initPackages: Array<InitPackage> = [InitPackage.yum("docker"), InitPackage.yum("gitlab-runner"), InitPackage.yum("tzdata")];
+
 
     const initConfig = new InitConfig([
       // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
