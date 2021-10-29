@@ -153,7 +153,7 @@ export class GitlabRunnerStack extends Stack {
 
 
     const initPackages: Array<InitPackage> = [InitPackage.yum("docker"), InitPackage.yum("gitlab-runner"), InitPackage.yum("tzdata")];
-
+    manager.node.addMetadata("packages", initPackages); // Attach initPackages to metadata
 
     const initConfig = new InitConfig([
       // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
@@ -181,7 +181,7 @@ export class GitlabRunnerStack extends Stack {
       }),
     ]);
 
-    manager.node.addMetadata("config", initConfig); // Attach metadata
+    manager.node.addMetadata("config", initConfig); // Attach initConfig to metadata
 
     /*
      * ManagerEIP:
