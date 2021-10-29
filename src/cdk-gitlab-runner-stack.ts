@@ -28,6 +28,7 @@ import { Bucket, BucketEncryption, LifecycleRule } from "@aws-cdk/aws-s3";
 import {
   BucketDeployment,
   ServerSideEncryption,
+  Source,
 } from "@aws-cdk/aws-s3-deployment";
 import { Construct, Stack, StackProps } from "@aws-cdk/core";
 import { Domain } from "domain";
@@ -61,7 +62,6 @@ export interface GitlabRunnerStackProps extends StackProps {
 }
 
 export class GitlabRunnerStack extends Stack {
-  private cacheBucketExpirationDate: Date;
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
 
@@ -176,7 +176,7 @@ export class GitlabRunnerStack extends Stack {
       }),
     ]);
 
-    manager.node.addMetadata("d", initConfig); // Attach metadata
+    manager.node.addMetadata("config", initConfig); // Attach metadata
 
     /*
      * ManagerEIP:
@@ -266,7 +266,7 @@ export class GitlabRunnerStack extends Stack {
       this,
       "GitlabRunnerCacheBucketDeployment",
       {
-        sources: null, // TODO: configure it
+        sources: [Source.asset], // TODO: configure it
         destinationBucket: cacheBucket,
         serverSideEncryption: ServerSideEncryption.AES_256,
       }
