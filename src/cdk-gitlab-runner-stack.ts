@@ -149,7 +149,9 @@ export class GitlabRunnerStack extends Stack {
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
 
-    // const init... = new Init...(); // TODO: discover Init resources
+    // const init... = new Init...(); // TODO: discover Init resources // ImplementConfigSets
+
+    new InitConfigSe
 
 
     const initPackages: Array<InitPackage> = [InitPackage.yum("docker"), InitPackage.yum("gitlab-runner"), InitPackage.yum("tzdata")];
@@ -182,6 +184,8 @@ export class GitlabRunnerStack extends Stack {
     ]);
 
     manager.node.addMetadata("config", initConfig); // Attach initConfig to metadata
+
+    
 
     /*
      * ManagerEIP:
