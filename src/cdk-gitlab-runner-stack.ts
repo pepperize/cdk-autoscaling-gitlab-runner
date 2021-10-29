@@ -147,8 +147,6 @@ export class GitlabRunnerStack extends Stack {
     manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
-    // manager.node.addMetadata(); TODO: add metadata
-    // manager.instance.addDependsOn(runnersSecurityGroup); // TODO: maybe remove it because we already have securityGroup configured
 
     // const init... = new Init...(); // TODO: discover Init resources
 
@@ -177,6 +175,8 @@ export class GitlabRunnerStack extends Stack {
         // files: ['/etc/rsyslog.d/25-gitlab-runner.conf']
       }),
     ]);
+
+    manager.node.addMetadata("d", initConfig); // Attach metadata
 
     /*
      * ManagerEIP:
