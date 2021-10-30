@@ -1,6 +1,8 @@
 import {
   CfnEIP,
+  CloudFormationInit,
   IMachineImage,
+  InitCommand,
   InitConfig,
   InitElement,
   InitFile,
@@ -149,14 +151,28 @@ export class GitlabRunnerStack extends Stack {
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
 
-    // const init... = new Init...(); // ImplementConfigSets
 
-    new InitConfigSe
+    const metadata = CloudFormationInit.fromConfigSets({
+      configSets: {
+        "install": ["reposritories", "packages"],
+      },
+      configs: {
+        "repositories": new InitConfig([
+          InitCommand.shellCommand("curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash"),
+        ]),
+        "packages": new InitConfig([
+          InitPackage.yum("docker"),
+          InitPackage.yum("gitlab-runner"),
+          InitPackage.yum("tzdata"),
+        ]),
+      },
+    });
 
+    const tenGitlabRunner = InitCommand.shellCommand("curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash"); // Line 774: 10-gitlab-runner
 
     const initPackages: Array<InitPackage> = [InitPackage.yum("docker"), InitPackage.yum("gitlab-runner"), InitPackage.yum("tzdata")];
-    manager.node.addMetadata("packages", initPackages); // Attach initPackages to metadata
 
+    
     const initConfig = new InitConfig([
       // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
       InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", {
@@ -183,9 +199,9 @@ export class GitlabRunnerStack extends Stack {
       }),
     ]);
 
-    manager.node.addMetadata("config", initConfig); // Attach initConfig to metadata
+    // const init... = new Init...(); // ImplementConfigSets
 
-    
+    const initConfigSets: Array<InitElement> = [];
 
     /*
      * ManagerEIP:
