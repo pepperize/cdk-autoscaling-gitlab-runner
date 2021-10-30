@@ -1,4 +1,8 @@
-const { AwsCdkConstructLibrary, NodePackageManager, AwsCdkTypeScriptApp } = require("projen");
+const {
+  AwsCdkConstructLibrary,
+  NodePackageManager,
+  AwsCdkTypeScriptApp,
+} = require("projen");
 
 const project = new AwsCdkTypeScriptApp({
   authorName: "Ivan Ovdiienko",

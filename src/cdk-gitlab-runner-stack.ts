@@ -151,28 +151,40 @@ export class GitlabRunnerStack extends Stack {
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
 
-
     const metadata = CloudFormationInit.fromConfigSets({
       configSets: {
-        "install": ["reposritories", "packages"],
+        install: ["reposritories", "packages"],
       },
       configs: {
-        "repositories": new InitConfig([
-          InitCommand.shellCommand("curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash"),
+        repositories: new InitConfig([
+          InitCommand.shellCommand(
+            "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash"
+          ),
         ]),
-        "packages": new InitConfig([
+        packages: new InitConfig([
           InitPackage.yum("docker"),
           InitPackage.yum("gitlab-runner"),
           InitPackage.yum("tzdata"),
+          InitFile.fromString(
+            "/etc/cfn/cfn-hup.conf",
+            `[main]\nstack=${this.stackName}\nregion=${this.region}`,
+            { owner: "root", group: "root", mode: "root" }
+          ),
         ]),
+        config: new InitConfig([]),
       },
     });
 
-    const tenGitlabRunner = InitCommand.shellCommand("curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash"); // Line 774: 10-gitlab-runner
+    const tenGitlabRunner = InitCommand.shellCommand(
+      "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash"
+    ); // Line 774: 10-gitlab-runner
 
-    const initPackages: Array<InitPackage> = [InitPackage.yum("docker"), InitPackage.yum("gitlab-runner"), InitPackage.yum("tzdata")];
+    const initPackages: Array<InitPackage> = [
+      InitPackage.yum("docker"),
+      InitPackage.yum("gitlab-runner"),
+      InitPackage.yum("tzdata"),
+    ];
 
-    
     const initConfig = new InitConfig([
       // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
       InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", {
