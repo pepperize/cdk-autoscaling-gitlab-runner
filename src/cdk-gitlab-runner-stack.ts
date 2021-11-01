@@ -125,6 +125,27 @@ export class GitlabRunnerStack extends Stack {
       }
     );
 
+    /*
+     * RunnersRole:
+     * Type: 'AWS::IAM::Role'
+     */
+
+    const runnersRole = new Role(this, "RunnersRole", {
+      assumedBy: ec2ServicePrincipal,
+    });
+
+    /*
+     * RunnersInstanceProfile:
+     * Type: 'AWS::IAM::InstanceProfile'
+     */
+    const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
+      this,
+      "RunnersInstanceProfile",
+      {
+        roles: [runnersRole.roleName],
+      }
+    );
+
     /* Manager:
      * Type: 'AWS::EC2::Instance'
      */
@@ -203,8 +224,58 @@ export class GitlabRunnerStack extends Stack {
         ]),
         config: new InitConfig([
           // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
-          InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", {
-            // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
+          InitFile.fromString(
+            "/etc/gitlab-runner/config.toml", 
+            `
+            concurrent = ${props.gitlabMaxBuilds}
+            check_interval = ${props.gitlabCheckInterval}
+            [[runners]]
+              name = "${this.stackName}"
+              url = "${props.gitlabUrl}"
+              token = "${props.gitlabToken}"
+              executor = "docker+machine"
+              environment = [
+                "DOCKER_DRIVER=overlay2",
+                "DOCKER_TLS_CERTDIR=/certs"
+              ]
+              [runners.docker]
+                tls_verify = false
+                image = "${props.gitlabDockerImage}"
+                privileged = true
+                disable_cache = false
+                volumes = ["/certs/client", "/cache"]
+                shm_size = 0
+              [runners.cache]
+                Type = "s3"
+                Shared = true
+              [runners.cache.s3]
+                ServerAddress = "s3.${this.urlSuffix}"
+                BucketName = "${props.cacheBucketName}"
+                BucketLocation = "${this.region}"
+              [runners.machine]
+                IdleCount = ${props.gitlabIdleCount}
+                IdleTime = ${props.gitlabIdleTime}
+                MaxBuilds = ${props.gitlabMaxBuilds}
+                MachineDriver = "amazonec2"
+                MachineName = "gitlab-docker-machine-%s"
+                MachineOptions = [
+                  "amazonec2-instance-type=${props.gitlabRunnerInstanceType}",
+                  "amazonec2-region=${this.region}",
+                  "amazonec2-vpc-id=${props.vpc.vpcId}",
+                  "amazonec2-zone=${props.availabilityZone}",
+                  "amazonec2-subnet-id=${props.vpcSubnet}",
+                  "amazonec2-security-group=${this.stackName}-RunnersSecurityGroup",
+                  "amazonec2-use-private-address=true",
+                  "amazonec2-iam-instance-profile=${runnersInstanceProfile.logicalId}"
+                  ${props.gitlabRunnerSpotInstance ? "amazonec2-request-spot-instance=true" : ""} 
+                  ${props.gitlabRunnerSpotInstance ? `amazonec2-spot-price=${props.gitlabRunnerSpotInstancePrice}` : ""}
+                ]
+                OffPeakTimezone = "${props.gitlabOffPeakTimezone}"
+                OffPeakPeriods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
+                OffPeakIdleCount = ${props.gitlabOffPeakIdleCount}
+                OffPeakIdleTime = ${props.gitlabOffPeakIdleTime}
+            `,
+            {
             owner: "gitlab-runner",
             group: "gitlab-runner",
             mode: "000600",
@@ -246,26 +317,7 @@ export class GitlabRunnerStack extends Stack {
      * ######################
      */
 
-    /*
-     * RunnersRole:
-     * Type: 'AWS::IAM::Role'
-     */
-
-    const runnersRole = new Role(this, "RunnersRole", {
-      assumedBy: ec2ServicePrincipal,
-    });
-
-    /*
-     * RunnersInstanceProfile:
-     * Type: 'AWS::IAM::InstanceProfile'
-     */
-    const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
-      this,
-      "RunnersInstanceProfile",
-      {
-        roles: [runnersRole.roleName],
-      }
-    );
+    
 
     /*
      * RunnersSecurityGroup:
