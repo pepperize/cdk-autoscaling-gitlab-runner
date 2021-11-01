@@ -170,12 +170,22 @@ export class GitlabRunnerStack extends Stack {
           InitPackage.yum("tzdata"),
           InitFile.fromString(
             "/etc/cfn/cfn-hup.conf",
-            `[main]\nstack=${this.stackName}\nregion=${this.region}`,
+            `
+              [main]
+              stack=${this.stackName}
+              region=${this.region}
+            `,
             { owner: "root", group: "root", mode: "root" }
           ),
           InitFile.fromString(
             "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-            `[cfn-auto-reloader-hook]\ntriggers=post.update\npath=Resources.Manager.Metadata.AWS::CloudFormation::Init\naction=/opt/aws/bin/cfn-init -v --stack ${this.stackName} --region ${this.region} --resource Manager --configsets default\nrunas=root`
+            `
+              [cfn-auto-reloader-hook]
+              triggers=post.update
+              path=Resources.Manager.Metadata.AWS::CloudFormation::Init
+              action=/opt/aws/bin/cfn-init -v --stack ${this.stackName} --region ${this.region} --resource Manager --configsets default
+              runas=root
+            `
           ),
           InitCommand.shellCommand(
             "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash", // 10-gitlab-runner
