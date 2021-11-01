@@ -213,7 +213,7 @@ export class GitlabRunnerStack extends Stack {
         enabled: true,
         // files: ['/etc/gitlab-runner/config.toml']
       }),
-      InitService.enable("gitlab-runner", {
+      InitService.enable("rsyslog", {
         ensureRunning: true,
         enabled: true,
         // files: ['/etc/rsyslog.d/25-gitlab-runner.conf']
