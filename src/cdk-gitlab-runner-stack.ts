@@ -224,7 +224,7 @@ export class GitlabRunnerStack extends Stack {
         ]),
         config: new InitConfig([
           InitFile.fromString(
-            "/etc/gitlab-runner/config.toml", 
+            "/etc/gitlab-runner/config.toml",
             `
             concurrent = ${props.gitlabMaxBuilds}
             check_interval = ${props.gitlabCheckInterval}
@@ -263,11 +263,23 @@ export class GitlabRunnerStack extends Stack {
                   "amazonec2-vpc-id=${props.vpc.vpcId}",
                   "amazonec2-zone=${props.availabilityZone}",
                   "amazonec2-subnet-id=${props.vpcSubnet}",
-                  "amazonec2-security-group=${this.stackName}-RunnersSecurityGroup",
+                  "amazonec2-security-group=${
+                    this.stackName
+                  }-RunnersSecurityGroup",
                   "amazonec2-use-private-address=true",
-                  "amazonec2-iam-instance-profile=${runnersInstanceProfile.logicalId}"
-                  ${props.gitlabRunnerSpotInstance ? "amazonec2-request-spot-instance=true" : ""} 
-                  ${props.gitlabRunnerSpotInstance ? `amazonec2-spot-price=${props.gitlabRunnerSpotInstancePrice}` : ""}
+                  "amazonec2-iam-instance-profile=${
+                    runnersInstanceProfile.logicalId
+                  }"
+                  ${
+                    props.gitlabRunnerSpotInstance
+                      ? "amazonec2-request-spot-instance=true"
+                      : ""
+                  } 
+                  ${
+                    props.gitlabRunnerSpotInstance
+                      ? `amazonec2-spot-price=${props.gitlabRunnerSpotInstancePrice}`
+                      : ""
+                  }
                 ]
                 OffPeakTimezone = "${props.gitlabOffPeakTimezone}"
                 OffPeakPeriods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
@@ -275,19 +287,22 @@ export class GitlabRunnerStack extends Stack {
                 OffPeakIdleTime = ${props.gitlabOffPeakIdleTime}
             `,
             {
-            owner: "gitlab-runner",
-            group: "gitlab-runner",
-            mode: "000600",
-          }),
-          InitFile.fromString("/etc/rsyslog.d/25-gitlab-runner.conf",
-          `
+              owner: "gitlab-runner",
+              group: "gitlab-runner",
+              mode: "000600",
+            }
+          ),
+          InitFile.fromString(
+            "/etc/rsyslog.d/25-gitlab-runner.conf",
+            `
             :programname, isequal, "gitlab-runner" /var/log/gitlab-runner.log
           `,
-          {
-            owner: "root",
-            group: "root",
-            mode: "000644",
-          }),
+            {
+              owner: "root",
+              group: "root",
+              mode: "000644",
+            }
+          ),
           InitService.enable("gitlab-runner", {
             ensureRunning: true,
             enabled: true,
@@ -301,7 +316,6 @@ export class GitlabRunnerStack extends Stack {
         ]),
       },
     });
-
 
     /*
      * ManagerEIP:
@@ -318,8 +332,6 @@ export class GitlabRunnerStack extends Stack {
      * ### GitLab Runners ###
      * ######################
      */
-
-    
 
     /*
      * RunnersSecurityGroup:
