@@ -154,6 +154,8 @@ export class GitlabRunnerStack extends Stack {
     const metadata = CloudFormationInit.fromConfigSets({
       configSets: {
         install: ["reposritories", "packages"],
+        config: ["config"],
+        default: ["install", "config"],
       },
       configs: {
         repositories: new InitConfig([
@@ -169,6 +171,10 @@ export class GitlabRunnerStack extends Stack {
             "/etc/cfn/cfn-hup.conf",
             `[main]\nstack=${this.stackName}\nregion=${this.region}`,
             { owner: "root", group: "root", mode: "root" }
+          ),
+          InitFile.fromString(
+            "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
+            `[cfn-auto-reloader-hook]\ntriggers=post.update\npath=Resources.Manager.Metadata.AWS::CloudFormation::Init\naction=/opt/aws/bin/cfn-init -v --stack ${this.stackName} --region ${this.region} --resource Manager --configsets default\nrunas=root`
           ),
         ]),
         config: new InitConfig([]),
