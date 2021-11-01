@@ -223,7 +223,6 @@ export class GitlabRunnerStack extends Stack {
           }),
         ]),
         config: new InitConfig([
-          // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml", 
             `
@@ -280,8 +279,11 @@ export class GitlabRunnerStack extends Stack {
             group: "gitlab-runner",
             mode: "000600",
           }),
-          InitFile.fromAsset("25-gitlab-runner.conf", "/etc/rsyslog.d/", {
-            // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
+          InitFile.fromString("/etc/rsyslog.d/25-gitlab-runner.conf",
+          `
+            :programname, isequal, "gitlab-runner" /var/log/gitlab-runner.log
+          `,
+          {
             owner: "root",
             group: "root",
             mode: "000644",
