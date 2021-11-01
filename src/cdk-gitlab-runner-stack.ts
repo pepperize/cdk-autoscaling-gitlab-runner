@@ -155,7 +155,7 @@ export class GitlabRunnerStack extends Stack {
       configSets: {
         install: ["reposritories", "packages"],
         config: ["config"],
-        default: ["install", "config"],
+        // default: ["install", "config"], // TODO: REVIEW
       },
       configs: {
         repositories: new InitConfig([
@@ -188,42 +188,36 @@ export class GitlabRunnerStack extends Stack {
           InitService.enable("cfn-hup", {
             enabled: true,
             ensureRunning: true,
-            // files: [ '/etc/cfn/cfn-hup.conf', '/etc/cfn/hooks.d/cfn-auto-reloader.conf' ],
+            // files: [ '/etc/cfn/cfn-hup.conf', '/etc/cfn/hooks.d/cfn-auto-reloader.conf' ], TODO: REVIEW
           }),
         ]),
-        config: new InitConfig([]),
+        config: new InitConfig([
+          // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
+          InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", {
+            // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
+            owner: "gitlab-runner",
+            group: "gitlab-runner",
+            mode: "000600",
+          }),
+          InitFile.fromAsset("25-gitlab-runner.conf", "/etc/rsyslog.d/", {
+            // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
+            owner: "root",
+            group: "root",
+            mode: "000644",
+          }),
+          InitService.enable("gitlab-runner", {
+            ensureRunning: true,
+            enabled: true,
+            // files: ['/etc/gitlab-runner/config.toml']
+          }),
+          InitService.enable("rsyslog", {
+            ensureRunning: true,
+            enabled: true,
+            // files: ['/etc/rsyslog.d/25-gitlab-runner.conf']
+          }),
+        ]),
       },
     });
-
-    const initConfig = new InitConfig([
-      // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
-      InitFile.fromAsset("config.toml", "/etc/gitlab-runner/", {
-        // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
-        owner: "gitlab-runner",
-        group: "gitlab-runner",
-        mode: "000600",
-      }),
-      InitFile.fromAsset("25-gitlab-runner.conf", "/etc/rsyslog.d/", {
-        // TODO: Provide configuration // TODO: decide which is better: https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.InitFile.html#methods
-        owner: "root",
-        group: "root",
-        mode: "000644",
-      }),
-      InitService.enable("gitlab-runner", {
-        ensureRunning: true,
-        enabled: true,
-        // files: ['/etc/gitlab-runner/config.toml']
-      }),
-      InitService.enable("rsyslog", {
-        ensureRunning: true,
-        enabled: true,
-        // files: ['/etc/rsyslog.d/25-gitlab-runner.conf']
-      }),
-    ]);
-
-    // const init... = new Init...(); // ImplementConfigSets
-
-    const initConfigSets: Array<InitElement> = [];
 
     /*
      * ManagerEIP:
