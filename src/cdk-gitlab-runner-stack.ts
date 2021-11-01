@@ -160,7 +160,8 @@ export class GitlabRunnerStack extends Stack {
       configs: {
         repositories: new InitConfig([
           InitCommand.shellCommand(
-            "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash"
+            "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash", // 10-gitlab-runner
+            { key: "10-gitlab-runner" }
           ),
         ]),
         packages: new InitConfig([
@@ -176,20 +177,22 @@ export class GitlabRunnerStack extends Stack {
             "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
             `[cfn-auto-reloader-hook]\ntriggers=post.update\npath=Resources.Manager.Metadata.AWS::CloudFormation::Init\naction=/opt/aws/bin/cfn-init -v --stack ${this.stackName} --region ${this.region} --resource Manager --configsets default\nrunas=root`
           ),
+          InitCommand.shellCommand(
+            "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash", // 10-gitlab-runner
+            { key: "10-gitlab-runner" }
+          ),
+          InitCommand.shellCommand(
+            "gitlab-runner start", // 20-gitlab-runner-start
+            { key: "20-gitlab-runner-start" }
+          ),
+          InitService.enable("sysvinit", {
+            enabled: true,
+            ensureRunning: true,
+          }),
         ]),
         config: new InitConfig([]),
       },
     });
-
-    const tenGitlabRunner = InitCommand.shellCommand(
-      "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash"
-    ); // Line 774: 10-gitlab-runner
-
-    const initPackages: Array<InitPackage> = [
-      InitPackage.yum("docker"),
-      InitPackage.yum("gitlab-runner"),
-      InitPackage.yum("tzdata"),
-    ];
 
     const initConfig = new InitConfig([
       // TODO: Rewrite it completely. It should create files instead of reading them. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html
