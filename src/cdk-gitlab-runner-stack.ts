@@ -219,6 +219,7 @@ export class GitlabRunnerStack extends Stack {
       },
     });
 
+
     /*
      * ManagerEIP:
      * Type: 'AWS::EC2::EIP'
