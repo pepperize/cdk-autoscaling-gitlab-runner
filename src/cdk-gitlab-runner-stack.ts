@@ -1,20 +1,18 @@
+import { Signals } from "@aws-cdk/aws-autoscaling";
 import {
   CfnEIP,
   CloudFormationInit,
   IMachineImage,
   InitCommand,
   InitConfig,
-  InitElement,
   InitFile,
   InitPackage,
   InitService,
-  InitServiceRestartHandle,
   Instance,
   InstanceType,
   MultipartUserData,
   Peer,
   Port,
-  Protocol,
   SecurityGroup,
   SubnetSelection,
   SubnetType,
@@ -27,14 +25,13 @@ import {
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-import { Bucket, BucketEncryption, LifecycleRule } from "@aws-cdk/aws-s3";
+import { Bucket, BucketEncryption} from "@aws-cdk/aws-s3";
 import {
   BucketDeployment,
   ServerSideEncryption,
   Source,
 } from "@aws-cdk/aws-s3-deployment";
-import { Construct, Stack, StackProps } from "@aws-cdk/core";
-import { Domain } from "domain";
+import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core";
 
 export interface GitlabRunnerStackProps extends StackProps {
   instanceTypeIdentifier: string;
@@ -317,6 +314,10 @@ export class GitlabRunnerStack extends Stack {
       },
     });
 
+    Signals.waitForAll({ // TODO: Use it as creation policy for runnersSecurityGroup
+      timeout: Duration.minutes(15)
+    });
+
     /*
      * ManagerEIP:
      * Type: 'AWS::EC2::EIP'
@@ -340,7 +341,7 @@ export class GitlabRunnerStack extends Stack {
     const runnersSecurityGroup = SecurityGroup.fromSecurityGroupId(
       this,
       "RunnersSecurityGroup",
-      managerSecurityGroup.securityGroupId
+      managerSecurityGroup.securityGroupId,
     );
 
     runnersSecurityGroup.connections.allowFrom(
