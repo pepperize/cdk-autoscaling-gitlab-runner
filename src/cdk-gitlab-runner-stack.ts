@@ -188,6 +188,7 @@ export class GitlabRunnerStack extends Stack {
           InitService.enable("sysvinit", {
             enabled: true,
             ensureRunning: true,
+            // files: [ '/etc/cfn/cfn-hup.conf', '/etc/cfn/hooks.d/cfn-auto-reloader.conf' ],
           }),
         ]),
         config: new InitConfig([]),
