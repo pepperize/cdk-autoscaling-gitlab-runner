@@ -185,7 +185,7 @@ export class GitlabRunnerStack extends Stack {
             "gitlab-runner start", // 20-gitlab-runner-start
             { key: "20-gitlab-runner-start" }
           ),
-          InitService.enable("sysvinit", {
+          InitService.enable("cfn-hup", {
             enabled: true,
             ensureRunning: true,
             // files: [ '/etc/cfn/cfn-hup.conf', '/etc/cfn/hooks.d/cfn-auto-reloader.conf' ],
