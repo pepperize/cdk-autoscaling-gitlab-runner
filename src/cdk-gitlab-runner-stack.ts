@@ -154,16 +154,16 @@ export class GitlabRunnerStack extends Stack {
                   "s3:DeleteObject*",
                   "s3:PutObject*",
                 ],
-                Resource: ["${CacheBucket.Arn}/*"],
+                Resource: [`${cacheBucket.bucketArn}/*`],
               },
               {
                 Effect: "Allow",
                 Action: ["s3:ListBucket"],
-                Resource: ["CacheBucket.Arn"],
+                Resource: [`${cacheBucket.bucketArn}`],
               },
             ],
           },
-        }), // TODO: Re-check this
+        }),
         Runners: PolicyDocument.fromJson({
           PolicyName: "Runners",
           PolicyDocument: {
