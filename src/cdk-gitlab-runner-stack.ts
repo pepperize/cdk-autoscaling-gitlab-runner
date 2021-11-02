@@ -132,18 +132,6 @@ export class GitlabRunnerStack extends Stack {
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
 
     /*
-     * ManagerInstanceProfile:
-     * Type: 'AWS::IAM::InstanceProfile'
-     */
-    const managerInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
-      this,
-      "ManagerInstanceProfile",
-      {
-        roles: [managerRole.roleName], // TODO: Fix cyclical dependency! https://stackoverflow.com/questions/60307531/resolving-cyclical-dependencies-between-aws-cdk-cloudformation-stacks
-      }
-    );
-
-    /*
      * RunnersRole:
      * Type: 'AWS::IAM::Role'
      */
@@ -254,19 +242,31 @@ export class GitlabRunnerStack extends Stack {
                   "ec2:ResourceTag/Name": "*gitlab-docker-machine-*",
                 },
                 ArnEquals: {
-                  "ec2:InstanceProfile": "RunnersInstanceProfile.Arn",
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
             {
               Effect: "Allow",
               Action: ["iam:PassRole"],
-              Resource: ["RunnersRole.Arn"],
+              Resource: [`${runnersRole.roleArn}`],
             },
           ],
-        }), // TODO: Re-check this
+        }),
       },
     });
+
+    /*
+     * ManagerInstanceProfile:
+     * Type: 'AWS::IAM::InstanceProfile'
+     */
+    const managerInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
+      this,
+      "ManagerInstanceProfile",
+      {
+        roles: [managerRole.roleName],
+      }
+    );
 
     /* Manager:
      * Type: 'AWS::EC2::Instance'
