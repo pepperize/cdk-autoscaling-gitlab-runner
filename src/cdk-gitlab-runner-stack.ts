@@ -142,101 +142,95 @@ export class GitlabRunnerStack extends Stack {
       ],
       inlinePolicies: {
         Cache: PolicyDocument.fromJson({
-          PolicyName: "Cache",
-          PolicyDocument: {
-            Version: "2012-10-17",
-            Statement: [
-              {
-                Effect: "Allow",
-                Action: [
-                  "s3:ListObjects*",
-                  "s3:GetObject*",
-                  "s3:DeleteObject*",
-                  "s3:PutObject*",
-                ],
-                Resource: [`${cacheBucket.bucketArn}/*`],
-              },
-              {
-                Effect: "Allow",
-                Action: ["s3:ListBucket"],
-                Resource: [`${cacheBucket.bucketArn}`],
-              },
-            ],
-          },
+          Version: "2012-10-17",
+          Statement: [
+            {
+              Effect: "Allow",
+              Action: [
+                "s3:ListObjects*",
+                "s3:GetObject*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+              ],
+              Resource: [`${cacheBucket.bucketArn}/*`],
+            },
+            {
+              Effect: "Allow",
+              Action: ["s3:ListBucket"],
+              Resource: [`${cacheBucket.bucketArn}`],
+            },
+          ],
         }),
         Runners: PolicyDocument.fromJson({
-          PolicyName: "Runners",
-          PolicyDocument: {
-            Version: "2012-10-17",
-            Statement: [
-              {
-                Effect: "Allow",
-                Action: [
-                  "ec2:CreateKeyPair",
-                  "ec2:DeleteKeyPair",
-                  "ec2:ImportKeyPair",
-                  "ec2:Describe*",
-                ],
-                Resource: ["*"],
-              },
-              {
-                Effect: "Allow",
-                Action: ["ec2:CreateTags", "ssm:UpdateInstanceInformation"],
-                Resource: ["*"],
-                Condition: {
-                  StringEquals: {
-                    "ec2:Region": "AWS::Region",
-                    "ec2:InstanceType": "GitlabRunnerInstanceType",
-                  },
-                  StringLike: {
-                    "aws:RequestTag/Name": "*gitlab-docker-machine-*",
-                  },
-                  "ForAllValues:StringEquals": {
-                    "aws:TagKeys": ["Name"],
-                  },
+          Version: "2012-10-17",
+          Statement: [
+            {
+              Effect: "Allow",
+              Action: [
+                "ec2:CreateKeyPair",
+                "ec2:DeleteKeyPair",
+                "ec2:ImportKeyPair",
+                "ec2:Describe*",
+              ],
+              Resource: ["*"],
+            },
+            {
+              Effect: "Allow",
+              Action: ["ec2:CreateTags", "ssm:UpdateInstanceInformation"],
+              Resource: ["*"],
+              Condition: {
+                StringEquals: {
+                  "ec2:Region": "AWS::Region",
+                  "ec2:InstanceType": "GitlabRunnerInstanceType",
+                },
+                StringLike: {
+                  "aws:RequestTag/Name": "*gitlab-docker-machine-*",
+                },
+                "ForAllValues:StringEquals": {
+                  "aws:TagKeys": ["Name"],
                 },
               },
-              {
-                Effect: "Allow",
-                Action: ["ec2:RunInstances", "ec2:RequestSpotInstances"],
-                Resource: ["*"],
-                Condition: {
-                  StringEqualsIfExists: {
-                    "ec2:InstanceType": "GitlabRunnerInstanceType",
-                    "ec2:Region": "AWS::Region",
-                    "ec2:Tenancy": "default",
-                  },
-                  ArnEqualsIfExists: {
-                    "ec2:Vpc": `arn:${this.partition}:ec2:${this.partition}:${this.account}:vpc/${props.vpc.vpcId}`,
-                    "ec2:InstanceProfile": "RunnersInstanceProfile.Arn",
-                  },
+            },
+            {
+              Effect: "Allow",
+              Action: ["ec2:RunInstances", "ec2:RequestSpotInstances"],
+              Resource: ["*"],
+              Condition: {
+                StringEqualsIfExists: {
+                  "ec2:InstanceType": `${props.gitlabRunnerInstanceType}`,
+                  "ec2:Region": `${this.region}`,
+                  "ec2:Tenancy": "default",
+                },
+                ArnEqualsIfExists: {
+                  "ec2:Vpc": `arn:${this.partition}:ec2:${this.partition}:${this.account}:vpc/${props.vpc.vpcId}`,
+                  "ec2:InstanceProfile": "RunnersInstanceProfile.Arn",
                 },
               },
-              {
-                Effect: "Allow",
-                Action: [
-                  "ec2:TerminateInstances",
-                  "ec2:StopInstances",
-                  "ec2:StartInstances",
-                  "ec2:RebootInstances",
-                ],
-                Resource: ["*"],
-                Condition: {
-                  StringLike: {
-                    "ec2:ResourceTag/Name": "*gitlab-docker-machine-*",
-                  },
-                  ArnEquals: {
-                    "ec2:InstanceProfile": "RunnersInstanceProfile.Arn",
-                  },
+            },
+            {
+              Effect: "Allow",
+              Action: [
+                "ec2:TerminateInstances",
+                "ec2:StopInstances",
+                "ec2:StartInstances",
+                "ec2:RebootInstances",
+              ],
+              Resource: ["*"],
+              Condition: {
+                StringLike: {
+                  "ec2:ResourceTag/Name": "*gitlab-docker-machine-*",
+                },
+                ArnEquals: {
+                  "ec2:InstanceProfile": "RunnersInstanceProfile.Arn",
                 },
               },
-              {
-                Effect: "Allow",
-                Action: ["iam:PassRole"],
-                Resource: ["RunnersRole.Arn"],
-              },
-            ],
-          },
+            },
+            {
+              Effect: "Allow",
+              Action: ["iam:PassRole"],
+              Resource: ["RunnersRole.Arn"],
+            },
+          ],
         }), // TODO: Re-check this
       },
     });
