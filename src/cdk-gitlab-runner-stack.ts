@@ -131,6 +131,39 @@ export class GitlabRunnerStack extends Stack {
      */
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
 
+    /*
+     * ManagerInstanceProfile:
+     * Type: 'AWS::IAM::InstanceProfile'
+     */
+    const managerInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
+      this,
+      "ManagerInstanceProfile",
+      {
+        roles: [managerRole.roleName], // TODO: Fix cyclical dependency! https://stackoverflow.com/questions/60307531/resolving-cyclical-dependencies-between-aws-cdk-cloudformation-stacks
+      }
+    );
+
+    /*
+     * RunnersRole:
+     * Type: 'AWS::IAM::Role'
+     */
+
+    const runnersRole = new Role(this, "RunnersRole", {
+      assumedBy: ec2ServicePrincipal,
+    });
+
+    /*
+     * RunnersInstanceProfile:
+     * Type: 'AWS::IAM::InstanceProfile'
+     */
+    const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
+      this,
+      "RunnersInstanceProfile",
+      {
+        roles: [runnersRole.roleName],
+      }
+    );
+
     const managerRole = new Role(this, "ManagerRole", {
       assumedBy: ec2ServicePrincipal,
       managedPolicies: [
@@ -180,8 +213,8 @@ export class GitlabRunnerStack extends Stack {
               Resource: ["*"],
               Condition: {
                 StringEquals: {
-                  "ec2:Region": "AWS::Region",
-                  "ec2:InstanceType": "GitlabRunnerInstanceType",
+                  "ec2:Region": `${this.region}`,
+                  "ec2:InstanceType": `${props.gitlabRunnerInstanceType}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-docker-machine-*",
@@ -203,7 +236,7 @@ export class GitlabRunnerStack extends Stack {
                 },
                 ArnEqualsIfExists: {
                   "ec2:Vpc": `arn:${this.partition}:ec2:${this.partition}:${this.account}:vpc/${props.vpc.vpcId}`,
-                  "ec2:InstanceProfile": "RunnersInstanceProfile.Arn",
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
@@ -234,39 +267,6 @@ export class GitlabRunnerStack extends Stack {
         }), // TODO: Re-check this
       },
     });
-
-    /*
-     * ManagerInstanceProfile:
-     * Type: 'AWS::IAM::InstanceProfile'
-     */
-    const managerInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
-      this,
-      "ManagerInstanceProfile",
-      {
-        roles: [managerRole.roleName],
-      }
-    );
-
-    /*
-     * RunnersRole:
-     * Type: 'AWS::IAM::Role'
-     */
-
-    const runnersRole = new Role(this, "RunnersRole", {
-      assumedBy: ec2ServicePrincipal,
-    });
-
-    /*
-     * RunnersInstanceProfile:
-     * Type: 'AWS::IAM::InstanceProfile'
-     */
-    const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
-      this,
-      "RunnersInstanceProfile",
-      {
-        roles: [runnersRole.roleName],
-      }
-    );
 
     /* Manager:
      * Type: 'AWS::EC2::Instance'
