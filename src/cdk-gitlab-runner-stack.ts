@@ -100,7 +100,7 @@ export class GitlabRunnerStack extends Stack {
       managedPolicies: [
         ManagedPolicy.fromManagedPolicyArn(
           this,
-          "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM",
+          "AmazonEC2RoleforSSM",
           "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
         ),
       ],
