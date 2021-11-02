@@ -40,25 +40,25 @@ export interface GitlabRunnerStackProps extends StackProps {
   /** These props come from "Parameters:" from runner.yml CFN template */
   cacheBucketName: string;
   cacheExpirationInDays: number;
-  availabilityZone: any; // TODO: Provide some type
+  availabilityZone: string;
   vpcSubnet: SubnetSelection;
-  managerImageId: any; // TODO: Provide some type
-  managerInstanceType: any; // TODO: Provide some type
-  managerKeyPair: any; // TODO: Provide some type
-  gitlabUrl: any; // TODO: Provide some type
-  gitlabToken: any; // TODO: Provide some type
-  gitlabRunnerInstanceType: any; // TODO: Provide some type
-  gitlabDockerImage: any; // TODO: Provide some type
-  gitlabMaxBuilds: any; // TODO: Provide some type
-  gitlabMaxConcurrentBuilds: any; // TODO: Provide some type
-  gitlabIdleCount: any; // TODO: Provide some type
-  gitlabIdleTime: any; // TODO: Provide some type
-  gitlabOffPeakTimezone: any; // TODO: Provide some type
-  gitlabOffPeakIdleCount: any; // TODO: Provide some type
-  gitlabOffPeakIdleTime: any; // TODO: Provide some type
-  gitlabCheckInterval: any; // TODO: Provide some type
-  gitlabRunnerSpotInstance: any; // TODO: Provide some type
-  gitlabRunnerSpotInstancePrice: any; // TODO: Provide some type
+  managerImageId: string;
+  managerInstanceType: string;
+  managerKeyPair: string;
+  gitlabUrl: string;
+  gitlabToken: string;
+  gitlabRunnerInstanceType: string;
+  gitlabDockerImage: string;
+  gitlabMaxBuilds: string;
+  gitlabMaxConcurrentBuilds: string;
+  gitlabIdleCount: string;
+  gitlabIdleTime: string;
+  gitlabOffPeakTimezone: string;
+  gitlabOffPeakIdleCount: string;
+  gitlabOffPeakIdleTime: string;
+  gitlabCheckInterval: string;
+  gitlabRunnerSpotInstance: string;
+  gitlabRunnerSpotInstancePrice: string;
 }
 
 export class GitlabRunnerStack extends Stack {
