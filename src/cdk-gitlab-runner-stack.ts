@@ -279,12 +279,11 @@ export class GitlabRunnerStack extends Stack {
     );
 
     const manager = new Instance(this, "Instance", {
-      // TODO: finish this, set the missing values
       instanceType: new InstanceType(props.instanceTypeIdentifier),
       vpc: props.vpc,
       machineImage: props.machineImage,
       userData: userData,
-      keyName: props.managerKeyPair, // TODO: set type in props
+      keyName: props.managerKeyPair,
       securityGroup: managerSecurityGroup,
       vpcSubnets: props.vpcSubnet ?? {
         subnetType: SubnetType.PUBLIC,
@@ -440,7 +439,7 @@ export class GitlabRunnerStack extends Stack {
     });
 
     Signals.waitForAll({
-      // TODO: Use it as creation policy for runnersSecurityGroup
+      // Line 884: CreationPolicy
       timeout: Duration.minutes(15),
     });
 
