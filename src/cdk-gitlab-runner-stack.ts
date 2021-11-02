@@ -66,6 +66,42 @@ export class GitlabRunnerStack extends Stack {
     super(scope, id, props);
 
     /*
+     * ####################################
+     * ### S3 Bucket for Runners' cache ###
+     * ####################################
+     */
+
+    /* Transformation cacheExpirationInDays into expirationDate */
+    const today = new Date().getDate();
+    const cacheBucketExpirationDate = new Date();
+    cacheBucketExpirationDate.setDate(today + props.cacheExpirationInDays);
+
+    /* Enabled if not 0. If 0 - cache doesnt't expire. */
+    const lifeCycleRuleEnabled = props.cacheExpirationInDays === 0;
+
+    const cacheBucket = new Bucket(this, "GitlabRunnerCacheBucket", {
+      bucketName: props.cacheBucketName,
+      lifecycleRules: [
+        {
+          enabled: lifeCycleRuleEnabled,
+          expirationDate: cacheBucketExpirationDate,
+        },
+      ],
+      encryption: BucketEncryption.KMS,
+      bucketKeyEnabled: true,
+    });
+
+    const cacheBucketDeployment = new BucketDeployment(
+      this,
+      "GitlabRunnerCacheBucketDeployment",
+      {
+        sources: [Source.asset], // TODO: configure it
+        destinationBucket: cacheBucket,
+        serverSideEncryption: ServerSideEncryption.AES_256,
+      }
+    );
+
+    /*
      * #############################
      * ### GitLab Runner Manager ###
      * #############################
@@ -449,42 +485,6 @@ export class GitlabRunnerStack extends Stack {
       Peer.anyIpv4(),
       Port.tcp(2376),
       "SSH traffic from Docker"
-    );
-
-    /*
-     * ####################################
-     * ### S3 Bucket for Runners' cache ###
-     * ####################################
-     */
-
-    /* Transformation cacheExpirationInDays into expirationDate */
-    const today = new Date().getDate();
-    const cacheBucketExpirationDate = new Date();
-    cacheBucketExpirationDate.setDate(today + props.cacheExpirationInDays);
-
-    /* Enabled if not 0. If 0 - cache doesnt't expire. */
-    const lifeCycleRuleEnabled = props.cacheExpirationInDays === 0;
-
-    const cacheBucket = new Bucket(this, "GitlabRunnerCacheBucket", {
-      bucketName: props.cacheBucketName,
-      lifecycleRules: [
-        {
-          enabled: lifeCycleRuleEnabled,
-          expirationDate: cacheBucketExpirationDate,
-        },
-      ],
-      encryption: BucketEncryption.KMS,
-      bucketKeyEnabled: true,
-    });
-
-    const cacheBucketDeployment = new BucketDeployment(
-      this,
-      "GitlabRunnerCacheBucketDeployment",
-      {
-        sources: [Source.asset], // TODO: configure it
-        destinationBucket: cacheBucket,
-        serverSideEncryption: ServerSideEncryption.AES_256,
-      }
     );
   }
 }
