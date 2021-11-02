@@ -91,7 +91,7 @@ export class GitlabRunnerStack extends Stack {
       bucketKeyEnabled: true,
     });
 
-    const cacheBucketDeployment = new BucketDeployment(
+    const cacheBucketDeployment = new BucketDeployment( // TODO: rethink if we need it at all
       this,
       "GitlabRunnerCacheBucketDeployment",
       {
