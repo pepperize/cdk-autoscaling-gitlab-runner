@@ -30,4 +30,4 @@ new GitlabRunnerStack(app, `GitlabRunnerStack`, {
   gitlabRunnerSpotInstance: "",
   gitlabRunnerSpotInstancePrice: "",
 
-}),
+});
