@@ -8,6 +8,7 @@ import {
   InitFile,
   InitPackage,
   InitService,
+  InitServiceRestartHandle,
   Instance,
   InstanceType,
   MultipartUserData,
@@ -293,6 +294,18 @@ export class GitlabRunnerStack extends Stack {
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
 
+
+    
+    const cfnHupPackagesConfigSetRestartHandle = new InitServiceRestartHandle();
+    cfnHupPackagesConfigSetRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
+    cfnHupPackagesConfigSetRestartHandle._addFile("/etc/cfn/hooks.d/cfn-auto-reloader.conf");
+
+    const gitlabRunnerConfigConfigSetRestartHandle = new InitServiceRestartHandle();
+    gitlabRunnerConfigConfigSetRestartHandle._addFile("/etc/gitlab-runner/config.toml");
+
+    const rsyslogConfigConfigSetRestartHandle = new InitServiceRestartHandle();
+    rsyslogConfigConfigSetRestartHandle._addFile("/etc/rsyslog.d/25-gitlab-runner.conf");
+
     const metadata = CloudFormationInit.fromConfigSets({
       configSets: {
         install: ["reposritories", "packages"],
@@ -340,7 +353,7 @@ export class GitlabRunnerStack extends Stack {
           InitService.enable("cfn-hup", {
             enabled: true,
             ensureRunning: true,
-            // files: [ '/etc/cfn/cfn-hup.conf', '/etc/cfn/hooks.d/cfn-auto-reloader.conf' ], TODO: REVIEW
+            serviceRestartHandle: cfnHupPackagesConfigSetRestartHandle,
           }),
         ]),
         config: new InitConfig([
@@ -427,12 +440,12 @@ export class GitlabRunnerStack extends Stack {
           InitService.enable("gitlab-runner", {
             ensureRunning: true,
             enabled: true,
-            // files: ['/etc/gitlab-runner/config.toml'] TODO: REVIEW
+            serviceRestartHandle: gitlabRunnerConfigConfigSetRestartHandle,
           }),
           InitService.enable("rsyslog", {
             ensureRunning: true,
             enabled: true,
-            // files: ['/etc/rsyslog.d/25-gitlab-runner.conf'] TODO: REVIEW
+            serviceRestartHandle: rsyslogConfigConfigSetRestartHandle,
           }),
         ]),
       },
