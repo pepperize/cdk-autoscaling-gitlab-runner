@@ -1,4 +1,4 @@
-import { SubnetType, Vpc } from "@aws-cdk/aws-ec2";
+import { MachineImage, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
 import { App } from "@aws-cdk/core";
 import { GitlabRunnerStack } from "./cdk-gitlab-runner-stack";
 
@@ -6,8 +6,8 @@ const app = new App();
 
 new GitlabRunnerStack(app, `GitlabRunnerStack`, {
   instanceTypeIdentifier: "",
-  vpc: new Vpc(null, null, null),
-  machineImage: null,
+  vpc: new Vpc(app, "Vpc", {}),
+  machineImage: MachineImage.genericLinux(),
   cacheBucketName: "",
   cacheExpirationInDays: 0,
   availabilityZone: "",
