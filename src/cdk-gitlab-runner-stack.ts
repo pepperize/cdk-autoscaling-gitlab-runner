@@ -44,7 +44,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   availabilityZone: string;
   vpcSubnet: SubnetSelection;
   managerImageId: string;
-  managerInstanceType: string;
+  managerInstanceType: InstanceType;
   managerKeyPair: string;
   gitlabUrl: string;
   gitlabToken: string;
@@ -280,7 +280,7 @@ export class GitlabRunnerStack extends Stack {
     );
 
     const manager = new Instance(this, "Instance", {
-      instanceType: new InstanceType(props.instanceTypeIdentifier),
+      instanceType: props.managerInstanceType,
       vpc: props.vpc,
       machineImage: props.machineImage,
       userData: userData,

@@ -1,4 +1,4 @@
-import { MachineImage, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType, MachineImage, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
 import { App } from "@aws-cdk/core";
 import { GitlabRunnerStack } from "./cdk-gitlab-runner-stack";
 
@@ -13,7 +13,7 @@ new GitlabRunnerStack(app, `GitlabRunnerStack`, {
   availabilityZone: "",
   vpcSubnet: null,
   managerImageId: "",
-  managerInstanceType: "",
+  managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPair: "",
   gitlabUrl: "",
   gitlabToken: "",
