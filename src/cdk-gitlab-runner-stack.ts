@@ -35,7 +35,6 @@ import {
 import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core";
 
 export interface GitlabRunnerStackProps extends StackProps {
-  instanceTypeIdentifier: string;
   vpc: Vpc;
   machineImage: IMachineImage;
   /** These props come from "Parameters:" from runner.yml CFN template */
