@@ -7,7 +7,7 @@ const app = new App();
 new GitlabRunnerStack(app, `GitlabRunnerStack`, {
   instanceTypeIdentifier: "",
   vpc: new Vpc(app, "Vpc", {}),
-  machineImage: MachineImage.genericLinux(),
+  machineImage: MachineImage.,
   cacheBucketName: "",
   cacheExpirationInDays: 0,
   availabilityZone: "",
