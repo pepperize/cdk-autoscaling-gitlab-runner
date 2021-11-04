@@ -17,7 +17,7 @@ import {
   SecurityGroup,
   SubnetSelection,
   SubnetType,
-  Vpc,
+  IVpc,
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
@@ -35,7 +35,7 @@ import {
 import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core";
 
 export interface GitlabRunnerStackProps extends StackProps {
-  vpc: Vpc;
+  vpc: IVpc;
   machineImage: IMachineImage;
   /** These props come from "Parameters:" from runner.yml CFN template */
   cacheBucketName: string;
@@ -293,17 +293,22 @@ export class GitlabRunnerStack extends Stack {
     manager.instance.iamInstanceProfile =
       managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
 
-
-    
     const cfnHupPackagesConfigSetRestartHandle = new InitServiceRestartHandle();
     cfnHupPackagesConfigSetRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
-    cfnHupPackagesConfigSetRestartHandle._addFile("/etc/cfn/hooks.d/cfn-auto-reloader.conf");
+    cfnHupPackagesConfigSetRestartHandle._addFile(
+      "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
+    );
 
-    const gitlabRunnerConfigConfigSetRestartHandle = new InitServiceRestartHandle();
-    gitlabRunnerConfigConfigSetRestartHandle._addFile("/etc/gitlab-runner/config.toml");
+    const gitlabRunnerConfigConfigSetRestartHandle =
+      new InitServiceRestartHandle();
+    gitlabRunnerConfigConfigSetRestartHandle._addFile(
+      "/etc/gitlab-runner/config.toml"
+    );
 
     const rsyslogConfigConfigSetRestartHandle = new InitServiceRestartHandle();
-    rsyslogConfigConfigSetRestartHandle._addFile("/etc/rsyslog.d/25-gitlab-runner.conf");
+    rsyslogConfigConfigSetRestartHandle._addFile(
+      "/etc/rsyslog.d/25-gitlab-runner.conf"
+    );
 
     const metadata = CloudFormationInit.fromConfigSets({
       configSets: {
