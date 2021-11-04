@@ -5,9 +5,8 @@ import { GitlabRunnerStack } from "./cdk-gitlab-runner-stack";
 const app = new App();
 
 new GitlabRunnerStack(app, `GitlabRunnerStack`, {
-  instanceTypeIdentifier: "",
   vpc: new Vpc(app, "Vpc", {}),
-  machineImage: MachineImage.,
+  machineImage: MachineImage. ``,
   cacheBucketName: "",
   cacheExpirationInDays: 0,
   availabilityZone: "",
