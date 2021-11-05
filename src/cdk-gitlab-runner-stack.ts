@@ -91,16 +91,6 @@ export class GitlabRunnerStack extends Stack {
       bucketKeyEnabled: true,
     });
 
-    const cacheBucketDeployment = new BucketDeployment( // TODO: rethink if we need it at all
-      this,
-      "GitlabRunnerCacheBucketDeployment",
-      {
-        sources: [Source.asset], // TODO: configure it
-        destinationBucket: cacheBucket,
-        serverSideEncryption: ServerSideEncryption.AES_256,
-      }
-    );
-
     /*
      * #############################
      * ### GitLab Runner Manager ###
