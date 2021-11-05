@@ -51,6 +51,16 @@ const project = new AwsCdkConstructLibrary({
     prettier: true,
   },
 });
+project.setScript("preinstall", "npx only-allow npm");
+project.setScript("build", "tsc");
+project.setScript("watch", "tsc -w");
+project.setScript("cdk", "cdk");
+project.setScript(
+  "bootstrap",
+  "cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess"
+);
+project.setScript("synth", "cdk synth");
+project.setScript("deploy", "cdk deploy");
 project.setScript(
   "format",
   "prettier --write 'src/*.ts' '.projenrc.js' 'README.md'"
