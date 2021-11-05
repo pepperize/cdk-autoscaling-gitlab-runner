@@ -1,1 +1,45 @@
-{}
+{
+  "vpc-provider:account=277361172576:filter.tag:Name=AWSBootstrapKit-LandingZone-PipelineStack/Vpc/pepperizeVpcStack/PepperizeVpc-Prod:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0c8e4fbcc7f6b524a",
+    "vpcCidrBlock": "10.0.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0e1641df06f6fd0f5",
+            "cidr": "10.0.0.0/18",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0d126a18817670e92"
+          },
+          {
+            "subnetId": "subnet-094fca8f43234fd0e",
+            "cidr": "10.0.64.0/18",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-048a246424d19a755"
+          }
+        ]
+      },
+      {
+        "name": "Private",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-0e9bd278a3fa77e39",
+            "cidr": "10.0.128.0/18",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0aaffad6b845189a7"
+          },
+          {
+            "subnetId": "subnet-0d583cd54d2e33614",
+            "cidr": "10.0.192.0/18",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-095e194bc243597b9"
+          }
+        ]
+      }
+    ]
+  }
+}

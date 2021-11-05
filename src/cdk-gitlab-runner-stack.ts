@@ -90,7 +90,9 @@ export class GitlabRunnerStack extends Stack {
      * #############################
      */
 
-    const vpc = Vpc.fromLookup(this, "PepperizeVpc", {})
+    const vpc = Vpc.fromLookup(this, "PepperizeVpc", {
+      vpcName: "AWSBootstrapKit-LandingZone-PipelineStack/Vpc/pepperizeVpcStack/PepperizeVpc-Prod", // TODO: find a better way to find a vpc
+    })
 
     /*
      * ManagerSecurityGroup:
