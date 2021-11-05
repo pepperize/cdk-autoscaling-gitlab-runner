@@ -16,8 +16,7 @@ import {
   Port,
   SecurityGroup,
   SubnetSelection,
-  SubnetType,
-  IVpc,
+  Vpc,
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
@@ -30,7 +29,6 @@ import { Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core";
 
 export interface GitlabRunnerStackProps extends StackProps {
-  vpc: IVpc;
   machineImage: IMachineImage;
   /** These props come from "Parameters:" from runner.yml CFN template */
   cacheBucketName: string;
@@ -92,6 +90,8 @@ export class GitlabRunnerStack extends Stack {
      * #############################
      */
 
+    const vpc = Vpc.fromLookup(this, "PepperizeVpc", {})
+
     /*
      * ManagerSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup
@@ -100,7 +100,7 @@ export class GitlabRunnerStack extends Stack {
       this,
       "ManagerSecurityGroup",
       {
-        vpc: props.vpc,
+        vpc: vpc,
         description: "Security group for GitLab Runners Manager.",
       }
     );
@@ -208,7 +208,7 @@ export class GitlabRunnerStack extends Stack {
                   "ec2:Tenancy": "default",
                 },
                 ArnEqualsIfExists: {
-                  "ec2:Vpc": `arn:${this.partition}:ec2:${this.partition}:${this.account}:vpc/${props.vpc.vpcId}`,
+                  "ec2:Vpc": `arn:${this.partition}:ec2:${this.partition}:${this.account}:vpc/${vpc.vpcId}`,
                   "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
@@ -265,14 +265,12 @@ export class GitlabRunnerStack extends Stack {
 
     const manager = new Instance(this, "Instance", {
       instanceType: props.managerInstanceType,
-      vpc: props.vpc,
+      vpc: vpc,
       machineImage: props.machineImage,
       userData: userData,
       keyName: props.managerKeyPair,
       securityGroup: managerSecurityGroup,
-      vpcSubnets: props.vpcSubnet ?? {
-        subnetType: SubnetType.PUBLIC,
-      },
+      vpcSubnets: props.vpcSubnet
     });
     manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
     manager.instance.iamInstanceProfile =
@@ -383,7 +381,7 @@ export class GitlabRunnerStack extends Stack {
                 MachineOptions = [
                   "amazonec2-instance-type=${props.gitlabRunnerInstanceType}",
                   "amazonec2-region=${this.region}",
-                  "amazonec2-vpc-id=${props.vpc.vpcId}",
+                  "amazonec2-vpc-id=${vpc.vpcId}",
                   "amazonec2-zone=${props.availabilityZone}",
                   "amazonec2-subnet-id=${props.vpcSubnet}",
                   "amazonec2-security-group=${

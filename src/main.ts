@@ -4,7 +4,6 @@ import {
   InstanceType,
   MachineImage,
   SubnetType,
-  Vpc,
 } from "@aws-cdk/aws-ec2";
 import { App } from "@aws-cdk/core";
 import { GitlabRunnerStack } from "./cdk-gitlab-runner-stack";
@@ -30,8 +29,7 @@ const managerAmiMap: Record<string, string> = { // Record<REGION, AMI_ID>
     "us-west-2": "ami-061392db613a6357b"
 };
 
-new GitlabRunnerStack(app, `GitlabRunnerStack`, {
-  vpc: Vpc.fromLookup(app, "PepperizeVpc", {}),
+new GitlabRunnerStack(app, "GitlabRunnerStack", {
   machineImage: MachineImage.genericLinux(managerAmiMap),
   cacheBucketName: "",
   cacheExpirationInDays: 0,
@@ -55,3 +53,5 @@ new GitlabRunnerStack(app, `GitlabRunnerStack`, {
   gitlabRunnerSpotInstance: "",
   gitlabRunnerSpotInstancePrice: "",
 });
+
+app.synth();
