@@ -19,6 +19,10 @@ const project = new AwsCdkTypeScriptApp({
   ],
   appEntrypoint: "main.ts",
   context: {
+    "@aws-cdk/core:enableStackNameDuplicates": "true",
+    "aws-cdk:enableDiffNoFail": "true",
+    "@aws-cdk/core:stackRelativeExports": "true",
+    "@aws-cdk/core:newStyleStackSynthesis": true,
   },
   // deps: ["package-name", ...]
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
