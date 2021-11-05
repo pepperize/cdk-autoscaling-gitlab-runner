@@ -1,3 +1,4 @@
+const process = require('process');
 import {
   InstanceClass,
   InstanceSize,
@@ -39,7 +40,7 @@ new GitlabRunnerStack(app, "GitlabRunnerStack", {
   cacheBucketName: "",
   cacheExpirationInDays: 0,
   availabilityZone: "",
-  vpcSubnet: {subnetType: SubnetType.PRIVATE_ISOLATED},
+  vpcSubnet: {subnetType: SubnetType.PUBLIC},
   managerImageId: "",
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPair: "",

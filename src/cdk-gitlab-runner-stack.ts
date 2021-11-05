@@ -11,11 +11,11 @@ import {
   InitServiceRestartHandle,
   Instance,
   InstanceType,
-  MultipartUserData,
   Peer,
   Port,
   SecurityGroup,
   SubnetSelection,
+  UserData,
   Vpc,
 } from "@aws-cdk/aws-ec2";
 import {
@@ -256,11 +256,13 @@ export class GitlabRunnerStack extends Stack {
     /* Manager:
      * Type: 'AWS::EC2::Instance'
      */
-    const userData = new MultipartUserData({});
+    const userData = UserData.forLinux({
+
+    });
     userData.addCommands(
       `yum update -y aws-cfn-bootstrap`, // !/bin/bash -xe
       `/opt/aws/bin/cfn-init --stack '${this.stackName}' --region '${this.region}' --resource Manager --configsets default`, // Install the files and packages from the metadata
-      `/opt/aws/bin/cfn-signal -e $? --stack '${this.region}' --region '${this.region}' --resource Manager` // Signal the status from cfn-init
+      `/opt/aws/bin/cfn-signal -e $? --stack '${this.region}' --region '${this.region}' --resource Manager`, // Signal the status from cfn-init
     );
 
     const manager = new Instance(this, "Instance", {
