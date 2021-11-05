@@ -1,5 +1,9 @@
 {
   "name": "cdk-gitlab-runner",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pepperize/cdk-gitlab-runner.git"
+  },
   "scripts": {
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
@@ -12,6 +16,8 @@
     "unbump": "npx projen unbump",
     "publish:github": "npx projen publish:github",
     "default": "npx projen default",
+    "watch": "npx projen watch",
+    "package": "npx projen package",
     "eslint": "npx projen eslint",
     "compat": "npx projen compat",
     "publish:npm": "npx projen publish:npm",
@@ -37,7 +43,6 @@
     "@types/node": "^14.17.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
-    "aws-cdk": "1.128.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -46,25 +51,38 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.3.1",
     "jest-junit": "^12",
+    "jsii": "^1.42.0",
+    "jsii-diff": "^1.42.0",
+    "jsii-docgen": "^3.8.20",
+    "jsii-pacmak": "^1.42.0",
     "json-schema": "^0.3.0",
     "npm-check-updates": "^11",
     "prettier": "^2.4.1",
     "projen": "^0.30.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.7",
-    "ts-node": "^9",
     "typescript": "^4.4.4"
   },
-  "dependencies": {
-    "@aws-cdk/assert": "1.128.0",
+  "peerDependencies": {
     "@aws-cdk/aws-autoscaling": "1.128.0",
     "@aws-cdk/aws-ec2": "1.128.0",
     "@aws-cdk/aws-iam": "1.128.0",
     "@aws-cdk/aws-s3": "1.128.0",
     "@aws-cdk/aws-s3-deployment": "1.128.0",
-    "@aws-cdk/core": "1.128.0"
+    "constructs": "^3.2.27"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-autoscaling": "1.128.0",
+    "@aws-cdk/aws-ec2": "1.128.0",
+    "@aws-cdk/aws-iam": "1.128.0",
+    "@aws-cdk/aws-s3": "1.128.0",
+    "@aws-cdk/aws-s3-deployment": "1.128.0"
   },
   "bundledDependencies": [],
+  "keywords": [
+    "cdk"
+  ],
+  "main": "lib/index.js",
   "license": "Apache-2.0",
   "version": "0.0.0",
   "jest": {
@@ -112,22 +130,22 @@
     "outdir": "dist",
     "targets": {
       "java": {
-        "package": "",
+        "package": "your_java_package",
         "maven": {
-          "groupId": "",
-          "artifactId": ""
+          "groupId": "your_package_group_id",
+          "artifactId": "your_package_target_id"
         }
       },
       "python": {
-        "distName": "",
-        "module": ""
+        "distName": "distribution-name",
+        "module": "module_name"
       },
       "dotnet": {
-        "namespace": "",
-        "packageId": ""
+        "namespace": "Organization.Namespace",
+        "packageId": "Package.Name"
       },
       "go": {
-        "moduleName": ""
+        "moduleName": "github.com/owner/repo/subdir"
       }
     },
     "tsc": {

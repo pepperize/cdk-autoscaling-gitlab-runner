@@ -3,6 +3,7 @@ import {
   InstanceSize,
   InstanceType,
   MachineImage,
+  SubnetSelection,
   SubnetType,
   Vpc,
 } from "@aws-cdk/aws-ec2";
@@ -36,7 +37,7 @@ new GitlabRunnerStack(app, `GitlabRunnerStack`, {
   cacheBucketName: "",
   cacheExpirationInDays: 0,
   availabilityZone: "",
-  vpcSubnet: null,
+  vpcSubnet: {subnetType: SubnetType.PRIVATE_ISOLATED},
   managerImageId: "",
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPair: "",

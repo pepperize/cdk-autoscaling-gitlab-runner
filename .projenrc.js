@@ -1,10 +1,6 @@
-const {
-  AwsCdkConstructLibrary,
-  NodePackageManager,
-  AwsCdkTypeScriptApp,
-} = require("projen");
+const { AwsCdkConstructLibrary, NodePackageManager } = require("projen");
 
-const project = new AwsCdkTypeScriptApp({
+const project = new AwsCdkConstructLibrary({
   author: "Ivan Ovdiienko",
   authorAddress: "ivan.ovdiienko@pepperize.com",
   authorOrganization: "Pepperize",
@@ -39,13 +35,13 @@ const project = new AwsCdkTypeScriptApp({
     packageId: "Package.Name",
   },
   publishToPypi: {
-    distName: "<distribution-name>",
-    module: "<module_name>",
+    distName: "distribution-name",
+    module: "module_name",
   },
   publishToMaven: {
-    javaPackage: "<your_java_package>",
-    mavenGroupId: "<your_package_group_id",
-    mavenArtifactId: "<your_package_target_id>",
+    javaPackage: "your_java_package",
+    mavenGroupId: "your_package_group_id",
+    mavenArtifactId: "your_package_target_id",
   },
   publishToGo: {
     moduleName: "github.com/owner/repo/subdir",

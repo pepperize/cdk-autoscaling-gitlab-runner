@@ -23,8 +23,7 @@
       "type": "build"
     },
     {
-      "name": "aws-cdk",
-      "version": "1.128.0",
+      "name": "eslint",
       "type": "build"
     },
     {
@@ -33,22 +32,6 @@
     },
     {
       "name": "eslint-import-resolver-node",
-      "type": "build"
-    },
-    {
-      "name": "eslint-config-prettier",
-      "type": "build"
-    },
-    {
-      "name": "eslint-plugin-import",
-      "type": "build"
-    },
-    {
-      "name": "eslint-plugin-prettier",
-      "type": "build"
-    },
-    {
-      "name": "jest",
       "type": "build"
     },
     {
@@ -70,6 +53,22 @@
     {
       "name": "jest-junit",
       "version": "^12",
+      "type": "build"
+    },
+    {
+      "name": "jsii",
+      "type": "build"
+    },
+    {
+      "name": "jsii-diff",
+      "type": "build"
+    },
+    {
+      "name": "jsii-docgen",
+      "type": "build"
+    },
+    {
+      "name": "jsii-pacmak",
       "type": "build"
     },
     {
@@ -99,18 +98,38 @@
       "type": "build"
     },
     {
-      "name": "ts-node",
-      "version": "^9",
-      "type": "build"
-    },
-    {
       "name": "typescript",
       "type": "build"
     },
     {
-      "name": "@aws-cdk/assert",
+      "name": "@aws-cdk/aws-autoscaling",
       "version": "1.128.0",
-      "type": "runtime"
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-ec2",
+      "version": "1.128.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-iam",
+      "version": "1.128.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-s3-deployment",
+      "version": "1.128.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-s3",
+      "version": "1.128.0",
+      "type": "peer"
+    },
+    {
+      "name": "constructs",
+      "version": "^3.2.27",
+      "type": "peer"
     },
     {
       "name": "@aws-cdk/aws-autoscaling",
@@ -134,11 +153,6 @@
     },
     {
       "name": "@aws-cdk/aws-s3",
-      "version": "1.128.0",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/core",
       "version": "1.128.0",
       "type": "runtime"
     }
