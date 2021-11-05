@@ -3,11 +3,10 @@ import {
   InstanceSize,
   InstanceType,
   MachineImage,
-  SubnetSelection,
   SubnetType,
   Vpc,
 } from "@aws-cdk/aws-ec2";
-import { App, CfnMapping, DockerImage } from "@aws-cdk/core";
+import { App } from "@aws-cdk/core";
 import { GitlabRunnerStack } from "./cdk-gitlab-runner-stack";
 
 const app = new App();

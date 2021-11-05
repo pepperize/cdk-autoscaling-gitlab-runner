@@ -27,11 +27,6 @@ import {
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
 import { Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
-import {
-  BucketDeployment,
-  ServerSideEncryption,
-  Source,
-} from "@aws-cdk/aws-s3-deployment";
 import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core";
 
 export interface GitlabRunnerStackProps extends StackProps {
@@ -300,7 +295,7 @@ export class GitlabRunnerStack extends Stack {
       "/etc/rsyslog.d/25-gitlab-runner.conf"
     );
 
-    const metadata = CloudFormationInit.fromConfigSets({
+    CloudFormationInit.fromConfigSets({
       configSets: {
         install: ["reposritories", "packages"],
         config: ["config"],
@@ -454,7 +449,7 @@ export class GitlabRunnerStack extends Stack {
      * ManagerEIP:
      * Type: 'AWS::EC2::EIP'
      */
-    const managerEip = new CfnEIP(this, "ManagerEIP", {
+    new CfnEIP(this, "ManagerEIP", {
       // TODO: refactor this low level code
       domain: "vpc",
       instanceId: manager.instanceId,
