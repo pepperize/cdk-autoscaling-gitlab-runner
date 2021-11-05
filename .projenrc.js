@@ -5,7 +5,7 @@ const {
 } = require("projen");
 
 const project = new AwsCdkTypeScriptApp({
-  authorName: "Ivan Ovdiienko",
+  author: "Ivan Ovdiienko",
   authorAddress: "ivan.ovdiienko@pepperize.com",
   authorOrganization: "Pepperize",
   cdkVersion: "1.128.0",
