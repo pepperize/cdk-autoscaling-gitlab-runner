@@ -31,3 +31,7 @@ execute `npx projen` to update project configuration files.
 # Development
 
 The current development branch is `master`. The dev environment is `production`. The commit convention is [Angular](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines).
+
+# Philosophy
+
+It will be a useful and reusable **gitlab runner** CDK Construct. We'll make it available to the public at diffent package registries across different programming languages. 
