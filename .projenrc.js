@@ -17,6 +17,9 @@ const project = new AwsCdkTypeScriptApp({
     "@aws-cdk/aws-iam",
     "@aws-cdk/aws-autoscaling",
   ],
+  appEntrypoint: "main.ts",
+  context: {
+  },
   // deps: ["package-name", ...]
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
