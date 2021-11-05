@@ -10,10 +10,15 @@ const project = new AwsCdkConstructLibrary({
   name: "cdk-gitlab-runner",
   repositoryUrl: "https://github.com/pepperize/cdk-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
-
-  // cdkDependencies: undefined,      /* Which AWS CDK modules (those that start with "@aws-cdk/") does this library require when consumed? */
+  cdkDependencies: [
+    "@aws-cdk/aws-s3",
+    "@aws-cdk/aws-s3-deployment",
+    "@aws-cdk/aws-ec2",
+    "@aws-cdk/aws-iam",
+    "@aws-cdk/aws-autoscaling",
+  ],
+  // deps: ["package-name", ...]
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
-  // deps: [],                        /* Runtime dependencies of this module. */
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                     /* Build dependencies for this module. */
   // packageName: undefined,          /* The "name" in package.json. */
@@ -30,13 +35,13 @@ const project = new AwsCdkConstructLibrary({
     packageId: "Package.Name",
   },
   publishToPypi: {
-    distName: "<distribution-name>",
-    module: "<module_name>",
+    distName: "distribution-name",
+    module: "module_name",
   },
   publishToMaven: {
-    javaPackage: "<your_java_package>",
-    mavenGroupId: "<your_package_group_id",
-    mavenArtifactId: "<your_package_target_id>",
+    javaPackage: "your_java_package",
+    mavenGroupId: "your_package_group_id",
+    mavenArtifactId: "your_package_target_id",
   },
   publishToGo: {
     moduleName: "github.com/owner/repo/subdir",

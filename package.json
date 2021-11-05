@@ -51,10 +51,10 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.3.1",
     "jest-junit": "^12",
-    "jsii": "^1.39.0",
-    "jsii-diff": "^1.39.0",
-    "jsii-docgen": "^3.7.11",
-    "jsii-pacmak": "^1.39.0",
+    "jsii": "^1.42.0",
+    "jsii-diff": "^1.42.0",
+    "jsii-docgen": "^3.8.20",
+    "jsii-pacmak": "^1.42.0",
     "json-schema": "^0.3.0",
     "npm-check-updates": "^11",
     "prettier": "^2.4.1",
@@ -64,7 +64,19 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
+    "@aws-cdk/aws-autoscaling": "1.128.0",
+    "@aws-cdk/aws-ec2": "1.128.0",
+    "@aws-cdk/aws-iam": "1.128.0",
+    "@aws-cdk/aws-s3": "1.128.0",
+    "@aws-cdk/aws-s3-deployment": "1.128.0",
     "constructs": "^3.2.27"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-autoscaling": "1.128.0",
+    "@aws-cdk/aws-ec2": "1.128.0",
+    "@aws-cdk/aws-iam": "1.128.0",
+    "@aws-cdk/aws-s3": "1.128.0",
+    "@aws-cdk/aws-s3-deployment": "1.128.0"
   },
   "bundledDependencies": [],
   "keywords": [
@@ -118,22 +130,22 @@
     "outdir": "dist",
     "targets": {
       "java": {
-        "package": "",
+        "package": "your_java_package",
         "maven": {
-          "groupId": "",
-          "artifactId": ""
+          "groupId": "your_package_group_id",
+          "artifactId": "your_package_target_id"
         }
       },
       "python": {
-        "distName": "",
-        "module": ""
+        "distName": "distribution-name",
+        "module": "module_name"
       },
       "dotnet": {
-        "namespace": "",
-        "packageId": ""
+        "namespace": "Organization.Namespace",
+        "packageId": "Package.Name"
       },
       "go": {
-        "moduleName": ""
+        "moduleName": "github.com/owner/repo/subdir"
       }
     },
     "tsc": {
