@@ -1,14 +1,5 @@
-### Maintenance (Projen)
-
-This project uses [projen](https://github.com/projen/projen) to maintain project configuration through code. Thus, the synthesized files with projen should never be manually edited (in fact, projen enforces that).
-
-To modify the project setup, you should interact with rich strongly-typed
-class [AwsCdkTypeScriptApp](https://github.com/projen/projen/blob/master/API.md#projen-awscdktypescriptapp) and
-execute `npx projen` to update project configuration files.
-
-> In simple words, developers can only modify `.projenrc.js` file for configuration/maintenance and files under `/src` directory for development.
-
-## Prerequisites:
+*Note: it's a really simple and short README. Only basic tips are covered. Feel free to improve it.*
+# Prerequisites:
 
 - **[WebStorm](https://www.jetbrains.com/phpstorm/)**: ^2021.2 or any other IDE for TypeScript development,
 - **[Node.js](https://nodejs.org/download/release/v14.6.0/)**: ^16.6.2,
@@ -25,3 +16,18 @@ npm install
 ```
 npx projen
 ```
+
+# Maintenance (Projen)
+
+This project uses [projen](https://github.com/projen/projen) to maintain project configuration through code. Thus, the synthesized files with projen should never be manually edited (in fact, projen enforces that).
+
+To modify the project setup, you should interact with rich strongly-typed
+class [AwsCdkTypeScriptApp](https://github.com/projen/projen/blob/master/API.md#projen-awscdktypescriptapp) and
+execute `npx projen` to update project configuration files.
+
+> In simple words, developers can only modify `.projenrc.js` file for configuration/maintenance and files under `/src` directory for development.
+
+
+# Development
+
+The current development branch is `master`. The dev environment is `production`. The commit convention is [Angular](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines).
