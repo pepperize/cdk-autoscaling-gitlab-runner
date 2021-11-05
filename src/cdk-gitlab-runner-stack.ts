@@ -35,7 +35,6 @@ export interface GitlabRunnerStackProps extends StackProps {
   cacheExpirationInDays: number;
   availabilityZone: string;
   vpcSubnet: SubnetSelection;
-  managerImageId: string;
   managerInstanceType: InstanceType;
   managerKeyPair: string;
   gitlabUrl: string;
@@ -351,7 +350,7 @@ export class GitlabRunnerStack extends Stack {
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
             `
-            concurrent = ${props.gitlabMaxBuilds}
+            concurrent = ${props.gitlabMaxConcurrentBuilds}
             check_interval = ${props.gitlabCheckInterval}
             [[runners]]
               name = "${this.stackName}"

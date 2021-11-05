@@ -41,7 +41,6 @@ new GitlabRunnerStack(app, "GitlabRunnerStack", {
   cacheExpirationInDays: 0,
   availabilityZone: "",
   vpcSubnet: {subnetType: SubnetType.PUBLIC}, // TODO: Should be private with NAT?
-  managerImageId: "",
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPair: "",
   gitlabUrl: "",
