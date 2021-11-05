@@ -16,6 +16,8 @@ execute `npx projen` to update project configuration files.
 - **[awscli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)** ^1.20.31.
 # Quick start
 
+Run:
+
 ```
 npm install
 ```
