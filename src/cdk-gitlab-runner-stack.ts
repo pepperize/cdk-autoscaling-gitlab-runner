@@ -104,7 +104,6 @@ const defaultProps: GitlabRunnerStackProps = {
 };
 
 export class GitlabRunnerStack extends Stack {
-
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
 
@@ -130,7 +129,7 @@ export class GitlabRunnerStack extends Stack {
       gitlabCheckInterval,
       gitlabRunnerSpotInstance,
       gitlabRunnerSpotInstancePrice,
-    }: GitlabRunnerStackProps = {...props, ...defaultProps}
+    }: GitlabRunnerStackProps = { ...defaultProps, ...props }; // assign defaults and reassign with props if defined
 
     /*
      * ####################################
@@ -141,9 +140,7 @@ export class GitlabRunnerStack extends Stack {
     /* Transformation cacheExpirationInDays into expirationDate */
     const today = new Date().getDate();
     const cacheBucketExpirationDate = new Date();
-    cacheBucketExpirationDate.setDate(
-      today + cacheExpirationInDays!
-    );
+    cacheBucketExpirationDate.setDate(today + cacheExpirationInDays!);
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. */
     const lifeCycleRuleEnabled = cacheExpirationInDays === 0;
