@@ -142,6 +142,7 @@ export class GitlabRunnerStack extends Stack {
     today.setUTCHours(0,0,0,0); // Date must be at midnight GMT
     
     const cacheBucketExpirationDate = new Date();
+    cacheBucketExpirationDate.setUTCHours(0,0,0,0); // Date must be at midnight GMT
     cacheBucketExpirationDate.setDate(today.getDate() + cacheExpirationInDays!);
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. */
