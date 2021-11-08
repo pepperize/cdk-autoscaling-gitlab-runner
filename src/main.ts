@@ -37,9 +37,9 @@ const managerAmiMap: Record<string, string> = { // Record<REGION, AMI_ID>
 
 new GitlabRunnerStack(app, "GitlabRunnerStack", {
   machineImage: MachineImage.genericLinux(managerAmiMap),
-  cacheBucketName: "",
-  cacheExpirationInDays: 0,
-  availabilityZone: "",
+  cacheBucketName: "RunnerCache",
+  cacheExpirationInDays: 31,
+  availabilityZone: "a",
   vpcSubnet: {subnetType: SubnetType.PUBLIC}, // TODO: Should be private with NAT?
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPair: "",
