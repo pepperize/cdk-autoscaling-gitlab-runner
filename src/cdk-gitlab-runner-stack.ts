@@ -32,7 +32,8 @@ import {
 import { Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core";
 
-export const managerAmiMap: Record<string, string> = { // Record<REGION, AMI_ID>
+export const managerAmiMap: Record<string, string> = {
+  // Record<REGION, AMI_ID>
   "eu-north-1": "ami-d16fe6af",
   "ap-south-1": "ami-0889b8a448de4fc44",
   "eu-west-3": "ami-0451ae4fd8dd178f7",
@@ -48,7 +49,7 @@ export const managerAmiMap: Record<string, string> = { // Record<REGION, AMI_ID>
   "us-east-1": "ami-0de53d8956e8dcf80",
   "us-east-2": "ami-02bcbb802e03574ba",
   "us-west-1": "ami-0019ef04ac50be30f",
-  "us-west-2": "ami-061392db613a6357b"
+  "us-west-2": "ami-061392db613a6357b",
 };
 
 export interface GitlabRunnerStackProps extends StackProps {
@@ -59,33 +60,36 @@ export interface GitlabRunnerStackProps extends StackProps {
   vpcSubnet?: SubnetSelection;
   managerInstanceType?: InstanceType;
   managerKeyPairName?: string;
-  gitlabUrl: string;
-  gitlabToken: string;
+  gitlabUrl?: string;
+  gitlabToken?: string;
   gitlabRunnerInstanceType?: InstanceType;
-  gitlabDockerImage: string;
-  gitlabMaxBuilds: string;
-  gitlabMaxConcurrentBuilds: string;
-  gitlabIdleCount: string;
-  gitlabIdleTime: string;
-  gitlabOffPeakTimezone: string;
-  gitlabOffPeakIdleCount: string;
-  gitlabOffPeakIdleTime: string;
-  gitlabCheckInterval: string;
-  gitlabRunnerSpotInstance: string;
-  gitlabRunnerSpotInstancePrice: string;
+  gitlabDockerImage?: string;
+  gitlabMaxBuilds?: string;
+  gitlabMaxConcurrentBuilds?: string;
+  gitlabIdleCount?: string;
+  gitlabIdleTime?: string;
+  gitlabOffPeakTimezone?: string;
+  gitlabOffPeakIdleCount?: string;
+  gitlabOffPeakIdleTime?: string;
+  gitlabCheckInterval?: string;
+  gitlabRunnerSpotInstance?: string;
+  gitlabRunnerSpotInstancePrice?: string;
 }
 
-const gitlabRunnerStackPropsDefaults: Partial<GitlabRunnerStackProps> = {
+const defaultProps: GitlabRunnerStackProps = {
   machineImage: MachineImage.genericLinux(managerAmiMap),
   cacheBucketName: "RunnerCache",
   cacheExpirationInDays: 0,
   availabilityZone: "a",
-  vpcSubnet: {subnetType: SubnetType.PUBLIC},
+  vpcSubnet: { subnetType: SubnetType.PUBLIC },
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPairName: "", // You won't be able to ssh into an instance without the Key Pair
   gitlabUrl: "string", // URL of your GitLab instance
   gitlabToken: "string",
-  gitlabRunnerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
+  gitlabRunnerInstanceType: InstanceType.of(
+    InstanceClass.T2,
+    InstanceSize.MICRO
+  ),
   gitlabDockerImage: "string",
   gitlabMaxBuilds: "string",
   gitlabMaxConcurrentBuilds: "string",
@@ -97,13 +101,36 @@ const gitlabRunnerStackPropsDefaults: Partial<GitlabRunnerStackProps> = {
   gitlabCheckInterval: "string",
   gitlabRunnerSpotInstance: "string",
   gitlabRunnerSpotInstancePrice: "string",
-}
+};
 
 export class GitlabRunnerStack extends Stack {
+
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
 
-    const properties = {props}
+    const {
+      machineImage,
+      cacheBucketName,
+      cacheExpirationInDays,
+      availabilityZone,
+      vpcSubnet,
+      managerInstanceType,
+      managerKeyPairName,
+      gitlabUrl,
+      gitlabToken,
+      gitlabRunnerInstanceType,
+      gitlabDockerImage,
+      gitlabMaxBuilds,
+      gitlabMaxConcurrentBuilds,
+      gitlabIdleCount,
+      gitlabIdleTime,
+      gitlabOffPeakTimezone,
+      gitlabOffPeakIdleCount,
+      gitlabOffPeakIdleTime,
+      gitlabCheckInterval,
+      gitlabRunnerSpotInstance,
+      gitlabRunnerSpotInstancePrice,
+    }: GitlabRunnerStackProps = {...props, ...defaultProps}
 
     /*
      * ####################################
@@ -114,13 +141,15 @@ export class GitlabRunnerStack extends Stack {
     /* Transformation cacheExpirationInDays into expirationDate */
     const today = new Date().getDate();
     const cacheBucketExpirationDate = new Date();
-    cacheBucketExpirationDate.setDate(today + props.cacheExpirationInDays?? gitlabRunnerStackPropsDefaults.cacheExpirationInDays);
+    cacheBucketExpirationDate.setDate(
+      today + cacheExpirationInDays!
+    );
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. */
-    const lifeCycleRuleEnabled = props.cacheExpirationInDays === 0;
+    const lifeCycleRuleEnabled = cacheExpirationInDays === 0;
 
     const cacheBucket = new Bucket(this, "GitlabRunnerCacheBucket", {
-      bucketName: props.cacheBucketName,
+      bucketName: cacheBucketName,
       lifecycleRules: [
         {
           enabled: lifeCycleRuleEnabled,
@@ -138,8 +167,9 @@ export class GitlabRunnerStack extends Stack {
      */
 
     const vpc = Vpc.fromLookup(this, "PepperizeVpc", {
-      vpcName: "AWSBootstrapKit-LandingZone-PipelineStack/Vpc/pepperizeVpcStack/PepperizeVpc-Prod", // TODO: find a better way to find a vpc
-    })
+      vpcName:
+        "AWSBootstrapKit-LandingZone-PipelineStack/Vpc/pepperizeVpcStack/PepperizeVpc-Prod", // TODO: find a better way to find a vpc
+    });
 
     /*
      * ManagerSecurityGroup:
@@ -236,7 +266,7 @@ export class GitlabRunnerStack extends Stack {
               Condition: {
                 StringEquals: {
                   "ec2:Region": `${this.region}`,
-                  "ec2:InstanceType": `${props.gitlabRunnerInstanceType?.toString}`,
+                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-docker-machine-*",
@@ -252,7 +282,7 @@ export class GitlabRunnerStack extends Stack {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${props.gitlabRunnerInstanceType?.toString}`,
+                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString}`,
                   "ec2:Region": `${this.region}`,
                   "ec2:Tenancy": "default",
                 },
@@ -305,23 +335,21 @@ export class GitlabRunnerStack extends Stack {
     /* Manager:
      * Type: 'AWS::EC2::Instance'
      */
-    const userData = UserData.forLinux({
-
-    });
+    const userData = UserData.forLinux({});
     userData.addCommands(
       `yum update -y aws-cfn-bootstrap`, // !/bin/bash -xe
       `/opt/aws/bin/cfn-init --stack '${this.stackName}' --region '${this.region}' --resource Manager --configsets default`, // Install the files and packages from the metadata
-      `/opt/aws/bin/cfn-signal -e $? --stack '${this.region}' --region '${this.region}' --resource Manager`, // Signal the status from cfn-init
+      `/opt/aws/bin/cfn-signal -e $? --stack '${this.region}' --region '${this.region}' --resource Manager` // Signal the status from cfn-init
     );
 
     const manager = new Instance(this, "Instance", {
-      instanceType: props.managerInstanceType,
+      instanceType: managerInstanceType!,
       vpc: vpc,
-      machineImage: props.machineImage,
+      machineImage: machineImage!,
       userData: userData,
-      keyName: props.managerKeyPairName,
-      securityGroup: managerSecurityGroup,
-      vpcSubnets: props.vpcSubnet
+      keyName: managerKeyPairName!,
+      securityGroup: managerSecurityGroup!,
+      vpcSubnets: vpcSubnet!,
     });
     manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
     manager.instance.iamInstanceProfile =
@@ -398,12 +426,12 @@ export class GitlabRunnerStack extends Stack {
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
             `
-            concurrent = ${props.gitlabMaxConcurrentBuilds}
-            check_interval = ${props.gitlabCheckInterval}
+            concurrent = ${gitlabMaxConcurrentBuilds!}
+            check_interval = ${gitlabCheckInterval!}
             [[runners]]
               name = "${this.stackName}"
-              url = "${props.gitlabUrl}"
-              token = "${props.gitlabToken}"
+              url = "${gitlabUrl}"
+              token = "${gitlabToken}"
               executor = "docker+machine"
               environment = [
                 "DOCKER_DRIVER=overlay2",
@@ -411,7 +439,7 @@ export class GitlabRunnerStack extends Stack {
               ]
               [runners.docker]
                 tls_verify = false
-                image = "${props.gitlabDockerImage}"
+                image = "${gitlabDockerImage!}"
                 privileged = true
                 disable_cache = false
                 volumes = ["/certs/client", "/cache"]
@@ -421,20 +449,20 @@ export class GitlabRunnerStack extends Stack {
                 Shared = true
               [runners.cache.s3]
                 ServerAddress = "s3.${this.urlSuffix}"
-                BucketName = "${props.cacheBucketName}"
+                BucketName = "${cacheBucketName!}"
                 BucketLocation = "${this.region}"
               [runners.machine]
-                IdleCount = ${props.gitlabIdleCount}
-                IdleTime = ${props.gitlabIdleTime}
-                MaxBuilds = ${props.gitlabMaxBuilds}
+                IdleCount = ${gitlabIdleCount!}
+                IdleTime = ${gitlabIdleTime!}
+                MaxBuilds = ${gitlabMaxBuilds!}
                 MachineDriver = "amazonec2"
                 MachineName = "gitlab-docker-machine-%s"
                 MachineOptions = [
-                  "amazonec2-instance-type=${props.gitlabRunnerInstanceType}",
+                  "amazonec2-instance-type=${gitlabRunnerInstanceType!}",
                   "amazonec2-region=${this.region}",
                   "amazonec2-vpc-id=${vpc.vpcId}",
-                  "amazonec2-zone=${props.availabilityZone}",
-                  "amazonec2-subnet-id=${props.vpcSubnet}",
+                  "amazonec2-zone=${availabilityZone!}",
+                  "amazonec2-subnet-id=${vpcSubnet!}",
                   "amazonec2-security-group=${
                     this.stackName
                   }-RunnersSecurityGroup",
@@ -443,20 +471,20 @@ export class GitlabRunnerStack extends Stack {
                     runnersInstanceProfile.logicalId
                   }"
                   ${
-                    props.gitlabRunnerSpotInstance
+                    gitlabRunnerSpotInstance
                       ? "amazonec2-request-spot-instance=true"
                       : ""
                   } 
                   ${
-                    props.gitlabRunnerSpotInstance
-                      ? `amazonec2-spot-price=${props.gitlabRunnerSpotInstancePrice}`
+                    gitlabRunnerSpotInstance
+                      ? `amazonec2-spot-price=${gitlabRunnerSpotInstancePrice!}`
                       : ""
                   }
                 ]
-                OffPeakTimezone = "${props.gitlabOffPeakTimezone}"
+                OffPeakTimezone = "${gitlabOffPeakTimezone!}"
                 OffPeakPeriods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
-                OffPeakIdleCount = ${props.gitlabOffPeakIdleCount}
-                OffPeakIdleTime = ${props.gitlabOffPeakIdleTime}
+                OffPeakIdleCount = ${gitlabOffPeakIdleCount!}
+                OffPeakIdleTime = ${gitlabOffPeakIdleTime!}
             `,
             {
               owner: "gitlab-runner",
