@@ -83,7 +83,7 @@ const defaultProps: GitlabRunnerStackProps = {
   availabilityZone: "a",
   vpcSubnet: { subnetType: SubnetType.PUBLIC },
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
-  managerKeyPairName: "", // You won't be able to ssh into an instance without the Key Pair
+  managerKeyPairName: undefined, // You won't be able to ssh into an instance without the Key Pair
   gitlabUrl: "string", // URL of your GitLab instance
   gitlabToken: "string",
   gitlabRunnerInstanceType: InstanceType.of(
@@ -138,15 +138,16 @@ export class GitlabRunnerStack extends Stack {
      */
 
     /* Transformation cacheExpirationInDays into expirationDate */
-    const today = new Date().getDate();
+    const today = new Date();
+    today.setUTCHours(0,0,0,0); // Date must be at midnight GMT
+    
     const cacheBucketExpirationDate = new Date();
-    cacheBucketExpirationDate.setDate(today + cacheExpirationInDays!);
+    cacheBucketExpirationDate.setDate(today.getDate() + cacheExpirationInDays!);
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. */
     const lifeCycleRuleEnabled = cacheExpirationInDays === 0;
 
     const cacheBucket = new Bucket(this, "GitlabRunnerCacheBucket", {
-      bucketName: cacheBucketName,
       lifecycleRules: [
         {
           enabled: lifeCycleRuleEnabled,
@@ -344,9 +345,9 @@ export class GitlabRunnerStack extends Stack {
       vpc: vpc,
       machineImage: machineImage!,
       userData: userData,
-      keyName: managerKeyPairName!,
-      securityGroup: managerSecurityGroup!,
-      vpcSubnets: vpcSubnet!,
+      keyName: managerKeyPairName,
+      securityGroup: managerSecurityGroup,
+      vpcSubnets: vpcSubnet,
     });
     manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
     manager.instance.iamInstanceProfile =
@@ -423,8 +424,8 @@ export class GitlabRunnerStack extends Stack {
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
             `
-            concurrent = ${gitlabMaxConcurrentBuilds!}
-            check_interval = ${gitlabCheckInterval!}
+            concurrent = ${gitlabMaxConcurrentBuilds}
+            check_interval = ${gitlabCheckInterval}
             [[runners]]
               name = "${this.stackName}"
               url = "${gitlabUrl}"
@@ -436,7 +437,7 @@ export class GitlabRunnerStack extends Stack {
               ]
               [runners.docker]
                 tls_verify = false
-                image = "${gitlabDockerImage!}"
+                image = "${gitlabDockerImage}"
                 privileged = true
                 disable_cache = false
                 volumes = ["/certs/client", "/cache"]
@@ -446,20 +447,20 @@ export class GitlabRunnerStack extends Stack {
                 Shared = true
               [runners.cache.s3]
                 ServerAddress = "s3.${this.urlSuffix}"
-                BucketName = "${cacheBucketName!}"
+                BucketName = "${cacheBucketName}"
                 BucketLocation = "${this.region}"
               [runners.machine]
-                IdleCount = ${gitlabIdleCount!}
-                IdleTime = ${gitlabIdleTime!}
-                MaxBuilds = ${gitlabMaxBuilds!}
+                IdleCount = ${gitlabIdleCount}
+                IdleTime = ${gitlabIdleTime}
+                MaxBuilds = ${gitlabMaxBuilds}
                 MachineDriver = "amazonec2"
                 MachineName = "gitlab-docker-machine-%s"
                 MachineOptions = [
-                  "amazonec2-instance-type=${gitlabRunnerInstanceType!}",
+                  "amazonec2-instance-type=${gitlabRunnerInstanceType}",
                   "amazonec2-region=${this.region}",
                   "amazonec2-vpc-id=${vpc.vpcId}",
-                  "amazonec2-zone=${availabilityZone!}",
-                  "amazonec2-subnet-id=${vpcSubnet!}",
+                  "amazonec2-zone=${availabilityZone}",
+                  "amazonec2-subnet-id=${vpcSubnet}",
                   "amazonec2-security-group=${
                     this.stackName
                   }-RunnersSecurityGroup",
@@ -474,14 +475,14 @@ export class GitlabRunnerStack extends Stack {
                   } 
                   ${
                     gitlabRunnerSpotInstance
-                      ? `amazonec2-spot-price=${gitlabRunnerSpotInstancePrice!}`
+                      ? `amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}`
                       : ""
                   }
                 ]
-                OffPeakTimezone = "${gitlabOffPeakTimezone!}"
+                OffPeakTimezone = "${gitlabOffPeakTimezone}"
                 OffPeakPeriods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
-                OffPeakIdleCount = ${gitlabOffPeakIdleCount!}
-                OffPeakIdleTime = ${gitlabOffPeakIdleTime!}
+                OffPeakIdleCount = ${gitlabOffPeakIdleCount}
+                OffPeakIdleTime = ${gitlabOffPeakIdleTime}
             `,
             {
               owner: "gitlab-runner",
