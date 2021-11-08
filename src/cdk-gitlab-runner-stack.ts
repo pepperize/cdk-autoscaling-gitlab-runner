@@ -78,7 +78,7 @@ export interface GitlabRunnerStackProps extends StackProps {
 
 const defaultProps: GitlabRunnerStackProps = {
   machineImage: MachineImage.genericLinux(managerAmiMap),
-  cacheBucketName: "RunnerCache",
+  cacheBucketName: "runnercache",
   cacheExpirationInDays: 0,
   availabilityZone: "a",
   vpcSubnet: { subnetType: SubnetType.PUBLIC },
