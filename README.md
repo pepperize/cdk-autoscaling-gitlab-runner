@@ -36,3 +36,12 @@ The current development branch is `master`. The dev environment is `production`.
 # Philosophy
 
 It will be a useful and reusable **gitlab runner** CDK Construct. We'll make it available to the public across diffent package registries and different programming languages.
+
+
+# ROLLBACK CAUTION
+
+Rollback will **delete all resources** provisioned with this app, **except**:
+- S3 bucket,
+- KMS key.
+
+These resources should be deleted **manually**
