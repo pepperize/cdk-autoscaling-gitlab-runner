@@ -10,11 +10,15 @@ import {
   InitService,
   InitServiceRestartHandle,
   Instance,
+  InstanceClass,
+  InstanceSize,
   InstanceType,
+  MachineImage,
   Peer,
   Port,
   SecurityGroup,
   SubnetSelection,
+  SubnetType,
   UserData,
   Vpc,
 } from "@aws-cdk/aws-ec2";
@@ -28,18 +32,36 @@ import {
 import { Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core";
 
+export const managerAmiMap: Record<string, string> = { // Record<REGION, AMI_ID>
+  "eu-north-1": "ami-d16fe6af",
+  "ap-south-1": "ami-0889b8a448de4fc44",
+  "eu-west-3": "ami-0451ae4fd8dd178f7",
+  "eu-west-2": "ami-09ead922c1dad67e4",
+  "eu-west-1": "ami-07683a44e80cd32c5",
+  "ap-northeast-2": "ami-047f7b46bd6dd5d84",
+  "ap-northeast-1": "ami-0f9ae750e8274075b",
+  "sa-east-1": "ami-0669a96e355eac82f",
+  "ca-central-1": "ami-03338e1f67dae0168",
+  "ap-southeast-1": "ami-0b419c3a4b01d1859",
+  "ap-southeast-2": "ami-04481c741a0311bbb",
+  "eu-central-1": "ami-09def150731bdbcc2",
+  "us-east-1": "ami-0de53d8956e8dcf80",
+  "us-east-2": "ami-02bcbb802e03574ba",
+  "us-west-1": "ami-0019ef04ac50be30f",
+  "us-west-2": "ami-061392db613a6357b"
+};
+
 export interface GitlabRunnerStackProps extends StackProps {
-  machineImage: IMachineImage;
-  /** These props come from "Parameters:" from runner.yml CFN template */
-  cacheBucketName: string;
-  cacheExpirationInDays: number;
-  availabilityZone: string;
-  vpcSubnet: SubnetSelection;
-  managerInstanceType: InstanceType;
-  managerKeyPair: string;
+  machineImage?: IMachineImage;
+  cacheBucketName?: string;
+  cacheExpirationInDays?: number;
+  availabilityZone?: string;
+  vpcSubnet?: SubnetSelection;
+  managerInstanceType?: InstanceType;
+  managerKeyPairName?: string;
   gitlabUrl: string;
   gitlabToken: string;
-  gitlabRunnerInstanceType: string;
+  gitlabRunnerInstanceType?: InstanceType;
   gitlabDockerImage: string;
   gitlabMaxBuilds: string;
   gitlabMaxConcurrentBuilds: string;
@@ -53,9 +75,35 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabRunnerSpotInstancePrice: string;
 }
 
+const gitlabRunnerStackPropsDefaults: Partial<GitlabRunnerStackProps> = {
+  machineImage: MachineImage.genericLinux(managerAmiMap),
+  cacheBucketName: "RunnerCache",
+  cacheExpirationInDays: 0,
+  availabilityZone: "a",
+  vpcSubnet: {subnetType: SubnetType.PUBLIC},
+  managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
+  managerKeyPairName: "", // You won't be able to ssh into an instance without the Key Pair
+  gitlabUrl: "string", // URL of your GitLab instance
+  gitlabToken: "string",
+  gitlabRunnerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
+  gitlabDockerImage: "string",
+  gitlabMaxBuilds: "string",
+  gitlabMaxConcurrentBuilds: "string",
+  gitlabIdleCount: "string",
+  gitlabIdleTime: "string",
+  gitlabOffPeakTimezone: "string",
+  gitlabOffPeakIdleCount: "string",
+  gitlabOffPeakIdleTime: "string",
+  gitlabCheckInterval: "string",
+  gitlabRunnerSpotInstance: "string",
+  gitlabRunnerSpotInstancePrice: "string",
+}
+
 export class GitlabRunnerStack extends Stack {
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
+
+    const properties = {props}
 
     /*
      * ####################################
@@ -66,7 +114,7 @@ export class GitlabRunnerStack extends Stack {
     /* Transformation cacheExpirationInDays into expirationDate */
     const today = new Date().getDate();
     const cacheBucketExpirationDate = new Date();
-    cacheBucketExpirationDate.setDate(today + props.cacheExpirationInDays);
+    cacheBucketExpirationDate.setDate(today + props.cacheExpirationInDays?? gitlabRunnerStackPropsDefaults.cacheExpirationInDays);
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. */
     const lifeCycleRuleEnabled = props.cacheExpirationInDays === 0;
@@ -188,7 +236,7 @@ export class GitlabRunnerStack extends Stack {
               Condition: {
                 StringEquals: {
                   "ec2:Region": `${this.region}`,
-                  "ec2:InstanceType": `${props.gitlabRunnerInstanceType}`,
+                  "ec2:InstanceType": `${props.gitlabRunnerInstanceType?.toString}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-docker-machine-*",
@@ -204,7 +252,7 @@ export class GitlabRunnerStack extends Stack {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${props.gitlabRunnerInstanceType}`,
+                  "ec2:InstanceType": `${props.gitlabRunnerInstanceType?.toString}`,
                   "ec2:Region": `${this.region}`,
                   "ec2:Tenancy": "default",
                 },
@@ -271,7 +319,7 @@ export class GitlabRunnerStack extends Stack {
       vpc: vpc,
       machineImage: props.machineImage,
       userData: userData,
-      keyName: props.managerKeyPair,
+      keyName: props.managerKeyPairName,
       securityGroup: managerSecurityGroup,
       vpcSubnets: props.vpcSubnet
     });
