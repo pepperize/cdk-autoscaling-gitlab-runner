@@ -56,18 +56,18 @@ export const managerAmiMap: Record<string, string> = {
  * About autoscaling props: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections 
  */
 export interface GitlabRunnerStackProps extends StackProps {
-  machineImage?: IMachineImage;
-  cacheBucketName?: string; // the bucket where your cache should be kept
+  machineImage?: IMachineImage; // An Amazon Machine Image for the Manager EC2 instance.
+  cacheBucketName?: string; // The bucket where your cache should be kept.
   cacheExpirationInDays?: number; // Number of days the cache is stored before deletion. 0 simply means don't delete.
-  availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'
+  availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
   vpcIdToLookUp: string; // Your VPC ID to launch the instance in.
   vpcSubnet?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
   managerInstanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
-  managerKeyPairName?: string; // You won't be able to ssh into an instance without the Key Pair
-  gitlabUrl?: string; // URL of your GitLab instance
-  gitlabToken: string; // RUNNER_TOKEN. Note this is different from the registration token used by `gitlab-runner register`
+  managerKeyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
+  gitlabUrl?: string; // URL of your GitLab instance.
+  gitlabToken: string; // RUNNER_TOKEN. Note this is different from the registration token used by `gitlab-runner register`.
   gitlabRunnerInstanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
-  gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml
+  gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml .
   gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
   gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
   gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
