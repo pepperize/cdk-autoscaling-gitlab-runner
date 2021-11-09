@@ -93,8 +93,8 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   gitlabUrl: "https://gitlab.com",
   // gitlabToken: must be set by a user and can't have a default value
   gitlabRunnerInstanceType: InstanceType.of(
-    InstanceClass.T2,
-    InstanceSize.MICRO
+    InstanceClass.T3,
+    InstanceSize.NANO
   ),
   gitlabDockerImage: "alpine",
   gitlabMaxBuilds: 25,
