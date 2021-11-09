@@ -19,6 +19,24 @@ npm install
 npx projen
 ```
 
+# Deploy
+
+1. **Register a new runner**
+
+    https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner
+
+1. **Get new runner token from register token**
+
+    ```sh
+    curl --request POST "https://gitlab.com/api/v4/runners" --form "token=<your register token>" --form "description=gitlab-runner-pepperize" --form "tag_list=<environment name>"
+    ```
+
+1. **AWS CDK deploy**
+
+    ```sh
+    npm run deploy
+    ```
+
 # Maintenance (Projen)
 
 This project uses [projen](https://github.com/projen/projen) to maintain project configuration through code. Thus, the synthesized files with projen should never be manually edited (in fact, projen enforces that).
