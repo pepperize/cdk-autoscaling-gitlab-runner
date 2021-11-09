@@ -54,7 +54,7 @@ export const managerAmiMap: Record<string, string> = {
 
 export interface GitlabRunnerStackProps extends StackProps {
   machineImage?: IMachineImage;
-  cacheBucketName?: string;
+  cacheBucketName?: string; // the bucket where your cache should be kept
   cacheExpirationInDays?: number;
   availabilityZone?: string;
   vpcSubnet?: SubnetSelection;
@@ -64,10 +64,11 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabToken?: string;
   gitlabRunnerInstanceType?: InstanceType;
   gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml
-  gitlabMaxBuilds?: string;
-  gitlabLimit?: number; // limit sets the maximum number of machines (running and idle) that this runner will spawn.
-  gitlabMaxConcurrentBuilds?: number;
-  gitlabIdleCount?: string;
+  gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
+  /** About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines */
+  gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
+  gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
+  gitlabIdleCount?: number; // A value that generates a minimum amount of not used machines when the job queue is empty.
   gitlabIdleTime?: string;
   gitlabOffPeakTimezone?: string;
   gitlabOffPeakIdleCount?: string;
@@ -92,10 +93,10 @@ const defaultProps: GitlabRunnerStackProps = {
     InstanceSize.MICRO
   ),
   gitlabDockerImage: "alpine",
-  gitlabMaxBuilds: "string",
+  gitlabMaxBuilds: 25,
   gitlabMaxConcurrentBuilds: 10,
   gitlabLimit: 20,
-  gitlabIdleCount: "string",
+  gitlabIdleCount: 10,
   gitlabIdleTime: "string",
   gitlabOffPeakTimezone: "string",
   gitlabOffPeakIdleCount: "string",
@@ -435,7 +436,7 @@ export class GitlabRunnerStack extends Stack {
               url = "${gitlabUrl}"
               token = "${gitlabToken}"
               executor = "docker+machine"
-              limit = 20
+              limit = "${gitlabLimit}"
               environment = [
                 "DOCKER_DRIVER=overlay2",
                 "DOCKER_TLS_CERTDIR=/certs"
