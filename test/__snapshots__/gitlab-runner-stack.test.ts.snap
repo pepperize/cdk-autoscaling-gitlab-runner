@@ -138,7 +138,7 @@ Object {
       "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain",
     },
-    "ManagerAutoscalingGroup": Object {
+    "ManagerAutoscalingGroupASGE4841860": Object {
       "CreationPolicy": Object {
         "ResourceSignal": Object {
           "Count": 1,
@@ -222,7 +222,8 @@ check_interval = 0
   url = \\"https://gitlab.com\\"
   token = \\"\\"
   executor = \\"docker+machine\\"
-  limit = \\"20\\"
+  limit = 20
+  output_limit = 52428800
   environment = [
     \\"DOCKER_DRIVER=overlay2\\",
     \\"DOCKER_TLS_CERTDIR=/certs\\"
@@ -231,6 +232,8 @@ check_interval = 0
     tls_verify = false
     image = \\"alpine\\"
     privileged = true
+    cap_add = [\\"CAP_SYS_ADMIN\\"]
+    wait_for_services_timeout = 300
     disable_cache = false
     volumes = [\\"/certs/client\\", \\"/cache\\"]
     shm_size = 0
@@ -254,7 +257,7 @@ check_interval = 0
     IdleTime = 300
     MaxBuilds = 25
     MachineDriver = \\"amazonec2\\"
-    MachineName = \\"gitlab-docker-machine-%s\\"
+    MachineName = \\"gitlab-runner-%s\\"
     MachineOptions = [
       \\"amazonec2-instance-type=t3.micro\\",
       \\"amazonec2-region=",
@@ -273,7 +276,7 @@ check_interval = 0
     ]
     [[runners.machine.autoscaling]]
       Timezone = \\"UTC\\"
-      Periods = [\\"* * 0-8,18-23 * * mon-fri *\\", \\"* * * * * sat,sun *\\"]
+      Periods = [\\"* * * * * mon-fri *\\", \\"* * * * * sat,sun *\\"]
       IdleCount = 20
       IdleTime = 600",
                     ],
@@ -433,7 +436,7 @@ check_interval = 0
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 0f445ba5b35339cf
+# fingerprint: b820fa669c7b11ed
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -444,8 +447,8 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::StackName",
                 },
-                " --resource ManagerAutoscalingGroup -c default
-  /opt/aws/bin/cfn-signal -e $? --region ",
+                " --resource ManagerAutoscalingGroupASGE4841860 -c default
+  /opt/aws/bin/cfn-signal -e 0 --region ",
                 Object {
                   "Ref": "AWS::Region",
                 },
@@ -453,7 +456,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::StackName",
                 },
-                " --resource ManagerAutoscalingGroup
+                " --resource ManagerAutoscalingGroupASGE4841860
   cat /var/log/cfn-init.log >&2
 )",
               ],

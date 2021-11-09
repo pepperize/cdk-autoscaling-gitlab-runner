@@ -1,8 +1,4 @@
-import {
-  AutoScalingGroup,
-  CfnAutoScalingGroup,
-  Signals,
-} from "@aws-cdk/aws-autoscaling";
+import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
 import {
   CloudFormationInit,
   IMachineImage,
@@ -425,7 +421,8 @@ check_interval = ${gitlabCheckInterval}
   url = "${gitlabUrl}"
   token = "${gitlabToken}"
   executor = "docker+machine"
-  limit = "${gitlabLimit}"
+  limit = ${gitlabLimit}
+  output_limit = 52428800
   environment = [
     "DOCKER_DRIVER=overlay2",
     "DOCKER_TLS_CERTDIR=/certs"
@@ -434,6 +431,8 @@ check_interval = ${gitlabCheckInterval}
     tls_verify = false
     image = "${gitlabDockerImage}"
     privileged = true
+    cap_add = ["CAP_SYS_ADMIN"]
+    wait_for_services_timeout = 300
     disable_cache = false
     volumes = ["/certs/client", "/cache"]
     shm_size = 0
@@ -449,7 +448,7 @@ check_interval = ${gitlabCheckInterval}
     IdleTime = ${gitlabIdleTime}
     MaxBuilds = ${gitlabMaxBuilds}
     MachineDriver = "amazonec2"
-    MachineName = "gitlab-docker-machine-%s"
+    MachineName = "gitlab-runner-%s"
     MachineOptions = [
       "amazonec2-instance-type=${gitlabRunnerInstanceType}",
       "amazonec2-region=${this.region}",
@@ -464,7 +463,7 @@ check_interval = ${gitlabCheckInterval}
     ]
     [[runners.machine.autoscaling]]
       Timezone = "${gitlabAutoscalingTimezone}"
-      Periods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
+      Periods = ["* * * * * mon-fri *", "* * * * * sat,sun *"]
       IdleCount = ${gitlabAutoscalingIdleCount}
       IdleTime = ${gitlabAutoscalingIdleTime}
             `.trim(),
@@ -502,27 +501,24 @@ check_interval = ${gitlabCheckInterval}
       },
     });
 
-    const managerAutoscalingGroup = new AutoScalingGroup(
-      this,
-      "ManagerAutoscalingGroup",
-      {
-        vpc: vpc,
-        instanceType: managerInstanceType!,
-        machineImage: machineImage!,
-        keyName: managerKeyPairName,
-        securityGroup: managerSecurityGroup,
-        role: managerRole,
-        userData: userData,
-        init: initConfig,
-        maxCapacity: 1,
-        minCapacity: 1,
-        desiredCapacity: 1,
-        signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
-      }
-    );
-    const cfnManagerAutoscalingGroup = managerAutoscalingGroup.node
-      .defaultChild as CfnAutoScalingGroup;
-    cfnManagerAutoscalingGroup.overrideLogicalId("ManagerAutoscalingGroup");
+    new AutoScalingGroup(this, "ManagerAutoscalingGroup", {
+      vpc: vpc,
+      vpcSubnets: vpcSubnet,
+      instanceType: managerInstanceType!,
+      machineImage: machineImage!,
+      keyName: managerKeyPairName,
+      securityGroup: managerSecurityGroup,
+      role: managerRole,
+      userData: userData,
+      init: initConfig,
+      initOptions: {
+        ignoreFailures: true,
+      },
+      maxCapacity: 1,
+      minCapacity: 1,
+      desiredCapacity: 1,
+      signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
+    });
 
     /*
      * ######################
