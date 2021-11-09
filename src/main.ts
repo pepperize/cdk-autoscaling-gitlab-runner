@@ -10,17 +10,12 @@ const prodEnv = {
 const app = new App();
 
 new GitlabRunnerStack(app, "GitlabRunnerStack", {
+  vpcIdToLookUp: "",
   gitlabUrl: "", // URL of your GitLab instance
   gitlabToken: "",
-  gitlabMaxBuilds: "",
-  gitlabMaxConcurrentBuilds: "",
-  gitlabIdleCount: "",
-  gitlabIdleTime: "",
   gitlabOffPeakTimezone: "",
   gitlabOffPeakIdleCount: "",
   gitlabOffPeakIdleTime: "",
-  gitlabCheckInterval: "",
-  gitlabRunnerSpotInstance: "",
   gitlabRunnerSpotInstancePrice: "",
   env: prodEnv,
 });
