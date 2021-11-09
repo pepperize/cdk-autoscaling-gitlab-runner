@@ -18,6 +18,7 @@ test("gitlab-runner", () => {
   jest.spyOn(Vpc, "fromLookup").mockImplementationOnce(() => mockVpc);
 
   const props: GitlabRunnerStackProps = {
+    gitlabToken: "",
     vpcIdToLookUp: "-",
     vpcSubnet: { subnetType: SubnetType.PRIVATE_WITH_NAT },
   };
