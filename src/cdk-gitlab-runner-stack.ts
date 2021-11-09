@@ -71,12 +71,12 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
   gitlabIdleCount?: number; // A value that generates a minimum amount of not used machines when the job queue is empty.
   gitlabIdleTime?: number; // A number of seconds. The machine is waiting for the next jobs, and if no one is executed, after the IdleTime period, the machine is removed
-  gitlabOffPeakTimezone?: string;
-  gitlabOffPeakIdleCount?: string;
-  gitlabOffPeakIdleTime?: string;
+  gitlabOffPeakTimezone?: string; // TODO: refactor
+  gitlabOffPeakIdleCount?: string; // TODO: refactor
+  gitlabOffPeakIdleTime?: string; // TODO: refactor
   gitlabCheckInterval?: number;
   gitlabRunnerRequestSpotInstance?: boolean;
-  gitlabRunnerSpotInstancePrice?: string;
+  gitlabRunnerSpotInstancePrice?: string; // TODO: refactor
 }
 
 const defaultProps: Partial<GitlabRunnerStackProps> = {
@@ -98,12 +98,12 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   gitlabLimit: 20,
   gitlabIdleCount: 10,
   gitlabIdleTime: 300,
-  gitlabOffPeakTimezone: "string",
-  gitlabOffPeakIdleCount: "string",
-  gitlabOffPeakIdleTime: "string",
+  gitlabOffPeakTimezone: "string", // TODO: configure defaults
+  gitlabOffPeakIdleCount: "string", // TODO: configure defaults
+  gitlabOffPeakIdleTime: "string", // TODO: configure defaults
   gitlabCheckInterval: 0,
   gitlabRunnerRequestSpotInstance: true,
-  gitlabRunnerSpotInstancePrice: "string",
+  gitlabRunnerSpotInstancePrice: "string", // TODO: configure defaults
 };
 
 export class GitlabRunnerStack extends Stack {
