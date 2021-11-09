@@ -57,7 +57,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   cacheBucketName?: string; // the bucket where your cache should be kept
   cacheExpirationInDays?: number;
   availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'
-  vpcIdToLookUp: string;  // Your VPC ID to launch the instance in.
+  vpcIdToLookUp: string; // Your VPC ID to launch the instance in.
   vpcSubnet?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
   managerInstanceType?: InstanceType;
   managerKeyPairName?: string; // You won't be able to ssh into an instance without the Key Pair
@@ -87,7 +87,7 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this bs
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPairName: undefined,
-  gitlabUrl: "https://gitlab.com", 
+  gitlabUrl: "https://gitlab.com",
   gitlabToken: undefined,
   gitlabRunnerInstanceType: InstanceType.of(
     InstanceClass.T2,
@@ -145,10 +145,10 @@ export class GitlabRunnerStack extends Stack {
 
     /* Transformation cacheExpirationInDays into expirationDate */
     const today = new Date();
-    today.setUTCHours(0,0,0,0); // Date must be at midnight GMT
-    
+    today.setUTCHours(0, 0, 0, 0); // Date must be at midnight GMT
+
     const cacheBucketExpirationDate = new Date();
-    cacheBucketExpirationDate.setUTCHours(0,0,0,0); // Date must be at midnight GMT
+    cacheBucketExpirationDate.setUTCHours(0, 0, 0, 0); // Date must be at midnight GMT
     cacheBucketExpirationDate.setDate(today.getDate() + cacheExpirationInDays!);
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. */
@@ -172,8 +172,7 @@ export class GitlabRunnerStack extends Stack {
      */
 
     const vpc = Vpc.fromLookup(this, "PepperizeVpc", {
-      vpcId:
-        vpcIdToLookUp,
+      vpcId: vpcIdToLookUp,
     });
 
     /*
@@ -378,10 +377,10 @@ export class GitlabRunnerStack extends Stack {
     );
 
     // config sets
-    const REPOSITORIES = "repositories"
-    const PACKAGES = "packages"
-    const CONFIG = "config"
-    const INSTALL = "install"
+    const REPOSITORIES = "repositories";
+    const PACKAGES = "packages";
+    const CONFIG = "config";
+    const INSTALL = "install";
 
     CloudFormationInit.fromConfigSets({
       configSets: {
