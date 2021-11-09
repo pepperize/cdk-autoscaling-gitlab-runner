@@ -75,5 +75,9 @@ project.setScript(
 );
 
 project.buildWorkflow.on({ push: {}, pullRequest: {}, workflowDispatch: {} });
+project.buildTask.reset();
+project.buildTask.exec("npx projen");
+project.buildTask.spawn({ name: "test" });
+project.buildTask.spawn({ name: "compile" });
 
 project.synth();
