@@ -4,7 +4,7 @@ import { App, Stack } from "@aws-cdk/core";
 import {
   GitlabRunnerStack,
   GitlabRunnerStackProps,
-} from "../src/cdk-gitlab-runner-stack";
+} from "../src/gitlab-runner-stack";
 
 test("gitlab-runner", () => {
   const app = new App();

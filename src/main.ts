@@ -1,5 +1,5 @@
 import { App } from "@aws-cdk/core";
-import { GitlabRunnerStack } from "./cdk-gitlab-runner-stack";
+import { GitlabRunnerStack } from "./gitlab-runner-stack";
 
 const prodEnv = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
