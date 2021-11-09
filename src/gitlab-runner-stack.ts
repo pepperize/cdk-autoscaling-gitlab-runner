@@ -86,10 +86,12 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   cacheBucketName: "runnercache",
   cacheExpirationInDays: 0,
   availabilityZone: "a",
+  // vpcIdToLookUp: must be set by a user and can't have a default value
   vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPairName: undefined,
   gitlabUrl: "https://gitlab.com",
+  // gitlabToken: must be set by a user and can't have a default value
   gitlabRunnerInstanceType: InstanceType.of(
     InstanceClass.T2,
     InstanceSize.MICRO
