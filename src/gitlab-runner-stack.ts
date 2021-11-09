@@ -53,7 +53,7 @@ export const managerAmiMap: Record<string, string> = {
 /**
  * Documentation:
  * About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines
- * About autoscaling props: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections 
+ * About autoscaling props: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */
 export interface GitlabRunnerStackProps extends StackProps {
   machineImage?: IMachineImage; // An Amazon Machine Image for the Manager EC2 instance.
@@ -73,7 +73,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
   gitlabIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
   gitlabIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
-  gitlabAutoscalingTimezone?: string; // A timezone string. https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections 
+  gitlabAutoscalingTimezone?: string; // A timezone string. https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
   gitlabAutoscalingIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
   gitlabAutoscalingIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
   gitlabCheckInterval?: number; // The check_interval option defines how often the runner should check GitLab for new jobs, in seconds.
