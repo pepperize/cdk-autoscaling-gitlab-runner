@@ -77,8 +77,8 @@ Object {
         "LifecycleConfiguration": Object {
           "Rules": Array [
             Object {
-              "ExpirationDate": "2021-11-09T00:00:00",
-              "Status": "Enabled",
+              "ExpirationDate": "2021-12-09T00:00:00",
+              "Status": "Disabled",
             },
           ],
         },
@@ -426,7 +426,7 @@ Object {
             "ami",
           ],
         },
-        "InstanceType": "t2.micro",
+        "InstanceType": "t3.micro",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
