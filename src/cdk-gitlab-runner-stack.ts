@@ -58,7 +58,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   cacheExpirationInDays?: number;
   availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'
   vpcIdToLookUp: string;  // Your VPC ID to launch the instance in.
-  vpcSubnet?: SubnetSelection;
+  vpcSubnet?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
   managerInstanceType?: InstanceType;
   managerKeyPairName?: string; // You won't be able to ssh into an instance without the Key Pair
   gitlabUrl?: string; // URL of your GitLab instance
