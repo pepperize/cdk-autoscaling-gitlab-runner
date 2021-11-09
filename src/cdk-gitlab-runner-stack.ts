@@ -59,19 +59,20 @@ export interface GitlabRunnerStackProps extends StackProps {
   availabilityZone?: string;
   vpcSubnet?: SubnetSelection;
   managerInstanceType?: InstanceType;
-  managerKeyPairName?: string;
-  gitlabUrl?: string;
+  managerKeyPairName?: string; // You won't be able to ssh into an instance without the Key Pair
+  gitlabUrl?: string; // URL of your GitLab instance
   gitlabToken?: string;
   gitlabRunnerInstanceType?: InstanceType;
-  gitlabDockerImage?: string;
+  gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml
   gitlabMaxBuilds?: string;
-  gitlabMaxConcurrentBuilds?: string;
+  gitlabLimit?: number; // limit sets the maximum number of machines (running and idle) that this runner will spawn.
+  gitlabMaxConcurrentBuilds?: number;
   gitlabIdleCount?: string;
   gitlabIdleTime?: string;
   gitlabOffPeakTimezone?: string;
   gitlabOffPeakIdleCount?: string;
   gitlabOffPeakIdleTime?: string;
-  gitlabCheckInterval?: string;
+  gitlabCheckInterval?: number;
   gitlabRunnerSpotInstance?: string;
   gitlabRunnerSpotInstancePrice?: string;
 }
@@ -83,22 +84,23 @@ const defaultProps: GitlabRunnerStackProps = {
   availabilityZone: "a",
   vpcSubnet: { subnetType: SubnetType.PUBLIC },
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
-  managerKeyPairName: undefined, // You won't be able to ssh into an instance without the Key Pair
-  gitlabUrl: "string", // URL of your GitLab instance
+  managerKeyPairName: undefined,
+  gitlabUrl: "string", 
   gitlabToken: "string",
   gitlabRunnerInstanceType: InstanceType.of(
     InstanceClass.T2,
     InstanceSize.MICRO
   ),
-  gitlabDockerImage: "string",
+  gitlabDockerImage: "alpine",
   gitlabMaxBuilds: "string",
-  gitlabMaxConcurrentBuilds: "string",
+  gitlabMaxConcurrentBuilds: 10,
+  gitlabLimit: 20,
   gitlabIdleCount: "string",
   gitlabIdleTime: "string",
   gitlabOffPeakTimezone: "string",
   gitlabOffPeakIdleCount: "string",
   gitlabOffPeakIdleTime: "string",
-  gitlabCheckInterval: "string",
+  gitlabCheckInterval: 0,
   gitlabRunnerSpotInstance: "string",
   gitlabRunnerSpotInstancePrice: "string",
 };
@@ -120,6 +122,7 @@ export class GitlabRunnerStack extends Stack {
       gitlabRunnerInstanceType,
       gitlabDockerImage,
       gitlabMaxBuilds,
+      gitlabLimit,
       gitlabMaxConcurrentBuilds,
       gitlabIdleCount,
       gitlabIdleTime,
@@ -432,6 +435,7 @@ export class GitlabRunnerStack extends Stack {
               url = "${gitlabUrl}"
               token = "${gitlabToken}"
               executor = "docker+machine"
+              limit = 20
               environment = [
                 "DOCKER_DRIVER=overlay2",
                 "DOCKER_TLS_CERTDIR=/certs"
