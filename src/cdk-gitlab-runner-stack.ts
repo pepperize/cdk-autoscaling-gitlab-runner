@@ -374,20 +374,26 @@ export class GitlabRunnerStack extends Stack {
       "/etc/rsyslog.d/25-gitlab-runner.conf"
     );
 
+    // config sets
+    const REPOSITORIES = "repositories"
+    const PACKAGES = "packages"
+    const CONFIG = "config"
+    const INSTALL = "install"
+
     CloudFormationInit.fromConfigSets({
       configSets: {
-        install: ["reposritories", "packages"],
-        config: ["config"],
-        // default: ["install", "config"], // TODO: REVIEW
+        install: [REPOSITORIES, PACKAGES],
+        config: [CONFIG],
+        default: [INSTALL, CONFIG],
       },
       configs: {
-        repositories: new InitConfig([
+        [REPOSITORIES]: new InitConfig([
           InitCommand.shellCommand(
             "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash", // 10-gitlab-runner
             { key: "10-gitlab-runner" }
           ),
         ]),
-        packages: new InitConfig([
+        [PACKAGES]: new InitConfig([
           InitPackage.yum("docker"),
           InitPackage.yum("gitlab-runner"),
           InitPackage.yum("tzdata"),
@@ -424,7 +430,7 @@ export class GitlabRunnerStack extends Stack {
             serviceRestartHandle: cfnHupPackagesConfigSetRestartHandle,
           }),
         ]),
-        config: new InitConfig([
+        [CONFIG]: new InitConfig([
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
             `
