@@ -86,7 +86,7 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   cacheBucketName: "runnercache",
   cacheExpirationInDays: 0,
   availabilityZone: "a",
-  vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this bs
+  vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPairName: undefined,
   gitlabUrl: "https://gitlab.com",
@@ -100,7 +100,7 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   gitlabLimit: 20,
   gitlabIdleCount: 10,
   gitlabIdleTime: 300,
-  gitlabAutoscalingTimezone: "string", // TODO: configure defaults
+  gitlabAutoscalingTimezone: "UTC",
   gitlabAutoscalingIdleCount: 20,
   gitlabAutoscalingIdleTime: 600,
   gitlabCheckInterval: 0,
