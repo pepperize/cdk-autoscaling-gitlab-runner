@@ -454,23 +454,11 @@ export class GitlabRunnerStack extends Stack {
                   "amazonec2-vpc-id=${vpc.vpcId}",
                   "amazonec2-zone=${availabilityZone}",
                   "amazonec2-subnet-id=${vpcSubnetId}",
-                  "amazonec2-security-group=${
-                    this.stackName
-                  }-RunnersSecurityGroup",
+                  "amazonec2-security-group=${this.stackName}-RunnersSecurityGroup",
                   "amazonec2-use-private-address=true",
-                  "amazonec2-iam-instance-profile=${
-                    runnersInstanceProfile.logicalId
-                  }"
-                  ${
-                    gitlabRunnerRequestSpotInstance
-                      ? "amazonec2-request-spot-instance=true"
-                      : ""
-                  } 
-                  ${
-                    gitlabRunnerRequestSpotInstance
-                      ? `amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}`
-                      : ""
-                  }
+                  "amazonec2-iam-instance-profile=${runnersInstanceProfile.logicalId}",
+                  "amazonec2-request-spot-instance=${gitlabRunnerRequestSpotInstance}",
+                  "amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}"
                 ]
                 [[runners.machine.autoscaling]]
                   Timezone = "${gitlabAutoscalingTimezone}"

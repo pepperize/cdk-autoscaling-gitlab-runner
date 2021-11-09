@@ -207,9 +207,9 @@ Object {
                   \\"amazonec2-subnet-id=priv1\\",
                   \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
                   \\"amazonec2-use-private-address=true\\",
-                  \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\"
-                  amazonec2-request-spot-instance=true 
-                  amazonec2-spot-price=0.03
+                  \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
+                  \\"amazonec2-request-spot-instance=true\\",
+                  \\"amazonec2-spot-price=0.03\\"
                 ]
                 [[runners.machine.autoscaling]]
                   Timezone = \\"UTC\\"
@@ -456,7 +456,7 @@ yum update -y aws-cfn-bootstrap
                   "Ref": "AWS::Region",
                 },
                 "' --resource Manager
-# fingerprint: d57612427447e6c5
+# fingerprint: 6b0943fcc97dccc4
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
