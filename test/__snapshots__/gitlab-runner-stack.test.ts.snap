@@ -448,7 +448,7 @@ yum update -y aws-cfn-bootstrap
                   "Ref": "AWS::StackName",
                 },
                 " --resource ManagerAutoscalingGroupASGE4841860 -c default
-  /opt/aws/bin/cfn-signal -e 0 --region ",
+  /opt/aws/bin/cfn-signal -e $? --region ",
                 Object {
                   "Ref": "AWS::Region",
                 },

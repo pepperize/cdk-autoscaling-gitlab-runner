@@ -512,7 +512,7 @@ check_interval = ${gitlabCheckInterval}
       userData: userData,
       init: initConfig,
       initOptions: {
-        ignoreFailures: true,
+        ignoreFailures: false,
       },
       maxCapacity: 1,
       minCapacity: 1,
