@@ -6,7 +6,7 @@ const project = new AwsCdkTypeScriptApp({
   authorOrganization: "Pepperize",
   cdkVersion: "1.131.0",
   cdkVersionPinning: true,
-  defaultReleaseBranch: "main",
+  defaultReleaseBranch: "master",
   name: "cdk-gitlab-runner",
   repositoryUrl: "https://github.com/pepperize/cdk-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
