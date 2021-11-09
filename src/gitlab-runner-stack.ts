@@ -73,11 +73,11 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
   gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
   gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
-  gitlabIdleCount?: number; // A value that generates a minimum amount of not used machines when the job queue is empty.
-  gitlabIdleTime?: number; // A number of seconds. The machine is waiting for the next jobs, and if no one is executed, after the IdleTime period, the machine is removed
-  gitlabOffPeakTimezone?: string; // TODO: refactor
-  gitlabOffPeakIdleCount?: string; // TODO: refactor
-  gitlabOffPeakIdleTime?: string; // TODO: refactor
+  gitlabIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
+  gitlabIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
+  gitlabAutoscalingTimezone?: string; // A timezone string. https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections 
+  gitlabAutoscalingIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
+  gitlabAutoscalingIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
   gitlabCheckInterval?: number;
   gitlabRunnerRequestSpotInstance?: boolean;
   gitlabRunnerSpotInstancePrice?: string; // TODO: refactor
@@ -102,9 +102,9 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   gitlabLimit: 20,
   gitlabIdleCount: 10,
   gitlabIdleTime: 300,
-  gitlabOffPeakTimezone: "string", // TODO: configure defaults
-  gitlabOffPeakIdleCount: "string", // TODO: configure defaults
-  gitlabOffPeakIdleTime: "string", // TODO: configure defaults
+  gitlabAutoscalingTimezone: "string", // TODO: configure defaults
+  gitlabAutoscalingIdleCount: 20,
+  gitlabAutoscalingIdleTime: 600,
   gitlabCheckInterval: 0,
   gitlabRunnerRequestSpotInstance: true,
   gitlabRunnerSpotInstancePrice: "string", // TODO: configure defaults
@@ -132,9 +132,9 @@ export class GitlabRunnerStack extends Stack {
       gitlabMaxConcurrentBuilds,
       gitlabIdleCount,
       gitlabIdleTime,
-      gitlabOffPeakTimezone,
-      gitlabOffPeakIdleCount,
-      gitlabOffPeakIdleTime,
+      gitlabAutoscalingTimezone,
+      gitlabAutoscalingIdleCount,
+      gitlabAutoscalingIdleTime,
       gitlabCheckInterval,
       gitlabRunnerRequestSpotInstance,
       gitlabRunnerSpotInstancePrice,
@@ -497,10 +497,11 @@ export class GitlabRunnerStack extends Stack {
                       : ""
                   }
                 ]
-                OffPeakTimezone = "${gitlabOffPeakTimezone}"
-                OffPeakPeriods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
-                OffPeakIdleCount = ${gitlabOffPeakIdleCount}
-                OffPeakIdleTime = ${gitlabOffPeakIdleTime}
+                [[runners.machine.autoscaling]]
+                  Timezone = "${gitlabAutoscalingTimezone}"
+                  Periods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
+                  IdleCount = ${gitlabAutoscalingIdleCount}
+                  IdleTime = ${gitlabAutoscalingIdleTime}
             `,
             {
               owner: "gitlab-runner",
