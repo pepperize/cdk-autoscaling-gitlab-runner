@@ -58,7 +58,7 @@ export const managerAmiMap: Record<string, string> = {
 export interface GitlabRunnerStackProps extends StackProps {
   machineImage?: IMachineImage;
   cacheBucketName?: string; // the bucket where your cache should be kept
-  cacheExpirationInDays?: number; // Number of days the cache is stored before deletion. 0 simply means don't delete. 
+  cacheExpirationInDays?: number; // Number of days the cache is stored before deletion. 0 simply means don't delete.
   availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'
   vpcIdToLookUp: string; // Your VPC ID to launch the instance in.
   vpcSubnet?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
