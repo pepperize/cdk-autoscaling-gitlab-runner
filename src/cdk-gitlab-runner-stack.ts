@@ -61,7 +61,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   managerInstanceType?: InstanceType;
   managerKeyPairName?: string; // You won't be able to ssh into an instance without the Key Pair
   gitlabUrl?: string; // URL of your GitLab instance
-  gitlabToken?: string;
+  gitlabToken?: string; // RUNNER_TOKEN. Note this is different from the registration token used by `gitlab-runner register`
   gitlabRunnerInstanceType?: InstanceType;
   gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml
   gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
@@ -86,8 +86,8 @@ const defaultProps: GitlabRunnerStackProps = {
   vpcSubnet: { subnetType: SubnetType.PUBLIC },
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPairName: undefined,
-  gitlabUrl: "string", 
-  gitlabToken: "string",
+  gitlabUrl: "https://gitlab.com", 
+  gitlabToken: undefined,
   gitlabRunnerInstanceType: InstanceType.of(
     InstanceClass.T2,
     InstanceSize.MICRO
