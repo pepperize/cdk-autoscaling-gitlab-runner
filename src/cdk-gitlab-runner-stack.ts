@@ -52,10 +52,10 @@ export const managerAmiMap: Record<string, string> = {
   "us-west-2": "ami-061392db613a6357b",
 };
 
-/** 
+/**
  * Documentation:
- * About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines 
- * 
+ * About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines
+ *
  */
 export interface GitlabRunnerStackProps extends StackProps {
   machineImage?: IMachineImage;
@@ -177,6 +177,8 @@ export class GitlabRunnerStack extends Stack {
     const vpc = Vpc.fromLookup(this, "PepperizeVpc", {
       vpcId: vpcIdToLookUp,
     });
+    const vpcSubnetId =
+      vpc.selectSubnets(vpcSubnet).subnetIds.find(() => true) || "";
 
     /*
      * ManagerSecurityGroup:
@@ -476,7 +478,7 @@ export class GitlabRunnerStack extends Stack {
                   "amazonec2-region=${this.region}",
                   "amazonec2-vpc-id=${vpc.vpcId}",
                   "amazonec2-zone=${availabilityZone}",
-                  "amazonec2-subnet-id=${vpcSubnet}",
+                  "amazonec2-subnet-id=${vpcSubnetId}",
                   "amazonec2-security-group=${
                     this.stackName
                   }-RunnersSecurityGroup",

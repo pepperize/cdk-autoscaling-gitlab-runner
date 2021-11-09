@@ -1,0 +1,543 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`gitlab-runner 1`] = `
+Object {
+  "Mappings": Object {
+    "InstanceAmiMap051BFFE2": Object {
+      "ap-northeast-1": Object {
+        "ami": "ami-0f9ae750e8274075b",
+      },
+      "ap-northeast-2": Object {
+        "ami": "ami-047f7b46bd6dd5d84",
+      },
+      "ap-south-1": Object {
+        "ami": "ami-0889b8a448de4fc44",
+      },
+      "ap-southeast-1": Object {
+        "ami": "ami-0b419c3a4b01d1859",
+      },
+      "ap-southeast-2": Object {
+        "ami": "ami-04481c741a0311bbb",
+      },
+      "ca-central-1": Object {
+        "ami": "ami-03338e1f67dae0168",
+      },
+      "eu-central-1": Object {
+        "ami": "ami-09def150731bdbcc2",
+      },
+      "eu-north-1": Object {
+        "ami": "ami-d16fe6af",
+      },
+      "eu-west-1": Object {
+        "ami": "ami-07683a44e80cd32c5",
+      },
+      "eu-west-2": Object {
+        "ami": "ami-09ead922c1dad67e4",
+      },
+      "eu-west-3": Object {
+        "ami": "ami-0451ae4fd8dd178f7",
+      },
+      "sa-east-1": Object {
+        "ami": "ami-0669a96e355eac82f",
+      },
+      "us-east-1": Object {
+        "ami": "ami-0de53d8956e8dcf80",
+      },
+      "us-east-2": Object {
+        "ami": "ami-02bcbb802e03574ba",
+      },
+      "us-west-1": Object {
+        "ami": "ami-0019ef04ac50be30f",
+      },
+      "us-west-2": Object {
+        "ami": "ami-061392db613a6357b",
+      },
+    },
+  },
+  "Resources": Object {
+    "GitlabRunnerCacheBucketD970991B": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "BucketKeyEnabled": true,
+              "ServerSideEncryptionByDefault": Object {
+                "KMSMasterKeyID": Object {
+                  "Fn::GetAtt": Array [
+                    "GitlabRunnerCacheBucketKey33399B97",
+                    "Arn",
+                  ],
+                },
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "LifecycleConfiguration": Object {
+          "Rules": Array [
+            Object {
+              "ExpirationDate": "2021-11-09T00:00:00",
+              "Status": "Enabled",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "GitlabRunnerCacheBucketKey33399B97": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Created by gitlab-runner/GitlabRunnerCacheBucket",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "InstanceC1063A87": Object {
+      "DependsOn": Array [
+        "InstanceInstanceRoleE9785DE5",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": "az1",
+        "ImageId": Object {
+          "Fn::FindInMap": Array [
+            "InstanceAmiMap051BFFE2",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            "ami",
+          ],
+        },
+        "InstanceType": "t2.micro",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ManagerSecurityGroup288FD437",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": "priv1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "gitlab-runner/Instance",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash
+yum update -y aws-cfn-bootstrap
+/opt/aws/bin/cfn-init --stack 'gitlab-runner' --region '",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                "' --resource Manager --configsets default
+/opt/aws/bin/cfn-signal -e $? --stack '",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                "' --region '",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                "' --resource Manager",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "InstanceInstanceRoleE9785DE5": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "gitlab-runner/Instance",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerEIP": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "InstanceId": Object {
+          "Ref": "InstanceC1063A87",
+        },
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "ManagerInstanceProfile": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerRole08FB5B64",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ManagerRole08FB5B64": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM",
+        ],
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "s3:ListObjects*",
+                    "s3:GetObject*",
+                    "s3:DeleteObject*",
+                    "s3:PutObject*",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        Object {
+                          "Fn::GetAtt": Array [
+                            "GitlabRunnerCacheBucketD970991B",
+                            "Arn",
+                          ],
+                        },
+                        "/*",
+                      ],
+                    ],
+                  },
+                },
+                Object {
+                  "Action": "s3:ListBucket",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::GetAtt": Array [
+                      "GitlabRunnerCacheBucketD970991B",
+                      "Arn",
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Cache",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "ec2:CreateKeyPair",
+                    "ec2:DeleteKeyPair",
+                    "ec2:ImportKeyPair",
+                    "ec2:Describe*",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:CreateTags",
+                    "ssm:UpdateInstanceInformation",
+                  ],
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "Name",
+                      ],
+                    },
+                    "StringEquals": Object {
+                      "ec2:InstanceType": "toString() {
+        return this.instanceTypeIdentifier;
+    }",
+                      "ec2:Region": Object {
+                        "Ref": "AWS::Region",
+                      },
+                    },
+                    "StringLike": Object {
+                      "aws:RequestTag/Name": "*gitlab-docker-machine-*",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:RunInstances",
+                    "ec2:RequestSpotInstances",
+                  ],
+                  "Condition": Object {
+                    "ArnEqualsIfExists": Object {
+                      "ec2:InstanceProfile": Object {
+                        "Fn::GetAtt": Array [
+                          "RunnersInstanceProfile",
+                          "Arn",
+                        ],
+                      },
+                      "ec2:Vpc": Object {
+                        "Fn::Join": Array [
+                          "",
+                          Array [
+                            "arn:",
+                            Object {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":ec2:",
+                            Object {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":",
+                            Object {
+                              "Ref": "AWS::AccountId",
+                            },
+                            ":vpc/vpc123",
+                          ],
+                        ],
+                      },
+                    },
+                    "StringEqualsIfExists": Object {
+                      "ec2:InstanceType": "toString() {
+        return this.instanceTypeIdentifier;
+    }",
+                      "ec2:Region": Object {
+                        "Ref": "AWS::Region",
+                      },
+                      "ec2:Tenancy": "default",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:TerminateInstances",
+                    "ec2:StopInstances",
+                    "ec2:StartInstances",
+                    "ec2:RebootInstances",
+                  ],
+                  "Condition": Object {
+                    "ArnEquals": Object {
+                      "ec2:InstanceProfile": Object {
+                        "Fn::GetAtt": Array [
+                          "RunnersInstanceProfile",
+                          "Arn",
+                        ],
+                      },
+                    },
+                    "StringLike": Object {
+                      "ec2:ResourceTag/Name": "*gitlab-docker-machine-*",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": "iam:PassRole",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::GetAtt": Array [
+                      "RunnersRole1AC39F4E",
+                      "Arn",
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Runners",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerSecurityGroup288FD437": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for GitLab Runners Manager.",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "SSH traffic",
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "ToPort": 22,
+          },
+        ],
+        "VpcId": "vpc123",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "RunnersInstanceProfile": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "RunnersRole1AC39F4E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "RunnersRole1AC39F4E": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "RunnersSecurityGroupfrom0000022579A51D9": Object {
+      "Properties": Object {
+        "CidrIp": "0.0.0.0/0",
+        "Description": "SSH traffic from Manager",
+        "FromPort": 22,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerSecurityGroup288FD437",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 22,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "RunnersSecurityGroupfrom0000023769FED4A35": Object {
+      "Properties": Object {
+        "CidrIp": "0.0.0.0/0",
+        "Description": "SSH traffic from Docker",
+        "FromPort": 2376,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerSecurityGroup288FD437",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 2376,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+  },
+}
+`;
