@@ -209,12 +209,13 @@ Object {
                   \\"amazonec2-use-private-address=true\\",
                   \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\"
                   amazonec2-request-spot-instance=true 
-                  amazonec2-spot-price=string
+                  amazonec2-spot-price=0.03
                 ]
-                OffPeakTimezone = \\"string\\"
-                OffPeakPeriods = [\\"* * 0-8,18-23 * * mon-fri *\\", \\"* * * * * sat,sun *\\"]
-                OffPeakIdleCount = string
-                OffPeakIdleTime = string
+                [[runners.machine.autoscaling]]
+                  Timezone = \\"UTC\\"
+                  Periods = [\\"* * 0-8,18-23 * * mon-fri *\\", \\"* * * * * sat,sun *\\"]
+                  IdleCount = 20
+                  IdleTime = 600
             ",
                     ],
                   ],
@@ -455,7 +456,7 @@ yum update -y aws-cfn-bootstrap
                   "Ref": "AWS::Region",
                 },
                 "' --resource Manager
-# fingerprint: 45e95c25cd0d6a87
+# fingerprint: d57612427447e6c5
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
