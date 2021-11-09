@@ -56,7 +56,8 @@ export interface GitlabRunnerStackProps extends StackProps {
   machineImage?: IMachineImage;
   cacheBucketName?: string; // the bucket where your cache should be kept
   cacheExpirationInDays?: number;
-  availabilityZone?: string;
+  availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'
+  vpcIdToLookUp: string;  // Your VPC ID to launch the instance in.
   vpcSubnet?: SubnetSelection;
   managerInstanceType?: InstanceType;
   managerKeyPairName?: string; // You won't be able to ssh into an instance without the Key Pair
@@ -78,12 +79,12 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabRunnerSpotInstancePrice?: string;
 }
 
-const defaultProps: GitlabRunnerStackProps = {
+const defaultProps: Partial<GitlabRunnerStackProps> = {
   machineImage: MachineImage.genericLinux(managerAmiMap),
   cacheBucketName: "runnercache",
   cacheExpirationInDays: 0,
   availabilityZone: "a",
-  vpcSubnet: { subnetType: SubnetType.PUBLIC },
+  vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this bs
   managerInstanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
   managerKeyPairName: undefined,
   gitlabUrl: "https://gitlab.com", 
@@ -115,6 +116,7 @@ export class GitlabRunnerStack extends Stack {
       cacheBucketName,
       cacheExpirationInDays,
       availabilityZone,
+      vpcIdToLookUp,
       vpcSubnet,
       managerInstanceType,
       managerKeyPairName,
@@ -170,8 +172,8 @@ export class GitlabRunnerStack extends Stack {
      */
 
     const vpc = Vpc.fromLookup(this, "PepperizeVpc", {
-      vpcName:
-        "AWSBootstrapKit-LandingZone-PipelineStack/Vpc/pepperizeVpcStack/PepperizeVpc-Prod", // TODO: find a better way to find a vpc
+      vpcId:
+        vpcIdToLookUp,
     });
 
     /*
@@ -472,7 +474,7 @@ export class GitlabRunnerStack extends Stack {
                   "amazonec2-region=${this.region}",
                   "amazonec2-vpc-id=${vpc.vpcId}",
                   "amazonec2-zone=${availabilityZone}",
-                  "amazonec2-subnet-id=${vpcSubnet}",
+                  "amazonec2-subnet-id=${vpcSubnet.subnets[0].subnetId}",
                   "amazonec2-security-group=${
                     this.stackName
                   }-RunnersSecurityGroup",
