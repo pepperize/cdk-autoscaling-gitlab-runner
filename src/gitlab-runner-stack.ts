@@ -1,6 +1,5 @@
-import { Signals } from "@aws-cdk/aws-autoscaling";
+import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
 import {
-  CfnEIP,
   CloudFormationInit,
   IMachineImage,
   InitCommand,
@@ -9,7 +8,6 @@ import {
   InitPackage,
   InitService,
   InitServiceRestartHandle,
-  Instance,
   InstanceClass,
   InstanceSize,
   InstanceType,
@@ -60,7 +58,7 @@ export const managerAmiMap: Record<string, string> = {
 export interface GitlabRunnerStackProps extends StackProps {
   machineImage?: IMachineImage;
   cacheBucketName?: string; // the bucket where your cache should be kept
-  cacheExpirationInDays?: number; // Number of days the cache is stored before deletion. 0 simply means don't delete. 
+  cacheExpirationInDays?: number; // Number of days the cache is stored before deletion. 0 simply means don't delete.
   availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'
   vpcIdToLookUp: string; // Your VPC ID to launch the instance in.
   vpcSubnet?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
@@ -329,18 +327,6 @@ export class GitlabRunnerStack extends Stack {
       },
     });
 
-    /*
-     * ManagerInstanceProfile:
-     * Type: 'AWS::IAM::InstanceProfile'
-     */
-    const managerInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
-      this,
-      "ManagerInstanceProfile",
-      {
-        roles: [managerRole.roleName],
-      }
-    );
-
     /* Manager:
      * Type: 'AWS::EC2::Instance'
      */
@@ -350,19 +336,6 @@ export class GitlabRunnerStack extends Stack {
       `/opt/aws/bin/cfn-init --stack '${this.stackName}' --region '${this.region}' --resource Manager --configsets default`, // Install the files and packages from the metadata
       `/opt/aws/bin/cfn-signal -e $? --stack '${this.region}' --region '${this.region}' --resource Manager` // Signal the status from cfn-init
     );
-
-    const manager = new Instance(this, "Instance", {
-      instanceType: managerInstanceType!,
-      vpc: vpc,
-      machineImage: machineImage!,
-      userData: userData,
-      keyName: managerKeyPairName,
-      securityGroup: managerSecurityGroup,
-      vpcSubnets: vpcSubnet,
-    });
-    manager.node.tryRemoveChild("InstanceProfile"); // Remove default InstanceProfile
-    manager.instance.iamInstanceProfile =
-      managerInstanceProfile.instanceProfileName; // Reference our custom managerInstanceProfile: InstanceProfile
 
     const cfnHupPackagesConfigSetRestartHandle = new InitServiceRestartHandle();
     cfnHupPackagesConfigSetRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
@@ -381,22 +354,23 @@ export class GitlabRunnerStack extends Stack {
       "/etc/rsyslog.d/25-gitlab-runner.conf"
     );
 
-    // config sets
+    // configs
     const REPOSITORIES = "repositories";
     const PACKAGES = "packages";
     const CONFIG = "config";
-    const INSTALL = "install";
+    const RESTART = "restart";
 
-    CloudFormationInit.fromConfigSets({
+    const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
         install: [REPOSITORIES, PACKAGES],
         config: [CONFIG],
-        default: [INSTALL, CONFIG],
+        restart: [RESTART],
+        default: ["install", "config", "restart"],
       },
       configs: {
         [REPOSITORIES]: new InitConfig([
           InitCommand.shellCommand(
-            "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash", // 10-gitlab-runner
+            "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash",
             { key: "10-gitlab-runner" }
           ),
         ]),
@@ -411,7 +385,7 @@ export class GitlabRunnerStack extends Stack {
               stack=${this.stackName}
               region=${this.region}
             `,
-            { owner: "root", group: "root", mode: "root" }
+            { owner: "root", group: "root", mode: "000400" }
           ),
           InitFile.fromString(
             "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
@@ -419,18 +393,17 @@ export class GitlabRunnerStack extends Stack {
               [cfn-auto-reloader-hook]
               triggers=post.update
               path=Resources.Manager.Metadata.AWS::CloudFormation::Init
-              action=/opt/aws/bin/cfn-init -v --stack ${this.stackName} --region ${this.region} --resource Manager --configsets default
+              action=/opt/aws/bin/cfn-init -v --stack ${this.stackName} --region ${this.region} --resource ManagerLaunchTemplate --configsets default
               runas=root
             `
           ),
           InitCommand.shellCommand(
-            "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash", // 10-gitlab-runner
-            { key: "10-gitlab-runner" }
+            "curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+            { key: "10-docker-machine" }
           ),
-          InitCommand.shellCommand(
-            "gitlab-runner start", // 20-gitlab-runner-start
-            { key: "20-gitlab-runner-start" }
-          ),
+          InitCommand.shellCommand("gitlab-runner start", {
+            key: "20-gitlab-runner-start",
+          }),
           InitService.enable("cfn-hup", {
             enabled: true,
             ensureRunning: true,
@@ -531,22 +504,26 @@ export class GitlabRunnerStack extends Stack {
             serviceRestartHandle: rsyslogConfigConfigSetRestartHandle,
           }),
         ]),
+        [RESTART]: new InitConfig([
+          InitCommand.shellCommand("gitlab-runner restart", {
+            key: "10-gitlab-runner-restart",
+          }),
+        ]),
       },
     });
 
-    Signals.waitForAll({
-      // Line 884: CreationPolicy
-      timeout: Duration.minutes(15),
-    });
-
-    /*
-     * ManagerEIP:
-     * Type: 'AWS::EC2::EIP'
-     */
-    new CfnEIP(this, "ManagerEIP", {
-      // TODO: refactor this low level code
-      domain: "vpc",
-      instanceId: manager.instanceId,
+    new AutoScalingGroup(this, "ManagerAutoscalingGroup", {
+      vpc: vpc,
+      instanceType: managerInstanceType!,
+      machineImage: machineImage!,
+      keyName: managerKeyPairName,
+      securityGroup: managerSecurityGroup,
+      role: managerRole,
+      userData: userData,
+      init: initConfig,
+      maxCapacity: 1,
+      minCapacity: 1,
+      signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
     });
 
     /*

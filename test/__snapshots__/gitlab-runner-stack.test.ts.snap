@@ -3,7 +3,7 @@
 exports[`gitlab-runner 1`] = `
 Object {
   "Mappings": Object {
-    "InstanceAmiMap051BFFE2": Object {
+    "ManagerAutoscalingGroupAmiMap402DC0D6": Object {
       "ap-northeast-1": Object {
         "ami": "ami-0f9ae750e8274075b",
       },
@@ -138,15 +138,287 @@ Object {
       "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain",
     },
-    "InstanceC1063A87": Object {
+    "ManagerAutoscalingGroupASGE4841860": Object {
+      "CreationPolicy": Object {
+        "ResourceSignal": Object {
+          "Count": 1,
+          "Timeout": "PT15M",
+        },
+      },
+      "Metadata": Object {
+        "AWS::CloudFormation::Init": Object {
+          "config": Object {
+            "files": Object {
+              "/etc/gitlab-runner/config.toml": Object {
+                "content": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "
+            concurrent = 10
+            check_interval = 0
+            [[runners]]
+              name = \\"gitlab-runner\\"
+              url = \\"https://gitlab.com\\"
+              token = \\"\\"
+              executor = \\"docker+machine\\"
+              limit = \\"20\\"
+              environment = [
+                \\"DOCKER_DRIVER=overlay2\\",
+                \\"DOCKER_TLS_CERTDIR=/certs\\"
+              ]
+              [runners.docker]
+                tls_verify = false
+                image = \\"alpine\\"
+                privileged = true
+                disable_cache = false
+                volumes = [\\"/certs/client\\", \\"/cache\\"]
+                shm_size = 0
+              [runners.cache]
+                Type = \\"s3\\"
+                Shared = true
+              [runners.cache.s3]
+                ServerAddress = \\"s3.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                      "\\"
+                BucketName = \\"runnercache\\"
+                BucketLocation = \\"",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      "\\"
+              [runners.machine]
+                IdleCount = 10
+                IdleTime = 300
+                MaxBuilds = 25
+                MachineDriver = \\"amazonec2\\"
+                MachineName = \\"gitlab-docker-machine-%s\\"
+                MachineOptions = [
+                  \\"amazonec2-instance-type=t2.micro\\",
+                  \\"amazonec2-region=",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      "\\",
+                  \\"amazonec2-vpc-id=vpc123\\",
+                  \\"amazonec2-zone=a\\",
+                  \\"amazonec2-subnet-id=priv1\\",
+                  \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
+                  \\"amazonec2-use-private-address=true\\",
+                  \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\"
+                  amazonec2-request-spot-instance=true 
+                  amazonec2-spot-price=string
+                ]
+                OffPeakTimezone = \\"string\\"
+                OffPeakPeriods = [\\"* * 0-8,18-23 * * mon-fri *\\", \\"* * * * * sat,sun *\\"]
+                OffPeakIdleCount = string
+                OffPeakIdleTime = string
+            ",
+                    ],
+                  ],
+                },
+                "encoding": "plain",
+                "group": "gitlab-runner",
+                "mode": "000600",
+                "owner": "gitlab-runner",
+              },
+              "/etc/rsyslog.d/25-gitlab-runner.conf": Object {
+                "content": "
+            :programname, isequal, \\"gitlab-runner\\" /var/log/gitlab-runner.log
+          ",
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+            },
+            "services": Object {
+              "sysvinit": Object {
+                "gitlab-runner": Object {
+                  "enabled": true,
+                  "ensureRunning": true,
+                  "files": Array [
+                    "/etc/gitlab-runner/config.toml",
+                  ],
+                },
+                "rsyslog": Object {
+                  "enabled": true,
+                  "ensureRunning": true,
+                  "files": Array [
+                    "/etc/rsyslog.d/25-gitlab-runner.conf",
+                  ],
+                },
+              },
+            },
+          },
+          "configSets": Object {
+            "config": Array [
+              "config",
+            ],
+            "default": Array [
+              "config",
+              "restart",
+            ],
+            "install": Array [
+              "repositories",
+              "packages",
+            ],
+            "restart": Array [
+              "restart",
+            ],
+          },
+          "packages": Object {
+            "commands": Object {
+              "10-docker-machine": Object {
+                "command": "curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+              },
+              "20-gitlab-runner-start": Object {
+                "command": "gitlab-runner start",
+              },
+            },
+            "files": Object {
+              "/etc/cfn/cfn-hup.conf": Object {
+                "content": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "
+              [main]
+              stack=gitlab-runner
+              region=",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      "
+            ",
+                    ],
+                  ],
+                },
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000400",
+                "owner": "root",
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": Object {
+                "content": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "
+              [cfn-auto-reloader-hook]
+              triggers=post.update
+              path=Resources.Manager.Metadata.AWS::CloudFormation::Init
+              action=/opt/aws/bin/cfn-init -v --stack gitlab-runner --region ",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      " --resource ManagerLaunchTemplate --configsets default
+              runas=root
+            ",
+                    ],
+                  ],
+                },
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+            },
+            "packages": Object {
+              "yum": Object {
+                "docker": Array [],
+                "gitlab-runner": Array [],
+                "tzdata": Array [],
+              },
+            },
+            "services": Object {
+              "sysvinit": Object {
+                "cfn-hup": Object {
+                  "enabled": true,
+                  "ensureRunning": true,
+                  "files": Array [
+                    "/etc/cfn/cfn-hup.conf",
+                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
+                  ],
+                },
+              },
+            },
+          },
+          "repositories": Object {
+            "commands": Object {
+              "10-gitlab-runner": Object {
+                "command": "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash",
+              },
+            },
+          },
+          "restart": Object {
+            "commands": Object {
+              "10-gitlab-runner-restart": Object {
+                "command": "gitlab-runner restart",
+              },
+            },
+          },
+        },
+      },
+      "Properties": Object {
+        "LaunchConfigurationName": Object {
+          "Ref": "ManagerAutoscalingGroupLaunchConfig078E7BD8",
+        },
+        "MaxSize": "1",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "gitlab-runner/ManagerAutoscalingGroup",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          "priv1",
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingRollingUpdate": Object {
+          "PauseTime": "PT15M",
+          "SuspendProcesses": Array [
+            "HealthCheck",
+            "ReplaceUnhealthy",
+            "AZRebalance",
+            "AlarmNotification",
+            "ScheduledActions",
+          ],
+          "WaitOnResourceSignals": true,
+        },
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "ManagerAutoscalingGroupInstanceProfile7C061EF0": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerRole08FB5B64",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ManagerAutoscalingGroupLaunchConfig078E7BD8": Object {
       "DependsOn": Array [
-        "InstanceInstanceRoleE9785DE5",
+        "ManagerRoleDefaultPolicy9C31350E",
+        "ManagerRole08FB5B64",
       ],
       "Properties": Object {
-        "AvailabilityZone": "az1",
+        "IamInstanceProfile": Object {
+          "Ref": "ManagerAutoscalingGroupInstanceProfile7C061EF0",
+        },
         "ImageId": Object {
           "Fn::FindInMap": Array [
-            "InstanceAmiMap051BFFE2",
+            "ManagerAutoscalingGroupAmiMap402DC0D6",
             Object {
               "Ref": "AWS::Region",
             },
@@ -154,19 +426,12 @@ Object {
           ],
         },
         "InstanceType": "t2.micro",
-        "SecurityGroupIds": Array [
+        "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
               "ManagerSecurityGroup288FD437",
               "GroupId",
             ],
-          },
-        ],
-        "SubnetId": "priv1",
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "gitlab-runner/Instance",
           },
         ],
         "UserData": Object {
@@ -189,65 +454,36 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::Region",
                 },
-                "' --resource Manager",
+                "' --resource Manager
+# fingerprint: 45e95c25cd0d6a87
+(
+  set +e
+  /opt/aws/bin/cfn-init -v --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource ManagerAutoscalingGroupASGE4841860 -c default
+  /opt/aws/bin/cfn-signal -e $? --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource ManagerAutoscalingGroupASGE4841860
+  cat /var/log/cfn-init.log >&2
+)",
               ],
             ],
           },
         },
       },
-      "Type": "AWS::EC2::Instance",
-    },
-    "InstanceInstanceRoleE9785DE5": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "ec2.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "gitlab-runner/Instance",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ManagerEIP": Object {
-      "Properties": Object {
-        "Domain": "vpc",
-        "InstanceId": Object {
-          "Ref": "InstanceC1063A87",
-        },
-      },
-      "Type": "AWS::EC2::EIP",
-    },
-    "ManagerInstanceProfile": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
-            "Ref": "ManagerRole08FB5B64",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
     "ManagerRole08FB5B64": Object {
       "Properties": Object {
@@ -445,6 +681,32 @@ yum update -y aws-cfn-bootstrap
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "ManagerRoleDefaultPolicy9C31350E": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "cloudformation:DescribeStackResource",
+                "cloudformation:SignalResource",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "AWS::StackId",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ManagerRoleDefaultPolicy9C31350E",
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerRole08FB5B64",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "ManagerSecurityGroup288FD437": Object {
       "Properties": Object {
