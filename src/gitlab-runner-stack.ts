@@ -77,8 +77,8 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabAutoscalingIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
   gitlabAutoscalingIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
   gitlabCheckInterval?: number; // The check_interval option defines how often the runner should check GitLab for new jobs, in seconds.
-  gitlabRunnerRequestSpotInstance?: boolean;
-  gitlabRunnerSpotInstancePrice?: string; // TODO: refactor
+  gitlabRunnerRequestSpotInstance?: boolean; // Use or not to use the Amazon EC2 Spot instances.
+  gitlabRunnerSpotInstancePrice?: number; // A maximum (bidding) price for a Spot instance. https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
 }
 
 const defaultProps: Partial<GitlabRunnerStackProps> = {
@@ -105,7 +105,7 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   gitlabAutoscalingIdleTime: 600,
   gitlabCheckInterval: 0,
   gitlabRunnerRequestSpotInstance: true,
-  gitlabRunnerSpotInstancePrice: "string", // TODO: configure defaults
+  gitlabRunnerSpotInstancePrice: 0.03, // TODO: configure defaults
 };
 
 export class GitlabRunnerStack extends Stack {
