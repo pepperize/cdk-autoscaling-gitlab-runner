@@ -769,34 +769,59 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::IAM::Role",
     },
-    "RunnersSecurityGroupfrom0000022579A51D9": Object {
+    "RunnersSecurityGroup2A22C282": Object {
       "Properties": Object {
-        "CidrIp": "0.0.0.0/0",
+        "GroupDescription": "Security group for GitLab Runners.",
+        "GroupName": "gitlab-runner-RunnersSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": "vpc123",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "RunnersSecurityGroupfromgitlabrunnerManagerSecurityGroup036D51A122875D21A6": Object {
+      "Properties": Object {
         "Description": "SSH traffic from Manager",
         "FromPort": 22,
         "GroupId": Object {
           "Fn::GetAtt": Array [
-            "ManagerSecurityGroup288FD437",
+            "RunnersSecurityGroup2A22C282",
             "GroupId",
           ],
         },
         "IpProtocol": "tcp",
-        "ToPort": 22,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "RunnersSecurityGroupfrom0000023769FED4A35": Object {
-      "Properties": Object {
-        "CidrIp": "0.0.0.0/0",
-        "Description": "SSH traffic from Docker",
-        "FromPort": 2376,
-        "GroupId": Object {
+        "SourceSecurityGroupId": Object {
           "Fn::GetAtt": Array [
             "ManagerSecurityGroup288FD437",
             "GroupId",
           ],
         },
+        "ToPort": 22,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "RunnersSecurityGroupfromgitlabrunnerManagerSecurityGroup036D51A12376CE6A4DF2": Object {
+      "Properties": Object {
+        "Description": "SSH traffic from Docker",
+        "FromPort": 2376,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "RunnersSecurityGroup2A22C282",
+            "GroupId",
+          ],
+        },
         "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerSecurityGroup288FD437",
+            "GroupId",
+          ],
+        },
         "ToPort": 2376,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",

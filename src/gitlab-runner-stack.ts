@@ -526,19 +526,23 @@ export class GitlabRunnerStack extends Stack {
      * RunnersSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup'
      */
-    const runnersSecurityGroup = SecurityGroup.fromSecurityGroupId(
+    const runnersSecurityGroup = new SecurityGroup(
       this,
       "RunnersSecurityGroup",
-      managerSecurityGroup.securityGroupId
+      {
+        securityGroupName: `${this.stackName}-RunnersSecurityGroup`,
+        description: "Security group for GitLab Runners.",
+        vpc: vpc,
+      }
     );
 
     runnersSecurityGroup.connections.allowFrom(
-      Peer.anyIpv4(),
+      managerSecurityGroup,
       Port.tcp(22),
       "SSH traffic from Manager"
     );
     runnersSecurityGroup.connections.allowFrom(
-      Peer.anyIpv4(),
+      managerSecurityGroup,
       Port.tcp(2376),
       "SSH traffic from Docker"
     );
