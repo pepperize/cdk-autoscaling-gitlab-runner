@@ -196,7 +196,7 @@ Object {
                 MachineDriver = \\"amazonec2\\"
                 MachineName = \\"gitlab-docker-machine-%s\\"
                 MachineOptions = [
-                  \\"amazonec2-instance-type=t2.micro\\",
+                  \\"amazonec2-instance-type=t3.nano\\",
                   \\"amazonec2-region=",
                       Object {
                         "Ref": "AWS::Region",
@@ -456,7 +456,7 @@ yum update -y aws-cfn-bootstrap
                   "Ref": "AWS::Region",
                 },
                 "' --resource Manager
-# fingerprint: 6b0943fcc97dccc4
+# fingerprint: 47276c6476a51f91
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
