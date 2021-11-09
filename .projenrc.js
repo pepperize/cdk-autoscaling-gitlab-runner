@@ -34,7 +34,7 @@ const project = new AwsCdkTypeScriptApp({
   release: {
     releaseEveryCommit: true,
   },
-  releaseToNpm: true,
+  releaseToNpm: false,
   a: {
     distTag: "latest",
     registry: "registry.npmjs.org",
