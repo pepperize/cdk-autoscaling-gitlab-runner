@@ -4,6 +4,8 @@ const project = new AwsCdkTypeScriptApp({
   authorName: "Ivan Ovdiienko",
   authorAddress: "ivan.ovdiienko@pepperize.com",
   authorOrganization: "Pepperize",
+  copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
+  license: "MIT",
   cdkVersion: "1.131.0",
   cdkVersionPinning: true,
   defaultReleaseBranch: "master",
