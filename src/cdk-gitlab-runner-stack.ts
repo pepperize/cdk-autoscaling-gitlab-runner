@@ -69,7 +69,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
   gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
   gitlabIdleCount?: number; // A value that generates a minimum amount of not used machines when the job queue is empty.
-  gitlabIdleTime?: string;
+  gitlabIdleTime?: number; // A number of seconds. The machine is waiting for the next jobs, and if no one is executed, after the IdleTime period, the machine is removed
   gitlabOffPeakTimezone?: string;
   gitlabOffPeakIdleCount?: string;
   gitlabOffPeakIdleTime?: string;
@@ -97,7 +97,7 @@ const defaultProps: GitlabRunnerStackProps = {
   gitlabMaxConcurrentBuilds: 10,
   gitlabLimit: 20,
   gitlabIdleCount: 10,
-  gitlabIdleTime: "string",
+  gitlabIdleTime: 300,
   gitlabOffPeakTimezone: "string",
   gitlabOffPeakIdleCount: "string",
   gitlabOffPeakIdleTime: "string",
