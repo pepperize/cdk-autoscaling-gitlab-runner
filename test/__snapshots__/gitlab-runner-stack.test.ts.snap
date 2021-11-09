@@ -566,7 +566,7 @@ yum update -y aws-cfn-bootstrap
                       },
                     },
                     "StringLike": Object {
-                      "aws:RequestTag/Name": "*gitlab-docker-machine-*",
+                      "aws:RequestTag/Name": "*gitlab-runner-*",
                     },
                   },
                   "Effect": "Allow",
@@ -634,7 +634,7 @@ yum update -y aws-cfn-bootstrap
                       },
                     },
                     "StringLike": Object {
-                      "ec2:ResourceTag/Name": "*gitlab-docker-machine-*",
+                      "ec2:ResourceTag/Name": "*gitlab-runner-*",
                     },
                   },
                   "Effect": "Allow",

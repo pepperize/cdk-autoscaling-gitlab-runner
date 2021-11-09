@@ -278,7 +278,7 @@ export class GitlabRunnerStack extends Stack {
                   "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString()}`,
                 },
                 StringLike: {
-                  "aws:RequestTag/Name": "*gitlab-docker-machine-*",
+                  "aws:RequestTag/Name": "*gitlab-runner-*",
                 },
                 "ForAllValues:StringEquals": {
                   "aws:TagKeys": ["Name"],
@@ -312,7 +312,7 @@ export class GitlabRunnerStack extends Stack {
               Resource: ["*"],
               Condition: {
                 StringLike: {
-                  "ec2:ResourceTag/Name": "*gitlab-docker-machine-*",
+                  "ec2:ResourceTag/Name": "*gitlab-runner-*",
                 },
                 ArnEquals: {
                   "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
