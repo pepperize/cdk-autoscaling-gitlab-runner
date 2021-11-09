@@ -1,4 +1,8 @@
-import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
+import {
+  AutoScalingGroup,
+  CfnAutoScalingGroup,
+  Signals,
+} from "@aws-cdk/aws-autoscaling";
 import {
   CloudFormationInit,
   IMachineImage,
@@ -88,13 +92,13 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   availabilityZone: "a",
   // vpcIdToLookUp: must be set by a user and can't have a default value
   vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
-  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
+  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
   managerKeyPairName: undefined,
   gitlabUrl: "https://gitlab.com",
   // gitlabToken: must be set by a user and can't have a default value
   gitlabRunnerInstanceType: InstanceType.of(
     InstanceClass.T3,
-    InstanceSize.NANO
+    InstanceSize.MICRO
   ),
   gitlabDockerImage: "alpine",
   gitlabMaxBuilds: 25,
@@ -334,40 +338,29 @@ export class GitlabRunnerStack extends Stack {
      */
     const userData = UserData.forLinux({});
     userData.addCommands(
-      `yum update -y aws-cfn-bootstrap`, // !/bin/bash -xe
-      `/opt/aws/bin/cfn-init --stack '${this.stackName}' --region '${this.region}' --resource Manager --configsets default`, // Install the files and packages from the metadata
-      `/opt/aws/bin/cfn-signal -e $? --stack '${this.region}' --region '${this.region}' --resource Manager` // Signal the status from cfn-init
+      `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
     );
 
-    const cfnHupPackagesConfigSetRestartHandle = new InitServiceRestartHandle();
-    cfnHupPackagesConfigSetRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
-    cfnHupPackagesConfigSetRestartHandle._addFile(
-      "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
-    );
+    const cfnHupRestartHandle = new InitServiceRestartHandle();
+    cfnHupRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
+    cfnHupRestartHandle._addFile("/etc/cfn/hooks.d/cfn-auto-reloader.conf");
 
-    const gitlabRunnerConfigConfigSetRestartHandle =
-      new InitServiceRestartHandle();
-    gitlabRunnerConfigConfigSetRestartHandle._addFile(
-      "/etc/gitlab-runner/config.toml"
-    );
+    const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
+    gitlabRunnerConfigRestartHandle._addFile("/etc/gitlab-runner/config.toml");
 
-    const rsyslogConfigConfigSetRestartHandle = new InitServiceRestartHandle();
-    rsyslogConfigConfigSetRestartHandle._addFile(
-      "/etc/rsyslog.d/25-gitlab-runner.conf"
-    );
+    const rsyslogConfigRestartHandle = new InitServiceRestartHandle();
+    rsyslogConfigRestartHandle._addFile("/etc/rsyslog.d/25-gitlab-runner.conf");
 
     // configs
     const REPOSITORIES = "repositories";
     const PACKAGES = "packages";
+    const CFN_HUP = "cfnHup";
     const CONFIG = "config";
     const RESTART = "restart";
 
     const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
-        install: [REPOSITORIES, PACKAGES],
-        config: [CONFIG],
-        restart: [RESTART],
-        default: ["install", "config", "restart"],
+        default: [REPOSITORIES, PACKAGES, CFN_HUP, CONFIG, RESTART],
       },
       configs: {
         [REPOSITORIES]: new InitConfig([
@@ -380,92 +373,101 @@ export class GitlabRunnerStack extends Stack {
           InitPackage.yum("docker"),
           InitPackage.yum("gitlab-runner"),
           InitPackage.yum("tzdata"),
-          InitFile.fromString(
-            "/etc/cfn/cfn-hup.conf",
-            `
-              [main]
-              stack=${this.stackName}
-              region=${this.region}
-            `,
-            { owner: "root", group: "root", mode: "000400" }
-          ),
-          InitFile.fromString(
-            "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-            `
-              [cfn-auto-reloader-hook]
-              triggers=post.update
-              path=Resources.Manager.Metadata.AWS::CloudFormation::Init
-              action=/opt/aws/bin/cfn-init -v --stack ${this.stackName} --region ${this.region} --resource ManagerLaunchTemplate --configsets default
-              runas=root
-            `
-          ),
           InitCommand.shellCommand(
-            "curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+            "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
             { key: "10-docker-machine" }
           ),
           InitCommand.shellCommand("gitlab-runner start", {
             key: "20-gitlab-runner-start",
           }),
+        ]),
+        [CFN_HUP]: new InitConfig([
+          InitFile.fromString(
+            "/etc/cfn/cfn-hup.conf",
+            `
+[main]
+stack=${this.stackName}
+region=${this.region}
+verbose=true
+            `.trim(),
+            {
+              owner: "root",
+              group: "root",
+              mode: "000400",
+              serviceRestartHandles: [cfnHupRestartHandle],
+            }
+          ),
+          InitFile.fromString(
+            "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
+            `
+[cfn-auto-reloader-hook]
+triggers=post.update
+path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
+action=/opt/aws/bin/cfn-init -v --stack ${this.stackName} --region ${this.region} --resource ManagerAutoscalingGroup --configsets default
+runas=root
+            `.trim(),
+            { serviceRestartHandles: [cfnHupRestartHandle] }
+          ),
           InitService.enable("cfn-hup", {
             enabled: true,
             ensureRunning: true,
-            serviceRestartHandle: cfnHupPackagesConfigSetRestartHandle,
+            serviceRestartHandle: cfnHupRestartHandle,
           }),
         ]),
         [CONFIG]: new InitConfig([
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
             `
-            concurrent = ${gitlabMaxConcurrentBuilds}
-            check_interval = ${gitlabCheckInterval}
-            [[runners]]
-              name = "${this.stackName}"
-              url = "${gitlabUrl}"
-              token = "${gitlabToken}"
-              executor = "docker+machine"
-              limit = "${gitlabLimit}"
-              environment = [
-                "DOCKER_DRIVER=overlay2",
-                "DOCKER_TLS_CERTDIR=/certs"
-              ]
-              [runners.docker]
-                tls_verify = false
-                image = "${gitlabDockerImage}"
-                privileged = true
-                disable_cache = false
-                volumes = ["/certs/client", "/cache"]
-                shm_size = 0
-              [runners.cache]
-                Type = "s3"
-                Shared = true
-              [runners.cache.s3]
-                ServerAddress = "s3.${this.urlSuffix}"
-                BucketName = "${cacheBucketName}"
-                BucketLocation = "${this.region}"
-              [runners.machine]
-                IdleCount = ${gitlabIdleCount}
-                IdleTime = ${gitlabIdleTime}
-                MaxBuilds = ${gitlabMaxBuilds}
-                MachineDriver = "amazonec2"
-                MachineName = "gitlab-docker-machine-%s"
-                MachineOptions = [
-                  "amazonec2-instance-type=${gitlabRunnerInstanceType}",
-                  "amazonec2-region=${this.region}",
-                  "amazonec2-vpc-id=${vpc.vpcId}",
-                  "amazonec2-zone=${availabilityZone}",
-                  "amazonec2-subnet-id=${vpcSubnetId}",
-                  "amazonec2-security-group=${this.stackName}-RunnersSecurityGroup",
-                  "amazonec2-use-private-address=true",
-                  "amazonec2-iam-instance-profile=${runnersInstanceProfile.logicalId}",
-                  "amazonec2-request-spot-instance=${gitlabRunnerRequestSpotInstance}",
-                  "amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}"
-                ]
-                [[runners.machine.autoscaling]]
-                  Timezone = "${gitlabAutoscalingTimezone}"
-                  Periods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
-                  IdleCount = ${gitlabAutoscalingIdleCount}
-                  IdleTime = ${gitlabAutoscalingIdleTime}
-            `,
+concurrent = ${gitlabMaxConcurrentBuilds}
+check_interval = ${gitlabCheckInterval}
+[[runners]]
+  name = "${this.stackName}"
+  url = "${gitlabUrl}"
+  token = "${gitlabToken}"
+  executor = "docker+machine"
+  limit = "${gitlabLimit}"
+  environment = [
+    "DOCKER_DRIVER=overlay2",
+    "DOCKER_TLS_CERTDIR=/certs"
+  ]
+  [runners.docker]
+    tls_verify = false
+    image = "${gitlabDockerImage}"
+    privileged = true
+    disable_cache = false
+    volumes = ["/certs/client", "/cache"]
+    shm_size = 0
+  [runners.cache]
+    Type = "s3"
+    Shared = true
+  [runners.cache.s3]
+    ServerAddress = "s3.${this.urlSuffix}"
+    BucketName = "${cacheBucketName}"
+    BucketLocation = "${this.region}"
+  [runners.machine]
+    IdleCount = ${gitlabIdleCount}
+    IdleTime = ${gitlabIdleTime}
+    MaxBuilds = ${gitlabMaxBuilds}
+    MachineDriver = "amazonec2"
+    MachineName = "gitlab-docker-machine-%s"
+    MachineOptions = [
+      "amazonec2-instance-type=${gitlabRunnerInstanceType}",
+      "amazonec2-region=${this.region}",
+      "amazonec2-vpc-id=${vpc.vpcId}",
+      "amazonec2-zone=${availabilityZone}",
+      "amazonec2-subnet-id=${vpcSubnetId}",
+      "amazonec2-security-group=${this.stackName}-RunnersSecurityGroup",
+      "amazonec2-use-private-address=true",
+      "amazonec2-iam-instance-profile=${runnersInstanceProfile.logicalId}",
+      "amazonec2-request-spot-instance=${gitlabRunnerRequestSpotInstance}",
+      "amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}"
+    ]
+    [[runners.machine.autoscaling]]
+      Timezone = "${gitlabAutoscalingTimezone}"
+      Periods = ["* * 0-8,18-23 * * mon-fri *", "* * * * * sat,sun *"]
+      IdleCount = ${gitlabAutoscalingIdleCount}
+      IdleTime = ${gitlabAutoscalingIdleTime}
+            `.trim(),
             {
               owner: "gitlab-runner",
               group: "gitlab-runner",
@@ -474,9 +476,7 @@ export class GitlabRunnerStack extends Stack {
           ),
           InitFile.fromString(
             "/etc/rsyslog.d/25-gitlab-runner.conf",
-            `
-            :programname, isequal, "gitlab-runner" /var/log/gitlab-runner.log
-          `,
+            `:programname, isequal, "gitlab-runner" /var/log/gitlab-runner.log`,
             {
               owner: "root",
               group: "root",
@@ -486,12 +486,12 @@ export class GitlabRunnerStack extends Stack {
           InitService.enable("gitlab-runner", {
             ensureRunning: true,
             enabled: true,
-            serviceRestartHandle: gitlabRunnerConfigConfigSetRestartHandle,
+            serviceRestartHandle: gitlabRunnerConfigRestartHandle,
           }),
           InitService.enable("rsyslog", {
             ensureRunning: true,
             enabled: true,
-            serviceRestartHandle: rsyslogConfigConfigSetRestartHandle,
+            serviceRestartHandle: rsyslogConfigRestartHandle,
           }),
         ]),
         [RESTART]: new InitConfig([
@@ -502,19 +502,27 @@ export class GitlabRunnerStack extends Stack {
       },
     });
 
-    new AutoScalingGroup(this, "ManagerAutoscalingGroup", {
-      vpc: vpc,
-      instanceType: managerInstanceType!,
-      machineImage: machineImage!,
-      keyName: managerKeyPairName,
-      securityGroup: managerSecurityGroup,
-      role: managerRole,
-      userData: userData,
-      init: initConfig,
-      maxCapacity: 1,
-      minCapacity: 1,
-      signals: Signals.waitForCount(0, { timeout: Duration.minutes(15) }), // TODO: set 'count' back to 1
-    });
+    const managerAutoscalingGroup = new AutoScalingGroup(
+      this,
+      "ManagerAutoscalingGroup",
+      {
+        vpc: vpc,
+        instanceType: managerInstanceType!,
+        machineImage: machineImage!,
+        keyName: managerKeyPairName,
+        securityGroup: managerSecurityGroup,
+        role: managerRole,
+        userData: userData,
+        init: initConfig,
+        maxCapacity: 1,
+        minCapacity: 1,
+        desiredCapacity: 1,
+        signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
+      }
+    );
+    const cfnManagerAutoscalingGroup = managerAutoscalingGroup.node
+      .defaultChild as CfnAutoScalingGroup;
+    cfnManagerAutoscalingGroup.overrideLogicalId("ManagerAutoscalingGroup");
 
     /*
      * ######################

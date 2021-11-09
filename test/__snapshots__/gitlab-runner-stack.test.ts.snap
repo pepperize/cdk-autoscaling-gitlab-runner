@@ -138,7 +138,7 @@ Object {
       "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain",
     },
-    "ManagerAutoscalingGroupASGE4841860": Object {
+    "ManagerAutoscalingGroup": Object {
       "CreationPolicy": Object {
         "ResourceSignal": Object {
           "Count": 1,
@@ -147,6 +147,67 @@ Object {
       },
       "Metadata": Object {
         "AWS::CloudFormation::Init": Object {
+          "cfnHup": Object {
+            "files": Object {
+              "/etc/cfn/cfn-hup.conf": Object {
+                "content": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "[main]
+stack=gitlab-runner
+region=",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      "
+verbose=true",
+                    ],
+                  ],
+                },
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000400",
+                "owner": "root",
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": Object {
+                "content": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "[cfn-auto-reloader-hook]
+triggers=post.update
+path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
+action=/opt/aws/bin/cfn-init -v --stack gitlab-runner --region ",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      " --resource ManagerAutoscalingGroup --configsets default
+runas=root",
+                    ],
+                  ],
+                },
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+            },
+            "services": Object {
+              "sysvinit": Object {
+                "cfn-hup": Object {
+                  "enabled": true,
+                  "ensureRunning": true,
+                  "files": Array [
+                    "/etc/cfn/cfn-hup.conf",
+                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
+                    "/etc/cfn/cfn-hup.conf",
+                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
+                  ],
+                },
+              },
+            },
+          },
           "config": Object {
             "files": Object {
               "/etc/gitlab-runner/config.toml": Object {
@@ -154,69 +215,67 @@ Object {
                   "Fn::Join": Array [
                     "",
                     Array [
-                      "
-            concurrent = 10
-            check_interval = 0
-            [[runners]]
-              name = \\"gitlab-runner\\"
-              url = \\"https://gitlab.com\\"
-              token = \\"\\"
-              executor = \\"docker+machine\\"
-              limit = \\"20\\"
-              environment = [
-                \\"DOCKER_DRIVER=overlay2\\",
-                \\"DOCKER_TLS_CERTDIR=/certs\\"
-              ]
-              [runners.docker]
-                tls_verify = false
-                image = \\"alpine\\"
-                privileged = true
-                disable_cache = false
-                volumes = [\\"/certs/client\\", \\"/cache\\"]
-                shm_size = 0
-              [runners.cache]
-                Type = \\"s3\\"
-                Shared = true
-              [runners.cache.s3]
-                ServerAddress = \\"s3.",
+                      "concurrent = 10
+check_interval = 0
+[[runners]]
+  name = \\"gitlab-runner\\"
+  url = \\"https://gitlab.com\\"
+  token = \\"\\"
+  executor = \\"docker+machine\\"
+  limit = \\"20\\"
+  environment = [
+    \\"DOCKER_DRIVER=overlay2\\",
+    \\"DOCKER_TLS_CERTDIR=/certs\\"
+  ]
+  [runners.docker]
+    tls_verify = false
+    image = \\"alpine\\"
+    privileged = true
+    disable_cache = false
+    volumes = [\\"/certs/client\\", \\"/cache\\"]
+    shm_size = 0
+  [runners.cache]
+    Type = \\"s3\\"
+    Shared = true
+  [runners.cache.s3]
+    ServerAddress = \\"s3.",
                       Object {
                         "Ref": "AWS::URLSuffix",
                       },
                       "\\"
-                BucketName = \\"runnercache\\"
-                BucketLocation = \\"",
+    BucketName = \\"runnercache\\"
+    BucketLocation = \\"",
                       Object {
                         "Ref": "AWS::Region",
                       },
                       "\\"
-              [runners.machine]
-                IdleCount = 10
-                IdleTime = 300
-                MaxBuilds = 25
-                MachineDriver = \\"amazonec2\\"
-                MachineName = \\"gitlab-docker-machine-%s\\"
-                MachineOptions = [
-                  \\"amazonec2-instance-type=t3.nano\\",
-                  \\"amazonec2-region=",
+  [runners.machine]
+    IdleCount = 10
+    IdleTime = 300
+    MaxBuilds = 25
+    MachineDriver = \\"amazonec2\\"
+    MachineName = \\"gitlab-docker-machine-%s\\"
+    MachineOptions = [
+      \\"amazonec2-instance-type=t3.micro\\",
+      \\"amazonec2-region=",
                       Object {
                         "Ref": "AWS::Region",
                       },
                       "\\",
-                  \\"amazonec2-vpc-id=vpc123\\",
-                  \\"amazonec2-zone=a\\",
-                  \\"amazonec2-subnet-id=priv1\\",
-                  \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
-                  \\"amazonec2-use-private-address=true\\",
-                  \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
-                  \\"amazonec2-request-spot-instance=true\\",
-                  \\"amazonec2-spot-price=0.03\\"
-                ]
-                [[runners.machine.autoscaling]]
-                  Timezone = \\"UTC\\"
-                  Periods = [\\"* * 0-8,18-23 * * mon-fri *\\", \\"* * * * * sat,sun *\\"]
-                  IdleCount = 20
-                  IdleTime = 600
-            ",
+      \\"amazonec2-vpc-id=vpc123\\",
+      \\"amazonec2-zone=a\\",
+      \\"amazonec2-subnet-id=priv1\\",
+      \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
+      \\"amazonec2-use-private-address=true\\",
+      \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
+      \\"amazonec2-request-spot-instance=true\\",
+      \\"amazonec2-spot-price=0.03\\"
+    ]
+    [[runners.machine.autoscaling]]
+      Timezone = \\"UTC\\"
+      Periods = [\\"* * 0-8,18-23 * * mon-fri *\\", \\"* * * * * sat,sun *\\"]
+      IdleCount = 20
+      IdleTime = 600",
                     ],
                   ],
                 },
@@ -226,9 +285,7 @@ Object {
                 "owner": "gitlab-runner",
               },
               "/etc/rsyslog.d/25-gitlab-runner.conf": Object {
-                "content": "
-            :programname, isequal, \\"gitlab-runner\\" /var/log/gitlab-runner.log
-          ",
+                "content": ":programname, isequal, \\"gitlab-runner\\" /var/log/gitlab-runner.log",
                 "encoding": "plain",
                 "group": "root",
                 "mode": "000644",
@@ -255,76 +312,21 @@ Object {
             },
           },
           "configSets": Object {
-            "config": Array [
-              "config",
-            ],
             "default": Array [
-              "config",
-              "restart",
-            ],
-            "install": Array [
               "repositories",
               "packages",
-            ],
-            "restart": Array [
+              "cfnHup",
+              "config",
               "restart",
             ],
           },
           "packages": Object {
             "commands": Object {
               "10-docker-machine": Object {
-                "command": "curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
               },
               "20-gitlab-runner-start": Object {
                 "command": "gitlab-runner start",
-              },
-            },
-            "files": Object {
-              "/etc/cfn/cfn-hup.conf": Object {
-                "content": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "
-              [main]
-              stack=gitlab-runner
-              region=",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      "
-            ",
-                    ],
-                  ],
-                },
-                "encoding": "plain",
-                "group": "root",
-                "mode": "000400",
-                "owner": "root",
-              },
-              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": Object {
-                "content": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "
-              [cfn-auto-reloader-hook]
-              triggers=post.update
-              path=Resources.Manager.Metadata.AWS::CloudFormation::Init
-              action=/opt/aws/bin/cfn-init -v --stack gitlab-runner --region ",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      " --resource ManagerLaunchTemplate --configsets default
-              runas=root
-            ",
-                    ],
-                  ],
-                },
-                "encoding": "plain",
-                "group": "root",
-                "mode": "000644",
-                "owner": "root",
               },
             },
             "packages": Object {
@@ -332,18 +334,6 @@ Object {
                 "docker": Array [],
                 "gitlab-runner": Array [],
                 "tzdata": Array [],
-              },
-            },
-            "services": Object {
-              "sysvinit": Object {
-                "cfn-hup": Object {
-                  "enabled": true,
-                  "ensureRunning": true,
-                  "files": Array [
-                    "/etc/cfn/cfn-hup.conf",
-                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-                  ],
-                },
               },
             },
           },
@@ -364,6 +354,7 @@ Object {
         },
       },
       "Properties": Object {
+        "DesiredCapacity": "1",
         "LaunchConfigurationName": Object {
           "Ref": "ManagerAutoscalingGroupLaunchConfig078E7BD8",
         },
@@ -426,7 +417,7 @@ Object {
             "ami",
           ],
         },
-        "InstanceType": "t3.micro",
+        "InstanceType": "t3.nano",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -442,21 +433,7 @@ Object {
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-/opt/aws/bin/cfn-init --stack 'gitlab-runner' --region '",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                "' --resource Manager --configsets default
-/opt/aws/bin/cfn-signal -e $? --stack '",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                "' --region '",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                "' --resource Manager
-# fingerprint: 47276c6476a51f91
+# fingerprint: 0f445ba5b35339cf
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -467,7 +444,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::StackName",
                 },
-                " --resource ManagerAutoscalingGroupASGE4841860 -c default
+                " --resource ManagerAutoscalingGroup -c default
   /opt/aws/bin/cfn-signal -e $? --region ",
                 Object {
                   "Ref": "AWS::Region",
@@ -476,7 +453,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::StackName",
                 },
-                " --resource ManagerAutoscalingGroupASGE4841860
+                " --resource ManagerAutoscalingGroup
   cat /var/log/cfn-init.log >&2
 )",
               ],
