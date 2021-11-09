@@ -513,7 +513,7 @@ export class GitlabRunnerStack extends Stack {
       init: initConfig,
       maxCapacity: 1,
       minCapacity: 1,
-      signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
+      signals: Signals.waitForCount(0, { timeout: Duration.minutes(15) }), // TODO:
     });
 
     /*
