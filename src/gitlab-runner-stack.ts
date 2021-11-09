@@ -275,7 +275,7 @@ export class GitlabRunnerStack extends Stack {
               Condition: {
                 StringEquals: {
                   "ec2:Region": `${this.region}`,
-                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString}`,
+                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString()}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-docker-machine-*",
@@ -291,7 +291,7 @@ export class GitlabRunnerStack extends Stack {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString}`,
+                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString()}`,
                   "ec2:Region": `${this.region}`,
                   "ec2:Tenancy": "default",
                 },

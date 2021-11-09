@@ -560,9 +560,7 @@ yum update -y aws-cfn-bootstrap
                       ],
                     },
                     "StringEquals": Object {
-                      "ec2:InstanceType": "toString() {
-        return this.instanceTypeIdentifier;
-    }",
+                      "ec2:InstanceType": "t3.micro",
                       "ec2:Region": Object {
                         "Ref": "AWS::Region",
                       },
@@ -609,9 +607,7 @@ yum update -y aws-cfn-bootstrap
                       },
                     },
                     "StringEqualsIfExists": Object {
-                      "ec2:InstanceType": "toString() {
-        return this.instanceTypeIdentifier;
-    }",
+                      "ec2:InstanceType": "t3.micro",
                       "ec2:Region": Object {
                         "Ref": "AWS::Region",
                       },
