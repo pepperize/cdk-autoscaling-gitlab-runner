@@ -58,6 +58,7 @@ const project = new AwsCdkTypeScriptApp({
     prettier: true,
   },
 });
+
 project.setScript("preinstall", "npx only-allow npm");
 project.setScript("build", "tsc");
 project.setScript("watch", "tsc -w");
@@ -72,4 +73,7 @@ project.setScript(
   "format",
   "prettier --write 'src/*.ts' '.projenrc.js' 'README.md'"
 );
+
+project.buildWorkflow.on({ push: {}, pullRequest: {}, workflowDispatch: {} });
+
 project.synth();
