@@ -107,7 +107,7 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   gitlabAutoscalingIdleTime: 600,
   gitlabCheckInterval: 0,
   gitlabRunnerRequestSpotInstance: true,
-  gitlabRunnerSpotInstancePrice: 0.03, // TODO: configure defaults
+  gitlabRunnerSpotInstancePrice: 0.03,
 };
 
 export class GitlabRunnerStack extends Stack {
