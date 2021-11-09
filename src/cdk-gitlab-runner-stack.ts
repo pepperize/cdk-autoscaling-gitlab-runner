@@ -52,6 +52,11 @@ export const managerAmiMap: Record<string, string> = {
   "us-west-2": "ami-061392db613a6357b",
 };
 
+/** 
+ * Documentation:
+ * About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines 
+ * 
+ */
 export interface GitlabRunnerStackProps extends StackProps {
   machineImage?: IMachineImage;
   cacheBucketName?: string; // the bucket where your cache should be kept
@@ -66,7 +71,6 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabRunnerInstanceType?: InstanceType;
   gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml
   gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
-  /** About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines */
   gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
   gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
   gitlabIdleCount?: number; // A value that generates a minimum amount of not used machines when the job queue is empty.
