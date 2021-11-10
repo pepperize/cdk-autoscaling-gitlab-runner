@@ -10,7 +10,7 @@ const app = new App();
 
 new GitlabRunnerStack(app, "GitlabRunnerStack", {
   gitlabToken: "iieC-HsJsedAse2vq486",
-  vpcIdToLookUp: "vpc-0f413950c9d415553",
+  vpcIdToLookUp: "vpc-0da907b688369469e",
   env: prodEnv,
 });
 
