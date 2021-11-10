@@ -3,6 +3,17 @@
 exports[`gitlab-runner 1`] = `
 Object {
   "Mappings": Object {
+    "AmiMap": Object {
+      "eu-central-1": Object {
+        "ami": "ami-0a49b025fffbbdac6",
+      },
+      "us-east-1": Object {
+        "ami": "ami-04fe9398b2a27a600",
+      },
+      "us-west-1": Object {
+        "ami": "ami-0de625cc489c46bfb",
+      },
+    },
     "ManagerAutoscalingGroupAmiMap402DC0D6": Object {
       "ap-northeast-1": Object {
         "ami": "ami-0f9ae750e8274075b",
@@ -417,7 +428,7 @@ check_interval = 0
   ]
   [runners.docker]
     tls_verify = false
-    image = \\"alpine\\"
+    image = \\"docker:19.03.5\\"
     privileged = true
     cap_add = [\\"CAP_SYS_ADMIN\\"]
     wait_for_services_timeout = 300
@@ -447,6 +458,17 @@ check_interval = 0
     MachineName = \\"gitlab-runner-%s\\"
     MachineOptions = [
       \\"amazonec2-instance-type=t3.micro\\",
+      \\"amazonec2-ami=",
+                      Object {
+                        "Fn::FindInMap": Array [
+                          "AmiMap",
+                          Object {
+                            "Ref": "AWS::Region",
+                          },
+                          "ami",
+                        ],
+                      },
+                      "\\",
       \\"amazonec2-region=",
                       Object {
                         "Ref": "AWS::Region",
@@ -623,7 +645,7 @@ check_interval = 0
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 8572ff59146e70c6
+# fingerprint: 31d99387779bb73c
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
