@@ -8,10 +8,10 @@ Object {
         "ami": "ami-0a49b025fffbbdac6",
       },
       "us-east-1": Object {
-        "ami": "ami-04fe9398b2a27a600",
+        "ami": "ami-083654bd07b5da81d",
       },
       "us-west-1": Object {
-        "ami": "ami-0de625cc489c46bfb",
+        "ami": "ami-053ac55bdcfe96e85",
       },
     },
     "ManagerAutoscalingGroupAmiMap402DC0D6": Object {

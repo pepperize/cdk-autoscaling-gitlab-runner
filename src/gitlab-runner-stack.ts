@@ -59,8 +59,8 @@ export const runnerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
   // https://cloud-images.ubuntu.com/locator/ec2/
   "eu-central-1": "ami-0a49b025fffbbdac6",
-  "us-west-1": "ami-0de625cc489c46bfb",
-  "us-east-1": "ami-04fe9398b2a27a600",
+  "us-west-1": "ami-053ac55bdcfe96e85",
+  "us-east-1": "ami-083654bd07b5da81d",
 };
 
 /**
