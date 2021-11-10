@@ -54,9 +54,23 @@ Object {
       },
     },
   },
+  "Parameters": Object {
+    "AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1ArtifactHash0128B949": Object {
+      "Description": "Artifact hash for asset \\"1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1\\"",
+      "Type": "String",
+    },
+    "AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3Bucket4842F32D": Object {
+      "Description": "S3 bucket for asset \\"1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1\\"",
+      "Type": "String",
+    },
+    "AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A": Object {
+      "Description": "S3 key for asset version \\"1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1\\"",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
-    "GitlabRunnerCacheBucketD970991B": Object {
-      "DeletionPolicy": "Retain",
+    "CacheBucket41D9D0B0": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "BucketEncryption": Object {
           "ServerSideEncryptionConfiguration": Array [
@@ -65,7 +79,7 @@ Object {
               "ServerSideEncryptionByDefault": Object {
                 "KMSMasterKeyID": Object {
                   "Fn::GetAtt": Array [
-                    "GitlabRunnerCacheBucketKey33399B97",
+                    "CacheBucketKey16D34357",
                     "Arn",
                   ],
                 },
@@ -74,6 +88,7 @@ Object {
             },
           ],
         },
+        "BucketName": "gitlab-runner-runnercache-undefined-undefined",
         "LifecycleConfiguration": Object {
           "Rules": Array [
             Object {
@@ -82,14 +97,45 @@ Object {
             },
           ],
         },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true",
+          },
+        ],
       },
       "Type": "AWS::S3::Bucket",
-      "UpdateReplacePolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
     },
-    "GitlabRunnerCacheBucketKey33399B97": Object {
+    "CacheBucketAutoDeleteObjectsCustomResource12E72BBC": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "CacheBucketPolicyE2F00ED4",
+      ],
+      "Properties": Object {
+        "BucketName": Object {
+          "Ref": "CacheBucket41D9D0B0",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "CacheBucketKey16D34357": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "Description": "Created by gitlab-runner/GitlabRunnerCacheBucket",
+        "Description": "Created by gitlab-runner/CacheBucket",
         "KeyPolicy": Object {
           "Statement": Array [
             Object {
@@ -137,6 +183,147 @@ Object {
       },
       "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain",
+    },
+    "CacheBucketPolicyE2F00ED4": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "CacheBucket41D9D0B0",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::GetAtt": Array [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn",
+                  ],
+                },
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "CacheBucket41D9D0B0",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "CacheBucket41D9D0B0",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": Object {
+      "DependsOn": Array [
+        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3Bucket4842F32D",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Lambda function for auto-deleting objects in ",
+              Object {
+                "Ref": "CacheBucket41D9D0B0",
+              },
+              " S3 bucket.",
+            ],
+          ],
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "ManagerAutoscalingGroupASGE4841860": Object {
       "CreationPolicy": Object {
@@ -246,7 +433,7 @@ check_interval = 0
                         "Ref": "AWS::URLSuffix",
                       },
                       "\\"
-    BucketName = \\"runnercache\\"
+    BucketName = \\"gitlab-runner-runnercache-undefined-undefined\\"
     BucketLocation = \\"",
                       Object {
                         "Ref": "AWS::Region",
@@ -436,7 +623,7 @@ check_interval = 0
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: c1f669c24de9d3dd
+# fingerprint: 8572ff59146e70c6
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -511,7 +698,7 @@ yum update -y aws-cfn-bootstrap
                       Array [
                         Object {
                           "Fn::GetAtt": Array [
-                            "GitlabRunnerCacheBucketD970991B",
+                            "CacheBucket41D9D0B0",
                             "Arn",
                           ],
                         },
@@ -525,7 +712,7 @@ yum update -y aws-cfn-bootstrap
                   "Effect": "Allow",
                   "Resource": Object {
                     "Fn::GetAtt": Array [
-                      "GitlabRunnerCacheBucketD970991B",
+                      "CacheBucket41D9D0B0",
                       "Arn",
                     ],
                   },
@@ -743,6 +930,9 @@ yum update -y aws-cfn-bootstrap
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": Array [
+          "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM",
+        ],
       },
       "Type": "AWS::IAM::Role",
     },

@@ -27,8 +27,14 @@ import {
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-import { Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
-import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core";
+import { BlockPublicAccess, Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
+import {
+  Construct,
+  Duration,
+  RemovalPolicy,
+  Stack,
+  StackProps,
+} from "@aws-cdk/core";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -115,6 +121,7 @@ export class GitlabRunnerStack extends Stack {
     super(scope, id, props);
 
     const {
+      env,
       machineImage,
       cacheBucketName,
       cacheExpirationInDays,
@@ -156,8 +163,11 @@ export class GitlabRunnerStack extends Stack {
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. */
     const lifeCycleRuleEnabled = cacheExpirationInDays === 0;
+    const uniqueCacheBucketName =
+      `${this.stackName}-${cacheBucketName}-${env?.account}-${env?.region}`.toLocaleLowerCase();
 
-    const cacheBucket = new Bucket(this, "GitlabRunnerCacheBucket", {
+    const cacheBucket = new Bucket(this, "CacheBucket", {
+      bucketName: uniqueCacheBucketName,
       lifecycleRules: [
         {
           enabled: lifeCycleRuleEnabled,
@@ -166,6 +176,9 @@ export class GitlabRunnerStack extends Stack {
       ],
       encryption: BucketEncryption.KMS,
       bucketKeyEnabled: true,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      autoDeleteObjects: true,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
 
     /*
@@ -203,6 +216,11 @@ export class GitlabRunnerStack extends Stack {
      * Type: 'AWS::IAM::Role'
      */
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
+    const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
+      this,
+      "AmazonEC2RoleforSSM",
+      "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+    );
 
     /*
      * RunnersRole:
@@ -211,6 +229,7 @@ export class GitlabRunnerStack extends Stack {
 
     const runnersRole = new Role(this, "RunnersRole", {
       assumedBy: ec2ServicePrincipal,
+      managedPolicies: [ec2ManagedPolicyForSSM],
     });
 
     /*
@@ -228,13 +247,7 @@ export class GitlabRunnerStack extends Stack {
 
     const managerRole = new Role(this, "ManagerRole", {
       assumedBy: ec2ServicePrincipal,
-      managedPolicies: [
-        ManagedPolicy.fromManagedPolicyArn(
-          this,
-          "AmazonEC2RoleforSSM",
-          "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
-        ),
-      ],
+      managedPolicies: [ec2ManagedPolicyForSSM],
       inlinePolicies: {
         Cache: PolicyDocument.fromJson({
           Version: "2012-10-17",
@@ -442,7 +455,7 @@ check_interval = ${gitlabCheckInterval}
     Shared = true
   [runners.cache.s3]
     ServerAddress = "s3.${this.urlSuffix}"
-    BucketName = "${cacheBucketName}"
+    BucketName = "${uniqueCacheBucketName}"
     BucketLocation = "${this.region}"
   [runners.machine]
     IdleCount = ${gitlabOffPeakIdleCount}
