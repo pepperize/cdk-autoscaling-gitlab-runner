@@ -55,6 +55,13 @@ export const managerAmiMap: Record<string, string> = {
   "us-west-1": "ami-0019ef04ac50be30f",
   "us-west-2": "ami-061392db613a6357b",
 };
+export const runnerAmiMap: Record<string, string> = {
+  // Record<REGION, AMI_ID>
+  // https://cloud-images.ubuntu.com/locator/ec2/
+  "eu-central-1": "ami-0a49b025fffbbdac6",
+  "us-west-1": "ami-053ac55bdcfe96e85",
+  "us-east-1": "ami-083654bd07b5da81d",
+};
 
 /**
  * Documentation:
@@ -73,6 +80,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabUrl?: string; // URL of your GitLab instance.
   gitlabToken: string; // RUNNER_TOKEN. Note this is different from the registration token used by `gitlab-runner register`.
   gitlabRunnerInstanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
+  gitlabRunnerImageId?: IMachineImage;
   gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml .
   gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
   gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
@@ -102,7 +110,8 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
     InstanceClass.T3,
     InstanceSize.MICRO
   ),
-  gitlabDockerImage: "alpine",
+  gitlabDockerImage: "docker:19.03.5",
+  gitlabRunnerImageId: MachineImage.genericLinux(runnerAmiMap),
   gitlabMaxBuilds: 10,
   gitlabMaxConcurrentBuilds: 10,
   gitlabLimit: 20,
@@ -134,6 +143,7 @@ export class GitlabRunnerStack extends Stack {
       gitlabToken,
       gitlabRunnerInstanceType,
       gitlabDockerImage,
+      gitlabRunnerImageId,
       gitlabMaxBuilds,
       gitlabLimit,
       gitlabMaxConcurrentBuilds,
@@ -465,13 +475,16 @@ check_interval = ${gitlabCheckInterval}
     MachineName = "gitlab-runner-%s"
     MachineOptions = [
       "amazonec2-instance-type=${gitlabRunnerInstanceType}",
+      "amazonec2-ami=${gitlabRunnerImageId?.getImage(this).imageId}",
       "amazonec2-region=${this.region}",
       "amazonec2-vpc-id=${vpc.vpcId}",
       "amazonec2-zone=${availabilityZone}",
       "amazonec2-subnet-id=${vpcSubnetId}",
       "amazonec2-security-group=${this.stackName}-RunnersSecurityGroup",
       "amazonec2-use-private-address=true",
-      "amazonec2-iam-instance-profile=${runnersInstanceProfile.instanceProfileName}",
+      "amazonec2-iam-instance-profile=${
+        runnersInstanceProfile.instanceProfileName
+      }",
       "amazonec2-request-spot-instance=${gitlabRunnerRequestSpotInstance}",
       "amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}"
     ]
