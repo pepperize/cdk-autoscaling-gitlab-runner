@@ -69,7 +69,7 @@ export const runnerAmiMap: Record<string, string> = {
  * About autoscaling props: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */
 export interface GitlabRunnerStackProps extends StackProps {
-  machineImage?: IMachineImage; // An Amazon Machine Image for the Manager EC2 instance.
+  managerMachineImageId?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
   cacheBucketName?: string; // The bucket where your cache should be kept.
   cacheExpirationInDays?: number; // Number of days the cache is stored before deletion. 0 simply means don't delete.
   availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
@@ -80,7 +80,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabUrl?: string; // URL of your GitLab instance.
   gitlabToken: string; // RUNNER_TOKEN. Note this is different from the registration token used by `gitlab-runner register`.
   gitlabRunnerInstanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
-  gitlabRunnerImageId?: IMachineImage;
+  gitlabRunnerImageId?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
   gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml .
   gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
   gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
@@ -96,7 +96,7 @@ export interface GitlabRunnerStackProps extends StackProps {
 }
 
 const defaultProps: Partial<GitlabRunnerStackProps> = {
-  machineImage: MachineImage.genericLinux(managerAmiMap),
+  managerMachineImageId: MachineImage.genericLinux(managerAmiMap),
   cacheBucketName: "runnercache",
   cacheExpirationInDays: 30,
   availabilityZone: "a",
@@ -131,7 +131,7 @@ export class GitlabRunnerStack extends Stack {
 
     const {
       env,
-      machineImage,
+      managerMachineImageId,
       cacheBucketName,
       cacheExpirationInDays,
       availabilityZone,
@@ -531,7 +531,7 @@ check_interval = ${gitlabCheckInterval}
       vpc: vpc,
       vpcSubnets: vpcSubnet,
       instanceType: managerInstanceType!,
-      machineImage: machineImage!,
+      machineImage: managerMachineImageId!,
       keyName: managerKeyPairName,
       securityGroup: managerSecurityGroup,
       role: managerRole,
