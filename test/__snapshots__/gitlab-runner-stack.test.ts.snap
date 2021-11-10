@@ -595,7 +595,7 @@ yum update -y aws-cfn-bootstrap
                             },
                             ":ec2:",
                             Object {
-                              "Ref": "AWS::Partition",
+                              "Ref": "AWS::Region",
                             },
                             ":",
                             Object {

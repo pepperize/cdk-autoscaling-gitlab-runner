@@ -297,7 +297,7 @@ export class GitlabRunnerStack extends Stack {
                   "ec2:Tenancy": "default",
                 },
                 ArnEqualsIfExists: {
-                  "ec2:Vpc": `arn:${this.partition}:ec2:${this.partition}:${this.account}:vpc/${vpc.vpcId}`,
+                  "ec2:Vpc": `arn:${this.partition}:ec2:${this.region}:${this.account}:vpc/${vpc.vpcId}`,
                   "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
