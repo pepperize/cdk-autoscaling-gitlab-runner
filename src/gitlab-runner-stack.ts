@@ -183,7 +183,6 @@ export class GitlabRunnerStack extends Stack {
         },
       ],
       encryption: BucketEncryption.KMS_MANAGED,
-      bucketKeyEnabled: true,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
