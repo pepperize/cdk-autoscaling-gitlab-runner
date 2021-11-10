@@ -535,7 +535,7 @@ check_interval = 0
           "packages": Object {
             "commands": Object {
               "10-docker-machine": Object {
-                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+                "command": "curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
               },
               "20-gitlab-runner-start": Object {
                 "command": "gitlab-runner start",
@@ -645,7 +645,7 @@ check_interval = 0
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 31d99387779bb73c
+# fingerprint: 243579d3ca77cf3a
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
