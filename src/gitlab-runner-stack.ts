@@ -182,7 +182,7 @@ export class GitlabRunnerStack extends Stack {
           expirationDate: cacheBucketExpirationDate,
         },
       ],
-      encryption: BucketEncryption.KMS,
+      encryption: BucketEncryption.KMS_MANAGED,
       bucketKeyEnabled: true,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       autoDeleteObjects: true,
