@@ -31,6 +31,11 @@ npx projen
    curl --request POST "https://gitlab.com/api/v4/runners" --form "token=<your register token>" --form "description=gitlab-runner-pepperize" --form "tag_list=<environment name>"
    ```
 
+1. **Configure aws credentials**
+
+   - Go to [SSO Starting Page](https://pepperize.awsapps.com/)
+   - Select the proper account and follow "Command line or programmatic access" instructions
+
 1. **AWS CDK deploy**
 
    ```sh
