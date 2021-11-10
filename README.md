@@ -37,6 +37,14 @@ npx projen
    npm run deploy
    ```
 
+1. **Create service linked role**
+
+   _If using spot instances_
+
+   ```sh
+   aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
+   ```
+
 # Maintenance (Projen)
 
 This project uses [projen](https://github.com/projen/projen) to maintain project configuration through code. Thus, the synthesized files with projen should never be manually edited (in fact, projen enforces that).
