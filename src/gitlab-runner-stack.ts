@@ -88,7 +88,7 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   availabilityZone: "a",
   // vpcIdToLookUp: must be set by a user and can't have a default value
   vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
-  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
+  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
   managerKeyPairName: undefined,
   gitlabUrl: "https://gitlab.com",
   // gitlabToken: must be set by a user and can't have a default value
@@ -221,6 +221,7 @@ export class GitlabRunnerStack extends Stack {
       this,
       "RunnersInstanceProfile",
       {
+        instanceProfileName: "RunnersInstanceProfile",
         roles: [runnersRole.roleName],
       }
     );
@@ -457,7 +458,7 @@ check_interval = ${gitlabCheckInterval}
       "amazonec2-subnet-id=${vpcSubnetId}",
       "amazonec2-security-group=${this.stackName}-RunnersSecurityGroup",
       "amazonec2-use-private-address=true",
-      "amazonec2-iam-instance-profile=${runnersInstanceProfile.logicalId}",
+      "amazonec2-iam-instance-profile=${runnersInstanceProfile.instanceProfileName}",
       "amazonec2-request-spot-instance=${gitlabRunnerRequestSpotInstance}",
       "amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}"
     ]
