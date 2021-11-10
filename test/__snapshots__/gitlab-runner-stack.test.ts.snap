@@ -253,9 +253,9 @@ check_interval = 0
                       },
                       "\\"
   [runners.machine]
-    IdleCount = 10
+    IdleCount = 0
     IdleTime = 300
-    MaxBuilds = 25
+    MaxBuilds = 10
     MachineDriver = \\"amazonec2\\"
     MachineName = \\"gitlab-runner-%s\\"
     MachineOptions = [
@@ -276,9 +276,9 @@ check_interval = 0
     ]
     [[runners.machine.autoscaling]]
       Timezone = \\"UTC\\"
-      Periods = [\\"* * * * * mon-fri *\\", \\"* * * * * sat,sun *\\"]
-      IdleCount = 20
-      IdleTime = 600",
+      Periods = [\\"* * 11-23 * * mon-fri *\\"]
+      IdleCount = 1
+      IdleTime = 1800",
                     ],
                   ],
                 },
@@ -420,7 +420,7 @@ check_interval = 0
             "ami",
           ],
         },
-        "InstanceType": "t3.micro",
+        "InstanceType": "t3.nano",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -436,7 +436,7 @@ check_interval = 0
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: b820fa669c7b11ed
+# fingerprint: c1f669c24de9d3dd
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

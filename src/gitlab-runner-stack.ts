@@ -71,8 +71,8 @@ export interface GitlabRunnerStackProps extends StackProps {
   gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
   gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
   gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
-  gitlabIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
-  gitlabIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
+  gitlabOffPeakIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
+  gitlabOffPeakIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
   gitlabAutoscalingTimezone?: string; // A timezone string. https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
   gitlabAutoscalingIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
   gitlabAutoscalingIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
@@ -88,7 +88,7 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   availabilityZone: "a",
   // vpcIdToLookUp: must be set by a user and can't have a default value
   vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
-  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
+  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
   managerKeyPairName: undefined,
   gitlabUrl: "https://gitlab.com",
   // gitlabToken: must be set by a user and can't have a default value
@@ -97,14 +97,14 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
     InstanceSize.MICRO
   ),
   gitlabDockerImage: "alpine",
-  gitlabMaxBuilds: 25,
+  gitlabMaxBuilds: 10,
   gitlabMaxConcurrentBuilds: 10,
   gitlabLimit: 20,
-  gitlabIdleCount: 10,
-  gitlabIdleTime: 300,
+  gitlabOffPeakIdleCount: 0,
+  gitlabOffPeakIdleTime: 300,
   gitlabAutoscalingTimezone: "UTC",
-  gitlabAutoscalingIdleCount: 20,
-  gitlabAutoscalingIdleTime: 600,
+  gitlabAutoscalingIdleCount: 1,
+  gitlabAutoscalingIdleTime: 1800,
   gitlabCheckInterval: 0,
   gitlabRunnerRequestSpotInstance: true,
   gitlabRunnerSpotInstancePrice: 0.03,
@@ -130,8 +130,8 @@ export class GitlabRunnerStack extends Stack {
       gitlabMaxBuilds,
       gitlabLimit,
       gitlabMaxConcurrentBuilds,
-      gitlabIdleCount,
-      gitlabIdleTime,
+      gitlabOffPeakIdleCount,
+      gitlabOffPeakIdleTime,
       gitlabAutoscalingTimezone,
       gitlabAutoscalingIdleCount,
       gitlabAutoscalingIdleTime,
@@ -445,8 +445,8 @@ check_interval = ${gitlabCheckInterval}
     BucketName = "${cacheBucketName}"
     BucketLocation = "${this.region}"
   [runners.machine]
-    IdleCount = ${gitlabIdleCount}
-    IdleTime = ${gitlabIdleTime}
+    IdleCount = ${gitlabOffPeakIdleCount}
+    IdleTime = ${gitlabOffPeakIdleTime}
     MaxBuilds = ${gitlabMaxBuilds}
     MachineDriver = "amazonec2"
     MachineName = "gitlab-runner-%s"
@@ -464,7 +464,7 @@ check_interval = ${gitlabCheckInterval}
     ]
     [[runners.machine.autoscaling]]
       Timezone = "${gitlabAutoscalingTimezone}"
-      Periods = ["* * * * * mon-fri *", "* * * * * sat,sun *"]
+      Periods = ["* * 11-23 * * mon-fri *"]
       IdleCount = ${gitlabAutoscalingIdleCount}
       IdleTime = ${gitlabAutoscalingIdleTime}
             `.trim(),
