@@ -33,8 +33,9 @@ npx projen
 
 1. **Configure aws credentials**
 
-   - Go to [SSO Starting Page](https://pepperize.awsapps.com/)
-   - Select the proper account and follow "Command line or programmatic access" instructions
+   - Go to [SSO Starting Page](https://pepperize.awsapps.com/),
+   - Select the proper account and follow "Command line or programmatic access" instructions,
+   - You may need to reload or open the fresh terminal instance so the environment variables get updated.
 
 1. **AWS CDK deploy**
 
