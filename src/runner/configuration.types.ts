@@ -1,3 +1,10 @@
+type Configuration =
+  | (Pick<GlobalConfiguration, "runnersConfig"> & Partial<GlobalConfiguration>)
+  | {
+      runnersConfig:
+        | Partial<RunnersConfiguration> & Pick<RunnersConfiguration, "token">;
+    };
+
 /**
  * https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
  */
@@ -49,6 +56,9 @@ type RunnersConfiguration = {
    * @default 52428800 Default is 50 GB.
    */
   outputLimit: number;
+  docker: DockerConfiguration;
+  cache: S3CacheConfiguration;
+  machine: MachineConfiguration;
 };
 
 /**
