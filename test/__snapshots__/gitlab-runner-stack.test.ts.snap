@@ -96,7 +96,7 @@ Object {
         "LifecycleConfiguration": Object {
           "Rules": Array [
             Object {
-              "ExpirationDate": "2021-12-11T00:00:00",
+              "ExpirationDate": "2021-12-12T00:00:00",
               "Status": "Disabled",
             },
           ],
