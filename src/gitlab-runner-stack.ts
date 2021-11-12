@@ -27,7 +27,7 @@ import {
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-import { BlockPublicAccess, Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
+import { BlockPublicAccess, Bucket, BucketEncryption, IBucket } from "@aws-cdk/aws-s3";
 import {
   Construct,
   Duration,
@@ -74,7 +74,7 @@ export interface GitlabRunnerStackProps extends StackProps {
   cacheExpirationInDays?: number; // Number of days the cache is stored before deletion. 0 simply means don't delete.
   availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
   vpcIdToLookUp: string; // Your VPC ID to launch the instance in.
-  vpcSubnet?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
+  vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
   managerInstanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
   managerKeyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
   gitlabUrl?: string; // URL of your GitLab instance.
@@ -101,7 +101,7 @@ const defaultProps: Partial<GitlabRunnerStackProps> = {
   cacheExpirationInDays: 30,
   availabilityZone: "a",
   // vpcIdToLookUp: must be set by a user and can't have a default value
-  vpcSubnet: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
+  vpcSubnets: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
   managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
   managerKeyPairName: undefined,
   gitlabUrl: "https://gitlab.com",
@@ -136,7 +136,7 @@ export class GitlabRunnerStack extends Stack {
       cacheExpirationInDays,
       availabilityZone,
       vpcIdToLookUp,
-      vpcSubnet,
+      vpcSubnets,
       managerInstanceType,
       managerKeyPairName,
       gitlabUrl,
@@ -198,7 +198,7 @@ export class GitlabRunnerStack extends Stack {
       vpcId: vpcIdToLookUp,
     });
     const vpcSubnetId =
-      vpc.selectSubnets(vpcSubnet).subnetIds.find(() => true) || "";
+      vpc.selectSubnets(vpcSubnets).subnetIds.find(() => true) || "";
 
     /*
      * ManagerSecurityGroup:
@@ -528,7 +528,7 @@ check_interval = ${gitlabCheckInterval}
 
     new AutoScalingGroup(this, "ManagerAutoscalingGroup", {
       vpc: vpc,
-      vpcSubnets: vpcSubnet,
+      vpcSubnets: vpcSubnets,
       instanceType: managerInstanceType!,
       machineImage: managerMachineImageId!,
       keyName: managerKeyPairName,
