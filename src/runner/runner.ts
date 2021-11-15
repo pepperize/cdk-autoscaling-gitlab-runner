@@ -100,7 +100,7 @@ export class Runner extends Construct {
     super(scope, id);
 
     const {
-      managerMachineImage: managerMachineImageId,
+      managerMachineImage,
       cacheBucketName,
       cacheExpirationInDays,
       availabilityZone,
@@ -499,7 +499,7 @@ check_interval = ${gitlabCheckInterval}
       vpc: vpc,
       vpcSubnets: vpcSubnets,
       instanceType: managerInstanceType!,
-      machineImage: managerMachineImageId!,
+      machineImage: managerMachineImage!,
       keyName: managerKeyPairName,
       securityGroup: managerSecurityGroup,
       role: managerRole,
