@@ -1,5 +1,5 @@
 export type Configuration =
-  | (Pick<GlobalConfiguration, "runnersConfig"> & Partial<GlobalConfiguration>)
+  | (Pick<GlobalConfiguration, "runners"> & Partial<GlobalConfiguration>)
   | {
       runnersConfig:
         | Partial<RunnersConfiguration> & Pick<RunnersConfiguration, "token">;
@@ -24,13 +24,13 @@ export type GlobalConfiguration = {
   /**
    * The GitLab Runners configuration.
    */
-  runnersConfig: RunnersConfiguration;
+  runners: RunnersConfiguration[];
 };
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
  */
- export type RunnersConfiguration = {
+export type RunnersConfiguration = {
   /**
    * The runner’s name.
    * @default "gitlab-runner"
@@ -57,7 +57,7 @@ export type GlobalConfiguration = {
    */
   outputLimit: number;
   docker: DockerConfiguration;
-  cache: S3CacheConfiguration;
+  cache?: S3CacheConfiguration;
   machine: MachineConfiguration;
 };
 
@@ -100,7 +100,7 @@ type DockerConfiguration = {
   idleTime: number;
   maxBuilds: number;
   machineName: string;
-  machineOptions: MachineOptions;
+  machineOptions?: MachineOptions;
   autoscaling: AutoscalingConfiguration[];
 };
 export type MachineOptions = {

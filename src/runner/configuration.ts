@@ -1,9 +1,6 @@
-import { JsonMap, stringify } from "@iarna/toml";
+import { stringify } from "@iarna/toml";
+import { GlobalConfiguration } from "./configuration.types";
 
-export type RunnerConfiguration = {
-  [key: "concurrent" | "check_interval" | string]: number;
-};
-
-export const toToml = (configuration: RunnerConfiguration) => {
-  return stringify(configuration as JsonMap);
+export const toToml = (configuration: GlobalConfiguration) => {
+  return stringify(configuration);
 };

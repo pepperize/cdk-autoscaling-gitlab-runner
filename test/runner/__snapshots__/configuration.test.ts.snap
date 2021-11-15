@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`configuration 1`] = `
+"concurrent = 10
+checkInterval = 0
+
+[[runners]]
+name = \\"gitlab-runner\\"
+url = \\"https://gitlab.com\\"
+limit = 10
+outputLimit = 52_428_800
+token = \\"foo+bar\\"
+
+  [runners.docker]
+  image = \\"docker:19.03.5\\"
+
+  [runners.machine]
+  idleCount = 0
+  idleTime = 300
+  maxBuilds = 20
+  machineName = \\"gitlab-runner\\"
+  autoscaling = [ ]
+"
+`;
