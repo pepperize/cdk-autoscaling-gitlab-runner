@@ -265,15 +265,19 @@ runas=root",
           "config": Object {
             "files": Object {
               "/etc/gitlab-runner/config.toml": Object {
-                "content": "concurrent = 10
+                "content": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "concurrent = 10
 check_interval = 0
 
 [[runners]]
 name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
-limit = 10
+limit = 20
 output_limit = 52_428_800
-token = \\"foo+bar\\"
+token = \\"iieC-HsJsedAse2vq486\\"
 
   [runners.docker]
   tls_verify = false
@@ -290,24 +294,28 @@ token = \\"foo+bar\\"
   Shared = true
 
     [runners.cache.s3]
-    ServerAddress = \\"s3.amazonaws.com\\"
-    BucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
+    ServerAddress = \\"s3.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                      "\\"
+    BucketName = \\"gitlab-runner-runnercache-0-us-east-1\\"
     BucketLocation = \\"us-east-1\\"
 
   [runners.machine]
   IdleCount = 0
   IdleTime = 300
-  MaxBuilds = 20
+  MaxBuilds = 10
   MachineDriver = \\"amazonec2\\"
   MachineName = \\"gitlab-runner-%s\\"
   MachineOptions = [
   \\"amazonec2-instance-type=t3.micro\\",
   \\"amazonec2-ami=ami-083654bd07b5da81d\\",
   \\"amazonec2-region=us-east-1\\",
-  \\"amazonec2-vpc-id=vpc-0da907b688369469e\\",
+  \\"amazonec2-vpc-id=vpc-12345\\",
   \\"amazonec2-zone=a\\",
-  \\"amazonec2-subnet-id=subnet-0da907b688369469e\\",
-  \\"amazonec2-security-group=RunnersSecurityGroup\\",
+  \\"amazonec2-subnet-id=s-12345\\",
+  \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
   \\"amazonec2-request-spot-instance=true\\",
@@ -315,10 +323,13 @@ token = \\"foo+bar\\"
 ]
 
     [[runners.machine.autoscaling]]
-    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
-    IdleCount = 1
     IdleTime = 1_800
+    IdleCount = 1
+    Periods = [ \\"* * 11-23 * * mon-fri *\\" ]
     Timezone = \\"Etc/UTC\\"",
+                    ],
+                  ],
+                },
                 "encoding": "plain",
                 "group": "gitlab-runner",
                 "mode": "000600",
@@ -466,7 +477,7 @@ token = \\"foo+bar\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 3225ca6a223f7c42
+# fingerprint: a412934b49ed0ccd
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

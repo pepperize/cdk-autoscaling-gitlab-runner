@@ -104,6 +104,7 @@ export type CacheS3Configuration = {
    * The name of the S3 region.
    */
   BucketLocation: string;
+  [key: "AccessKey" | "SecretKey" | string]: string;
 };
 
 /**

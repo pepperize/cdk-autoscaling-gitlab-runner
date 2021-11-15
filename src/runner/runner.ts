@@ -11,6 +11,7 @@ import {
   InstanceClass,
   InstanceSize,
   InstanceType,
+  IVpc,
   MachineImage,
   Peer,
   Port,
@@ -27,7 +28,12 @@ import {
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-import { BlockPublicAccess, Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
+import {
+  BlockPublicAccess,
+  Bucket,
+  BucketEncryption,
+  IBucket,
+} from "@aws-cdk/aws-s3";
 import { Duration, RemovalPolicy, Construct, Stack } from "@aws-cdk/core";
 import { toToml } from "./configuration";
 import { defaultConfiguration } from "./configuration.default";
@@ -59,6 +65,30 @@ export const runnerAmiMap: Record<string, string> = {
   "us-west-1": "ami-053ac55bdcfe96e85",
   "us-east-1": "ami-083654bd07b5da81d",
 };
+
+export interface NewProps {
+  cacheBucket: IBucket;
+
+  manager: {
+    machineImage: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
+    instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
+  };
+
+  runner: {
+    machineImage: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
+    instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
+  };
+
+  token: string; // GitLab Runner auth token. Note this is different from the registration token used by `gitlab-runner register`.
+
+  vpc: {
+    vpc?: IVpc;
+    vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
+    availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
+  };
+
+  // runnersConfiguration: RequiredConfiguration | GlobalConfiguration
+}
 
 /**
  * Documentation:
@@ -129,11 +159,26 @@ export class Runner extends Construct {
       managerMachineImage,
       cacheBucketName,
       cacheExpirationInDays,
+      availabilityZone,
       vpcIdToLookUp,
       vpcSubnets,
       managerInstanceType,
       managerKeyPairName,
+      gitlabUrl,
+      gitlabToken,
       gitlabRunnerInstanceType,
+      gitlabDockerImage,
+      gitlabRunnerMachineImage,
+      gitlabMaxBuilds,
+      gitlabLimit,
+      gitlabMaxConcurrentBuilds,
+      gitlabOffPeakIdleCount,
+      gitlabOffPeakIdleTime,
+      gitlabAutoscalingIdleCount,
+      gitlabAutoscalingIdleTime,
+      gitlabCheckInterval,
+      gitlabRunnerRequestSpotInstance,
+      gitlabRunnerSpotInstancePrice,
     }: RunnerProps = { ...defaultProps, ...props }; // assign defaults and reassign with props if defined
 
     /*
@@ -176,6 +221,8 @@ export class Runner extends Construct {
     const vpc = Vpc.fromLookup(scope, "PepperizeVpc", {
       vpcId: vpcIdToLookUp,
     });
+    const vpcSubnetId =
+      vpc.selectSubnets(vpcSubnets).subnetIds.find(() => true) || "";
 
     /*
      * ManagerSecurityGroup:
@@ -354,33 +401,53 @@ export class Runner extends Construct {
 
     const config: GlobalConfiguration = {
       ...defaultConfiguration,
+      concurrent: gitlabMaxConcurrentBuilds!,
+      check_interval: gitlabCheckInterval!,
       runners: [
         {
           ...defaultConfiguration.runners[0],
-          token: "foo+bar",
+          name: scope.stackName,
+          url: gitlabUrl!,
+          token: gitlabToken,
+          limit: gitlabLimit!,
           cache: {
             ...defaultConfiguration.runners[0].cache,
             s3: {
-              ServerAddress: "s3.amazonaws.com",
-              BucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
-              BucketLocation: "us-east-1",
+              ServerAddress: `s3.${scope.urlSuffix}`,
+              BucketName: uniqueCacheBucketName,
+              BucketLocation: scope.region,
             },
+          },
+          docker: {
+            ...defaultConfiguration.runners[0].docker,
+            image: gitlabDockerImage!,
           },
           machine: {
             ...defaultConfiguration.runners[0].machine,
+            IdleCount: gitlabOffPeakIdleCount!,
+            IdleTime: gitlabOffPeakIdleTime!,
+            MaxBuilds: gitlabMaxBuilds!,
             MachineOptions: new MachineOptions({
-              "instance-type": "t3.micro",
-              ami: "ami-083654bd07b5da81d",
-              region: "us-east-1",
-              "vpc-id": "vpc-0da907b688369469e",
-              zone: "a",
-              "subnet-id": "subnet-0da907b688369469e",
-              "security-group": "RunnersSecurityGroup",
+              "instance-type": gitlabRunnerInstanceType!.toString(),
+              ami: gitlabRunnerMachineImage!.getImage(scope).imageId,
+              region: scope.region,
+              "vpc-id": vpc.vpcId,
+              zone: availabilityZone!,
+              "subnet-id": vpcSubnetId,
+              "security-group": `${scope.stackName}-RunnersSecurityGroup`,
               "use-private-address": true,
-              "iam-instance-profile": "RunnersInstanceProfile",
-              "request-spot-instance": true,
-              "spot-price": 0.03,
+              "iam-instance-profile": `${runnersInstanceProfile.instanceProfileName}`,
+              "request-spot-instance": gitlabRunnerRequestSpotInstance!,
+              "spot-price": gitlabRunnerSpotInstancePrice!,
             }).toJson(),
+            autoscaling: [
+              {
+                IdleTime: gitlabAutoscalingIdleTime!,
+                IdleCount: gitlabAutoscalingIdleCount!,
+                Periods: ["* * 11-23 * * mon-fri *"],
+                Timezone: "Etc/UTC",
+              },
+            ],
           },
         },
       ],
