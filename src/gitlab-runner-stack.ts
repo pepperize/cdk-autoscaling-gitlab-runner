@@ -1,37 +1,14 @@
-import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
 import {
-  CloudFormationInit,
   IMachineImage,
-  InitCommand,
-  InitConfig,
-  InitFile,
-  InitPackage,
-  InitService,
-  InitServiceRestartHandle,
   InstanceClass,
   InstanceSize,
   InstanceType,
   MachineImage,
-  Peer,
-  Port,
-  SecurityGroup,
   SubnetSelection,
   SubnetType,
-  UserData,
-  Vpc,
 } from "@aws-cdk/aws-ec2";
 import {
-  CfnInstanceProfile,
-  ManagedPolicy,
-  PolicyDocument,
-  Role,
-  ServicePrincipal,
-} from "@aws-cdk/aws-iam";
-import { BlockPublicAccess, Bucket, BucketEncryption, } from "@aws-cdk/aws-s3";
-import {
   Construct,
-  Duration,
-  RemovalPolicy,
   Stack,
   StackProps,
 } from "@aws-cdk/core";
