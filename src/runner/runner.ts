@@ -11,6 +11,8 @@ import {
   InstanceClass,
   InstanceSize,
   InstanceType,
+  ISecurityGroup,
+  IVpc,
   MachineImage,
   Peer,
   Port,
@@ -22,13 +24,22 @@ import {
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
+  IRole,
   ManagedPolicy,
   PolicyDocument,
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-import { BlockPublicAccess, Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
+import {
+  BlockPublicAccess,
+  Bucket,
+  BucketEncryption,
+  IBucket,
+} from "@aws-cdk/aws-s3";
 import { Duration, RemovalPolicy, Construct, Stack } from "@aws-cdk/core";
+import { toToml } from "./configuration";
+import { defaultConfiguration } from "./configuration.default";
+import { GlobalConfiguration, MachineOptions } from "./configuration.types";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -56,6 +67,33 @@ export const runnerAmiMap: Record<string, string> = {
   "us-west-1": "ami-053ac55bdcfe96e85",
   "us-east-1": "ami-083654bd07b5da81d",
 };
+
+export interface NewProps {
+  token: string; // GitLab Runner auth token. Note this is different from the registration token used by `gitlab-runner register`.
+
+  cache?: {
+    enabled: boolean;
+    bucket?: IBucket;
+  };
+
+  manager?: {
+    machineImage: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
+    instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
+  };
+
+  runner?: {
+    role?: IRole;
+    machineImage: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
+    instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
+    // configuration: RequiredConfiguration | GlobalConfiguration; // https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
+  };
+
+  vpc?: {
+    vpc?: IVpc;
+    vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
+    availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
+  };
+}
 
 /**
  * Documentation:
@@ -120,6 +158,8 @@ const defaultProps: Partial<RunnerProps> = {
 };
 
 export class Runner extends Construct {
+  public managerSecurityGroup: ISecurityGroup;
+
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
     const {
@@ -141,7 +181,6 @@ export class Runner extends Construct {
       gitlabMaxConcurrentBuilds,
       gitlabOffPeakIdleCount,
       gitlabOffPeakIdleTime,
-      gitlabAutoscalingTimezone,
       gitlabAutoscalingIdleCount,
       gitlabAutoscalingIdleTime,
       gitlabCheckInterval,
@@ -196,7 +235,7 @@ export class Runner extends Construct {
      * ManagerSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup
      */
-    const managerSecurityGroup = new SecurityGroup(
+    this.managerSecurityGroup = new SecurityGroup(
       scope,
       "ManagerSecurityGroup",
       {
@@ -204,7 +243,7 @@ export class Runner extends Construct {
         description: "Security group for GitLab Runners Manager.",
       }
     );
-    managerSecurityGroup.connections.allowFrom(
+    this.managerSecurityGroup.connections.allowFrom(
       Peer.ipv4("0.0.0.0/0"),
       Port.tcp(22),
       "SSH traffic"
@@ -367,6 +406,60 @@ export class Runner extends Construct {
     const CONFIG = "config";
     const RESTART = "restart";
 
+    const config: GlobalConfiguration = {
+      ...defaultConfiguration,
+      concurrent: gitlabMaxConcurrentBuilds!,
+      check_interval: gitlabCheckInterval!,
+      runners: [
+        {
+          ...defaultConfiguration.runners[0],
+          name: scope.stackName,
+          url: gitlabUrl!,
+          token: gitlabToken,
+          limit: gitlabLimit!,
+          cache: {
+            ...defaultConfiguration.runners[0].cache,
+            s3: {
+              ServerAddress: `s3.${scope.urlSuffix}`,
+              BucketName: `${cacheBucket.bucketName}`,
+              BucketLocation: `${scope.region}`,
+            },
+          },
+          docker: {
+            ...defaultConfiguration.runners[0].docker,
+            image: gitlabDockerImage!,
+          },
+          machine: {
+            ...defaultConfiguration.runners[0].machine,
+            IdleCount: gitlabOffPeakIdleCount!,
+            IdleTime: gitlabOffPeakIdleTime!,
+            MaxBuilds: gitlabMaxBuilds!,
+            MachineOptions: new MachineOptions({
+              "instance-type": gitlabRunnerInstanceType!.toString(),
+              ami: gitlabRunnerMachineImage!.getImage(scope).imageId,
+              region: scope.region,
+              "vpc-id": vpc.vpcId,
+              zone: availabilityZone!,
+              "subnet-id": vpcSubnetId,
+              "security-group": `${scope.stackName}-RunnersSecurityGroup`,
+              "use-private-address": true,
+              "iam-instance-profile": `${runnersInstanceProfile.instanceProfileName}`,
+              "request-spot-instance": gitlabRunnerRequestSpotInstance!,
+              "spot-price": gitlabRunnerSpotInstancePrice!,
+            }).toJson(),
+            autoscaling: [
+              {
+                IdleTime: gitlabAutoscalingIdleTime!,
+                IdleCount: gitlabAutoscalingIdleCount!,
+                Periods: ["* * 11-23 * * mon-fri *"],
+                Timezone: "Etc/UTC",
+              },
+            ],
+          },
+        },
+      ],
+    };
+
     const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
         default: [REPOSITORIES, PACKAGES, CFN_HUP, CONFIG, RESTART],
@@ -427,63 +520,7 @@ runas=root
         [CONFIG]: new InitConfig([
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
-            `
-concurrent = ${gitlabMaxConcurrentBuilds}
-check_interval = ${gitlabCheckInterval}
-[[runners]]
-  name = "${scope.stackName}"
-  url = "${gitlabUrl}"
-  token = "${gitlabToken}"
-  executor = "docker+machine"
-  limit = ${gitlabLimit}
-  output_limit = 52428800
-  environment = [
-    "DOCKER_DRIVER=overlay2",
-    "DOCKER_TLS_CERTDIR=/certs"
-  ]
-  [runners.docker]
-    tls_verify = false
-    image = "${gitlabDockerImage}"
-    privileged = true
-    cap_add = ["CAP_SYS_ADMIN"]
-    wait_for_services_timeout = 300
-    disable_cache = false
-    volumes = ["/certs/client", "/cache"]
-    shm_size = 0
-  [runners.cache]
-    Type = "s3"
-    Shared = true
-  [runners.cache.s3]
-    ServerAddress = "s3.${scope.urlSuffix}"
-    BucketName = "${uniqueCacheBucketName}"
-    BucketLocation = "${scope.region}"
-  [runners.machine]
-    IdleCount = ${gitlabOffPeakIdleCount}
-    IdleTime = ${gitlabOffPeakIdleTime}
-    MaxBuilds = ${gitlabMaxBuilds}
-    MachineDriver = "amazonec2"
-    MachineName = "gitlab-runner-%s"
-    MachineOptions = [
-      "amazonec2-instance-type=${gitlabRunnerInstanceType}",
-      "amazonec2-ami=${gitlabRunnerMachineImage?.getImage(scope).imageId}",
-      "amazonec2-region=${scope.region}",
-      "amazonec2-vpc-id=${vpc.vpcId}",
-      "amazonec2-zone=${availabilityZone}",
-      "amazonec2-subnet-id=${vpcSubnetId}",
-      "amazonec2-security-group=${scope.stackName}-RunnersSecurityGroup",
-      "amazonec2-use-private-address=true",
-      "amazonec2-iam-instance-profile=${
-        runnersInstanceProfile.instanceProfileName
-      }",
-      "amazonec2-request-spot-instance=${gitlabRunnerRequestSpotInstance}",
-      "amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}"
-    ]
-    [[runners.machine.autoscaling]]
-      Timezone = "${gitlabAutoscalingTimezone}"
-      Periods = ["* * 11-23 * * mon-fri *"]
-      IdleCount = ${gitlabAutoscalingIdleCount}
-      IdleTime = ${gitlabAutoscalingIdleTime}
-            `.trim(),
+            toToml(config).trim(),
             {
               owner: "gitlab-runner",
               group: "gitlab-runner",
@@ -524,7 +561,7 @@ check_interval = ${gitlabCheckInterval}
       instanceType: managerInstanceType!,
       machineImage: managerMachineImage!,
       keyName: managerKeyPairName,
-      securityGroup: managerSecurityGroup,
+      securityGroup: this.managerSecurityGroup,
       role: managerRole,
       userData: userData,
       init: initConfig,
@@ -558,12 +595,12 @@ check_interval = ${gitlabCheckInterval}
     );
 
     runnersSecurityGroup.connections.allowFrom(
-      managerSecurityGroup,
+      this.managerSecurityGroup,
       Port.tcp(22),
       "SSH traffic from Manager"
     );
     runnersSecurityGroup.connections.allowFrom(
-      managerSecurityGroup,
+      this.managerSecurityGroup,
       Port.tcp(2376),
       "SSH traffic from Docker"
     );

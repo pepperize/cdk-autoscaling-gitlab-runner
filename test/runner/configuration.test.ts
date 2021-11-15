@@ -18,6 +18,7 @@ test("configuration", () => {
             ServerAddress: "s3.amazonaws.com",
             BucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
             BucketLocation: "us-east-1",
+            AccessKey: "ASIAZJBNZOWZ2QXIG7EB",
           },
         },
         machine: {

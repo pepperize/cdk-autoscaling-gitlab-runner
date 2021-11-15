@@ -1,4 +1,4 @@
-export type Configuration =
+export type RequiredConfiguration =
   | (Pick<GlobalConfiguration, "runners"> & Partial<GlobalConfiguration>)
   | {
       runners:
@@ -104,6 +104,7 @@ export type CacheS3Configuration = {
    * The name of the S3 region.
    */
   BucketLocation: string;
+  [key: "AccessKey" | "SecretKey" | string]: string;
 };
 
 /**
