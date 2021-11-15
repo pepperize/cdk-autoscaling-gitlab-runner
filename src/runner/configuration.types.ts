@@ -1,7 +1,7 @@
 export type Configuration =
   | (Pick<GlobalConfiguration, "runners"> & Partial<GlobalConfiguration>)
   | {
-      runnersConfig:
+      runners:
         | Partial<RunnersConfiguration> & Pick<RunnersConfiguration, "token">;
     };
 
@@ -19,7 +19,7 @@ export type GlobalConfiguration = {
    * The check_interval option defines how often the runner should check GitLab for new jobs| in seconds.
    * @default 0
    */
-  checkInterval: number;
+  check_interval: number;
 
   /**
    * The GitLab Runners configuration.
@@ -55,9 +55,9 @@ export type RunnersConfiguration = {
    * Maximum build log size in kilobytes.
    * @default 52428800 Default is 50 GB.
    */
-  outputLimit: number;
+  output_limit: number;
   docker: DockerConfiguration;
-  cache?: S3CacheConfiguration;
+  cache?: CacheS3Configuration;
   machine: MachineConfiguration;
 };
 
@@ -72,57 +72,64 @@ type DockerConfiguration = {
   image: string;
 };
 
+export type CacheConfiguration = {
+  Type: "s3";
+  Shared: boolean;
+  s3: CacheS3Configuration;
+};
+
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
  */
-export type S3CacheConfiguration = {
+export type CacheS3Configuration = {
   /**
    * The AWS S3 host.
    * @default "s3.amazonaws.com"
    */
-  serverAdress: string;
+  ServerAddress: string;
   /**
    * The name of the storage bucket where cache is stored.
    * @default "runners-cache"
    */
-  bucketName: string;
+  BucketName: string;
   /**
    * The name of the S3 region.
    */
-  bucketLocation: string;
+  BucketLocation: string;
 };
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
  */
 export type MachineConfiguration = {
-  idleCount: number;
-  idleTime: number;
-  maxBuilds: number;
-  machineName: string;
-  machineOptions?: MachineOptions;
+  IdleCount: number;
+  IdleTime: number;
+  MaxBuilds: number;
+  MachineDriver: "amazonec2" | string;
+  MachineName: string;
+  MachineOptions?: MachineOptions;
   autoscaling: AutoscalingConfiguration[];
 };
 export type MachineOptions = {
-  instanceType: string;
-  amiId: string;
+  instance_type: string;
+  ami_id: string;
   region: string;
-  vpcId: string;
-  availabilityZone: string;
-  securityGroup: string;
-  usePrivateAddress: boolean;
-  instanceProfile: string;
-  requestSpotInstances: boolean;
-  sportPrice: number;
+  vpc_id: string;
+  availability_zone: string;
+  security_group: string;
+  use_private_address: boolean;
+  instance_profile: string;
+  request_spot_instances: boolean;
+  sport_price: number;
 };
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */
 export type AutoscalingConfiguration = {
-  idleCount: number;
-  idleTime: number;
-  periods: Period[];
-  timezone: Timezone;
+  IdleCount: number;
+  IdleTime: number;
+  Periods: Period[];
+  Timezone: Timezone;
 };
 
 /**

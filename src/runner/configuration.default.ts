@@ -10,21 +10,22 @@ export type DefaultConfiguration =
 
 export const defaultConfiguration: DefaultConfiguration = {
   concurrent: 10,
-  checkInterval: 0,
+  check_interval: 0,
   runners: [
     {
       name: "gitlab-runner",
       url: "https://gitlab.com",
       limit: 10,
-      outputLimit: 52428800,
+      output_limit: 52428800,
       docker: {
         image: "docker:19.03.5",
       },
       machine: {
-        idleCount: 0,
-        idleTime: 300,
-        maxBuilds: 20,
-        machineName: "gitlab-runner",
+        IdleCount: 0,
+        IdleTime: 300,
+        MaxBuilds: 20,
+        MachineDriver: "amazonec2",
+        MachineName: "gitlab-runner",
         autoscaling: [],
       },
     },
