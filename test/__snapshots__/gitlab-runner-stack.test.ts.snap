@@ -299,7 +299,11 @@ token = \\"iieC-HsJsedAse2vq486\\"
                         "Ref": "AWS::URLSuffix",
                       },
                       "\\"
-    BucketName = \\"gitlab-runner-runnercache-0-us-east-1\\"
+    BucketName = \\"",
+                      Object {
+                        "Ref": "CacheBucket41D9D0B0",
+                      },
+                      "\\"
     BucketLocation = \\"us-east-1\\"
 
   [runners.machine]
@@ -477,7 +481,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: a412934b49ed0ccd
+# fingerprint: cdbaab1d0e1c3434
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

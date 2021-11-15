@@ -1,4 +1,4 @@
-export type Configuration =
+export type RequiredConfiguration =
   | (Pick<GlobalConfiguration, "runners"> & Partial<GlobalConfiguration>)
   | {
       runners:

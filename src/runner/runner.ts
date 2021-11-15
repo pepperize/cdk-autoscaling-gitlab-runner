@@ -11,6 +11,7 @@ import {
   InstanceClass,
   InstanceSize,
   InstanceType,
+  ISecurityGroup,
   IVpc,
   MachineImage,
   Peer,
@@ -23,6 +24,7 @@ import {
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
+  IRole,
   ManagedPolicy,
   PolicyDocument,
   Role,
@@ -67,27 +69,30 @@ export const runnerAmiMap: Record<string, string> = {
 };
 
 export interface NewProps {
-  cacheBucket: IBucket;
+  token: string; // GitLab Runner auth token. Note this is different from the registration token used by `gitlab-runner register`.
 
-  manager: {
+  cache?: {
+    enabled: boolean;
+    bucket?: IBucket;
+  };
+
+  manager?: {
     machineImage: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
     instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
   };
 
-  runner: {
+  runner?: {
+    role?: IRole;
     machineImage: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
     instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
+    // configuration: RequiredConfiguration | GlobalConfiguration; // https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
   };
 
-  token: string; // GitLab Runner auth token. Note this is different from the registration token used by `gitlab-runner register`.
-
-  vpc: {
+  vpc?: {
     vpc?: IVpc;
     vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
     availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
   };
-
-  // runnersConfiguration: RequiredConfiguration | GlobalConfiguration
 }
 
 /**
@@ -153,6 +158,8 @@ const defaultProps: Partial<RunnerProps> = {
 };
 
 export class Runner extends Construct {
+  public managerSecurityGroup: ISecurityGroup;
+
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
     const {
@@ -228,7 +235,7 @@ export class Runner extends Construct {
      * ManagerSecurityGroup:
      * Type: 'AWS::EC2::SecurityGroup
      */
-    const managerSecurityGroup = new SecurityGroup(
+    this.managerSecurityGroup = new SecurityGroup(
       scope,
       "ManagerSecurityGroup",
       {
@@ -236,7 +243,7 @@ export class Runner extends Construct {
         description: "Security group for GitLab Runners Manager.",
       }
     );
-    managerSecurityGroup.connections.allowFrom(
+    this.managerSecurityGroup.connections.allowFrom(
       Peer.ipv4("0.0.0.0/0"),
       Port.tcp(22),
       "SSH traffic"
@@ -414,8 +421,8 @@ export class Runner extends Construct {
             ...defaultConfiguration.runners[0].cache,
             s3: {
               ServerAddress: `s3.${scope.urlSuffix}`,
-              BucketName: uniqueCacheBucketName,
-              BucketLocation: scope.region,
+              BucketName: `${cacheBucket.bucketName}`,
+              BucketLocation: `${scope.region}`,
             },
           },
           docker: {
@@ -554,7 +561,7 @@ runas=root
       instanceType: managerInstanceType!,
       machineImage: managerMachineImage!,
       keyName: managerKeyPairName,
-      securityGroup: managerSecurityGroup,
+      securityGroup: this.managerSecurityGroup,
       role: managerRole,
       userData: userData,
       init: initConfig,
@@ -588,12 +595,12 @@ runas=root
     );
 
     runnersSecurityGroup.connections.allowFrom(
-      managerSecurityGroup,
+      this.managerSecurityGroup,
       Port.tcp(22),
       "SSH traffic from Manager"
     );
     runnersSecurityGroup.connections.allowFrom(
-      managerSecurityGroup,
+      this.managerSecurityGroup,
       Port.tcp(2376),
       "SSH traffic from Docker"
     );
