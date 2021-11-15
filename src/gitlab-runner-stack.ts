@@ -6,7 +6,7 @@ import { Runner } from "./runner/runner";
  * About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines
  * About autoscaling props: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */
-type GitlabRunnerStackProps = StackProps;
+export type GitlabRunnerStackProps = StackProps;
 
 export class GitlabRunnerStack extends Stack {
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {

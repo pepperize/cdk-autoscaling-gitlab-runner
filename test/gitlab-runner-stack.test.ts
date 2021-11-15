@@ -1,5 +1,5 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import { SubnetType, Vpc } from "@aws-cdk/aws-ec2";
+import { Vpc } from "@aws-cdk/aws-ec2";
 import { App, Stack } from "@aws-cdk/core";
 import {
   GitlabRunnerStack,
@@ -18,9 +18,6 @@ test("gitlab-runner", () => {
   jest.spyOn(Vpc, "fromLookup").mockImplementationOnce(() => mockVpc);
 
   const props: GitlabRunnerStackProps = {
-    gitlabToken: "",
-    vpcIdToLookUp: "-",
-    vpcSubnet: { subnetType: SubnetType.PRIVATE_WITH_NAT },
   };
   const gitlabRunnerStack = new GitlabRunnerStack(app, "gitlab-runner", props);
 
