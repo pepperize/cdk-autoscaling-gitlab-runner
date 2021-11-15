@@ -1,4 +1,4 @@
-type Configuration =
+export type Configuration =
   | (Pick<GlobalConfiguration, "runnersConfig"> & Partial<GlobalConfiguration>)
   | {
       runnersConfig:
@@ -8,7 +8,7 @@ type Configuration =
 /**
  * https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
  */
-type GlobalConfiguration = {
+export type GlobalConfiguration = {
   /**
    * The limit of the jobs that can be run concurrently across all runners (concurrent).
    * @default 10
@@ -30,7 +30,7 @@ type GlobalConfiguration = {
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
  */
-type RunnersConfiguration = {
+ export type RunnersConfiguration = {
   /**
    * The runner’s name.
    * @default "gitlab-runner"
@@ -75,7 +75,7 @@ type DockerConfiguration = {
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
  */
-type S3CacheConfiguration = {
+ export type S3CacheConfiguration = {
   /**
    * The AWS S3 host.
    * @default "s3.amazonaws.com"
@@ -95,7 +95,7 @@ type S3CacheConfiguration = {
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
  */
-type MachineConfiguration = {
+ export type MachineConfiguration = {
   idleCount: number;
   idleTime: number;
   maxBuilds: number;
@@ -103,7 +103,7 @@ type MachineConfiguration = {
   machineOptions: MachineOptions;
   autoscaling: AutoscalingConfiguration[];
 };
-type MachineOptions = {
+export type MachineOptions = {
   instanceType: string;
   amiId: string;
   region: string;
@@ -118,7 +118,7 @@ type MachineOptions = {
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */
-type AutoscalingConfiguration = {
+ export type AutoscalingConfiguration = {
   idleCount: number;
   idleTime: number;
   periods: Period[];
@@ -129,7 +129,7 @@ type AutoscalingConfiguration = {
  * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
  * https://github.com/gorhill/cronexpr#implementation
  */
-type Period = {
+ export type Period = {
   second: string;
   minute: string;
   hour: string;
@@ -139,7 +139,7 @@ type Period = {
   year: string;
 };
 
-type Timezone =
+export type Timezone =
   | "Africa/Algiers"
   | "Africa/Cairo"
   | "Africa/Casablanca"
