@@ -29,6 +29,9 @@ import {
 } from "@aws-cdk/aws-iam";
 import { BlockPublicAccess, Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
 import { Duration, RemovalPolicy, Construct, Stack } from "@aws-cdk/core";
+import { toToml } from "./configuration";
+import { defaultConfiguration } from "./configuration.default";
+import { GlobalConfiguration, MachineOptions } from "./configuration.types";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -126,27 +129,11 @@ export class Runner extends Construct {
       managerMachineImage,
       cacheBucketName,
       cacheExpirationInDays,
-      availabilityZone,
       vpcIdToLookUp,
       vpcSubnets,
       managerInstanceType,
       managerKeyPairName,
-      gitlabUrl,
-      gitlabToken,
       gitlabRunnerInstanceType,
-      gitlabDockerImage,
-      gitlabRunnerMachineImage,
-      gitlabMaxBuilds,
-      gitlabLimit,
-      gitlabMaxConcurrentBuilds,
-      gitlabOffPeakIdleCount,
-      gitlabOffPeakIdleTime,
-      gitlabAutoscalingTimezone,
-      gitlabAutoscalingIdleCount,
-      gitlabAutoscalingIdleTime,
-      gitlabCheckInterval,
-      gitlabRunnerRequestSpotInstance,
-      gitlabRunnerSpotInstancePrice,
     }: RunnerProps = { ...defaultProps, ...props }; // assign defaults and reassign with props if defined
 
     /*
@@ -189,8 +176,6 @@ export class Runner extends Construct {
     const vpc = Vpc.fromLookup(scope, "PepperizeVpc", {
       vpcId: vpcIdToLookUp,
     });
-    const vpcSubnetId =
-      vpc.selectSubnets(vpcSubnets).subnetIds.find(() => true) || "";
 
     /*
      * ManagerSecurityGroup:
@@ -367,6 +352,40 @@ export class Runner extends Construct {
     const CONFIG = "config";
     const RESTART = "restart";
 
+    const config: GlobalConfiguration = {
+      ...defaultConfiguration,
+      runners: [
+        {
+          ...defaultConfiguration.runners[0],
+          token: "foo+bar",
+          cache: {
+            ...defaultConfiguration.runners[0].cache,
+            s3: {
+              ServerAddress: "s3.amazonaws.com",
+              BucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
+              BucketLocation: "us-east-1",
+            },
+          },
+          machine: {
+            ...defaultConfiguration.runners[0].machine,
+            MachineOptions: new MachineOptions({
+              "instance-type": "t3.micro",
+              ami: "ami-083654bd07b5da81d",
+              region: "us-east-1",
+              "vpc-id": "vpc-0da907b688369469e",
+              zone: "a",
+              "subnet-id": "subnet-0da907b688369469e",
+              "security-group": "RunnersSecurityGroup",
+              "use-private-address": true,
+              "iam-instance-profile": "RunnersInstanceProfile",
+              "request-spot-instance": true,
+              "spot-price": 0.03,
+            }).toJson(),
+          },
+        },
+      ],
+    };
+
     const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
         default: [REPOSITORIES, PACKAGES, CFN_HUP, CONFIG, RESTART],
@@ -427,63 +446,7 @@ runas=root
         [CONFIG]: new InitConfig([
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
-            `
-concurrent = ${gitlabMaxConcurrentBuilds}
-check_interval = ${gitlabCheckInterval}
-[[runners]]
-  name = "${scope.stackName}"
-  url = "${gitlabUrl}"
-  token = "${gitlabToken}"
-  executor = "docker+machine"
-  limit = ${gitlabLimit}
-  output_limit = 52428800
-  environment = [
-    "DOCKER_DRIVER=overlay2",
-    "DOCKER_TLS_CERTDIR=/certs"
-  ]
-  [runners.docker]
-    tls_verify = false
-    image = "${gitlabDockerImage}"
-    privileged = true
-    cap_add = ["CAP_SYS_ADMIN"]
-    wait_for_services_timeout = 300
-    disable_cache = false
-    volumes = ["/certs/client", "/cache"]
-    shm_size = 0
-  [runners.cache]
-    Type = "s3"
-    Shared = true
-  [runners.cache.s3]
-    ServerAddress = "s3.${scope.urlSuffix}"
-    BucketName = "${uniqueCacheBucketName}"
-    BucketLocation = "${scope.region}"
-  [runners.machine]
-    IdleCount = ${gitlabOffPeakIdleCount}
-    IdleTime = ${gitlabOffPeakIdleTime}
-    MaxBuilds = ${gitlabMaxBuilds}
-    MachineDriver = "amazonec2"
-    MachineName = "gitlab-runner-%s"
-    MachineOptions = [
-      "amazonec2-instance-type=${gitlabRunnerInstanceType}",
-      "amazonec2-ami=${gitlabRunnerMachineImage?.getImage(scope).imageId}",
-      "amazonec2-region=${scope.region}",
-      "amazonec2-vpc-id=${vpc.vpcId}",
-      "amazonec2-zone=${availabilityZone}",
-      "amazonec2-subnet-id=${vpcSubnetId}",
-      "amazonec2-security-group=${scope.stackName}-RunnersSecurityGroup",
-      "amazonec2-use-private-address=true",
-      "amazonec2-iam-instance-profile=${
-        runnersInstanceProfile.instanceProfileName
-      }",
-      "amazonec2-request-spot-instance=${gitlabRunnerRequestSpotInstance}",
-      "amazonec2-spot-price=${gitlabRunnerSpotInstancePrice}"
-    ]
-    [[runners.machine.autoscaling]]
-      Timezone = "${gitlabAutoscalingTimezone}"
-      Periods = ["* * 11-23 * * mon-fri *"]
-      IdleCount = ${gitlabAutoscalingIdleCount}
-      IdleTime = ${gitlabAutoscalingIdleTime}
-            `.trim(),
+            toToml(config).trim(),
             {
               owner: "gitlab-runner",
               group: "gitlab-runner",
