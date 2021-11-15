@@ -28,12 +28,7 @@ import {
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
 import { BlockPublicAccess, Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
-import {
-  Duration,
-  RemovalPolicy,
-  Construct,
-  Stack
-} from "@aws-cdk/core";
+import { Duration, RemovalPolicy, Construct, Stack } from "@aws-cdk/core";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>

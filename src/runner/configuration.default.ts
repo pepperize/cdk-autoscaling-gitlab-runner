@@ -27,6 +27,6 @@ export const defaultConfiguration: DefaultConfiguration = {
         machineName: "gitlab-runner",
         autoscaling: [],
       },
-    }
+    },
   ],
 };

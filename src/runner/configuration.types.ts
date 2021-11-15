@@ -75,7 +75,7 @@ type DockerConfiguration = {
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
  */
- export type S3CacheConfiguration = {
+export type S3CacheConfiguration = {
   /**
    * The AWS S3 host.
    * @default "s3.amazonaws.com"
@@ -95,7 +95,7 @@ type DockerConfiguration = {
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
  */
- export type MachineConfiguration = {
+export type MachineConfiguration = {
   idleCount: number;
   idleTime: number;
   maxBuilds: number;
@@ -118,7 +118,7 @@ export type MachineOptions = {
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */
- export type AutoscalingConfiguration = {
+export type AutoscalingConfiguration = {
   idleCount: number;
   idleTime: number;
   periods: Period[];
@@ -129,7 +129,7 @@ export type MachineOptions = {
  * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
  * https://github.com/gorhill/cronexpr#implementation
  */
- export type Period = {
+export type Period = {
   second: string;
   minute: string;
   hour: string;
