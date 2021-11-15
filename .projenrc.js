@@ -9,7 +9,7 @@ const project = new AwsCdkTypeScriptApp({
   cdkVersion: "1.131.0",
   cdkVersionPinning: true,
   defaultReleaseBranch: "master",
-  name: "cdk-gitlab-runner",
+  name: "@pepperize/cdk-gitlab-runner",
   repositoryUrl: "https://github.com/pepperize/cdk-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
   cdkDependencies: [
@@ -26,7 +26,7 @@ const project = new AwsCdkTypeScriptApp({
     "@aws-cdk/core:stackRelativeExports": "true",
     "@aws-cdk/core:newStyleStackSynthesis": true,
   },
-  // deps: ["package-name", ...]
+  deps: ["@iarna/toml"],
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                     /* Build dependencies for this module. */
