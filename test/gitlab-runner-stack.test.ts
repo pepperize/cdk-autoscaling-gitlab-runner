@@ -1,6 +1,6 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { App, Stack } from "@aws-cdk/core";
+import {} from "@aws-cdk/aws-ec2";
+import { App } from "@aws-cdk/core";
 import {
   GitlabRunnerStack,
   GitlabRunnerStackProps,
@@ -9,15 +9,11 @@ import {
 test("gitlab-runner", () => {
   const app = new App();
 
-  const mockVpcStack = new Stack(app, "VpcStack");
-  const mockVpc = Vpc.fromVpcAttributes(mockVpcStack, "MyVpc", {
-    vpcId: "vpc123",
-    availabilityZones: ["az1"],
-    privateSubnetIds: ["priv1"],
-  });
-  jest.spyOn(Vpc, "fromLookup").mockImplementationOnce(() => mockVpc);
-
   const props: GitlabRunnerStackProps = {
+    env: {
+      account: "0",
+      region: "us-east-1",
+    },
   };
   const gitlabRunnerStack = new GitlabRunnerStack(app, "gitlab-runner", props);
 

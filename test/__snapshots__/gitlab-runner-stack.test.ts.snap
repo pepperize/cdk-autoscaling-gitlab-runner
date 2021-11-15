@@ -2,69 +2,6 @@
 
 exports[`gitlab-runner 1`] = `
 Object {
-  "Mappings": Object {
-    "AmiMap": Object {
-      "eu-central-1": Object {
-        "ami": "ami-0a49b025fffbbdac6",
-      },
-      "us-east-1": Object {
-        "ami": "ami-083654bd07b5da81d",
-      },
-      "us-west-1": Object {
-        "ami": "ami-053ac55bdcfe96e85",
-      },
-    },
-    "ManagerAutoscalingGroupAmiMap402DC0D6": Object {
-      "ap-northeast-1": Object {
-        "ami": "ami-0f9ae750e8274075b",
-      },
-      "ap-northeast-2": Object {
-        "ami": "ami-047f7b46bd6dd5d84",
-      },
-      "ap-south-1": Object {
-        "ami": "ami-0889b8a448de4fc44",
-      },
-      "ap-southeast-1": Object {
-        "ami": "ami-0b419c3a4b01d1859",
-      },
-      "ap-southeast-2": Object {
-        "ami": "ami-04481c741a0311bbb",
-      },
-      "ca-central-1": Object {
-        "ami": "ami-03338e1f67dae0168",
-      },
-      "eu-central-1": Object {
-        "ami": "ami-09def150731bdbcc2",
-      },
-      "eu-north-1": Object {
-        "ami": "ami-d16fe6af",
-      },
-      "eu-west-1": Object {
-        "ami": "ami-07683a44e80cd32c5",
-      },
-      "eu-west-2": Object {
-        "ami": "ami-09ead922c1dad67e4",
-      },
-      "eu-west-3": Object {
-        "ami": "ami-0451ae4fd8dd178f7",
-      },
-      "sa-east-1": Object {
-        "ami": "ami-0669a96e355eac82f",
-      },
-      "us-east-1": Object {
-        "ami": "ami-0de53d8956e8dcf80",
-      },
-      "us-east-2": Object {
-        "ami": "ami-02bcbb802e03574ba",
-      },
-      "us-west-1": Object {
-        "ami": "ami-0019ef04ac50be30f",
-      },
-      "us-west-2": Object {
-        "ami": "ami-061392db613a6357b",
-      },
-    },
-  },
   "Parameters": Object {
     "AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1ArtifactHash0128B949": Object {
       "Description": "Artifact hash for asset \\"1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1\\"",
@@ -92,11 +29,11 @@ Object {
             },
           ],
         },
-        "BucketName": "gitlab-runner-runnercache-undefined-undefined",
+        "BucketName": "gitlab-runner-runnercache-0-us-east-1",
         "LifecycleConfiguration": Object {
           "Rules": Array [
             Object {
-              "ExpirationDate": "2021-12-12T00:00:00",
+              "ExpirationDate": "2021-12-15T00:00:00",
               "Status": "Disabled",
             },
           ],
@@ -289,43 +226,21 @@ Object {
           "cfnHup": Object {
             "files": Object {
               "/etc/cfn/cfn-hup.conf": Object {
-                "content": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "[main]
+                "content": "[main]
 stack=gitlab-runner
-region=",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      "
+region=us-east-1
 verbose=true",
-                    ],
-                  ],
-                },
                 "encoding": "plain",
                 "group": "root",
                 "mode": "000400",
                 "owner": "root",
               },
               "/etc/cfn/hooks.d/cfn-auto-reloader.conf": Object {
-                "content": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "[cfn-auto-reloader-hook]
+                "content": "[cfn-auto-reloader-hook]
 triggers=post.update
 path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
-action=/opt/aws/bin/cfn-init -v --stack gitlab-runner --region ",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      " --resource ManagerAutoscalingGroup --configsets default
+action=/opt/aws/bin/cfn-init -v --stack gitlab-runner --region us-east-1 --resource ManagerAutoscalingGroup --configsets default
 runas=root",
-                    ],
-                  ],
-                },
                 "encoding": "plain",
                 "group": "root",
                 "mode": "000644",
@@ -359,7 +274,7 @@ check_interval = 0
 [[runners]]
   name = \\"gitlab-runner\\"
   url = \\"https://gitlab.com\\"
-  token = \\"\\"
+  token = \\"iieC-HsJsedAse2vq486\\"
   executor = \\"docker+machine\\"
   limit = 20
   output_limit = 52428800
@@ -385,12 +300,8 @@ check_interval = 0
                         "Ref": "AWS::URLSuffix",
                       },
                       "\\"
-    BucketName = \\"gitlab-runner-runnercache-undefined-undefined\\"
-    BucketLocation = \\"",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      "\\"
+    BucketName = \\"gitlab-runner-runnercache-0-us-east-1\\"
+    BucketLocation = \\"us-east-1\\"
   [runners.machine]
     IdleCount = 0
     IdleTime = 300
@@ -399,25 +310,11 @@ check_interval = 0
     MachineName = \\"gitlab-runner-%s\\"
     MachineOptions = [
       \\"amazonec2-instance-type=t3.micro\\",
-      \\"amazonec2-ami=",
-                      Object {
-                        "Fn::FindInMap": Array [
-                          "AmiMap",
-                          Object {
-                            "Ref": "AWS::Region",
-                          },
-                          "ami",
-                        ],
-                      },
-                      "\\",
-      \\"amazonec2-region=",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      "\\",
-      \\"amazonec2-vpc-id=vpc123\\",
+      \\"amazonec2-ami=ami-083654bd07b5da81d\\",
+      \\"amazonec2-region=us-east-1\\",
+      \\"amazonec2-vpc-id=vpc-12345\\",
       \\"amazonec2-zone=a\\",
-      \\"amazonec2-subnet-id=priv1\\",
+      \\"amazonec2-subnet-id=s-12345\\",
       \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
       \\"amazonec2-use-private-address=true\\",
       \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
@@ -521,7 +418,8 @@ check_interval = 0
           },
         ],
         "VPCZoneIdentifier": Array [
-          "priv1",
+          "s-12345",
+          "s-67890",
         ],
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
@@ -561,15 +459,7 @@ check_interval = 0
         "IamInstanceProfile": Object {
           "Ref": "ManagerAutoscalingGroupInstanceProfile7C061EF0",
         },
-        "ImageId": Object {
-          "Fn::FindInMap": Array [
-            "ManagerAutoscalingGroupAmiMap402DC0D6",
-            Object {
-              "Ref": "AWS::Region",
-            },
-            "ami",
-          ],
-        },
+        "ImageId": "ami-0de53d8956e8dcf80",
         "InstanceType": "t3.nano",
         "SecurityGroups": Array [
           Object {
@@ -586,7 +476,7 @@ check_interval = 0
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 243579d3ca77cf3a
+# fingerprint: 0d9b729a790f4924
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -624,17 +514,7 @@ yum update -y aws-cfn-bootstrap
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "ec2.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
@@ -711,9 +591,7 @@ yum update -y aws-cfn-bootstrap
                     },
                     "StringEquals": Object {
                       "ec2:InstanceType": "t3.micro",
-                      "ec2:Region": Object {
-                        "Ref": "AWS::Region",
-                      },
+                      "ec2:Region": "us-east-1",
                     },
                     "StringLike": Object {
                       "aws:RequestTag/Name": "*gitlab-runner-*",
@@ -743,24 +621,14 @@ yum update -y aws-cfn-bootstrap
                             Object {
                               "Ref": "AWS::Partition",
                             },
-                            ":ec2:",
-                            Object {
-                              "Ref": "AWS::Region",
-                            },
-                            ":",
-                            Object {
-                              "Ref": "AWS::AccountId",
-                            },
-                            ":vpc/vpc123",
+                            ":ec2:us-east-1:0:vpc/vpc-12345",
                           ],
                         ],
                       },
                     },
                     "StringEqualsIfExists": Object {
                       "ec2:InstanceType": "t3.micro",
-                      "ec2:Region": Object {
-                        "Ref": "AWS::Region",
-                      },
+                      "ec2:Region": "us-east-1",
                       "ec2:Tenancy": "default",
                     },
                   },
@@ -854,7 +722,7 @@ yum update -y aws-cfn-bootstrap
             "ToPort": 22,
           },
         ],
-        "VpcId": "vpc123",
+        "VpcId": "vpc-12345",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
@@ -877,17 +745,7 @@ yum update -y aws-cfn-bootstrap
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "ec2.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
@@ -910,7 +768,7 @@ yum update -y aws-cfn-bootstrap
             "IpProtocol": "-1",
           },
         ],
-        "VpcId": "vpc123",
+        "VpcId": "vpc-12345",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },

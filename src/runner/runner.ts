@@ -122,7 +122,6 @@ const defaultProps: Partial<RunnerProps> = {
 export class Runner extends Construct {
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
-
     const {
       managerMachineImage,
       cacheBucketName,
