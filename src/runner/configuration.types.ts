@@ -2,7 +2,8 @@ export type Configuration =
   | (Pick<GlobalConfiguration, "runners"> & Partial<GlobalConfiguration>)
   | {
       runners:
-        | Partial<RunnersConfiguration> & Pick<RunnersConfiguration, "token">;
+        | Partial<RunnersConfiguration>[] &
+            Pick<RunnersConfiguration, "token">[];
     };
 
 /**
@@ -135,22 +136,12 @@ export type MachineOptions = {
 export type AutoscalingConfiguration = {
   IdleCount: number;
   IdleTime: number;
-  Periods: Period[];
+  /**
+   * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
+   * https://github.com/gorhill/cronexpr#implementation
+   */
+  Periods: string[];
   Timezone: Timezone;
-};
-
-/**
- * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
- * https://github.com/gorhill/cronexpr#implementation
- */
-export type Period = {
-  second: string;
-  minute: string;
-  hour: string;
-  dayOfMonth: string;
-  month: string;
-  dayOfWeek: string;
-  year: string;
 };
 
 export type Timezone =
@@ -281,5 +272,4 @@ export type Timezone =
   | "Pacific/Noumea"
   | "Pacific/Pago_Pago"
   | "Pacific/Port_Moresby"
-  | "Pacific/Tongatapu"
-  | "UTC";
+  | "Pacific/Tongatapu";

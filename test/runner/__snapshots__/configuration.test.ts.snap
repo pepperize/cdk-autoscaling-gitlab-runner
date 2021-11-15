@@ -36,6 +36,11 @@ token = \\"foo+bar\\"
   MaxBuilds = 20
   MachineDriver = \\"amazonec2\\"
   MachineName = \\"gitlab-runner\\"
-  autoscaling = [ ]
+
+    [[runners.machine.autoscaling]]
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
 "
 `;
