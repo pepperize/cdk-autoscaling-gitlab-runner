@@ -57,7 +57,7 @@ export type RunnersConfiguration = {
    */
   output_limit: number;
   docker: DockerConfiguration;
-  cache?: CacheS3Configuration;
+  cache?: CacheConfiguration;
   machine: MachineConfiguration;
 };
 

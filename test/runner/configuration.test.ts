@@ -9,6 +9,14 @@ test("configuration", () => {
       {
         ...defaultConfiguration.runners[0],
         token: "foo+bar",
+        cache: {
+          ...defaultConfiguration.runners[0].cache,
+          s3: {
+            ServerAddress: "s3.amazonaws.com",
+            BucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
+            BucketLocation: "us-east-1",
+          },
+        },
       },
     ],
   };

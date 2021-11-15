@@ -21,6 +21,15 @@ token = \\"foo+bar\\"
   volumes = [ \\"/certs/client\\", \\"/cache\\" ]
   shm_size = 0
 
+  [runners.cache]
+  Type = \\"s3\\"
+  Shared = true
+
+    [runners.cache.s3]
+    ServerAddress = \\"s3.amazonaws.com\\"
+    BucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
+    BucketLocation = \\"us-east-1\\"
+
   [runners.machine]
   IdleCount = 0
   IdleTime = 300

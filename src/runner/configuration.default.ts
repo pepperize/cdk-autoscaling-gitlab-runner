@@ -1,11 +1,13 @@
 import {
+  CacheConfiguration,
   GlobalConfiguration,
   RunnersConfiguration,
 } from "./configuration.types";
 
 export type DefaultConfiguration =
   | Omit<GlobalConfiguration, "runners"> & {
-      runners: Omit<RunnersConfiguration, "token" | "cache">[];
+      runners: Omit<RunnersConfiguration, "token" | "cache">[] &
+        { cache: Omit<CacheConfiguration, "s3"> }[];
     };
 
 export const defaultConfiguration: DefaultConfiguration = {
@@ -26,6 +28,11 @@ export const defaultConfiguration: DefaultConfiguration = {
         disable_cache: false,
         volumes: ["/certs/client", "/cache"],
         shm_size: 0,
+      },
+      cache: {
+        Type: "s3",
+        Shared: true,
+        s3: {},
       },
       machine: {
         IdleCount: 0,
