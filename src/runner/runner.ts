@@ -94,35 +94,6 @@ export interface RunnerProps {
   gitlabRunnerSpotInstancePrice?: number; // A maximum (bidding) price for a Spot instance. https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
 }
 
-const defaultProps: Partial<RunnerProps> = {
-  managerMachineImage: MachineImage.genericLinux(managerAmiMap),
-  cacheBucketName: "runnercache",
-  cacheExpirationInDays: 30,
-  availabilityZone: "a",
-  // vpcIdToLookUp: must be set by a user and can't have a default value
-  vpcSubnets: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
-  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
-  managerKeyPairName: undefined,
-  gitlabUrl: "https://gitlab.com",
-  // gitlabToken: must be set by a user and can't have a default value
-  gitlabRunnerInstanceType: InstanceType.of(
-    InstanceClass.T3,
-    InstanceSize.MICRO
-  ),
-  gitlabDockerImage: "docker:19.03.5",
-  gitlabRunnerMachineImage: MachineImage.genericLinux(runnerAmiMap),
-  gitlabMaxBuilds: 10,
-  gitlabMaxConcurrentBuilds: 10,
-  gitlabLimit: 20,
-  gitlabOffPeakIdleCount: 0,
-  gitlabOffPeakIdleTime: 300,
-  gitlabAutoscalingTimezone: "UTC",
-  gitlabAutoscalingIdleCount: 1,
-  gitlabAutoscalingIdleTime: 1800,
-  gitlabCheckInterval: 0,
-  gitlabRunnerRequestSpotInstance: true,
-  gitlabRunnerSpotInstancePrice: 0.03,
-};
 
 export class Runner extends Construct {
   constructor(scope: Stack, id: string, props: RunnerProps) {
@@ -153,7 +124,7 @@ export class Runner extends Construct {
       gitlabCheckInterval,
       gitlabRunnerRequestSpotInstance,
       gitlabRunnerSpotInstancePrice,
-    }: RunnerProps = { ...defaultProps, ...props }; // assign defaults and reassign with props if defined
+    }: RunnerProps = { ...props }; // assign defaults and reassign with props if defined
 
     /*
      * ####################################
