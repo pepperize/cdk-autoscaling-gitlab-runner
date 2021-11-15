@@ -12,7 +12,14 @@ output_limit = 52_428_800
 token = \\"foo+bar\\"
 
   [runners.docker]
+  tls_verify = false
   image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
 
   [runners.machine]
   IdleCount = 0

@@ -18,7 +18,14 @@ export const defaultConfiguration: DefaultConfiguration = {
       limit: 10,
       output_limit: 52428800,
       docker: {
+        tls_verify: false,
         image: "docker:19.03.5",
+        privileged: true,
+        cap_add: ["CAP_SYS_ADMIN"],
+        wait_for_services_timeout: 300,
+        disable_cache: false,
+        volumes: ["/certs/client", "/cache"],
+        shm_size: 0,
       },
       machine: {
         IdleCount: 0,

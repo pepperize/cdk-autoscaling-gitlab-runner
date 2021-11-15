@@ -65,11 +65,18 @@ export type RunnersConfiguration = {
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
  */
 type DockerConfiguration = {
+  tls_verify: boolean;
   /**
    * The image to run jobs with.
    * @default
    */
   image: string;
+  privileged: boolean;
+  cap_add: string[];
+  wait_for_services_timeout: number;
+  disable_cache: boolean;
+  volumes: string[];
+  shm_size: number;
 };
 
 export type CacheConfiguration = {
