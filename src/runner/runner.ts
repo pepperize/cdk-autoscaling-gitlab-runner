@@ -8,11 +8,15 @@ import {
   InitPackage,
   InitService,
   InitServiceRestartHandle,
+  InstanceClass,
+  InstanceSize,
   InstanceType,
+  MachineImage,
   Peer,
   Port,
   SecurityGroup,
   SubnetSelection,
+  SubnetType,
   UserData,
   Vpc,
 } from "@aws-cdk/aws-ec2";
@@ -30,6 +34,33 @@ import {
   Construct,
   Stack
 } from "@aws-cdk/core";
+
+export const managerAmiMap: Record<string, string> = {
+  // Record<REGION, AMI_ID>
+  "eu-north-1": "ami-d16fe6af",
+  "ap-south-1": "ami-0889b8a448de4fc44",
+  "eu-west-3": "ami-0451ae4fd8dd178f7",
+  "eu-west-2": "ami-09ead922c1dad67e4",
+  "eu-west-1": "ami-07683a44e80cd32c5",
+  "ap-northeast-2": "ami-047f7b46bd6dd5d84",
+  "ap-northeast-1": "ami-0f9ae750e8274075b",
+  "sa-east-1": "ami-0669a96e355eac82f",
+  "ca-central-1": "ami-03338e1f67dae0168",
+  "ap-southeast-1": "ami-0b419c3a4b01d1859",
+  "ap-southeast-2": "ami-04481c741a0311bbb",
+  "eu-central-1": "ami-09def150731bdbcc2",
+  "us-east-1": "ami-0de53d8956e8dcf80",
+  "us-east-2": "ami-02bcbb802e03574ba",
+  "us-west-1": "ami-0019ef04ac50be30f",
+  "us-west-2": "ami-061392db613a6357b",
+};
+export const runnerAmiMap: Record<string, string> = {
+  // Record<REGION, AMI_ID>
+  // https://cloud-images.ubuntu.com/locator/ec2/
+  "eu-central-1": "ami-0a49b025fffbbdac6",
+  "us-west-1": "ami-053ac55bdcfe96e85",
+  "us-east-1": "ami-083654bd07b5da81d",
+};
 
 /**
  * Documentation:
@@ -63,10 +94,40 @@ export interface RunnerProps {
   gitlabRunnerSpotInstancePrice?: number; // A maximum (bidding) price for a Spot instance. https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
 }
 
+const defaultProps: Partial<RunnerProps> = {
+  managerMachineImage: MachineImage.genericLinux(managerAmiMap),
+  cacheBucketName: "runnercache",
+  cacheExpirationInDays: 30,
+  availabilityZone: "a",
+  // vpcIdToLookUp: must be set by a user and can't have a default value
+  vpcSubnets: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
+  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
+  managerKeyPairName: undefined,
+  gitlabUrl: "https://gitlab.com",
+  // gitlabToken: must be set by a user and can't have a default value
+  gitlabRunnerInstanceType: InstanceType.of(
+    InstanceClass.T3,
+    InstanceSize.MICRO
+  ),
+  gitlabDockerImage: "docker:19.03.5",
+  gitlabRunnerMachineImage: MachineImage.genericLinux(runnerAmiMap),
+  gitlabMaxBuilds: 10,
+  gitlabMaxConcurrentBuilds: 10,
+  gitlabLimit: 20,
+  gitlabOffPeakIdleCount: 0,
+  gitlabOffPeakIdleTime: 300,
+  gitlabAutoscalingTimezone: "UTC",
+  gitlabAutoscalingIdleCount: 1,
+  gitlabAutoscalingIdleTime: 1800,
+  gitlabCheckInterval: 0,
+  gitlabRunnerRequestSpotInstance: true,
+  gitlabRunnerSpotInstancePrice: 0.03,
+};
 
 export class Runner extends Construct {
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
+
     const {
       managerMachineImage,
       cacheBucketName,
@@ -92,7 +153,7 @@ export class Runner extends Construct {
       gitlabCheckInterval,
       gitlabRunnerRequestSpotInstance,
       gitlabRunnerSpotInstancePrice,
-    }: RunnerProps = { ...props }; // assign defaults and reassign with props if defined
+    }: RunnerProps = { ...defaultProps, ...props }; // assign defaults and reassign with props if defined
 
     /*
      * ####################################

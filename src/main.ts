@@ -9,8 +9,6 @@ const prodEnv = {
 const app = new App();
 
 new GitlabRunnerStack(app, "GitlabRunnerStack", {
-  gitlabToken: "iieC-HsJsedAse2vq486",
-  vpcIdToLookUp: "vpc-0da907b688369469e",
   env: prodEnv,
 });
 
