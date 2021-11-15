@@ -115,21 +115,38 @@ export type MachineConfiguration = {
   MaxBuilds: number;
   MachineDriver: "amazonec2" | string;
   MachineName: string;
-  MachineOptions?: MachineOptions;
+  MachineOptions?: string[];
   autoscaling: AutoscalingConfiguration[];
 };
-export type MachineOptions = {
-  instance_type: string;
-  ami_id: string;
+export type MachineOption = {
+  "instance-type": string;
+  ami: string;
   region: string;
-  vpc_id: string;
-  availability_zone: string;
-  security_group: string;
-  use_private_address: boolean;
-  instance_profile: string;
-  request_spot_instances: boolean;
-  sport_price: number;
+  "vpc-id": string;
+  zone: string;
+  "subnet-id": string;
+  "security-group": string;
+  "use-private-address": boolean;
+  "iam-instance-profile": string;
+  "request-spot-instance": boolean;
+  "spot-price": number;
+  [key: string]: string | boolean | number;
 };
+
+export class MachineOptions {
+  constructor(readonly options: MachineOption) {}
+
+  toJson() {
+    const options = [];
+
+    for (const key in this.options) {
+      const value = this.options[key];
+      options.push(`amazonec2-${key}=${value}`);
+    }
+
+    return options;
+  }
+}
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */

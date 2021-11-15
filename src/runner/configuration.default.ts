@@ -39,7 +39,7 @@ export const defaultConfiguration: DefaultConfiguration = {
         IdleTime: 300,
         MaxBuilds: 20,
         MachineDriver: "amazonec2",
-        MachineName: "gitlab-runner",
+        MachineName: "gitlab-runner-%s",
         autoscaling: [
           {
             Periods: ["* * 7-22 * * mon-fri *"],

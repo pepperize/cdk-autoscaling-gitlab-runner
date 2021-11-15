@@ -1,6 +1,9 @@
 import { toToml } from "../../src/runner/configuration";
 import { defaultConfiguration } from "../../src/runner/configuration.default";
-import { GlobalConfiguration } from "../../src/runner/configuration.types";
+import {
+  GlobalConfiguration,
+  MachineOptions,
+} from "../../src/runner/configuration.types";
 
 test("configuration", () => {
   const config: GlobalConfiguration = {
@@ -16,6 +19,22 @@ test("configuration", () => {
             BucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
             BucketLocation: "us-east-1",
           },
+        },
+        machine: {
+          ...defaultConfiguration.runners[0].machine,
+          MachineOptions: new MachineOptions({
+            "instance-type": "t3.micro",
+            ami: "ami-083654bd07b5da81d",
+            region: "us-east-1",
+            "vpc-id": "vpc-0da907b688369469e",
+            zone: "a",
+            "subnet-id": "subnet-0da907b688369469e",
+            "security-group": "RunnersSecurityGroup",
+            "use-private-address": true,
+            "iam-instance-profile": "RunnersInstanceProfile",
+            "request-spot-instance": true,
+            "spot-price": 0.03,
+          }).toJson(),
         },
       },
     ],

@@ -35,7 +35,20 @@ token = \\"foo+bar\\"
   IdleTime = 300
   MaxBuilds = 20
   MachineDriver = \\"amazonec2\\"
-  MachineName = \\"gitlab-runner\\"
+  MachineName = \\"gitlab-runner-%s\\"
+  MachineOptions = [
+  \\"amazonec2-instance-type=t3.micro\\",
+  \\"amazonec2-ami=ami-083654bd07b5da81d\\",
+  \\"amazonec2-region=us-east-1\\",
+  \\"amazonec2-vpc-id=vpc-0da907b688369469e\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=subnet-0da907b688369469e\\",
+  \\"amazonec2-security-group=RunnersSecurityGroup\\",
+  \\"amazonec2-use-private-address=true\\",
+  \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\"
+]
 
     [[runners.machine.autoscaling]]
     Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
