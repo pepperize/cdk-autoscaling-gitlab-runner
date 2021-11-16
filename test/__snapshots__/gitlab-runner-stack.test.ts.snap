@@ -275,7 +275,7 @@ check_interval = 0
 [[runners]]
 name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
-limit = 20
+limit = 10
 output_limit = 52_428_800
 token = \\"iieC-HsJsedAse2vq486\\"
 
@@ -309,28 +309,37 @@ token = \\"iieC-HsJsedAse2vq486\\"
   [runners.machine]
   IdleCount = 0
   IdleTime = 300
-  MaxBuilds = 10
+  MaxBuilds = 20
   MachineDriver = \\"amazonec2\\"
   MachineName = \\"gitlab-runner-%s\\"
   MachineOptions = [
   \\"amazonec2-instance-type=t3.micro\\",
   \\"amazonec2-ami=ami-083654bd07b5da81d\\",
   \\"amazonec2-region=us-east-1\\",
-  \\"amazonec2-vpc-id=vpc-12345\\",
+  \\"amazonec2-vpc-id=vpc-0da907b688369469e\\",
   \\"amazonec2-zone=a\\",
   \\"amazonec2-subnet-id=s-12345\\",
-  \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
+  \\"amazonec2-security-group=",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "RunnersSecurityGroup2A22C282",
+                          "GroupId",
+                        ],
+                      },
+                      "\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
   \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-block-duration-minutes=60\\",
   \\"amazonec2-spot-price=0.03\\"
 ]
 
     [[runners.machine.autoscaling]]
-    IdleTime = 1_800
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
     IdleCount = 1
-    Periods = [ \\"* * 11-23 * * mon-fri *\\" ]
-    Timezone = \\"Etc/UTC\\"",
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
+",
                     ],
                   ],
                 },
@@ -481,7 +490,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: cdbaab1d0e1c3434
+# fingerprint: 36325983a6e187b2
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -716,15 +725,6 @@ yum update -y aws-cfn-bootstrap
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "SSH traffic",
-            "FromPort": 22,
-            "IpProtocol": "tcp",
-            "ToPort": 22,
           },
         ],
         "VpcId": "vpc-12345",

@@ -1,4 +1,4 @@
-import { toToml } from "../../src/runner/configuration";
+import { Configuration } from "../../src/runner/configuration";
 import { defaultConfiguration } from "../../src/runner/configuration.default";
 import {
   GlobalConfiguration,
@@ -34,14 +34,15 @@ test("configuration", () => {
             "use-private-address": true,
             "iam-instance-profile": "RunnersInstanceProfile",
             "request-spot-instance": true,
+            "block-duration-minutes": 60,
             "spot-price": 0.03,
-          }).toJson(),
+          }).toArray(),
         },
       },
     ],
   };
 
-  const toml = toToml(config);
+  const toml = new Configuration(config).toToml();
 
   expect(toml).toMatchSnapshot();
 });

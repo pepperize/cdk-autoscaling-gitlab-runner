@@ -11,10 +11,8 @@ import {
   InstanceClass,
   InstanceSize,
   InstanceType,
-  ISecurityGroup,
   IVpc,
   MachineImage,
-  Peer,
   Port,
   SecurityGroup,
   SubnetSelection,
@@ -33,9 +31,7 @@ import {
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Duration, Construct, Stack } from "@aws-cdk/core";
 import { Cache, CacheProps } from "./cache";
-import { toToml } from "./configuration";
-import { defaultConfiguration } from "./configuration.default";
-import { GlobalConfiguration, MachineOptions } from "./configuration.types";
+import { Configuration } from "./configuration";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -160,8 +156,6 @@ const defaultProps: Partial<RunnerProps> = {
 };
 
 export class Runner extends Construct {
-  public managerSecurityGroup: ISecurityGroup;
-
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
     const {
@@ -172,21 +166,9 @@ export class Runner extends Construct {
       vpcSubnets,
       managerInstanceType,
       managerKeyPairName,
-      gitlabUrl,
       gitlabToken,
       gitlabRunnerInstanceType,
-      gitlabDockerImage,
       gitlabRunnerMachineImage,
-      gitlabMaxBuilds,
-      gitlabLimit,
-      gitlabMaxConcurrentBuilds,
-      gitlabOffPeakIdleCount,
-      gitlabOffPeakIdleTime,
-      gitlabAutoscalingIdleCount,
-      gitlabAutoscalingIdleTime,
-      gitlabCheckInterval,
-      gitlabRunnerRequestSpotInstance,
-      gitlabRunnerSpotInstancePrice,
     }: RunnerProps = { ...defaultProps, ...props }; // assign defaults and reassign with props if defined
 
     /*
@@ -199,10 +181,9 @@ export class Runner extends Construct {
 
     /*
      * #############################
-     * ### GitLab Runner Manager ###
+     * ### VPC ###
      * #############################
      */
-
     const vpc = Vpc.fromLookup(scope, "PepperizeVpc", {
       vpcId: vpcIdToLookUp,
     });
@@ -210,26 +191,9 @@ export class Runner extends Construct {
       vpc.selectSubnets(vpcSubnets).subnetIds.find(() => true) || "";
 
     /*
-     * ManagerSecurityGroup:
-     * Type: 'AWS::EC2::SecurityGroup
-     */
-    this.managerSecurityGroup = new SecurityGroup(
-      scope,
-      "ManagerSecurityGroup",
-      {
-        vpc: vpc,
-        description: "Security group for GitLab Runners Manager.",
-      }
-    );
-    this.managerSecurityGroup.connections.allowFrom(
-      Peer.ipv4("0.0.0.0/0"),
-      Port.tcp(22),
-      "SSH traffic"
-    );
-
-    /*
-     * ManagerRole:
-     * Type: 'AWS::IAM::Role'
+     * #############################
+     * ### IAM ###
+     * #############################
      */
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
     const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
@@ -239,19 +203,25 @@ export class Runner extends Construct {
     );
 
     /*
-     * RunnersRole:
-     * Type: 'AWS::IAM::Role'
+     * ######################
+     * ### GitLab Runners ###
+     * ######################
      */
+    const runnersSecurityGroup = new SecurityGroup(
+      scope,
+      "RunnersSecurityGroup",
+      {
+        securityGroupName: `${scope.stackName}-RunnersSecurityGroup`,
+        description: "Security group for GitLab Runners.",
+        vpc: vpc,
+      }
+    );
 
     const runnersRole = new Role(scope, "RunnersRole", {
       assumedBy: ec2ServicePrincipal,
       managedPolicies: [ec2ManagedPolicyForSSM],
     });
 
-    /*
-     * RunnersInstanceProfile:
-     * Type: 'AWS::IAM::InstanceProfile'
-     */
     const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
       scope,
       "RunnersInstanceProfile",
@@ -259,6 +229,30 @@ export class Runner extends Construct {
         instanceProfileName: "RunnersInstanceProfile",
         roles: [runnersRole.roleName],
       }
+    );
+
+    /*
+     * #############################
+     * ### GitLab Runner Manager ###
+     * #############################
+     */
+    const managerSecurityGroup = new SecurityGroup(
+      scope,
+      "ManagerSecurityGroup",
+      {
+        vpc: vpc,
+        description: "Security group for GitLab Runners Manager.",
+      }
+    );
+    managerSecurityGroup.connections.allowTo(
+      runnersSecurityGroup,
+      Port.tcp(22),
+      "SSH traffic from Manager"
+    );
+    managerSecurityGroup.connections.allowTo(
+      runnersSecurityGroup,
+      Port.tcp(2376),
+      "SSH traffic from Docker"
     );
 
     const managerRole = new Role(scope, "ManagerRole", {
@@ -384,60 +378,6 @@ export class Runner extends Construct {
     const CONFIG = "config";
     const RESTART = "restart";
 
-    const config: GlobalConfiguration = {
-      ...defaultConfiguration,
-      concurrent: gitlabMaxConcurrentBuilds!,
-      check_interval: gitlabCheckInterval!,
-      runners: [
-        {
-          ...defaultConfiguration.runners[0],
-          name: scope.stackName,
-          url: gitlabUrl!,
-          token: gitlabToken,
-          limit: gitlabLimit!,
-          cache: {
-            ...defaultConfiguration.runners[0].cache,
-            s3: {
-              ServerAddress: `s3.${scope.urlSuffix}`,
-              BucketName: `${cacheBucket.bucketName}`,
-              BucketLocation: `${scope.region}`,
-            },
-          },
-          docker: {
-            ...defaultConfiguration.runners[0].docker,
-            image: gitlabDockerImage!,
-          },
-          machine: {
-            ...defaultConfiguration.runners[0].machine,
-            IdleCount: gitlabOffPeakIdleCount!,
-            IdleTime: gitlabOffPeakIdleTime!,
-            MaxBuilds: gitlabMaxBuilds!,
-            MachineOptions: new MachineOptions({
-              "instance-type": gitlabRunnerInstanceType!.toString(),
-              ami: gitlabRunnerMachineImage!.getImage(scope).imageId,
-              region: scope.region,
-              "vpc-id": vpc.vpcId,
-              zone: availabilityZone!,
-              "subnet-id": vpcSubnetId,
-              "security-group": `${scope.stackName}-RunnersSecurityGroup`,
-              "use-private-address": true,
-              "iam-instance-profile": `${runnersInstanceProfile.instanceProfileName}`,
-              "request-spot-instance": gitlabRunnerRequestSpotInstance!,
-              "spot-price": gitlabRunnerSpotInstancePrice!,
-            }).toJson(),
-            autoscaling: [
-              {
-                IdleTime: gitlabAutoscalingIdleTime!,
-                IdleCount: gitlabAutoscalingIdleCount!,
-                Periods: ["* * 11-23 * * mon-fri *"],
-                Timezone: "Etc/UTC",
-              },
-            ],
-          },
-        },
-      ],
-    };
-
     const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
         default: [REPOSITORIES, PACKAGES, CFN_HUP, CONFIG, RESTART],
@@ -498,7 +438,27 @@ runas=root
         [CONFIG]: new InitConfig([
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
-            toToml(config).trim(),
+            Configuration.fromProps({
+              scope: scope,
+              token: gitlabToken,
+              cache: cacheBucket,
+              vpc: {
+                vpcId: vpcIdToLookUp,
+                subnetId: vpcSubnetId,
+                availabilityZone: availabilityZone!,
+              },
+              runner: {
+                instanceType: gitlabRunnerInstanceType!,
+                machineImage: gitlabRunnerMachineImage!,
+                securityGroup: runnersSecurityGroup,
+                instanceProfile: runnersInstanceProfile,
+              },
+              spot: {
+                requestSpotInstance: true,
+                blockDurationInMinutes: 60,
+                spotPrice: 0.03,
+              },
+            }).toToml(),
             {
               owner: "gitlab-runner",
               group: "gitlab-runner",
@@ -539,7 +499,7 @@ runas=root
       instanceType: managerInstanceType!,
       machineImage: managerMachineImage!,
       keyName: managerKeyPairName,
-      securityGroup: this.managerSecurityGroup,
+      securityGroup: managerSecurityGroup,
       role: managerRole,
       userData: userData,
       init: initConfig,
@@ -551,36 +511,5 @@ runas=root
       desiredCapacity: 1,
       signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
     });
-
-    /*
-     * ######################
-     * ### GitLab Runners ###
-     * ######################
-     */
-
-    /*
-     * RunnersSecurityGroup:
-     * Type: 'AWS::EC2::SecurityGroup'
-     */
-    const runnersSecurityGroup = new SecurityGroup(
-      scope,
-      "RunnersSecurityGroup",
-      {
-        securityGroupName: `${scope.stackName}-RunnersSecurityGroup`,
-        description: "Security group for GitLab Runners.",
-        vpc: vpc,
-      }
-    );
-
-    runnersSecurityGroup.connections.allowFrom(
-      this.managerSecurityGroup,
-      Port.tcp(22),
-      "SSH traffic from Manager"
-    );
-    runnersSecurityGroup.connections.allowFrom(
-      this.managerSecurityGroup,
-      Port.tcp(2376),
-      "SSH traffic from Docker"
-    );
   }
 }

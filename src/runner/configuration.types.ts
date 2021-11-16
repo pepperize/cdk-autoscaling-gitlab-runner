@@ -23,6 +23,16 @@ export type GlobalConfiguration = {
   check_interval: number;
 
   /**
+   * The log_level
+   */
+  log_level?: "debug" | "info" | "warn" | "error" | "fatal" | "panic";
+
+  /**
+   * The log format
+   */
+  log_format?: "runner" | "text" | "json";
+
+  /**
    * The GitLab Runners configuration.
    */
   runners: RunnersConfiguration[];
@@ -119,7 +129,7 @@ export type MachineConfiguration = {
   MachineOptions?: string[];
   autoscaling: AutoscalingConfiguration[];
 };
-export type MachineOption = {
+export type MachineOptionProps = {
   "instance-type": string;
   ami: string;
   region: string;
@@ -130,18 +140,27 @@ export type MachineOption = {
   "use-private-address": boolean;
   "iam-instance-profile": string;
   "request-spot-instance": boolean;
+  "block-duration-minutes": number;
   "spot-price": number;
   [key: string]: string | boolean | number;
 };
 
 export class MachineOptions {
-  constructor(readonly options: MachineOption) {}
+  public static fromProps(props: MachineOptionProps): MachineOptions {
+    return new MachineOptions(props);
+  }
+
+  constructor(private readonly props: MachineOptionProps) {}
 
   toJson() {
+    return JSON.stringify(this.toArray());
+  }
+
+  toArray(): string[] {
     const options = [];
 
-    for (const key in this.options) {
-      const value = this.options[key];
+    for (const key in this.props) {
+      const value = this.props[key];
       options.push(`amazonec2-${key}=${value}`);
     }
 
@@ -157,6 +176,11 @@ export type AutoscalingConfiguration = {
   /**
    * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
    * https://github.com/gorhill/cronexpr#implementation
+   *
+   * [second] [minute] [hour] [day of month] [month] [day of week] [year]
+   *
+   * @example
+   * // "* * 7-22 * * mon-fri *"
    */
   Periods: string[];
   Timezone: Timezone;
