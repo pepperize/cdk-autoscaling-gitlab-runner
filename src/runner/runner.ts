@@ -30,13 +30,9 @@ import {
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-import {
-  BlockPublicAccess,
-  Bucket,
-  BucketEncryption,
-  IBucket,
-} from "@aws-cdk/aws-s3";
-import { Duration, RemovalPolicy, Construct, Stack } from "@aws-cdk/core";
+import { IBucket } from "@aws-cdk/aws-s3";
+import { Duration, Construct, Stack } from "@aws-cdk/core";
+import { Cache, CacheProps } from "./cache";
 import { toToml } from "./configuration";
 import { defaultConfiguration } from "./configuration.default";
 import { GlobalConfiguration, MachineOptions } from "./configuration.types";
@@ -102,8 +98,16 @@ export interface NewProps {
  */
 export interface RunnerProps {
   managerMachineImage?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
-  cacheBucketName?: string; // The bucket where your cache should be kept.
-  cacheExpirationInDays?: number; // Number of days the cache is stored before deletion. 0 simply means don't delete.
+
+  /**
+   * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
+   * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
+   */
+  cache?: {
+    bucket?: IBucket;
+    options?: CacheProps;
+  };
+
   availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
   vpcIdToLookUp: string; // Your VPC ID to launch the instance in.
   vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
@@ -129,8 +133,6 @@ export interface RunnerProps {
 
 const defaultProps: Partial<RunnerProps> = {
   managerMachineImage: MachineImage.genericLinux(managerAmiMap),
-  cacheBucketName: "runnercache",
-  cacheExpirationInDays: 30,
   availabilityZone: "a",
   // vpcIdToLookUp: must be set by a user and can't have a default value
   vpcSubnets: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
@@ -164,8 +166,7 @@ export class Runner extends Construct {
     super(scope, id);
     const {
       managerMachineImage,
-      cacheBucketName,
-      cacheExpirationInDays,
+      cache,
       availabilityZone,
       vpcIdToLookUp,
       vpcSubnets,
@@ -193,31 +194,8 @@ export class Runner extends Construct {
      * ### S3 Bucket for Runners' cache ###
      * ####################################
      */
-
-    /* Transformation cacheExpirationInDays into expirationDate */
-    const today = new Date();
-    const cacheBucketExpirationDate = new Date();
-    cacheBucketExpirationDate.setDate(today.getDate() + cacheExpirationInDays!);
-    cacheBucketExpirationDate.setUTCHours(0, 0, 0, 0); // Date must be at midnight GMT
-
-    /* Enabled if not 0. If 0 - cache doesnt't expire. */
-    const lifeCycleRuleEnabled = cacheExpirationInDays === 0;
-    const uniqueCacheBucketName =
-      `${scope.stackName}-${cacheBucketName}-${scope.account}-${scope.region}`.toLocaleLowerCase();
-
-    const cacheBucket = new Bucket(scope, "CacheBucket", {
-      bucketName: uniqueCacheBucketName,
-      lifecycleRules: [
-        {
-          enabled: lifeCycleRuleEnabled,
-          expirationDate: cacheBucketExpirationDate,
-        },
-      ],
-      encryption: BucketEncryption.KMS_MANAGED,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      autoDeleteObjects: true,
-      removalPolicy: RemovalPolicy.DESTROY,
-    });
+    const cacheBucket =
+      cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
 
     /*
      * #############################

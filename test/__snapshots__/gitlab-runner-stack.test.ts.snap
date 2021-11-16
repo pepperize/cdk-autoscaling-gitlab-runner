@@ -29,11 +29,11 @@ Object {
             },
           ],
         },
-        "BucketName": "gitlab-runner-runnercache-0-us-east-1",
+        "BucketName": "gitlab-runner-runner-cache-0-us-east-1",
         "LifecycleConfiguration": Object {
           "Rules": Array [
             Object {
-              "ExpirationDate": "2021-12-15T00:00:00",
+              "ExpirationInDays": 30,
               "Status": "Disabled",
             },
           ],

@@ -1,4 +1,9 @@
-import { BlockPublicAccess, Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
+import {
+  BlockPublicAccess,
+  Bucket,
+  BucketEncryption,
+  IBucket,
+} from "@aws-cdk/aws-s3";
 import { Construct, Duration, RemovalPolicy, Stack } from "@aws-cdk/core";
 
 export interface CacheProps {
@@ -7,18 +12,23 @@ export interface CacheProps {
    *
    * @default "runner-cache"
    */
-  bucketName: string;
+  bucketName?: string;
   /**
    * The number of days the created cache objects are deleted from S3.
    * @default 30 days
    */
-  expiration: Duration;
+  expiration?: Duration;
 }
 
+/**
+ * A GitLab Runner cache consisting of an Amazon S3 bucket.
+ *
+ * The bucket is encrypted with a KMS managed master key, it has public access blocked and will be cleared and deleted on CFN stack deletion.
+ */
 export class Cache extends Construct {
-  readonly bucket;
+  readonly bucket: IBucket;
 
-  constructor(scope: Stack, id: string, props: CacheProps) {
+  constructor(scope: Stack, id: string, props: CacheProps = {}) {
     super(scope, id);
 
     const bucketName = props.bucketName || "runner-cache";
