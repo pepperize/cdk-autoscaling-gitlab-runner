@@ -25,7 +25,7 @@
     "preinstall": "npx only-allow npm",
     "cdk": "cdk",
     "bootstrap": "cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess",
-    "format": "prettier --write 'src/**/*.ts' '.projenrc.js' 'README.md'"
+    "format": "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
   },
   "author": {
     "name": "Ivan Ovdiienko",
