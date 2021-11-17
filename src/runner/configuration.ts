@@ -1,4 +1,4 @@
-import { IMachineImage, InstanceType } from "@aws-cdk/aws-ec2";
+import { IMachineImage, InstanceType, ISecurityGroup } from "@aws-cdk/aws-ec2";
 import { CfnInstanceProfile } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Stack } from "@aws-cdk/core";
