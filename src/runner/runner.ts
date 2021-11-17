@@ -110,7 +110,12 @@ export interface RunnerProps {
   managerInstanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
   managerKeyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
   gitlabUrl?: string; // URL of your GitLab instance.
-  gitlabToken: string; // RUNNER_TOKEN. Note this is different from the registration token used by `gitlab-runner register`.
+
+  /**
+   * The GitLab Runner’s authentication token, which is obtained during runner registration.
+   * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
+   */
+  gitlabToken: string;
   gitlabRunnerInstanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
   gitlabRunnerMachineImage?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
   gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml .
@@ -442,7 +447,7 @@ runas=root
             "/etc/gitlab-runner/config.toml",
             Configuration.fromProps({
               scope: scope,
-              token: gitlabToken,
+              gitlabToken: gitlabToken,
               cache: cacheBucket,
               vpc: {
                 vpcId: vpcIdToLookUp,

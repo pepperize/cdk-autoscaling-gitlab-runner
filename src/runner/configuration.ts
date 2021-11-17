@@ -15,7 +15,10 @@ import { GlobalConfiguration, MachineOptions } from "./configuration.types";
 
 export interface ConfigurationProps {
   scope: Stack;
-  token: string;
+  /**
+   * The GitLab Runner's auth token.
+   */
+  gitlabToken: string;
   cache: IBucket;
   vpc: {
     vpcId: string;
@@ -30,14 +33,14 @@ export interface ConfigurationProps {
   };
   spot: {
     requestSpotInstance: boolean;
-    blockDurationInMinutes: number;
+    blockDurationInMinutes?: number;
     spotPrice: number;
   };
 }
 
 export class Configuration {
   public static fromProps(props: ConfigurationProps) {
-    const { scope, token, cache, vpc, runner, spot } = props;
+    const { scope, gitlabToken, cache, vpc, runner, spot } = props;
 
     const configuration = {
       ...defaultConfiguration,
@@ -45,7 +48,7 @@ export class Configuration {
         {
           ...defaultRunnersConfiguration,
           name: scope.stackName,
-          token: token,
+          token: gitlabToken,
           cache: {
             ...defaultCacheConfiguration,
             s3: {

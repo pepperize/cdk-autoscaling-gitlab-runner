@@ -53,7 +53,7 @@ export type RunnersConfiguration = {
    */
   url: string;
   /**
-   * The runner’s authentication token, which is obtained during runner registration.
+   * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
    */
   token: string;
