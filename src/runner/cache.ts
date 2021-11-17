@@ -14,7 +14,7 @@ export interface CacheProps {
    */
   bucketName?: string;
   /**
-   * The number of days the created cache objects are deleted from S3.
+   * The number of days after which the created cache objects are deleted from S3.
    * @default 30 days
    */
   expiration?: Duration;
