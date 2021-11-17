@@ -54,7 +54,8 @@ type RunnersConfiguration = {
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
  */
-type DockerConfiguration = {
+export type DockerConfiguration = {
+  tls_verify: boolean;
   /**
    * The image to run jobs with.
    * @default
