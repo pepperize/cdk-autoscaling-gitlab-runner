@@ -325,7 +325,6 @@ token = \\"iieC-HsJsedAse2vq486\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
   \\"amazonec2-request-spot-instance=true\\",
-  \\"amazonec2-block-duration-minutes=60\\",
   \\"amazonec2-spot-price=0.03\\"
 ]
 
@@ -485,7 +484,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 757c2e69732a618d
+# fingerprint: e6ba5043ada7029b
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

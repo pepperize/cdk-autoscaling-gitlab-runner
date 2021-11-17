@@ -457,7 +457,6 @@ runas=root
               },
               spot: {
                 requestSpotInstance: true,
-                blockDurationInMinutes: 60,
                 spotPrice: 0.03,
               },
             }).toToml(),

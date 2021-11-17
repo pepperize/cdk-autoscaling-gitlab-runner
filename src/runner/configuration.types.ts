@@ -155,9 +155,9 @@ export type MachineOptionProps = {
   "use-private-address": boolean;
   "iam-instance-profile": string;
   "request-spot-instance": boolean;
-  "block-duration-minutes": number;
+  "block-duration-minutes"?: number;
   "spot-price": number;
-  [key: string]: string | boolean | number;
+  [key: string]: string | boolean | number | undefined;
 };
 
 export class MachineOptions {
@@ -176,6 +176,9 @@ export class MachineOptions {
 
     for (const key in this.props) {
       const value = this.props[key];
+      if (value === undefined) {
+        continue;
+      }
       options.push(`amazonec2-${key}=${value}`);
     }
 
