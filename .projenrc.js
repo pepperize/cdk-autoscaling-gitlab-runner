@@ -6,7 +6,7 @@ const project = new AwsCdkTypeScriptApp({
   authorOrganization: "Pepperize",
   copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
   license: "MIT",
-  cdkVersion: "1.131.0",
+  cdkVersion: "1.132.0",
   cdkVersionPinning: true,
   defaultReleaseBranch: "master",
   name: "@pepperize/cdk-gitlab-runner",
