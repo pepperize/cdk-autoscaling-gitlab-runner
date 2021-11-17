@@ -34,7 +34,7 @@ Object {
           "Rules": Array [
             Object {
               "ExpirationInDays": 30,
-              "Status": "Disabled",
+              "Status": "Enabled",
             },
           ],
         },

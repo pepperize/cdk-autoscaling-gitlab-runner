@@ -39,7 +39,7 @@ export class Cache extends Construct {
 
     /* Enabled if not 0. If 0 - cache doesnt't expire. If undefined - expiration sets to expire in 30 days */
     this.expiration = props.expiration ?? Duration.days(30);
-    this.lifeCycleRuleEnabled = this.expiration.toDays() === 0;
+    this.lifeCycleRuleEnabled = this.expiration.toDays() !== 0;
 
     this.bucket = new Bucket(scope, "CacheBucket", {
       bucketName: uniqueCacheBucketName,
