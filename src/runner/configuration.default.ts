@@ -54,6 +54,7 @@ export const defaultRunnersConfiguration = {
   url: "https://gitlab.com",
   limit: 10,
   output_limit: 52428800,
+  executor: "docker+machine",
   docker: defaultDockerConfiguration,
   cache: defaultCacheConfiguration,
   machine: defaultMachineConfiguration,
