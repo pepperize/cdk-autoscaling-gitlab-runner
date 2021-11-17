@@ -10,6 +10,7 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
+environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
 token = \\"foo+bar\\"
 
   [runners.docker]
