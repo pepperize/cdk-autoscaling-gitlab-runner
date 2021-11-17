@@ -29,12 +29,12 @@ Object {
             },
           ],
         },
-        "BucketName": "gitlab-runner-runnercache-0-us-east-1",
+        "BucketName": "gitlab-runner-runner-cache-0-us-east-1",
         "LifecycleConfiguration": Object {
           "Rules": Array [
             Object {
-              "ExpirationDate": "2021-12-15T00:00:00",
-              "Status": "Disabled",
+              "ExpirationInDays": 30,
+              "Status": "Enabled",
             },
           ],
         },
@@ -271,61 +271,69 @@ runas=root",
                     Array [
                       "concurrent = 10
 check_interval = 0
+
 [[runners]]
-  name = \\"gitlab-runner\\"
-  url = \\"https://gitlab.com\\"
-  token = \\"iieC-HsJsedAse2vq486\\"
-  executor = \\"docker+machine\\"
-  limit = 20
-  output_limit = 52428800
-  environment = [
-    \\"DOCKER_DRIVER=overlay2\\",
-    \\"DOCKER_TLS_CERTDIR=/certs\\"
-  ]
+name = \\"gitlab-runner\\"
+url = \\"https://gitlab.com\\"
+limit = 10
+output_limit = 52_428_800
+executor = \\"docker+machine\\"
+environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+token = \\"iieC-HsJsedAse2vq486\\"
+
   [runners.docker]
-    tls_verify = false
-    image = \\"docker:19.03.5\\"
-    privileged = true
-    cap_add = [\\"CAP_SYS_ADMIN\\"]
-    wait_for_services_timeout = 300
-    disable_cache = false
-    volumes = [\\"/certs/client\\", \\"/cache\\"]
-    shm_size = 0
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
+
   [runners.cache]
-    Type = \\"s3\\"
-    Shared = true
-  [runners.cache.s3]
+  Type = \\"s3\\"
+  Shared = true
+
+    [runners.cache.s3]
     ServerAddress = \\"s3.",
                       Object {
                         "Ref": "AWS::URLSuffix",
                       },
                       "\\"
-    BucketName = \\"gitlab-runner-runnercache-0-us-east-1\\"
+    BucketName = \\"",
+                      Object {
+                        "Ref": "CacheBucket41D9D0B0",
+                      },
+                      "\\"
     BucketLocation = \\"us-east-1\\"
+
   [runners.machine]
-    IdleCount = 0
-    IdleTime = 300
-    MaxBuilds = 10
-    MachineDriver = \\"amazonec2\\"
-    MachineName = \\"gitlab-runner-%s\\"
-    MachineOptions = [
-      \\"amazonec2-instance-type=t3.micro\\",
-      \\"amazonec2-ami=ami-083654bd07b5da81d\\",
-      \\"amazonec2-region=us-east-1\\",
-      \\"amazonec2-vpc-id=vpc-12345\\",
-      \\"amazonec2-zone=a\\",
-      \\"amazonec2-subnet-id=s-12345\\",
-      \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
-      \\"amazonec2-use-private-address=true\\",
-      \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
-      \\"amazonec2-request-spot-instance=true\\",
-      \\"amazonec2-spot-price=0.03\\"
-    ]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 20
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%s\\"
+  MachineOptions = [
+  \\"amazonec2-instance-type=t3.micro\\",
+  \\"amazonec2-ami=ami-083654bd07b5da81d\\",
+  \\"amazonec2-region=us-east-1\\",
+  \\"amazonec2-vpc-id=vpc-0da907b688369469e\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=s-12345\\",
+  \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
+  \\"amazonec2-use-private-address=true\\",
+  \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\"
+]
+
     [[runners.machine.autoscaling]]
-      Timezone = \\"UTC\\"
-      Periods = [\\"* * 11-23 * * mon-fri *\\"]
-      IdleCount = 1
-      IdleTime = 1800",
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
+",
                     ],
                   ],
                 },
@@ -476,7 +484,7 @@ check_interval = 0
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 0d9b729a790f4924
+# fingerprint: e6ba5043ada7029b
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -711,15 +719,6 @@ yum update -y aws-cfn-bootstrap
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "SSH traffic",
-            "FromPort": 22,
-            "IpProtocol": "tcp",
-            "ToPort": 22,
           },
         ],
         "VpcId": "vpc-12345",

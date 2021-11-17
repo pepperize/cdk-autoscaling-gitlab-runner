@@ -6,10 +6,10 @@ const project = new AwsCdkTypeScriptApp({
   authorOrganization: "Pepperize",
   copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
   license: "MIT",
-  cdkVersion: "1.131.0",
+  cdkVersion: "1.132.0",
   cdkVersionPinning: true,
   defaultReleaseBranch: "master",
-  name: "cdk-gitlab-runner",
+  name: "@pepperize/cdk-gitlab-runner",
   repositoryUrl: "https://github.com/pepperize/cdk-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
   cdkDependencies: [
@@ -26,7 +26,7 @@ const project = new AwsCdkTypeScriptApp({
     "@aws-cdk/core:stackRelativeExports": "true",
     "@aws-cdk/core:newStyleStackSynthesis": true,
   },
-  // deps: ["package-name", ...]
+  deps: ["@iarna/toml"],
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                     /* Build dependencies for this module. */
@@ -73,7 +73,7 @@ project.setScript("synth", "cdk synth");
 project.setScript("deploy", "cdk deploy");
 project.setScript(
   "format",
-  "prettier --write 'src/**/*.ts' '.projenrc.js' 'README.md'"
+  "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
 );
 
 project.buildWorkflow.on({ push: {}, pullRequest: {}, workflowDispatch: {} });

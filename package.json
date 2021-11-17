@@ -1,5 +1,5 @@
 {
-  "name": "cdk-gitlab-runner",
+  "name": "@pepperize/cdk-gitlab-runner",
   "scripts": {
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
@@ -25,7 +25,7 @@
     "preinstall": "npx only-allow npm",
     "cdk": "cdk",
     "bootstrap": "cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess",
-    "format": "prettier --write 'src/**/*.ts' '.projenrc.js' 'README.md'"
+    "format": "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
   },
   "author": {
     "name": "Ivan Ovdiienko",
@@ -36,7 +36,7 @@
     "@types/node": "^14.17.0",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
-    "aws-cdk": "1.131.0",
+    "aws-cdk": "1.132.0",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -55,13 +55,14 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "@aws-cdk/assert": "1.131.0",
-    "@aws-cdk/aws-autoscaling": "1.131.0",
-    "@aws-cdk/aws-ec2": "1.131.0",
-    "@aws-cdk/aws-iam": "1.131.0",
-    "@aws-cdk/aws-s3": "1.131.0",
-    "@aws-cdk/aws-s3-deployment": "1.131.0",
-    "@aws-cdk/core": "1.131.0"
+    "@aws-cdk/assert": "1.132.0",
+    "@aws-cdk/aws-autoscaling": "1.132.0",
+    "@aws-cdk/aws-ec2": "1.132.0",
+    "@aws-cdk/aws-iam": "1.132.0",
+    "@aws-cdk/aws-s3": "1.132.0",
+    "@aws-cdk/aws-s3-deployment": "1.132.0",
+    "@aws-cdk/core": "1.132.0",
+    "@iarna/toml": "^2.2.5"
   },
   "bundledDependencies": [],
   "license": "MIT",
