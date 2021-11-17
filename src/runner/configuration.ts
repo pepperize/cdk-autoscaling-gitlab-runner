@@ -26,6 +26,8 @@ export interface ConfigurationProps {
     instanceType: InstanceType;
     machineImage: IMachineImage;
     securityGroup: ISecurityGroup;
+    /** @deprecated */
+    securityGroupName: string;
     instanceProfile: CfnInstanceProfile;
   };
   spot: {
@@ -66,7 +68,7 @@ export class Configuration {
               "vpc-id": vpc.vpcId,
               zone: vpc.availabilityZone,
               "subnet-id": vpc.subnetId,
-              "security-group": `${runner.securityGroup.securityGroupId}`,
+              "security-group": `${runner.securityGroupName}`,
               "use-private-address": true,
               "iam-instance-profile": `${runner.instanceProfile.instanceProfileName}`,
               "request-spot-instance": spot.requestSpotInstance,

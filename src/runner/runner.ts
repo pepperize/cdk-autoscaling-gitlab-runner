@@ -208,11 +208,12 @@ export class Runner extends Construct {
      * ######################
      */
 
+    const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(
       scope,
       "RunnersSecurityGroup",
       {
-        securityGroupName: `${scope.stackName}-RunnersSecurityGroup`,
+        securityGroupName: runnersSecurityGroupName,
         description: "Security group for GitLab Runners.",
         vpc: vpc,
       }
@@ -452,6 +453,7 @@ runas=root
                 instanceType: gitlabRunnerInstanceType!,
                 machineImage: gitlabRunnerMachineImage!,
                 securityGroup: runnersSecurityGroup,
+                securityGroupName: runnersSecurityGroupName,
                 instanceProfile: runnersInstanceProfile,
               },
               spot: {
