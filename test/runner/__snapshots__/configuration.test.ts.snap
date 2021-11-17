@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`configuration 1`] = `
+"concurrent = 10
+check_interval = 0
+
+[[runners]]
+name = \\"gitlab-runner\\"
+url = \\"https://gitlab.com\\"
+limit = 10
+output_limit = 52_428_800
+executor = \\"docker+machine\\"
+environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+token = \\"foo+bar\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
+
+  [runners.cache]
+  Type = \\"s3\\"
+  Shared = true
+
+    [runners.cache.s3]
+    ServerAddress = \\"s3.amazonaws.com\\"
+    BucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
+    BucketLocation = \\"us-east-1\\"
+    AccessKey = \\"ASIAZJBNZOWZ2QXIG7EB\\"
+
+  [runners.machine]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 20
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%s\\"
+  MachineOptions = [
+  \\"amazonec2-instance-type=t3.micro\\",
+  \\"amazonec2-ami=ami-083654bd07b5da81d\\",
+  \\"amazonec2-region=us-east-1\\",
+  \\"amazonec2-vpc-id=vpc-0da907b688369469e\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=subnet-0da907b688369469e\\",
+  \\"amazonec2-security-group=RunnersSecurityGroup\\",
+  \\"amazonec2-use-private-address=true\\",
+  \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-block-duration-minutes=60\\",
+  \\"amazonec2-spot-price=0.03\\"
+]
+
+    [[runners.machine.autoscaling]]
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
+"
+`;

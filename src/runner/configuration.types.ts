@@ -1,7 +1,15 @@
+export type RequiredConfiguration =
+  | (Pick<GlobalConfiguration, "runners"> & Partial<GlobalConfiguration>)
+  | {
+      runners:
+        | Partial<RunnersConfiguration>[] &
+            Pick<RunnersConfiguration, "token">[];
+    };
+
 /**
  * https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
  */
-type GlobalConfiguration = {
+export type GlobalConfiguration = {
   /**
    * The limit of the jobs that can be run concurrently across all runners (concurrent).
    * @default 10
@@ -12,18 +20,28 @@ type GlobalConfiguration = {
    * The check_interval option defines how often the runner should check GitLab for new jobs| in seconds.
    * @default 0
    */
-  checkInterval: number;
+  check_interval: number;
+
+  /**
+   * The log_level
+   */
+  log_level?: "debug" | "info" | "warn" | "error" | "fatal" | "panic";
+
+  /**
+   * The log format
+   */
+  log_format?: "runner" | "text" | "json";
 
   /**
    * The GitLab Runners configuration.
    */
-  runnersConfig: RunnersConfiguration;
+  runners: RunnersConfiguration[];
 };
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
  */
-type RunnersConfiguration = {
+export type RunnersConfiguration = {
   /**
    * The runner’s name.
    * @default "gitlab-runner"
@@ -35,7 +53,7 @@ type RunnersConfiguration = {
    */
   url: string;
   /**
-   * The runner’s authentication token, which is obtained during runner registration.
+   * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
    */
   token: string;
@@ -48,89 +66,149 @@ type RunnersConfiguration = {
    * Maximum build log size in kilobytes.
    * @default 52428800 Default is 50 GB.
    */
-  outputLimit: number;
+  output_limit: number;
+
+  /**
+   * The following executors are available.
+   * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-executors
+   * @default "docker+machine" Use auto-scaled Docker machines.
+   */
+  executor: Executor | string;
+  /**
+   * Append or overwrite environment variables.
+   * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
+   * @default ["DOCKER_DRIVER=overlay2","DOCKER_TLS_CERTDIR=/certs"]
+   */
+  environment: string[];
+  docker: DockerConfiguration;
+  cache?: CacheConfiguration;
+  machine: MachineConfiguration;
 };
+
+export type Executor = "docker+machine" | "docker";
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
  */
+<<<<<<< HEAD
 export type DockerConfiguration = {
+=======
+type DockerConfiguration = {
+>>>>>>> master
   tls_verify: boolean;
   /**
    * The image to run jobs with.
    * @default
    */
   image: string;
+  privileged: boolean;
+  cap_add: string[];
+  wait_for_services_timeout: number;
+  disable_cache: boolean;
+  volumes: string[];
+  shm_size: number;
+};
+
+export type CacheConfiguration = {
+  Type: "s3";
+  Shared: boolean;
+  s3: CacheS3Configuration;
 };
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
  */
-type S3CacheConfiguration = {
+export type CacheS3Configuration = {
   /**
    * The AWS S3 host.
    * @default "s3.amazonaws.com"
    */
-  serverAdress: string;
+  ServerAddress: string;
   /**
    * The name of the storage bucket where cache is stored.
    * @default "runners-cache"
    */
-  bucketName: string;
+  BucketName: string;
   /**
    * The name of the S3 region.
    */
-  bucketLocation: string;
+  BucketLocation: string;
+  [key: "AccessKey" | "SecretKey" | string]: string;
 };
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
  */
-type MachineConfiguration = {
-  idleCount: number;
-  idleTime: number;
-  maxBuilds: number;
-  machineName: string;
-  machineOptions: MachineOptions;
+export type MachineConfiguration = {
+  IdleCount: number;
+  IdleTime: number;
+  MaxBuilds: number;
+  MachineDriver: "amazonec2" | string;
+  MachineName: string;
+  MachineOptions?: string[];
   autoscaling: AutoscalingConfiguration[];
 };
-type MachineOptions = {
-  instanceType: string;
-  amiId: string;
+export type MachineOptionProps = {
+  "instance-type": string;
+  ami: string;
   region: string;
-  vpcId: string;
-  availabilityZone: string;
-  securityGroup: string;
-  usePrivateAddress: boolean;
-  instanceProfile: string;
-  requestSpotInstances: boolean;
-  sportPrice: number;
+  "vpc-id": string;
+  zone: string;
+  "subnet-id": string;
+  "security-group": string;
+  "use-private-address": boolean;
+  "iam-instance-profile": string;
+  "request-spot-instance": boolean;
+  "block-duration-minutes"?: number;
+  "spot-price": number;
+  [key: string]: string | boolean | number | undefined;
 };
+
+export class MachineOptions {
+  public static fromProps(props: MachineOptionProps): MachineOptions {
+    return new MachineOptions(props);
+  }
+
+  constructor(private readonly props: MachineOptionProps) {}
+
+  toJson() {
+    return JSON.stringify(this.toArray());
+  }
+
+  toArray(): string[] {
+    const options = [];
+
+    for (const key in this.props) {
+      const value = this.props[key];
+      if (value === undefined) {
+        continue;
+      }
+      options.push(`amazonec2-${key}=${value}`);
+    }
+
+    return options;
+  }
+}
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */
-type AutoscalingConfiguration = {
-  idleCount: number;
-  idleTime: number;
-  periods: Period[];
-  timezone: Timezone;
+export type AutoscalingConfiguration = {
+  IdleCount: number;
+  IdleTime: number;
+  /**
+   * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
+   * https://github.com/gorhill/cronexpr#implementation
+   *
+   * [second] [minute] [hour] [day of month] [month] [day of week] [year]
+   *
+   * @example
+   * // "* * 7-22 * * mon-fri *"
+   */
+  Periods: string[];
+  Timezone: Timezone;
 };
 
-/**
- * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
- * https://github.com/gorhill/cronexpr#implementation
- */
-type Period = {
-  second: string;
-  minute: string;
-  hour: string;
-  dayOfMonth: string;
-  month: string;
-  dayOfWeek: string;
-  year: string;
-};
-
-type Timezone =
+export type Timezone =
   | "Africa/Algiers"
   | "Africa/Cairo"
   | "Africa/Casablanca"
@@ -258,5 +336,4 @@ type Timezone =
   | "Pacific/Noumea"
   | "Pacific/Pago_Pago"
   | "Pacific/Port_Moresby"
-  | "Pacific/Tongatapu"
-  | "UTC";
+  | "Pacific/Tongatapu";
