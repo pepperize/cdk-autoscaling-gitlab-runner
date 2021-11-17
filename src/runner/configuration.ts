@@ -1,12 +1,8 @@
-import {
-  IMachineImage,
-  InstanceType,
-} from "@aws-cdk/aws-ec2";
+import { IMachineImage, InstanceType, ISecurityGroup } from "@aws-cdk/aws-ec2";
 import { CfnInstanceProfile } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Stack } from "@aws-cdk/core";
 import { stringify } from "@iarna/toml";
-import { INamedSecurityGroup } from "../named-security-group.adapter";
 import {
   defaultAutoscalingConfiguration,
   defaultCacheConfiguration,
@@ -29,7 +25,7 @@ export interface ConfigurationProps {
   runner: {
     instanceType: InstanceType;
     machineImage: IMachineImage;
-    securityGroup: INamedSecurityGroup;
+    securityGroup: ISecurityGroup;
     instanceProfile: CfnInstanceProfile;
   };
   spot: {
@@ -70,7 +66,7 @@ export class Configuration {
               "vpc-id": vpc.vpcId,
               zone: vpc.availabilityZone,
               "subnet-id": vpc.subnetId,
-              "security-group": `${runner.securityGroup.getName()}`,
+              "security-group": `${runner.securityGroup.securityGroupId}`,
               "use-private-address": true,
               "iam-instance-profile": `${runner.instanceProfile.instanceProfileName}`,
               "request-spot-instance": spot.requestSpotInstance,

@@ -30,7 +30,6 @@ import {
 } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Duration, Construct, Stack } from "@aws-cdk/core";
-import { NamedSecurityGroup } from "../named-security-group.adapter";
 import { Cache, CacheProps } from "./cache";
 import { Configuration } from "./configuration";
 
@@ -209,7 +208,7 @@ export class Runner extends Construct {
      * ######################
      */
 
-    const runnersSecurityGroup = new NamedSecurityGroup(
+    const runnersSecurityGroup = new SecurityGroup(
       scope,
       "RunnersSecurityGroup",
       {
