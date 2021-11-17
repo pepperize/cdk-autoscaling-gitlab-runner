@@ -1,4 +1,4 @@
-import { IMachineImage, InstanceType, ISecurityGroup } from "@aws-cdk/aws-ec2";
+import { IMachineImage, InstanceType } from "@aws-cdk/aws-ec2";
 import { CfnInstanceProfile } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Stack } from "@aws-cdk/core";
@@ -25,7 +25,7 @@ export interface ConfigurationProps {
   runner: {
     instanceType: InstanceType;
     machineImage: IMachineImage;
-    securityGroup: ISecurityGroup;
+    securityGroupName: string;
     instanceProfile: CfnInstanceProfile;
   };
   spot: {
@@ -66,7 +66,7 @@ export class Configuration {
               "vpc-id": vpc.vpcId,
               zone: vpc.availabilityZone,
               "subnet-id": vpc.subnetId,
-              "security-group": `${runner.securityGroup.securityGroupId}`,
+              "security-group": `${runner.securityGroupName}`,
               "use-private-address": true,
               "iam-instance-profile": `${runner.instanceProfile.instanceProfileName}`,
               "request-spot-instance": spot.requestSpotInstance,
