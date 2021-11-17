@@ -55,6 +55,7 @@ export const defaultRunnersConfiguration = {
   limit: 10,
   output_limit: 52428800,
   executor: "docker+machine",
+  environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
   docker: defaultDockerConfiguration,
   cache: defaultCacheConfiguration,
   machine: defaultMachineConfiguration,

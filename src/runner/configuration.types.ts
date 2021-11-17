@@ -68,11 +68,24 @@ export type RunnersConfiguration = {
    */
   output_limit: number;
 
-  //executor: Executor; // TODO: add it here
+  /**
+   * The following executors are available.
+   * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-executors
+   * @default "docker+machine" Use auto-scaled Docker machines.
+   */
+  executor: Executor | string;
+  /**
+   * Append or overwrite environment variables.
+   * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
+   * @default ["DOCKER_DRIVER=overlay2","DOCKER_TLS_CERTDIR=/certs"]
+   */
+  environment: string[];
   docker: DockerConfiguration;
   cache?: CacheConfiguration;
   machine: MachineConfiguration;
 };
+
+export type Executor = "docker+machine" | "docker";
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
