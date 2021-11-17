@@ -27,6 +27,8 @@ export interface CacheProps {
  */
 export class Cache extends Construct {
   readonly bucket: IBucket;
+  readonly lifeCycleRuleEnabled: boolean;
+  readonly expiration: Duration;
 
   constructor(scope: Stack, id: string, props: CacheProps = {}) {
     super(scope, id);
@@ -35,16 +37,16 @@ export class Cache extends Construct {
     const uniqueCacheBucketName =
       `${scope.stackName}-${bucketName}-${scope.account}-${scope.region}`.toLocaleLowerCase();
 
-    /* Enabled if not 0. If 0 - cache doesnt't expire. */
-    const expiration = props.expiration || Duration.days(30);
-    const lifeCycleRuleEnabled = expiration.toDays() === 0;
+    /* Enabled if not 0. If 0 - cache doesnt't expire. If undefined - expiration sets to expire in 30 days */
+    this.expiration = props.expiration ?? Duration.days(30);
+    this.lifeCycleRuleEnabled = this.expiration.toDays() === 0;
 
     this.bucket = new Bucket(scope, "CacheBucket", {
       bucketName: uniqueCacheBucketName,
       lifecycleRules: [
         {
-          enabled: lifeCycleRuleEnabled,
-          expiration: expiration,
+          enabled: this.lifeCycleRuleEnabled,
+          expiration: this.expiration,
         },
       ],
       encryption: BucketEncryption.KMS_MANAGED,
