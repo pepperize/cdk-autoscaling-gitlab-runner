@@ -73,7 +73,7 @@ project.setScript("synth", "cdk synth");
 project.setScript("deploy", "cdk deploy");
 project.setScript(
   "format",
-  "prettier --write 'src/**/*.ts' '.projenrc.js' 'README.md'"
+  "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
 );
 
 project.buildWorkflow.on({ push: {}, pullRequest: {}, workflowDispatch: {} });
