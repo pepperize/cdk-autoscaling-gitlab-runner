@@ -67,6 +67,8 @@ export type RunnersConfiguration = {
    * @default 52428800 Default is 50 GB.
    */
   output_limit: number;
+
+  //executor: Executor; // TODO: add it here
   docker: DockerConfiguration;
   cache?: CacheConfiguration;
   machine: MachineConfiguration;
