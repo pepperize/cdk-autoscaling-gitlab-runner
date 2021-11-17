@@ -277,6 +277,7 @@ name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
+executor = \\"docker+machine\\"
 token = \\"iieC-HsJsedAse2vq486\\"
 
   [runners.docker]
@@ -490,7 +491,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 36325983a6e187b2
+# fingerprint: bd188091acc112ea
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

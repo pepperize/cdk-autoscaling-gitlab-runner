@@ -9,6 +9,7 @@ name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
+executor = \\"docker+machine\\"
 token = \\"foo+bar\\"
 
   [runners.docker]
