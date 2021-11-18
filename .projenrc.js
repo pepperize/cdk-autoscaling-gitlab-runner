@@ -59,6 +59,7 @@ const project = new AwsCdkTypeScriptApp({
   eslintOptions: {
     prettier: true,
   },
+  gitignore: [".idea"],
 });
 
 project.setScript("preinstall", "npx only-allow npm");
