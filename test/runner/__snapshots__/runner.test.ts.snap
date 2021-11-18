@@ -315,7 +315,7 @@ token = \\"\\"
   MachineDriver = \\"amazonec2\\"
   MachineName = \\"gitlab-runner-%s\\"
   MachineOptions = [
-  \\"amazonec2-instance-type=t3.nano\\",
+  \\"amazonec2-instance-type=t3.micro\\",
   \\"amazonec2-ami=ami-083654bd07b5da81d\\",
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=vpc123\\",
@@ -467,7 +467,7 @@ token = \\"\\"
           "Ref": "ManagerAutoscalingGroupInstanceProfile7C061EF0",
         },
         "ImageId": "ami-0de53d8956e8dcf80",
-        "InstanceType": "t3.micro",
+        "InstanceType": "t3.nano",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -483,7 +483,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 39cd59e536a21ff7
+# fingerprint: 8cdf33f59826b49c
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -597,7 +597,7 @@ yum update -y aws-cfn-bootstrap
                       ],
                     },
                     "StringEquals": Object {
-                      "ec2:InstanceType": "t3.nano",
+                      "ec2:InstanceType": "t3.micro",
                       "ec2:Region": "us-east-1",
                     },
                     "StringLike": Object {
@@ -634,7 +634,7 @@ yum update -y aws-cfn-bootstrap
                       },
                     },
                     "StringEqualsIfExists": Object {
-                      "ec2:InstanceType": "t3.nano",
+                      "ec2:InstanceType": "t3.micro",
                       "ec2:Region": "us-east-1",
                       "ec2:Tenancy": "default",
                     },
