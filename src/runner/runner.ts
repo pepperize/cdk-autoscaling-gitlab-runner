@@ -16,6 +16,7 @@ import {
   Port,
   SecurityGroup,
   SubnetSelection,
+  SubnetType,
   UserData,
   Vpc,
 } from "@aws-cdk/aws-ec2";
@@ -111,9 +112,9 @@ export class Runner extends Construct {
 
     /** Network */
     const vpc: IVpc = network?.vpc || new Vpc(scope, `GitlabRunnerVpc`);
-    const subnetId =
+    const runnersSubnetId =
       network?.vpcSubnets?.subnets?.find(() => true)?.subnetId ||
-      vpc.publicSubnets?.find(() => true)?.subnetId ||
+      vpc.privateSubnets?.find(() => true)?.subnetId ||
       "";
     this.availabilityZone =
       network?.availabilityZone ||
@@ -382,7 +383,7 @@ runas=root
               cache: cacheBucket,
               vpc: {
                 vpcId: vpc.vpcId,
-                subnetId: subnetId,
+                subnetId: runnersSubnetId,
                 availabilityZone: this.availabilityZone,
               },
               runner: {
@@ -432,7 +433,7 @@ runas=root
 
     new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
       vpc: vpc,
-      vpcSubnets: network?.vpcSubnets,
+      vpcSubnets: { subnetType: SubnetType.PUBLIC },
       instanceType: managerInstanceType,
       machineImage: managerMachineImage,
       keyName: manager?.keyPairName,

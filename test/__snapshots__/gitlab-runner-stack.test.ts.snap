@@ -320,7 +320,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=vpc-12345\\",
   \\"amazonec2-zone=dummy1a\\",
-  \\"amazonec2-subnet-id=s-12345\\",
+  \\"amazonec2-subnet-id=p-12345\\",
   \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
@@ -426,8 +426,8 @@ token = \\"iieC-HsJsedAse2vq486\\"
           },
         ],
         "VPCZoneIdentifier": Array [
-          "p-12345",
-          "p-67890",
+          "s-12345",
+          "s-67890",
         ],
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
@@ -484,7 +484,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 8607c099c84b2020
+# fingerprint: 169538585ccd8959
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
