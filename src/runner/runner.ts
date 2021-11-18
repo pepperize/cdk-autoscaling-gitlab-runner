@@ -158,7 +158,7 @@ export class Runner extends Construct {
 
     const runnerInstanceType =
       runner?.instanceType ||
-      InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
+      InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
 
     const runnerMachineImage =
       runner?.machineImage || MachineImage.genericLinux(runnerAmiMap);
@@ -189,7 +189,7 @@ export class Runner extends Construct {
 
     const managerInstanceType =
       runner?.instanceType ||
-      InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+      InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
 
     const managerMachineImage =
       runner?.machineImage || MachineImage.genericLinux(managerAmiMap);
