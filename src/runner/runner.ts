@@ -100,6 +100,7 @@ export interface RunnerProps {
 }
 
 export class Runner extends Construct {
+  readonly availabilityZone: string;
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
     const { manager, cache, runner, network, gitlabToken }: RunnerProps = props;
@@ -112,10 +113,10 @@ export class Runner extends Construct {
     const vpc: IVpc = network?.vpc || new Vpc(scope, `GitlabRunnerVpc`);
     const subnetId =
       vpc.selectSubnets(network?.vpcSubnets).subnetIds.find(() => true) || "";
-    const availabilityZone: string =
+    this.availabilityZone =
       network?.availabilityZone ||
       vpc.availabilityZones.find(() => true) ||
-      "a"; // TODO: re-check, maybe we don't need "network?.availabilityZone" prop at all
+      `${scope.region}-a`;
 
     /** IAM */
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
@@ -380,7 +381,7 @@ runas=root
               vpc: {
                 vpcId: vpc.vpcId,
                 subnetId: subnetId,
-                availabilityZone: availabilityZone,
+                availabilityZone: this.availabilityZone,
               },
               runner: {
                 instanceType: runnerInstanceType,

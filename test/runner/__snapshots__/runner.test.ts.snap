@@ -319,7 +319,7 @@ token = \\"\\"
   \\"amazonec2-ami=ami-083654bd07b5da81d\\",
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=vpc123\\",
-  \\"amazonec2-zone=az1\\",
+  \\"amazonec2-zone=a\\",
   \\"amazonec2-subnet-id=pub1\\",
   \\"amazonec2-security-group=MockStack-RunnersSecurityGroup\\",
   \\"amazonec2-use-private-address=true\\",
@@ -483,7 +483,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: a38a85a0d1055393
+# fingerprint: 39cd59e536a21ff7
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
