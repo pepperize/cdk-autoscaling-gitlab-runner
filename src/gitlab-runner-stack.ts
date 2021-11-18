@@ -12,7 +12,7 @@ export type GitlabRunnerStackProps = StackProps;
 export class GitlabRunnerStack extends Stack {
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
-    const vpc = Vpc.fromLookup(scope, "GitlabRunnerVpc", {
+    const vpc = Vpc.fromLookup(this, "GitlabRunnerVpc", {
       vpcId: "vpc-0da907b688369469e",
     });
     new Runner(this, id, {
