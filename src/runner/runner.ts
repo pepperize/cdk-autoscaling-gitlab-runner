@@ -238,7 +238,7 @@ export class Runner extends Construct {
               Condition: {
                 StringEquals: {
                   "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${runner?.instanceType?.toString()}`,
+                  "ec2:InstanceType": `${runnerInstanceType.toString()}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-runner-*",
@@ -254,7 +254,7 @@ export class Runner extends Construct {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${runner?.instanceType?.toString()}`,
+                  "ec2:InstanceType": `${runnerInstanceType.toString()}`,
                   "ec2:Region": `${scope.region}`,
                   "ec2:Tenancy": "default",
                 },
