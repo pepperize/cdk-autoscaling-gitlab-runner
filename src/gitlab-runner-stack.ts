@@ -1,3 +1,4 @@
+import { Vpc } from "@aws-cdk/aws-ec2";
 import { Construct, Stack, StackProps } from "@aws-cdk/core";
 import { Runner } from "./runner/runner";
 
@@ -11,9 +12,14 @@ export type GitlabRunnerStackProps = StackProps;
 export class GitlabRunnerStack extends Stack {
   constructor(scope: Construct, id: string, props: GitlabRunnerStackProps) {
     super(scope, id, props);
+    const vpc = Vpc.fromLookup(scope, "GitlabRunnerVpc", {
+      vpcId: "vpc-0da907b688369469e",
+    });
     new Runner(this, id, {
       gitlabToken: "iieC-HsJsedAse2vq486",
-      vpcIdToLookUp: "vpc-0da907b688369469e",
+      network: {
+        vpc,
+      },
     });
   }
 }

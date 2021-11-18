@@ -12,18 +12,28 @@ import {
   InstanceSize,
   InstanceType,
   IVpc,
+  MachineImage,
   Port,
   SecurityGroup,
   SubnetSelection,
   UserData,
-  Vpc
+  Vpc,
 } from "@aws-cdk/aws-ec2";
-import { CfnInstanceProfile, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
+import {
+  CfnInstanceProfile,
+  ManagedPolicy,
+  PolicyDocument,
+  Role,
+  ServicePrincipal,
+} from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
 import { Cache, CacheProps } from "./cache";
 import { Configuration } from "./configuration";
-import { DockerConfiguration, MachineConfiguration } from "./configuration.types";
+import {
+  DockerConfiguration,
+  MachineConfiguration,
+} from "./configuration.types";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -144,9 +154,10 @@ export class Runner extends Construct {
 
     const runnerInstanceType =
       runner?.instanceType ||
-      InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+      InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
 
-    const runnerMachineImage = runner?.machineImage;
+    const runnerMachineImage =
+      runner?.machineImage || MachineImage.genericLinux(runnerAmiMap);
 
     /*
      * #############################
@@ -171,6 +182,13 @@ export class Runner extends Construct {
       Port.tcp(2376),
       "SSH traffic from Docker"
     );
+
+    const managerInstanceType =
+      runner?.instanceType ||
+      InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+
+    const managerMachineImage =
+      runner?.machineImage || MachineImage.genericLinux(managerAmiMap);
 
     const managerRole = new Role(scope, "ManagerRole", {
       assumedBy: ec2ServicePrincipal,
@@ -412,9 +430,9 @@ runas=root
     new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
       vpc: vpc,
       vpcSubnets: network?.vpcSubnets,
-      instanceType: managerInstanceType!,
-      machineImage: managerMachineImage!,
-      keyName: managerKeyPairName,
+      instanceType: managerInstanceType,
+      machineImage: managerMachineImage,
+      keyName: manager?.keyPairName,
       securityGroup: managerSecurityGroup,
       role: managerRole,
       userData: userData,
