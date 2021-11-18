@@ -90,11 +90,7 @@ export type Executor = "docker+machine" | "docker";
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
  */
-<<<<<<< HEAD
 export type DockerConfiguration = {
-=======
-type DockerConfiguration = {
->>>>>>> master
   tls_verify: boolean;
   /**
    * The image to run jobs with.

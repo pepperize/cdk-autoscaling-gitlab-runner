@@ -8,42 +8,29 @@ import {
   InitPackage,
   InitService,
   InitServiceRestartHandle,
-  InstanceClass,
-  InstanceSize,
   InstanceType,
   IVpc,
-  MachineImage,
   Port,
   SecurityGroup,
   SubnetSelection,
-  SubnetType,
   UserData,
   Vpc,
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
-  IRole,
   ManagedPolicy,
   PolicyDocument,
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-import { BlockPublicAccess, Bucket, BucketEncryption } from "@aws-cdk/aws-s3";
-import { Duration, RemovalPolicy, Construct, Stack } from "@aws-cdk/core";
-=======
-=======
->>>>>>> master
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Duration, Construct, Stack } from "@aws-cdk/core";
 import { Cache, CacheProps } from "./cache";
 import { Configuration } from "./configuration";
-<<<<<<< HEAD
-import { DockerConfiguration, MachineConfiguration } from "./configuration.types";
->>>>>>> Stashed changes
-=======
->>>>>>> master
+import {
+  DockerConfiguration,
+  MachineConfiguration,
+} from "./configuration.types";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -72,41 +59,7 @@ export const runnerAmiMap: Record<string, string> = {
   "us-east-1": "ami-083654bd07b5da81d",
 };
 
-export interface NewProps {
-  token: string; // GitLab Runner auth token. Note this is different from the registration token used by `gitlab-runner register`.
-
-  cache?: {
-    enabled: boolean;
-    bucket?: IBucket;
-  };
-
-  manager?: {
-    machineImage: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
-    instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
-  };
-
-  runner?: {
-    role?: IRole;
-    machineImage: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
-    instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
-    // configuration: RequiredConfiguration | GlobalConfiguration; // https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
-  };
-
-  vpc?: {
-    vpc?: IVpc;
-    vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
-    availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
-  };
-}
-
-/**
- * Documentation:
- * About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines
- * About autoscaling props: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
- */
 export interface RunnerProps {
-<<<<<<< HEAD
-
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
@@ -128,132 +81,25 @@ export interface RunnerProps {
     vpc?: IVpc;
     availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
     vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
-  }
+  };
 
   manager?: {
     machineImage?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
     instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
     keyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
-  
-  }
+  };
   runner?: {
     instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
     machineImage?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
     docker?: Partial<DockerConfiguration>;
     machine?: Partial<MachineConfiguration>;
-  }
-
-}
->>>>>>> Stashed changes
-=======
-  managerMachineImage?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
-
-  /**
-   * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
-   * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
-   */
-  cache?: {
-    bucket?: IBucket;
-    options?: CacheProps;
   };
-
-  availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
-  vpcIdToLookUp: string; // Your VPC ID to launch the instance in.
-  vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
-  managerInstanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
-  managerKeyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
-  gitlabUrl?: string; // URL of your GitLab instance.
-
-  /**
-   * The GitLab Runner’s authentication token, which is obtained during runner registration.
-   * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
-   */
-  gitlabToken: string;
-  gitlabRunnerInstanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
-  gitlabRunnerMachineImage?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
-  gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml .
-  gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
-  gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
-  gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
-  gitlabOffPeakIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
-  gitlabOffPeakIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
-  gitlabAutoscalingTimezone?: string; // A timezone string. https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
-  gitlabAutoscalingIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
-  gitlabAutoscalingIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
-  gitlabCheckInterval?: number; // The check_interval option defines how often the runner should check GitLab for new jobs, in seconds.
-  gitlabRunnerRequestSpotInstance?: boolean; // Use or not to use the Amazon EC2 Spot instances.
-  gitlabRunnerSpotInstancePrice?: number; // A maximum (bidding) price for a Spot instance. https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
 }
-
-const defaultProps: Partial<RunnerProps> = {
-  managerMachineImage: MachineImage.genericLinux(managerAmiMap),
-  availabilityZone: "a",
-  // vpcIdToLookUp: must be set by a user and can't have a default value
-  vpcSubnets: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
-  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
-  managerKeyPairName: undefined,
-  gitlabUrl: "https://gitlab.com",
-  // gitlabToken: must be set by a user and can't have a default value
-  gitlabRunnerInstanceType: InstanceType.of(
-    InstanceClass.T3,
-    InstanceSize.MICRO
-  ),
-  gitlabDockerImage: "docker:19.03.5",
-  gitlabRunnerMachineImage: MachineImage.genericLinux(runnerAmiMap),
-  gitlabMaxBuilds: 10,
-  gitlabMaxConcurrentBuilds: 10,
-  gitlabLimit: 20,
-  gitlabOffPeakIdleCount: 0,
-  gitlabOffPeakIdleTime: 300,
-  gitlabAutoscalingTimezone: "UTC",
-  gitlabAutoscalingIdleCount: 1,
-  gitlabAutoscalingIdleTime: 1800,
-  gitlabCheckInterval: 0,
-  gitlabRunnerRequestSpotInstance: true,
-  gitlabRunnerSpotInstancePrice: 0.03,
-};
->>>>>>> master
 
 export class Runner extends Construct {
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
-    const {
-<<<<<<< Updated upstream
-      managerMachineImage,
-      cache,
-      availabilityZone,
-=======
-      manager,
-      cache,
-      runner,
->>>>>>> Stashed changes
-      vpcIdToLookUp,
-      vpcSubnets,
-      managerInstanceType,
-      managerKeyPairName,
-      gitlabToken,
-      gitlabRunnerInstanceType,
-      gitlabRunnerMachineImage,
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-      gitlabMaxBuilds,
-      gitlabLimit,
-      gitlabMaxConcurrentBuilds,
-      gitlabOffPeakIdleCount,
-      gitlabOffPeakIdleTime,
-      gitlabAutoscalingTimezone,
-      gitlabAutoscalingIdleCount,
-      gitlabAutoscalingIdleTime,
-      gitlabCheckInterval,
-      gitlabRunnerRequestSpotInstance,
-      gitlabRunnerSpotInstancePrice,
-=======
->>>>>>> master
-    }: RunnerProps = { ...defaultProps, ...props }; // assign defaults and reassign with props if defined
-=======
-    }: RunnerProps = props; // assign defaults and reassign with props if defined
->>>>>>> Stashed changes
-
+    const { manager, cache, runner, gitlabToken }: RunnerProps = props;
     /*
      * ####################################
      * ### S3 Bucket for Runners' cache ###
