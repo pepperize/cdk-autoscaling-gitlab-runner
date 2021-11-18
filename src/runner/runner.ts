@@ -114,7 +114,7 @@ export class Runner extends Construct {
     const vpc: IVpc = network?.vpc || new Vpc(scope, `GitlabRunnerVpc`);
     const runnersSubnetId =
       network?.vpcSubnets?.subnets?.find(() => true)?.subnetId ||
-      vpc.privateSubnets?.find(() => true)?.subnetId ||
+      vpc.publicSubnets?.find(() => true)?.subnetId ||
       "";
     this.availabilityZone =
       network?.availabilityZone ||
