@@ -8,29 +8,22 @@ import {
   InitPackage,
   InitService,
   InitServiceRestartHandle,
+  InstanceClass,
+  InstanceSize,
   InstanceType,
   IVpc,
   Port,
   SecurityGroup,
   SubnetSelection,
   UserData,
-  Vpc,
+  Vpc
 } from "@aws-cdk/aws-ec2";
-import {
-  CfnInstanceProfile,
-  ManagedPolicy,
-  PolicyDocument,
-  Role,
-  ServicePrincipal,
-} from "@aws-cdk/aws-iam";
+import { CfnInstanceProfile, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
-import { Duration, Construct, Stack } from "@aws-cdk/core";
+import { Construct, Duration, Stack } from "@aws-cdk/core";
 import { Cache, CacheProps } from "./cache";
 import { Configuration } from "./configuration";
-import {
-  DockerConfiguration,
-  MachineConfiguration,
-} from "./configuration.types";
+import { DockerConfiguration, MachineConfiguration } from "./configuration.types";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -77,7 +70,7 @@ export interface RunnerProps {
     options?: CacheProps;
   };
 
-  vpc?: {
+  network?: {
     vpc?: IVpc;
     availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
     vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
@@ -99,31 +92,22 @@ export interface RunnerProps {
 export class Runner extends Construct {
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
-    const { manager, cache, runner, gitlabToken }: RunnerProps = props;
-    /*
-     * ####################################
-     * ### S3 Bucket for Runners' cache ###
-     * ####################################
-     */
+    const { manager, cache, runner, network, gitlabToken }: RunnerProps = props;
+
+    /** S3 Bucket for Runners' cache */
     const cacheBucket =
       cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
 
-    /*
-     * #############################
-     * ### VPC ###
-     * #############################
-     */
-    const vpc = Vpc.fromLookup(scope, "PepperizeVpc", {
-      vpcId: vpcIdToLookUp,
-    });
-    const vpcSubnetId =
-      vpc.selectSubnets(vpcSubnets).subnetIds.find(() => true) || "";
+    /** Network */
+    const vpc: IVpc = network?.vpc || new Vpc(scope, `GitlabRunnerVpc`);
+    const subnetId =
+      vpc.selectSubnets(network?.vpcSubnets).subnetIds.find(() => true) || "";
+    const availabilityZone: string =
+      network?.availabilityZone ||
+      vpc.availabilityZones.find(() => true) ||
+      "a"; // TODO: re-check, maybe we don't need "network?.availabilityZone" prop at all
 
-    /*
-     * #############################
-     * ### IAM ###
-     * #############################
-     */
+    /** IAM */
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
     const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
       scope,
@@ -131,11 +115,7 @@ export class Runner extends Construct {
       "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
     );
 
-    /*
-     * ######################
-     * ### GitLab Runners ###
-     * ######################
-     */
+    /** GitLab Runners */
 
     const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(
@@ -161,6 +141,12 @@ export class Runner extends Construct {
         roles: [runnersRole.roleName],
       }
     );
+
+    const runnerInstanceType =
+      runner?.instanceType ||
+      InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+
+    const runnerMachineImage = runner?.machineImage;
 
     /*
      * #############################
@@ -230,7 +216,7 @@ export class Runner extends Construct {
               Condition: {
                 StringEquals: {
                   "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString()}`,
+                  "ec2:InstanceType": `${runner?.instanceType?.toString()}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-runner-*",
@@ -246,7 +232,7 @@ export class Runner extends Construct {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString()}`,
+                  "ec2:InstanceType": `${runner?.instanceType?.toString()}`,
                   "ec2:Region": `${scope.region}`,
                   "ec2:Tenancy": "default",
                 },
@@ -374,13 +360,13 @@ runas=root
               gitlabToken: gitlabToken,
               cache: cacheBucket,
               vpc: {
-                vpcId: vpcIdToLookUp,
-                subnetId: vpcSubnetId,
-                availabilityZone: availabilityZone!,
+                vpcId: vpc.vpcId,
+                subnetId: subnetId,
+                availabilityZone: availabilityZone,
               },
               runner: {
-                instanceType: gitlabRunnerInstanceType!,
-                machineImage: gitlabRunnerMachineImage!,
+                instanceType: runnerInstanceType,
+                machineImage: runnerMachineImage,
                 securityGroupName: runnersSecurityGroupName,
                 instanceProfile: runnersInstanceProfile,
               },
@@ -425,7 +411,7 @@ runas=root
 
     new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
       vpc: vpc,
-      vpcSubnets: vpcSubnets,
+      vpcSubnets: network?.vpcSubnets,
       instanceType: managerInstanceType!,
       machineImage: managerMachineImage!,
       keyName: managerKeyPairName,
