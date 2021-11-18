@@ -13,16 +13,17 @@ test("runner", () => {
     },
   });
 
-  const mockVpcStack = new Stack(app, "VpcStack");
-  const mockVpc = Vpc.fromVpcAttributes(mockVpcStack, "MyVpc", {
+  const mockVpc = Vpc.fromVpcAttributes(mockStack, "MyVpc", {
     vpcId: "vpc123",
-    availabilityZones: ["az1"],
     publicSubnetIds: ["pub1"],
+    availabilityZones: ["us-east-1a"],
   });
-
-  new Runner(mockStack, "Runner", {
-    vpcIdToLookUp: mockVpc.vpcId,
+  const runner = new Runner(mockStack, "Runner", {
+    network: {
+      vpc: mockVpc,
+    },
     gitlabToken: "",
   });
   expect(SynthUtils.toCloudFormation(mockStack)).toMatchSnapshot();
+  expect(runner.availabilityZone).toBe("us-east-1a");
 });

@@ -67,7 +67,7 @@ export class Configuration {
               ami: runner.machineImage.getImage(scope).imageId,
               region: scope.region,
               "vpc-id": vpc.vpcId,
-              zone: vpc.availabilityZone,
+              zone: vpc.availabilityZone.replace(scope.region, ""),
               "subnet-id": vpc.subnetId,
               "security-group": `${runner.securityGroupName}`,
               "use-private-address": true,

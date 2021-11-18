@@ -22,16 +22,19 @@ import {
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
-  IRole,
   ManagedPolicy,
   PolicyDocument,
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
-import { Duration, Construct, Stack } from "@aws-cdk/core";
+import { Construct, Duration, Stack } from "@aws-cdk/core";
 import { Cache, CacheProps } from "./cache";
 import { Configuration } from "./configuration";
+import {
+  DockerConfiguration,
+  MachineConfiguration,
+} from "./configuration.types";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -60,40 +63,14 @@ export const runnerAmiMap: Record<string, string> = {
   "us-east-1": "ami-083654bd07b5da81d",
 };
 
-export interface NewProps {
-  token: string; // GitLab Runner auth token. Note this is different from the registration token used by `gitlab-runner register`.
-
-  cache?: {
-    enabled: boolean;
-    bucket?: IBucket;
-  };
-
-  manager?: {
-    machineImage: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
-    instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
-  };
-
-  runner?: {
-    role?: IRole;
-    machineImage: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
-    instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
-    // configuration: RequiredConfiguration | GlobalConfiguration; // https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
-  };
-
-  vpc?: {
-    vpc?: IVpc;
-    vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
-    availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
-  };
-}
-
-/**
- * Documentation:
- * About concurrent, limit and IdleCount: https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines
- * About autoscaling props: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
- */
 export interface RunnerProps {
-  managerMachineImage?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
+  /**
+   * The GitLab Runner’s authentication token, which is obtained during runner registration.
+   * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
+   */
+  gitlabToken: string;
+
+  gitlabUrl?: string; // URL of your GitLab instance.
 
   /**
    * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
@@ -104,102 +81,47 @@ export interface RunnerProps {
     options?: CacheProps;
   };
 
-  availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
-  vpcIdToLookUp: string; // Your VPC ID to launch the instance in.
-  vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
-  managerInstanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
-  managerKeyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
-  gitlabUrl?: string; // URL of your GitLab instance.
+  network?: {
+    vpc?: IVpc;
+    availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
+    vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
+  };
 
-  /**
-   * The GitLab Runner’s authentication token, which is obtained during runner registration.
-   * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
-   */
-  gitlabToken: string;
-  gitlabRunnerInstanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
-  gitlabRunnerMachineImage?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
-  gitlabDockerImage?: string; // Define the default Docker image to be used by the child runners if it’s not defined in .gitlab-ci.yml .
-  gitlabMaxBuilds?: number; // Maximum job (build) count before machine is removed.
-  gitlabLimit?: number; // Limits how many jobs can be handled concurrently by this specific token. 0 simply means don’t limit.
-  gitlabMaxConcurrentBuilds?: number; // Limits how many jobs globally can be run concurrently. This is the most upper limit of number of jobs using all defined runners, local and autoscale.
-  gitlabOffPeakIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
-  gitlabOffPeakIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
-  gitlabAutoscalingTimezone?: string; // A timezone string. https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
-  gitlabAutoscalingIdleCount?: number; // Number of machines that need to be created and waiting in Idle state. A value that generates a minimum amount of not used machines when the job queue is empty.
-  gitlabAutoscalingIdleTime?: number; // Time (in seconds) for a machine to be in Idle state before it is removed.
-  gitlabCheckInterval?: number; // The check_interval option defines how often the runner should check GitLab for new jobs, in seconds.
-  gitlabRunnerRequestSpotInstance?: boolean; // Use or not to use the Amazon EC2 Spot instances.
-  gitlabRunnerSpotInstancePrice?: number; // A maximum (bidding) price for a Spot instance. https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
+  manager?: {
+    machineImage?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
+    instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
+    keyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
+  };
+  runner?: {
+    instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
+    machineImage?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
+    docker?: Partial<DockerConfiguration>;
+    machine?: Partial<MachineConfiguration>;
+  };
 }
 
-const defaultProps: Partial<RunnerProps> = {
-  managerMachineImage: MachineImage.genericLinux(managerAmiMap),
-  availabilityZone: "a",
-  // vpcIdToLookUp: must be set by a user and can't have a default value
-  vpcSubnets: { subnetType: SubnetType.PUBLIC }, // TODO: refactor this
-  managerInstanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
-  managerKeyPairName: undefined,
-  gitlabUrl: "https://gitlab.com",
-  // gitlabToken: must be set by a user and can't have a default value
-  gitlabRunnerInstanceType: InstanceType.of(
-    InstanceClass.T3,
-    InstanceSize.MICRO
-  ),
-  gitlabDockerImage: "docker:19.03.5",
-  gitlabRunnerMachineImage: MachineImage.genericLinux(runnerAmiMap),
-  gitlabMaxBuilds: 10,
-  gitlabMaxConcurrentBuilds: 10,
-  gitlabLimit: 20,
-  gitlabOffPeakIdleCount: 0,
-  gitlabOffPeakIdleTime: 300,
-  gitlabAutoscalingTimezone: "UTC",
-  gitlabAutoscalingIdleCount: 1,
-  gitlabAutoscalingIdleTime: 1800,
-  gitlabCheckInterval: 0,
-  gitlabRunnerRequestSpotInstance: true,
-  gitlabRunnerSpotInstancePrice: 0.03,
-};
-
 export class Runner extends Construct {
+  readonly availabilityZone: string;
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
-    const {
-      managerMachineImage,
-      cache,
-      availabilityZone,
-      vpcIdToLookUp,
-      vpcSubnets,
-      managerInstanceType,
-      managerKeyPairName,
-      gitlabToken,
-      gitlabRunnerInstanceType,
-      gitlabRunnerMachineImage,
-    }: RunnerProps = { ...defaultProps, ...props }; // assign defaults and reassign with props if defined
+    const { manager, cache, runner, network, gitlabToken }: RunnerProps = props;
 
-    /*
-     * ####################################
-     * ### S3 Bucket for Runners' cache ###
-     * ####################################
-     */
+    /** S3 Bucket for Runners' cache */
     const cacheBucket =
       cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
 
-    /*
-     * #############################
-     * ### VPC ###
-     * #############################
-     */
-    const vpc = Vpc.fromLookup(scope, "PepperizeVpc", {
-      vpcId: vpcIdToLookUp,
-    });
-    const vpcSubnetId =
-      vpc.selectSubnets(vpcSubnets).subnetIds.find(() => true) || "";
+    /** Network */
+    const vpc: IVpc = network?.vpc || new Vpc(scope, `GitlabRunnerVpc`);
+    const runnersSubnetId =
+      network?.vpcSubnets?.subnets?.find(() => true)?.subnetId ||
+      vpc.publicSubnets?.find(() => true)?.subnetId ||
+      "";
+    this.availabilityZone =
+      network?.availabilityZone ||
+      vpc.availabilityZones.find(() => true) ||
+      `${scope.region}-a`;
 
-    /*
-     * #############################
-     * ### IAM ###
-     * #############################
-     */
+    /** IAM */
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
     const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
       scope,
@@ -207,11 +129,7 @@ export class Runner extends Construct {
       "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
     );
 
-    /*
-     * ######################
-     * ### GitLab Runners ###
-     * ######################
-     */
+    /** GitLab Runners */
 
     const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(
@@ -238,6 +156,13 @@ export class Runner extends Construct {
       }
     );
 
+    const runnerInstanceType =
+      runner?.instanceType ||
+      InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+
+    const runnerMachineImage =
+      runner?.machineImage || MachineImage.genericLinux(runnerAmiMap);
+
     /*
      * #############################
      * ### GitLab Runner Manager ###
@@ -261,6 +186,13 @@ export class Runner extends Construct {
       Port.tcp(2376),
       "SSH traffic from Docker"
     );
+
+    const managerInstanceType =
+      runner?.instanceType ||
+      InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
+
+    const managerMachineImage =
+      runner?.machineImage || MachineImage.genericLinux(managerAmiMap);
 
     const managerRole = new Role(scope, "ManagerRole", {
       assumedBy: ec2ServicePrincipal,
@@ -306,7 +238,7 @@ export class Runner extends Construct {
               Condition: {
                 StringEquals: {
                   "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString()}`,
+                  "ec2:InstanceType": `${runnerInstanceType.toString()}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-runner-*",
@@ -322,7 +254,7 @@ export class Runner extends Construct {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${gitlabRunnerInstanceType?.toString()}`,
+                  "ec2:InstanceType": `${runnerInstanceType.toString()}`,
                   "ec2:Region": `${scope.region}`,
                   "ec2:Tenancy": "default",
                 },
@@ -450,13 +382,13 @@ runas=root
               gitlabToken: gitlabToken,
               cache: cacheBucket,
               vpc: {
-                vpcId: vpcIdToLookUp,
-                subnetId: vpcSubnetId,
-                availabilityZone: availabilityZone!,
+                vpcId: vpc.vpcId,
+                subnetId: runnersSubnetId,
+                availabilityZone: this.availabilityZone,
               },
               runner: {
-                instanceType: gitlabRunnerInstanceType!,
-                machineImage: gitlabRunnerMachineImage!,
+                instanceType: runnerInstanceType,
+                machineImage: runnerMachineImage,
                 securityGroupName: runnersSecurityGroupName,
                 instanceProfile: runnersInstanceProfile,
               },
@@ -501,10 +433,10 @@ runas=root
 
     new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
       vpc: vpc,
-      vpcSubnets: vpcSubnets,
-      instanceType: managerInstanceType!,
-      machineImage: managerMachineImage!,
-      keyName: managerKeyPairName,
+      vpcSubnets: { subnetType: SubnetType.PUBLIC },
+      instanceType: managerInstanceType,
+      machineImage: managerMachineImage,
+      keyName: manager?.keyPairName,
       securityGroup: managerSecurityGroup,
       role: managerRole,
       userData: userData,
