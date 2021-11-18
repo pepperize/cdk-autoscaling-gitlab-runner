@@ -597,7 +597,7 @@ yum update -y aws-cfn-bootstrap
                       ],
                     },
                     "StringEquals": Object {
-                      "ec2:InstanceType": "undefined",
+                      "ec2:InstanceType": "t3.nano",
                       "ec2:Region": "us-east-1",
                     },
                     "StringLike": Object {
@@ -634,7 +634,7 @@ yum update -y aws-cfn-bootstrap
                       },
                     },
                     "StringEqualsIfExists": Object {
-                      "ec2:InstanceType": "undefined",
+                      "ec2:InstanceType": "t3.nano",
                       "ec2:Region": "us-east-1",
                       "ec2:Tenancy": "default",
                     },
