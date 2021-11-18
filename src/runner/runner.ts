@@ -433,7 +433,10 @@ runas=root
 
     new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
       vpc: vpc,
-      vpcSubnets: { subnetType: SubnetType.PUBLIC },
+      vpcSubnets: {
+        subnetType: SubnetType.PUBLIC,
+        availabilityZones: [this.availabilityZone],
+      },
       instanceType: managerInstanceType,
       machineImage: managerMachineImage,
       keyName: manager?.keyPairName,
