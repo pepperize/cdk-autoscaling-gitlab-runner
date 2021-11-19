@@ -12,14 +12,11 @@ import {
   InstanceSize,
   InstanceType,
   ISecurityGroup,
-  IVpc,
   MachineImage,
   Port,
   SecurityGroup,
-  SubnetSelection,
   SubnetType,
   UserData,
-  Vpc,
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
@@ -39,6 +36,7 @@ import {
   DockerConfiguration,
   MachineConfiguration,
 } from "./configuration.types";
+import { Network, NetworkProps } from "./network";
 
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
@@ -85,11 +83,7 @@ export interface RunnerProps {
     options?: CacheProps;
   };
 
-  network?: {
-    vpc?: IVpc;
-    availabilityZone?: string; // If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is 'eu-west-1b' it has to be 'b'.
-    vpcSubnets?: SubnetSelection; // TODO: find a good approach OR just refactor it to use subnetId.
-  };
+  network?: NetworkProps;
 
   manager?: {
     machineImage?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
@@ -105,13 +99,11 @@ export interface RunnerProps {
 }
 
 export class Runner extends Construct {
+  readonly network: Network;
+
   readonly cacheBucket: IBucket;
-  readonly availabilityZone: string;
   readonly ec2ServicePrincipal: IPrincipal;
   readonly ec2ManagedPolicyForSSM: IManagedPolicy;
-
-  readonly vpc: IVpc;
-  readonly runnersSubnetId: string;
 
   readonly runnersSecurityGroupName: string;
   readonly runnersSecurityGroup: ISecurityGroup;
@@ -133,22 +125,19 @@ export class Runner extends Construct {
 
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
-    const { manager, cache, runner, network, gitlabToken }: RunnerProps = props;
+    const { manager, cache, runner, gitlabToken }: RunnerProps = props;
 
     /** S3 Bucket for Runners' cache */
     this.cacheBucket =
       cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
 
     /** Network */
-    this.vpc = network?.vpc || new Vpc(scope, `GitlabRunnerVpc`);
-    this.runnersSubnetId =
-      network?.vpcSubnets?.subnets?.find(() => true)?.subnetId ||
-      this.vpc.publicSubnets?.find(() => true)?.subnetId ||
-      "";
-    this.availabilityZone =
-      network?.availabilityZone ||
-      this.vpc.availabilityZones.find(() => true) ||
-      `${scope.region}-a`;
+
+    this.network = new Network(scope, "GitlubRunnerNetwork", {
+      vpc: props.network?.vpc,
+      availabilityZone: props.network?.availabilityZone,
+      subnet: props.network?.subnet,
+    });
 
     /** IAM */
     this.ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
@@ -167,7 +156,7 @@ export class Runner extends Construct {
       {
         securityGroupName: this.runnersSecurityGroupName,
         description: "Security group for GitLab Runners.",
-        vpc: this.vpc,
+        vpc: this.network.vpc,
       }
     );
 
@@ -201,7 +190,7 @@ export class Runner extends Construct {
       scope,
       "ManagerSecurityGroup",
       {
-        vpc: this.vpc,
+        vpc: this.network.vpc,
         description: "Security group for GitLab Runners Manager.",
       }
     );
@@ -288,7 +277,7 @@ export class Runner extends Construct {
                   "ec2:Tenancy": "default",
                 },
                 ArnEqualsIfExists: {
-                  "ec2:Vpc": `arn:${scope.partition}:ec2:${scope.region}:${scope.account}:vpc/${this.vpc.vpcId}`,
+                  "ec2:Vpc": `arn:${scope.partition}:ec2:${scope.region}:${scope.account}:vpc/${this.network.vpc.vpcId}`,
                   "ec2:InstanceProfile": `${this.runnersInstanceProfile.attrArn}`,
                 },
               },
@@ -417,9 +406,9 @@ runas=root
               gitlabToken: gitlabToken,
               cache: this.cacheBucket,
               vpc: {
-                vpcId: this.vpc.vpcId,
-                subnetId: this.runnersSubnetId,
-                availabilityZone: this.availabilityZone,
+                vpcId: this.network.vpc.vpcId,
+                subnetId: this.network.subnet.subnetId,
+                availabilityZone: this.network.availabilityZone,
               },
               runner: {
                 instanceType: this.runnerInstanceType,
@@ -467,10 +456,10 @@ runas=root
     });
 
     new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
-      vpc: this.vpc,
+      vpc: this.network.vpc,
       vpcSubnets: {
         subnetType: SubnetType.PUBLIC,
-        availabilityZones: [this.availabilityZone],
+        availabilityZones: [this.network.availabilityZone],
       },
       instanceType: this.managerInstanceType,
       machineImage: this.managerMachineImage,
