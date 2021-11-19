@@ -34,8 +34,8 @@ export class Network extends Construct {
       });
     this.availabilityZone =
       props.availabilityZone ||
-      this.vpc.availabilityZones.find(() => true) ||
       props.subnet?.availabilityZone ||
+      this.vpc.availabilityZones.find(() => true) ||
       `${scope.region}-a`;
 
     this.subnet =
