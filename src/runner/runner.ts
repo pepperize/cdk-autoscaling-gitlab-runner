@@ -102,6 +102,7 @@ export interface RunnerProps {
 
 export class Runner extends Construct {
   readonly availabilityZone: string;
+  readonly runnersSubnetId: string;
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
     const { manager, cache, runner, network, gitlabToken }: RunnerProps = props;
@@ -112,7 +113,7 @@ export class Runner extends Construct {
 
     /** Network */
     const vpc: IVpc = network?.vpc || new Vpc(scope, `GitlabRunnerVpc`);
-    const runnersSubnetId =
+    this.runnersSubnetId =
       network?.vpcSubnets?.subnets?.find(() => true)?.subnetId ||
       vpc.publicSubnets?.find(() => true)?.subnetId ||
       "";
@@ -383,7 +384,7 @@ runas=root
               cache: cacheBucket,
               vpc: {
                 vpcId: vpc.vpcId,
-                subnetId: runnersSubnetId,
+                subnetId: this.runnersSubnetId,
                 availabilityZone: this.availabilityZone,
               },
               runner: {
