@@ -44,12 +44,13 @@ export const defaultMachineConfiguration: MachineConfiguration = {
 };
 
 // Runners
-export type DefaultRunnersConfiguration = Omit<
+export type DefaultRunnerConfiguration = Omit<
   RunnersConfiguration,
   "token" | "cache"
->[] &
-  { cache: DefaultCacheConfiguration }[];
-export const defaultRunnersConfiguration = {
+> & { cache: DefaultCacheConfiguration };
+
+export type DefaultRunnersConfiguration = DefaultRunnerConfiguration[];
+export const defaultRunnerConfiguration: DefaultRunnerConfiguration = {
   name: "gitlab-runner",
   url: "https://gitlab.com",
   limit: 10,
@@ -69,5 +70,5 @@ export type DefaultGlobalConfiguration =
 export const defaultConfiguration: DefaultGlobalConfiguration = {
   concurrent: 10,
   check_interval: 0,
-  runners: [defaultRunnersConfiguration],
+  runners: [defaultRunnerConfiguration],
 };

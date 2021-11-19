@@ -9,7 +9,7 @@ import {
   defaultConfiguration,
   defaultDockerConfiguration,
   defaultMachineConfiguration,
-  defaultRunnersConfiguration,
+  defaultRunnerConfiguration,
 } from "./configuration.default";
 import { GlobalConfiguration, MachineOptions } from "./configuration.types";
 
@@ -46,7 +46,7 @@ export class Configuration {
       ...defaultConfiguration,
       runners: [
         {
-          ...defaultRunnersConfiguration,
+          ...defaultRunnerConfiguration,
           name: scope.stackName,
           token: gitlabToken,
           cache: {

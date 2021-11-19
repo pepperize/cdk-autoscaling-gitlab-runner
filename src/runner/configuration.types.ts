@@ -73,7 +73,7 @@ export type RunnersConfiguration = {
    * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-executors
    * @default "docker+machine" Use auto-scaled Docker machines.
    */
-  executor: Executor | string;
+  executor: Executor;
   /**
    * Append or overwrite environment variables.
    * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
