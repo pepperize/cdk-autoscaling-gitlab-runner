@@ -1,24 +1,11 @@
 import { App, Stack } from "@aws-cdk/core";
-import { GitlabRunnerStackProps } from "../../src/gitlab-runner-stack";
 import { Network } from "../../src/runner/network";
 
-const TEST_NAME = "network";
+test("network", () => {
+  const app = new App();
+  const stack = new Stack(app, `stack`);
 
-test(TEST_NAME, () => {
-  const MOCK_APP = new App();
-  const MOCK_STACK_PROPS: GitlabRunnerStackProps = {
-    env: {
-      account: "",
-      region: "us-east-1",
-    },
-  };
-  const MOCK_STACK = new Stack(
-    MOCK_APP,
-    `${TEST_NAME}-stack`,
-    MOCK_STACK_PROPS
-  );
-
-  const network = new Network(MOCK_STACK, `${TEST_NAME}-network`);
+  const network = new Network(stack, `network`);
 
   expect(network.availabilityZone).toBeDefined();
   expect(network.subnet.subnetId).toBeDefined();

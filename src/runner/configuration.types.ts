@@ -144,14 +144,24 @@ export type MachineConfiguration = {
   MachineOptions?: string[];
   autoscaling: AutoscalingConfiguration[];
 };
+
+/**
+ * https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
+ */
 export type MachineOptionProps = {
   "instance-type": string;
   ami: string;
   region: string;
   "vpc-id": string;
+  /**
+   * If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is eu-west-1b it has to be amazonec2-zone=b
+   */
   zone: string;
   "subnet-id": string;
   "security-group": string;
+  /**
+   * Use the private IP address of Docker Machines, but still create a public IP address. Useful to keep the traffic internal and avoid extra costs.
+   */
   "use-private-address": boolean;
   "iam-instance-profile": string;
   "request-spot-instance": boolean;

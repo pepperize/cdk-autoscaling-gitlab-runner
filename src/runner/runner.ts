@@ -72,14 +72,25 @@ export interface RunnerProps {
    */
   gitlabToken: string;
 
-  gitlabUrl?: string; // URL of your GitLab instance.
+  /**
+   * GitLab instance URL.
+   * @default "https://gitlab.com"
+   */
+  gitlabUrl?: string;
 
   /**
    * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
    * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
    */
   cache?: {
+    /**
+     * An existing S3 bucket used as runner's cache.
+     */
     bucket?: IBucket;
+
+    /**
+     * If no existing S3 bucket is provided, a S3 bucket will be created.
+     */
     options?: CacheProps;
   };
 
@@ -125,19 +136,14 @@ export class Runner extends Construct {
 
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
-    const { manager, cache, runner, gitlabToken }: RunnerProps = props;
+    const { manager, cache, runner, network, gitlabToken }: RunnerProps = props;
 
     /** S3 Bucket for Runners' cache */
     this.cacheBucket =
       cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
 
     /** Network */
-
-    this.network = new Network(scope, "GitlubRunnerNetwork", {
-      vpc: props.network?.vpc,
-      availabilityZone: props.network?.availabilityZone,
-      subnet: props.network?.subnet,
-    });
+    this.network = new Network(scope, "Network", network);
 
     /** IAM */
     this.ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
@@ -408,7 +414,7 @@ runas=root
               vpc: {
                 vpcId: this.network.vpc.vpcId,
                 subnetId: this.network.subnet.subnetId,
-                availabilityZone: this.network.availabilityZone,
+                availabilityZone: this.network.availabilityZone.slice(-1),
               },
               runner: {
                 instanceType: this.runnerInstanceType,
