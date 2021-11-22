@@ -114,7 +114,8 @@ export interface RunnerProps {
     instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
     keyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
   };
-  runner?: {
+
+  runners?: {
     instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
     machineImage?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
     docker?: Partial<DockerConfiguration>;
@@ -147,7 +148,7 @@ export class Runner extends Construct {
   readonly ec2ServicePrincipal: IPrincipal;
   readonly ec2ManagedPolicyForSSM: IManagedPolicy;
 
-  readonly runner: {
+  readonly runners: {
     securityGroupName: string;
     securityGroup: ISecurityGroup;
     role: IRole;
@@ -156,10 +157,12 @@ export class Runner extends Construct {
     machineImage: IMachineImage;
   };
 
-  readonly managerSecurityGroup: ISecurityGroup;
-  readonly managerInstanceType: InstanceType;
-  readonly managerMachineImage: IMachineImage;
-  readonly managerRole: IRole;
+  readonly manager: {
+    securityGroup: ISecurityGroup;
+    instanceType: InstanceType;
+    machineImage: IMachineImage;
+    role: IRole;
+  };
 
   readonly userData: UserData;
   readonly cfnHupRestartHandle: InitServiceRestartHandle;
@@ -169,7 +172,8 @@ export class Runner extends Construct {
 
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
-    const { manager, cache, runner, network, gitlabToken }: RunnerProps = props;
+    const { manager, cache, runners, network, gitlabToken }: RunnerProps =
+      props;
 
     /** S3 Bucket for Runners' cache */
     this.cacheBucket =
@@ -187,7 +191,6 @@ export class Runner extends Construct {
     );
 
     /** GitLab Runners */
-
     const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(
       scope,
@@ -214,18 +217,14 @@ export class Runner extends Construct {
     );
 
     const runnersInstanceType =
-      runner?.instanceType ||
+      runners?.instanceType ||
       InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
 
     const runnersMachineImage =
-      runner?.machineImage || MachineImage.genericLinux(runnerAmiMap);
+      runners?.machineImage || MachineImage.genericLinux(runnerAmiMap);
 
-    /*
-     * #############################
-     * ### GitLab Runner Manager ###
-     * #############################
-     */
-    this.managerSecurityGroup = new SecurityGroup(
+    /** GitLab Manager */
+    const managerSecurityGroup = new SecurityGroup(
       scope,
       "ManagerSecurityGroup",
       {
@@ -233,25 +232,25 @@ export class Runner extends Construct {
         description: "Security group for GitLab Runners Manager.",
       }
     );
-    this.managerSecurityGroup.connections.allowTo(
+    managerSecurityGroup.connections.allowTo(
       runnersSecurityGroup,
       Port.tcp(22),
       "SSH traffic from Manager"
     );
-    this.managerSecurityGroup.connections.allowTo(
+    managerSecurityGroup.connections.allowTo(
       runnersSecurityGroup,
       Port.tcp(2376),
       "SSH traffic from Docker"
     );
 
-    this.managerInstanceType =
-      runner?.instanceType ||
+    const managerInstanceType =
+      runners?.instanceType ||
       InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
 
-    this.managerMachineImage =
-      runner?.machineImage || MachineImage.genericLinux(managerAmiMap);
+    const managerMachineImage =
+      runners?.machineImage || MachineImage.genericLinux(managerAmiMap);
 
-    this.managerRole = new Role(scope, "ManagerRole", {
+    const managerRole = new Role(scope, "ManagerRole", {
       assumedBy: this.ec2ServicePrincipal,
       managedPolicies: [this.ec2ManagedPolicyForSSM],
       inlinePolicies: {
@@ -500,11 +499,11 @@ runas=root
         subnetType: SubnetType.PUBLIC,
         availabilityZones: [this.network.availabilityZone],
       },
-      instanceType: this.managerInstanceType,
-      machineImage: this.managerMachineImage,
+      instanceType: managerInstanceType,
+      machineImage: managerMachineImage,
       keyName: manager?.keyPairName,
-      securityGroup: this.managerSecurityGroup,
-      role: this.managerRole,
+      securityGroup: managerSecurityGroup,
+      role: managerRole,
       userData: this.userData,
       init: this.initConfig,
       initOptions: {
@@ -516,13 +515,20 @@ runas=root
       signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
     });
 
-    this.runner = {
+    this.runners = {
       securityGroupName: runnersSecurityGroupName,
       securityGroup: runnersSecurityGroup,
       role: runnersRole,
       instanceProfile: runnersInstanceProfile,
       instanceType: runnersInstanceType,
       machineImage: runnersMachineImage,
+    };
+
+    this.manager = {
+      securityGroup: managerSecurityGroup,
+      instanceType: managerInstanceType,
+      machineImage: managerMachineImage,
+      role: managerRole,
     };
   }
 }
