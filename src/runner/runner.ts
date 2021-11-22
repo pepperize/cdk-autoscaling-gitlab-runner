@@ -206,7 +206,6 @@ export class Runner extends Construct {
       scope,
       "RunnersInstanceProfile",
       {
-        instanceProfileName: "RunnersInstanceProfile",
         roles: [runnersRole.roleName],
       }
     );
@@ -287,7 +286,7 @@ export class Runner extends Construct {
               Action: ["ec2:CreateTags", "ssm:UpdateInstanceInformation"],
               Resource: ["*"],
               Condition: {
-                StringEquals: {
+                StringEqualsIfExists: {
                   "ec2:Region": `${scope.region}`,
                   "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                 },
@@ -297,6 +296,9 @@ export class Runner extends Construct {
                 "ForAllValues:StringEquals": {
                   "aws:TagKeys": ["Name"],
                 },
+                ArnEquals: {
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
+                },
               },
             },
             {
@@ -305,12 +307,11 @@ export class Runner extends Construct {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                   "ec2:Region": `${scope.region}`,
+                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                   "ec2:Tenancy": "default",
                 },
-                ArnEqualsIfExists: {
-                  "ec2:Vpc": `arn:${scope.partition}:ec2:${scope.region}:${scope.account}:vpc/${this.network.vpc.vpcId}`,
+                ArnEquals: {
                   "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
@@ -318,6 +319,7 @@ export class Runner extends Construct {
             {
               Effect: "Allow",
               Action: [
+                "ec2:CancelSpotInstanceRequests",
                 "ec2:TerminateInstances",
                 "ec2:StopInstances",
                 "ec2:StartInstances",
@@ -325,8 +327,9 @@ export class Runner extends Construct {
               ],
               Resource: ["*"],
               Condition: {
-                StringLike: {
-                  "ec2:ResourceTag/Name": "*gitlab-runner-*",
+                StringEqualsIfExists: {
+                  "ec2:Region": `${scope.region}`,
+                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                 },
                 ArnEquals: {
                   "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
