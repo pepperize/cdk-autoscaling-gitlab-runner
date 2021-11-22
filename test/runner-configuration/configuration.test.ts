@@ -1,9 +1,9 @@
-import { Configuration } from "../../src/runner/configuration";
-import { defaultConfiguration } from "../../src/runner/configuration.default";
 import {
+  Configuration,
+  defaultConfiguration,
   GlobalConfiguration,
   MachineOptions,
-} from "../../src/runner/configuration.types";
+} from "../../src/runner-configuration";
 
 test("configuration", () => {
   const config: GlobalConfiguration = {
