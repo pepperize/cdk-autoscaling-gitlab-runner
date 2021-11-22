@@ -30,12 +30,12 @@ import {
 import { IPrincipal } from "@aws-cdk/aws-iam/lib/principals";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
-import { Cache, CacheProps } from "./cache";
-import { Configuration } from "./configuration";
 import {
+  Configuration,
   DockerConfiguration,
   MachineConfiguration,
-} from "./configuration.types";
+} from "../runner-configuration";
+import { Cache, CacheProps } from "./cache";
 import { Network, NetworkProps } from "./network";
 
 /**
