@@ -323,7 +323,11 @@ token = \\"\\"
   \\"amazonec2-subnet-id=pub1\\",
   \\"amazonec2-security-group=MockStack-RunnersSecurityGroup\\",
   \\"amazonec2-use-private-address=true\\",
-  \\"amazonec2-iam-instance-profile=undefined\\",
+  \\"amazonec2-iam-instance-profile=",
+                      Object {
+                        "Ref": "RunnersInstanceProfile",
+                      },
+                      "\\",
   \\"amazonec2-request-spot-instance=true\\",
   \\"amazonec2-spot-price=0.03\\"
 ]
@@ -483,7 +487,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 75044c456408c711
+# fingerprint: 816b267ca4a6fd3e
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -621,11 +625,23 @@ yum update -y aws-cfn-bootstrap
                     "ec2:RequestSpotInstances",
                   ],
                   "Condition": Object {
-                    "ArnEquals": Object {
+                    "ArnEqualsIfExists": Object {
                       "ec2:InstanceProfile": Object {
                         "Fn::GetAtt": Array [
                           "RunnersInstanceProfile",
                           "Arn",
+                        ],
+                      },
+                      "ec2:Vpc": Object {
+                        "Fn::Join": Array [
+                          "",
+                          Array [
+                            "arn:",
+                            Object {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":ec2:us-east-1:0:vpc/vpc123",
+                          ],
                         ],
                       },
                     },

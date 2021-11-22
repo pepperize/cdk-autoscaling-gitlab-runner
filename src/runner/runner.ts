@@ -311,7 +311,8 @@ export class Runner extends Construct {
                   "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                   "ec2:Tenancy": "default",
                 },
-                ArnEquals: {
+                ArnEqualsIfExists: {
+                  "ec2:Vpc": `${this.network.vpc.vpcArn}`,
                   "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
