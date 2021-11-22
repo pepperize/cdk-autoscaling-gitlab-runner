@@ -1,4 +1,8 @@
-import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
+import {
+  AutoScalingGroup,
+  IAutoScalingGroup,
+  Signals,
+} from "@aws-cdk/aws-autoscaling";
 import {
   CloudFormationInit,
   IMachineImage,
@@ -20,22 +24,20 @@ import {
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
-  IManagedPolicy,
   IRole,
   ManagedPolicy,
   PolicyDocument,
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-import { IPrincipal } from "@aws-cdk/aws-iam/lib/principals";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
-import { Cache, CacheProps } from "./cache";
-import { Configuration } from "./configuration";
 import {
+  Configuration,
   DockerConfiguration,
   MachineConfiguration,
-} from "./configuration.types";
+} from "../runner-configuration";
+import { Cache, CacheProps } from "./cache";
 import { Network, NetworkProps } from "./network";
 
 /**
@@ -123,7 +125,7 @@ export interface RunnerProps {
      */
     keyPairName?: string;
   };
-  runner?: {
+  runners?: {
     /**
      * Instance type for runner EC2 instances. It's a combination of a class and size.
      */
@@ -165,30 +167,28 @@ export class Runner extends Construct {
   readonly network: Network;
 
   readonly cacheBucket: IBucket;
-  readonly ec2ServicePrincipal: IPrincipal;
-  readonly ec2ManagedPolicyForSSM: IManagedPolicy;
 
-  readonly runnersSecurityGroupName: string;
-  readonly runnersSecurityGroup: ISecurityGroup;
-  readonly runnersRole: IRole;
-  readonly runnersInstanceProfile: CfnInstanceProfile;
-  readonly runnerInstanceType: InstanceType;
-  readonly runnerMachineImage: IMachineImage;
+  readonly runners: {
+    securityGroupName: string;
+    securityGroup: ISecurityGroup;
+    role: IRole;
+    instanceProfile: CfnInstanceProfile;
+    instanceType: InstanceType;
+    machineImage: IMachineImage;
+  };
 
-  readonly managerSecurityGroup: ISecurityGroup;
-  readonly managerInstanceType: InstanceType;
-  readonly managerMachineImage: IMachineImage;
-  readonly managerRole: IRole;
-
-  readonly userData: UserData;
-  readonly cfnHupRestartHandle: InitServiceRestartHandle;
-  readonly gitlabRunnerConfigRestartHandle: InitServiceRestartHandle;
-  readonly rsyslogConfigRestartHandle: InitServiceRestartHandle;
-  readonly initConfig: CloudFormationInit;
+  readonly manager: {
+    securityGroup: ISecurityGroup;
+    instanceType: InstanceType;
+    machineImage: IMachineImage;
+    autoScalingGroup: IAutoScalingGroup;
+    role: IRole;
+  };
 
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
-    const { manager, cache, runner, network, gitlabToken }: RunnerProps = props;
+    const { manager, cache, runners, network, gitlabToken }: RunnerProps =
+      props;
 
     /** S3 Bucket for Runners' cache */
     this.cacheBucket =
@@ -198,53 +198,48 @@ export class Runner extends Construct {
     this.network = new Network(scope, "Network", network);
 
     /** IAM */
-    this.ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
-    this.ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
+    const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
+    const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
       scope,
       "AmazonEC2RoleforSSM",
       "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
     );
 
     /** GitLab Runners */
-
-    this.runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
-    this.runnersSecurityGroup = new SecurityGroup(
+    const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
+    const runnersSecurityGroup = new SecurityGroup(
       scope,
       "RunnersSecurityGroup",
       {
-        securityGroupName: this.runnersSecurityGroupName,
+        securityGroupName: runnersSecurityGroupName,
         description: "Security group for GitLab Runners.",
         vpc: this.network.vpc,
       }
     );
 
-    this.runnersRole = new Role(scope, "RunnersRole", {
-      assumedBy: this.ec2ServicePrincipal,
-      managedPolicies: [this.ec2ManagedPolicyForSSM],
+    const runnersRole = new Role(scope, "RunnersRole", {
+      assumedBy: ec2ServicePrincipal,
+      managedPolicies: [ec2ManagedPolicyForSSM],
     });
 
-    this.runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
+    const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
       scope,
       "RunnersInstanceProfile",
       {
         instanceProfileName: "RunnersInstanceProfile",
-        roles: [this.runnersRole.roleName],
+        roles: [runnersRole.roleName],
       }
     );
 
-    this.runnerInstanceType =
-      runner?.instanceType ||
+    const runnersInstanceType =
+      runners?.instanceType ||
       InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
 
-    this.runnerMachineImage =
-      runner?.machineImage || MachineImage.genericLinux(runnerAmiMap);
+    const runnersMachineImage =
+      runners?.machineImage || MachineImage.genericLinux(runnerAmiMap);
 
-    /*
-     * #############################
-     * ### GitLab Runner Manager ###
-     * #############################
-     */
-    this.managerSecurityGroup = new SecurityGroup(
+    /** GitLab Manager */
+    const managerSecurityGroup = new SecurityGroup(
       scope,
       "ManagerSecurityGroup",
       {
@@ -252,27 +247,27 @@ export class Runner extends Construct {
         description: "Security group for GitLab Runners Manager.",
       }
     );
-    this.managerSecurityGroup.connections.allowTo(
-      this.runnersSecurityGroup,
+    managerSecurityGroup.connections.allowTo(
+      runnersSecurityGroup,
       Port.tcp(22),
       "SSH traffic from Manager"
     );
-    this.managerSecurityGroup.connections.allowTo(
-      this.runnersSecurityGroup,
+    managerSecurityGroup.connections.allowTo(
+      runnersSecurityGroup,
       Port.tcp(2376),
       "SSH traffic from Docker"
     );
 
-    this.managerInstanceType =
-      runner?.instanceType ||
+    const managerInstanceType =
+      runners?.instanceType ||
       InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
 
-    this.managerMachineImage =
-      runner?.machineImage || MachineImage.genericLinux(managerAmiMap);
+    const managerMachineImage =
+      runners?.machineImage || MachineImage.genericLinux(managerAmiMap);
 
-    this.managerRole = new Role(scope, "ManagerRole", {
-      assumedBy: this.ec2ServicePrincipal,
-      managedPolicies: [this.ec2ManagedPolicyForSSM],
+    const managerRole = new Role(scope, "ManagerRole", {
+      assumedBy: ec2ServicePrincipal,
+      managedPolicies: [ec2ManagedPolicyForSSM],
       inlinePolicies: {
         Cache: PolicyDocument.fromJson({
           Version: "2012-10-17",
@@ -314,7 +309,7 @@ export class Runner extends Construct {
               Condition: {
                 StringEquals: {
                   "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${this.runnerInstanceType.toString()}`,
+                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-runner-*",
@@ -330,13 +325,13 @@ export class Runner extends Construct {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${this.runnerInstanceType.toString()}`,
+                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                   "ec2:Region": `${scope.region}`,
                   "ec2:Tenancy": "default",
                 },
                 ArnEqualsIfExists: {
                   "ec2:Vpc": `arn:${scope.partition}:ec2:${scope.region}:${scope.account}:vpc/${this.network.vpc.vpcId}`,
-                  "ec2:InstanceProfile": `${this.runnersInstanceProfile.attrArn}`,
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
@@ -354,14 +349,14 @@ export class Runner extends Construct {
                   "ec2:ResourceTag/Name": "*gitlab-runner-*",
                 },
                 ArnEquals: {
-                  "ec2:InstanceProfile": `${this.runnersInstanceProfile.attrArn}`,
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
             {
               Effect: "Allow",
               Action: ["iam:PassRole"],
-              Resource: [`${this.runnersRole.roleArn}`],
+              Resource: [`${runnersRole.roleArn}`],
             },
           ],
         }),
@@ -371,26 +366,20 @@ export class Runner extends Construct {
     /* Manager:
      * Type: 'AWS::EC2::Instance'
      */
-    this.userData = UserData.forLinux({});
-    this.userData.addCommands(
+    const userData = UserData.forLinux({});
+    userData.addCommands(
       `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
     );
 
-    this.cfnHupRestartHandle = new InitServiceRestartHandle();
-    this.cfnHupRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
-    this.cfnHupRestartHandle._addFile(
-      "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
-    );
+    const cfnHupRestartHandle = new InitServiceRestartHandle();
+    cfnHupRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
+    cfnHupRestartHandle._addFile("/etc/cfn/hooks.d/cfn-auto-reloader.conf");
 
-    this.gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
-    this.gitlabRunnerConfigRestartHandle._addFile(
-      "/etc/gitlab-runner/config.toml"
-    );
+    const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
+    gitlabRunnerConfigRestartHandle._addFile("/etc/gitlab-runner/config.toml");
 
-    this.rsyslogConfigRestartHandle = new InitServiceRestartHandle();
-    this.rsyslogConfigRestartHandle._addFile(
-      "/etc/rsyslog.d/25-gitlab-runner.conf"
-    );
+    const rsyslogConfigRestartHandle = new InitServiceRestartHandle();
+    rsyslogConfigRestartHandle._addFile("/etc/rsyslog.d/25-gitlab-runner.conf");
 
     // configs
     const REPOSITORIES = "repositories";
@@ -399,7 +388,7 @@ export class Runner extends Construct {
     const CONFIG = "config";
     const RESTART = "restart";
 
-    this.initConfig = CloudFormationInit.fromConfigSets({
+    const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
         default: [REPOSITORIES, PACKAGES, CFN_HUP, CONFIG, RESTART],
       },
@@ -436,7 +425,7 @@ verbose=true
               owner: "root",
               group: "root",
               mode: "000400",
-              serviceRestartHandles: [this.cfnHupRestartHandle],
+              serviceRestartHandles: [cfnHupRestartHandle],
             }
           ),
           InitFile.fromString(
@@ -448,12 +437,12 @@ path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
 action=/opt/aws/bin/cfn-init -v --stack ${scope.stackName} --region ${scope.region} --resource ManagerAutoscalingGroup --configsets default
 runas=root
             `.trim(),
-            { serviceRestartHandles: [this.cfnHupRestartHandle] }
+            { serviceRestartHandles: [cfnHupRestartHandle] }
           ),
           InitService.enable("cfn-hup", {
             enabled: true,
             ensureRunning: true,
-            serviceRestartHandle: this.cfnHupRestartHandle,
+            serviceRestartHandle: cfnHupRestartHandle,
           }),
         ]),
         [CONFIG]: new InitConfig([
@@ -469,10 +458,10 @@ runas=root
                 availabilityZone: this.network.availabilityZone.slice(-1),
               },
               runner: {
-                instanceType: this.runnerInstanceType,
-                machineImage: this.runnerMachineImage,
-                securityGroupName: this.runnersSecurityGroupName,
-                instanceProfile: this.runnersInstanceProfile,
+                instanceType: runnersInstanceType,
+                machineImage: runnersMachineImage,
+                securityGroupName: runnersSecurityGroupName,
+                instanceProfile: runnersInstanceProfile,
               },
               spot: {
                 requestSpotInstance: true,
@@ -497,12 +486,12 @@ runas=root
           InitService.enable("gitlab-runner", {
             ensureRunning: true,
             enabled: true,
-            serviceRestartHandle: this.gitlabRunnerConfigRestartHandle,
+            serviceRestartHandle: gitlabRunnerConfigRestartHandle,
           }),
           InitService.enable("rsyslog", {
             ensureRunning: true,
             enabled: true,
-            serviceRestartHandle: this.rsyslogConfigRestartHandle,
+            serviceRestartHandle: rsyslogConfigRestartHandle,
           }),
         ]),
         [RESTART]: new InitConfig([
@@ -513,26 +502,47 @@ runas=root
       },
     });
 
-    new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
-      vpc: this.network.vpc,
-      vpcSubnets: {
-        subnetType: SubnetType.PUBLIC,
-        availabilityZones: [this.network.availabilityZone],
-      },
-      instanceType: this.managerInstanceType,
-      machineImage: this.managerMachineImage,
-      keyName: manager?.keyPairName,
-      securityGroup: this.managerSecurityGroup,
-      role: this.managerRole,
-      userData: this.userData,
-      init: this.initConfig,
-      initOptions: {
-        ignoreFailures: false,
-      },
-      maxCapacity: 1,
-      minCapacity: 1,
-      desiredCapacity: 1,
-      signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
-    });
+    const managerAutoScalingGroup = new AutoScalingGroup(
+      scope,
+      "ManagerAutoscalingGroup",
+      {
+        vpc: this.network.vpc,
+        vpcSubnets: {
+          subnetType: SubnetType.PUBLIC,
+          availabilityZones: [this.network.availabilityZone],
+        },
+        instanceType: managerInstanceType,
+        machineImage: managerMachineImage,
+        keyName: manager?.keyPairName,
+        securityGroup: managerSecurityGroup,
+        role: managerRole,
+        userData: userData,
+        init: initConfig,
+        initOptions: {
+          ignoreFailures: false,
+        },
+        maxCapacity: 1,
+        minCapacity: 1,
+        desiredCapacity: 1,
+        signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
+      }
+    );
+
+    this.runners = {
+      securityGroupName: runnersSecurityGroupName,
+      securityGroup: runnersSecurityGroup,
+      role: runnersRole,
+      instanceProfile: runnersInstanceProfile,
+      instanceType: runnersInstanceType,
+      machineImage: runnersMachineImage,
+    };
+
+    this.manager = {
+      securityGroup: managerSecurityGroup,
+      instanceType: managerInstanceType,
+      machineImage: managerMachineImage,
+      autoScalingGroup: managerAutoScalingGroup,
+      role: managerRole,
+    };
   }
 }

@@ -1,3 +1,9 @@
+![GitHub](https://img.shields.io/github/license/pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)
+
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/pepperize/cdk-autoscaling-gitlab-runner/release?style=flat-square)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/pepperize/cdk-autoscaling-gitlab-runner/release/master?label=release&style=flat-square)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pepperize/cdk-autoscaling-gitlab-runner?sort=semver&style=flat-square)
+
 # AWS CDK GitLab Runner autoscaling on EC2
 
 This project provides a CDK construct to [execute jobs on auto-scaled EC2 instances](https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/index.html) using the [Docker Machine](https://docs.gitlab.com/runner/executors/docker_machine.html) executor.

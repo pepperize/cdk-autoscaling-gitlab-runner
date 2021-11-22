@@ -42,7 +42,13 @@ export interface ConfigurationProps {
   };
 }
 
+/**
+ * The GitLab Runner configuration to generate the {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html | config.toml}.
+ */
 export class Configuration {
+  /**
+   * Creates a configuration from the {@link Runner} merged with default presets.
+   */
   public static fromProps(props: ConfigurationProps) {
     const { scope, gitlabToken, cache, vpc, runner, spot } = props;
 
@@ -95,6 +101,9 @@ export class Configuration {
 
   constructor(readonly configuration: GlobalConfiguration) {}
 
+  /**
+   * Returns the configuration as toml formatted string.
+   */
   toToml(): string {
     return stringify(this.configuration);
   }
