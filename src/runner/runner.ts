@@ -147,12 +147,14 @@ export class Runner extends Construct {
   readonly ec2ServicePrincipal: IPrincipal;
   readonly ec2ManagedPolicyForSSM: IManagedPolicy;
 
-  readonly runnersSecurityGroupName: string;
-  readonly runnersSecurityGroup: ISecurityGroup;
-  readonly runnersRole: IRole;
-  readonly runnersInstanceProfile: CfnInstanceProfile;
-  readonly runnerInstanceType: InstanceType;
-  readonly runnerMachineImage: IMachineImage;
+  readonly runner: {
+    securityGroupName: string;
+    securityGroup: ISecurityGroup;
+    role: IRole;
+    instanceProfile: CfnInstanceProfile;
+    instanceType: InstanceType;
+    machineImage: IMachineImage;
+  };
 
   readonly managerSecurityGroup: ISecurityGroup;
   readonly managerInstanceType: InstanceType;
@@ -186,36 +188,36 @@ export class Runner extends Construct {
 
     /** GitLab Runners */
 
-    this.runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
-    this.runnersSecurityGroup = new SecurityGroup(
+    const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
+    const runnersSecurityGroup = new SecurityGroup(
       scope,
       "RunnersSecurityGroup",
       {
-        securityGroupName: this.runnersSecurityGroupName,
+        securityGroupName: runnersSecurityGroupName,
         description: "Security group for GitLab Runners.",
         vpc: this.network.vpc,
       }
     );
 
-    this.runnersRole = new Role(scope, "RunnersRole", {
+    const runnersRole = new Role(scope, "RunnersRole", {
       assumedBy: this.ec2ServicePrincipal,
       managedPolicies: [this.ec2ManagedPolicyForSSM],
     });
 
-    this.runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
+    const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
       scope,
       "RunnersInstanceProfile",
       {
         instanceProfileName: "RunnersInstanceProfile",
-        roles: [this.runnersRole.roleName],
+        roles: [runnersRole.roleName],
       }
     );
 
-    this.runnerInstanceType =
+    const runnersInstanceType =
       runner?.instanceType ||
       InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
 
-    this.runnerMachineImage =
+    const runnersMachineImage =
       runner?.machineImage || MachineImage.genericLinux(runnerAmiMap);
 
     /*
@@ -232,12 +234,12 @@ export class Runner extends Construct {
       }
     );
     this.managerSecurityGroup.connections.allowTo(
-      this.runnersSecurityGroup,
+      runnersSecurityGroup,
       Port.tcp(22),
       "SSH traffic from Manager"
     );
     this.managerSecurityGroup.connections.allowTo(
-      this.runnersSecurityGroup,
+      runnersSecurityGroup,
       Port.tcp(2376),
       "SSH traffic from Docker"
     );
@@ -293,7 +295,7 @@ export class Runner extends Construct {
               Condition: {
                 StringEquals: {
                   "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${this.runnerInstanceType.toString()}`,
+                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                 },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-runner-*",
@@ -309,13 +311,13 @@ export class Runner extends Construct {
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${this.runnerInstanceType.toString()}`,
+                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                   "ec2:Region": `${scope.region}`,
                   "ec2:Tenancy": "default",
                 },
                 ArnEqualsIfExists: {
                   "ec2:Vpc": `arn:${scope.partition}:ec2:${scope.region}:${scope.account}:vpc/${this.network.vpc.vpcId}`,
-                  "ec2:InstanceProfile": `${this.runnersInstanceProfile.attrArn}`,
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
@@ -333,14 +335,14 @@ export class Runner extends Construct {
                   "ec2:ResourceTag/Name": "*gitlab-runner-*",
                 },
                 ArnEquals: {
-                  "ec2:InstanceProfile": `${this.runnersInstanceProfile.attrArn}`,
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
             {
               Effect: "Allow",
               Action: ["iam:PassRole"],
-              Resource: [`${this.runnersRole.roleArn}`],
+              Resource: [`${runnersRole.roleArn}`],
             },
           ],
         }),
@@ -448,10 +450,10 @@ runas=root
                 availabilityZone: this.network.availabilityZone.slice(-1),
               },
               runner: {
-                instanceType: this.runnerInstanceType,
-                machineImage: this.runnerMachineImage,
-                securityGroupName: this.runnersSecurityGroupName,
-                instanceProfile: this.runnersInstanceProfile,
+                instanceType: runnersInstanceType,
+                machineImage: runnersMachineImage,
+                securityGroupName: runnersSecurityGroupName,
+                instanceProfile: runnersInstanceProfile,
               },
               spot: {
                 requestSpotInstance: true,
@@ -513,5 +515,14 @@ runas=root
       desiredCapacity: 1,
       signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
     });
+
+    this.runner = {
+      securityGroupName: runnersSecurityGroupName,
+      securityGroup: runnersSecurityGroup,
+      role: runnersRole,
+      instanceProfile: runnersInstanceProfile,
+      instanceType: runnersInstanceType,
+      machineImage: runnersMachineImage,
+    };
   }
 }
