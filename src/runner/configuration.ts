@@ -23,6 +23,10 @@ export interface ConfigurationProps {
   vpc: {
     vpcId: string;
     subnetId: string;
+    /**
+     *
+     * The availability zone of the vpc contains the region prefixed. The GitLab Runner configuration accepts only the availability zone symbol i.e. a.
+     */
     availabilityZone: string;
   };
   runner: {

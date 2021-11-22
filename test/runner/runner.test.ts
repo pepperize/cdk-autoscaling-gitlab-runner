@@ -25,5 +25,5 @@ test("runner", () => {
     gitlabToken: "",
   });
   expect(SynthUtils.toCloudFormation(mockStack)).toMatchSnapshot();
-  expect(runner.availabilityZone).toBe("us-east-1a");
+  expect(runner.network.availabilityZone).toBe("us-east-1a");
 });

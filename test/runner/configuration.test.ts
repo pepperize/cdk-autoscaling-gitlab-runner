@@ -1,12 +1,3 @@
-import {
-  InstanceClass,
-  InstanceSize,
-  InstanceType,
-  MachineImage,
-} from "@aws-cdk/aws-ec2";
-import { CfnInstanceProfile } from "@aws-cdk/aws-iam";
-import { Bucket } from "@aws-cdk/aws-s3";
-import { App, Stack } from "@aws-cdk/core";
 import { Configuration } from "../../src/runner/configuration";
 import { defaultConfiguration } from "../../src/runner/configuration.default";
 import {
@@ -54,54 +45,4 @@ test("configuration", () => {
   const toml = new Configuration(config).toToml();
 
   expect(toml).toMatchSnapshot();
-});
-
-test("configuration-az-from-props", () => {
-  const AVAILABILITY_ZONE = "us-east-1a";
-  const mockApp = new App();
-  const stackProps = {
-    env: {
-      account: "0",
-      region: "us-east-1",
-    },
-  };
-  const mockStack = new Stack(
-    mockApp,
-    "test-stack-configuration-az-from-props",
-    stackProps
-  );
-
-  const config = Configuration.fromProps({
-    scope: mockStack,
-    gitlabToken: "",
-    cache: new Bucket(mockStack, "mock-bucket-configuration-from-props"),
-    vpc: {
-      vpcId: "0",
-      subnetId: "0",
-      availabilityZone: AVAILABILITY_ZONE,
-    },
-    runner: {
-      instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.NANO),
-      machineImage: MachineImage.latestAmazonLinux({}),
-      securityGroupName: "",
-      instanceProfile: new CfnInstanceProfile(
-        mockStack,
-        "mock-cfnip-configuration-from-props",
-        {
-          roles: [],
-        }
-      ),
-    },
-    spot: {
-      requestSpotInstance: true,
-      spotPrice: 0.03,
-    },
-  });
-
-  expect(
-    // @ts-ignore
-    config.configuration.runners[0].machine.MachineOptions.find(
-      (entry: string) => entry.includes("amazonec2-zone=")
-    )
-  ).toBe("amazonec2-zone=a");
 });

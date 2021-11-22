@@ -319,8 +319,8 @@ token = \\"iieC-HsJsedAse2vq486\\"
   \\"amazonec2-ami=ami-083654bd07b5da81d\\",
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=vpc-12345\\",
-  \\"amazonec2-zone=dummy1a\\",
-  \\"amazonec2-subnet-id=s-12345\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=p-12345\\",
   \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
@@ -483,7 +483,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: ddc40505aaea7b49
+# fingerprint: 0ec5df5ab0d87623
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
