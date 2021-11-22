@@ -77,7 +77,6 @@ export const runnerAmiMap: Record<string, string> = {
 
 /**
  * Props of the Gitlab Runner
- * @beta
  */
 export interface RunnerProps {
   /**
