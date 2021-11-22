@@ -76,7 +76,7 @@ export const runnerAmiMap: Record<string, string> = {
 };
 
 /**
- * Props of the Gitlab Runner
+ * Properties of the Gitlab Runner. You have to provide at least the GitLab's Runner's authentication token.
  */
 export interface RunnerProps {
   /**
