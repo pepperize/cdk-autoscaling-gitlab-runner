@@ -110,14 +110,35 @@ export interface RunnerProps {
   network?: NetworkProps;
 
   manager?: {
-    machineImage?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
-    instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
-    keyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
+    /**
+     * An Amazon Machine Image ID for the Manager EC2 instance.
+     */
+    machineImage?: IMachineImage;
+    /**
+     * Instance type for manager EC2 instance. It's a combination of a class and size.
+     */
+    instanceType?: InstanceType;
+    /**
+     * A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
+     */
+    keyPairName?: string;
   };
   runner?: {
-    instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
-    machineImage?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
+    /**
+     * Instance type for runner EC2 instances. It's a combination of a class and size.
+     */
+    instanceType?: InstanceType; //
+    /**
+     * An Amazon Machine Image ID for the Runners EC2 instances.
+     */
+    machineImage?: IMachineImage; //
+    /**
+     *
+     */
     docker?: Partial<DockerConfiguration>;
+    /**
+     *
+     */
     machine?: Partial<MachineConfiguration>;
   };
 }
