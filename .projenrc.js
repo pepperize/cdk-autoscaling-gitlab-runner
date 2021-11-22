@@ -9,8 +9,25 @@ const project = new AwsCdkTypeScriptApp({
   cdkVersion: "1.132.0",
   cdkVersionPinning: true,
   defaultReleaseBranch: "master",
-  name: "@pepperize/cdk-gitlab-runner",
-  repositoryUrl: "https://github.com/pepperize/cdk-gitlab-runner.git",
+  name: "@pepperize/cdk-autoscaling-gitlab-runner",
+  description:
+    "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
+  keywords: [
+    "AWS",
+    "CDK",
+    "GitLab",
+    "Runner",
+    "Autoscaling",
+    "EC2",
+    "Spot Instances",
+    "Docker Machine",
+    "Executor",
+    "Docker in Docker",
+    "S3",
+    "Shared Cache",
+  ],
+  repositoryUrl:
+    "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
   cdkDependencies: [
     "@aws-cdk/aws-s3",

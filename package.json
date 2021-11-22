@@ -1,5 +1,6 @@
 {
-  "name": "@pepperize/cdk-gitlab-runner",
+  "name": "@pepperize/cdk-autoscaling-gitlab-runner",
+  "description": "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
   "scripts": {
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
@@ -65,6 +66,20 @@
     "@iarna/toml": "^2.2.5"
   },
   "bundledDependencies": [],
+  "keywords": [
+    "AWS",
+    "Autoscaling",
+    "CDK",
+    "Docker Machine",
+    "Docker in Docker",
+    "EC2",
+    "Executor",
+    "GitLab",
+    "Runner",
+    "S3",
+    "Shared Cache",
+    "Spot Instances"
+  ],
   "license": "MIT",
   "version": "0.0.0",
   "jest": {
