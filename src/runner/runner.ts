@@ -1,4 +1,8 @@
-import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
+import {
+  AutoScalingGroup,
+  IAutoScalingGroup,
+  Signals,
+} from "@aws-cdk/aws-autoscaling";
 import {
   CloudFormationInit,
   IMachineImage,
@@ -161,14 +165,9 @@ export class Runner extends Construct {
     securityGroup: ISecurityGroup;
     instanceType: InstanceType;
     machineImage: IMachineImage;
+    autoScalingGroup: IAutoScalingGroup;
     role: IRole;
   };
-
-  readonly userData: UserData;
-  readonly cfnHupRestartHandle: InitServiceRestartHandle;
-  readonly gitlabRunnerConfigRestartHandle: InitServiceRestartHandle;
-  readonly rsyslogConfigRestartHandle: InitServiceRestartHandle;
-  readonly initConfig: CloudFormationInit;
 
   constructor(scope: Stack, id: string, props: RunnerProps) {
     super(scope, id);
@@ -351,26 +350,20 @@ export class Runner extends Construct {
     /* Manager:
      * Type: 'AWS::EC2::Instance'
      */
-    this.userData = UserData.forLinux({});
-    this.userData.addCommands(
+    const userData = UserData.forLinux({});
+    userData.addCommands(
       `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
     );
 
-    this.cfnHupRestartHandle = new InitServiceRestartHandle();
-    this.cfnHupRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
-    this.cfnHupRestartHandle._addFile(
-      "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
-    );
+    const cfnHupRestartHandle = new InitServiceRestartHandle();
+    cfnHupRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
+    cfnHupRestartHandle._addFile("/etc/cfn/hooks.d/cfn-auto-reloader.conf");
 
-    this.gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
-    this.gitlabRunnerConfigRestartHandle._addFile(
-      "/etc/gitlab-runner/config.toml"
-    );
+    const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
+    gitlabRunnerConfigRestartHandle._addFile("/etc/gitlab-runner/config.toml");
 
-    this.rsyslogConfigRestartHandle = new InitServiceRestartHandle();
-    this.rsyslogConfigRestartHandle._addFile(
-      "/etc/rsyslog.d/25-gitlab-runner.conf"
-    );
+    const rsyslogConfigRestartHandle = new InitServiceRestartHandle();
+    rsyslogConfigRestartHandle._addFile("/etc/rsyslog.d/25-gitlab-runner.conf");
 
     // configs
     const REPOSITORIES = "repositories";
@@ -379,7 +372,7 @@ export class Runner extends Construct {
     const CONFIG = "config";
     const RESTART = "restart";
 
-    this.initConfig = CloudFormationInit.fromConfigSets({
+    const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
         default: [REPOSITORIES, PACKAGES, CFN_HUP, CONFIG, RESTART],
       },
@@ -416,7 +409,7 @@ verbose=true
               owner: "root",
               group: "root",
               mode: "000400",
-              serviceRestartHandles: [this.cfnHupRestartHandle],
+              serviceRestartHandles: [cfnHupRestartHandle],
             }
           ),
           InitFile.fromString(
@@ -428,12 +421,12 @@ path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
 action=/opt/aws/bin/cfn-init -v --stack ${scope.stackName} --region ${scope.region} --resource ManagerAutoscalingGroup --configsets default
 runas=root
             `.trim(),
-            { serviceRestartHandles: [this.cfnHupRestartHandle] }
+            { serviceRestartHandles: [cfnHupRestartHandle] }
           ),
           InitService.enable("cfn-hup", {
             enabled: true,
             ensureRunning: true,
-            serviceRestartHandle: this.cfnHupRestartHandle,
+            serviceRestartHandle: cfnHupRestartHandle,
           }),
         ]),
         [CONFIG]: new InitConfig([
@@ -477,12 +470,12 @@ runas=root
           InitService.enable("gitlab-runner", {
             ensureRunning: true,
             enabled: true,
-            serviceRestartHandle: this.gitlabRunnerConfigRestartHandle,
+            serviceRestartHandle: gitlabRunnerConfigRestartHandle,
           }),
           InitService.enable("rsyslog", {
             ensureRunning: true,
             enabled: true,
-            serviceRestartHandle: this.rsyslogConfigRestartHandle,
+            serviceRestartHandle: rsyslogConfigRestartHandle,
           }),
         ]),
         [RESTART]: new InitConfig([
@@ -493,27 +486,31 @@ runas=root
       },
     });
 
-    new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
-      vpc: this.network.vpc,
-      vpcSubnets: {
-        subnetType: SubnetType.PUBLIC,
-        availabilityZones: [this.network.availabilityZone],
-      },
-      instanceType: managerInstanceType,
-      machineImage: managerMachineImage,
-      keyName: manager?.keyPairName,
-      securityGroup: managerSecurityGroup,
-      role: managerRole,
-      userData: this.userData,
-      init: this.initConfig,
-      initOptions: {
-        ignoreFailures: false,
-      },
-      maxCapacity: 1,
-      minCapacity: 1,
-      desiredCapacity: 1,
-      signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
-    });
+    const managerAutoScalingGroup = new AutoScalingGroup(
+      scope,
+      "ManagerAutoscalingGroup",
+      {
+        vpc: this.network.vpc,
+        vpcSubnets: {
+          subnetType: SubnetType.PUBLIC,
+          availabilityZones: [this.network.availabilityZone],
+        },
+        instanceType: managerInstanceType,
+        machineImage: managerMachineImage,
+        keyName: manager?.keyPairName,
+        securityGroup: managerSecurityGroup,
+        role: managerRole,
+        userData: userData,
+        init: initConfig,
+        initOptions: {
+          ignoreFailures: false,
+        },
+        maxCapacity: 1,
+        minCapacity: 1,
+        desiredCapacity: 1,
+        signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
+      }
+    );
 
     this.runners = {
       securityGroupName: runnersSecurityGroupName,
@@ -528,6 +525,7 @@ runas=root
       securityGroup: managerSecurityGroup,
       instanceType: managerInstanceType,
       machineImage: managerMachineImage,
+      autoScalingGroup: managerAutoScalingGroup,
       role: managerRole,
     };
   }
