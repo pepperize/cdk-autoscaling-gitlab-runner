@@ -38,6 +38,16 @@ import {
 } from "./configuration.types";
 import { Network, NetworkProps } from "./network";
 
+/**
+ * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.
+ *
+ * @remarks
+ * The `cdk-gitlab-runner` defines the {@link RunnerProps} interface and {@link Runner} construct class,
+ * which are used to provision a the runner.
+ *
+ * @packageDocumentation
+ */
+
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
   "eu-north-1": "ami-d16fe6af",
@@ -65,6 +75,10 @@ export const runnerAmiMap: Record<string, string> = {
   "us-east-1": "ami-083654bd07b5da81d",
 };
 
+/**
+ * Props of the Gitlab Runner
+ * @beta
+ */
 export interface RunnerProps {
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
@@ -109,6 +123,25 @@ export interface RunnerProps {
   };
 }
 
+/**
+ * The Gitlab Runner
+ * @alpha
+ *
+ * @example Provisioning a basic Runner
+ * ```ts
+ * const app = new cdk.App();
+ * const stack = new cdk.Stack(app, "RunnerStack", {
+ *   env: {
+ *     account: "000000000000",
+ *     region: "us-east-1",
+ *   }
+ * });
+ *
+ * new Runner(scope, "GitlabRunner", {
+ *   gitlabToken: "xxxxxxxxxxxxxxxxxxxx",
+ * });
+ * ```
+ */
 export class Runner extends Construct {
   readonly network: Network;
 
