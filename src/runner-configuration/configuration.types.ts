@@ -89,7 +89,7 @@ export type Executor = "docker+machine" | "docker";
 
 /**
  * This defines the Docker Container parameters.
- * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
+ * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
  */
 export type DockerConfiguration = {
   tls_verify: boolean;
