@@ -24,14 +24,12 @@ import {
 } from "@aws-cdk/aws-ec2";
 import {
   CfnInstanceProfile,
-  IManagedPolicy,
   IRole,
   ManagedPolicy,
   PolicyDocument,
   Role,
   ServicePrincipal,
 } from "@aws-cdk/aws-iam";
-import { IPrincipal } from "@aws-cdk/aws-iam/lib/principals";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
 import {
@@ -149,8 +147,6 @@ export class Runner extends Construct {
   readonly network: Network;
 
   readonly cacheBucket: IBucket;
-  readonly ec2ServicePrincipal: IPrincipal;
-  readonly ec2ManagedPolicyForSSM: IManagedPolicy;
 
   readonly runners: {
     securityGroupName: string;
@@ -182,8 +178,8 @@ export class Runner extends Construct {
     this.network = new Network(scope, "Network", network);
 
     /** IAM */
-    this.ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
-    this.ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
+    const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
+    const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
       scope,
       "AmazonEC2RoleforSSM",
       "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
@@ -202,8 +198,8 @@ export class Runner extends Construct {
     );
 
     const runnersRole = new Role(scope, "RunnersRole", {
-      assumedBy: this.ec2ServicePrincipal,
-      managedPolicies: [this.ec2ManagedPolicyForSSM],
+      assumedBy: ec2ServicePrincipal,
+      managedPolicies: [ec2ManagedPolicyForSSM],
     });
 
     const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
@@ -250,8 +246,8 @@ export class Runner extends Construct {
       runners?.machineImage || MachineImage.genericLinux(managerAmiMap);
 
     const managerRole = new Role(scope, "ManagerRole", {
-      assumedBy: this.ec2ServicePrincipal,
-      managedPolicies: [this.ec2ManagedPolicyForSSM],
+      assumedBy: ec2ServicePrincipal,
+      managedPolicies: [ec2ManagedPolicyForSSM],
       inlinePolicies: {
         Cache: PolicyDocument.fromJson({
           Version: "2012-10-17",
