@@ -125,7 +125,6 @@ export interface RunnerProps {
 
 /**
  * The Gitlab Runner
- * @alpha
  *
  * @example Provisioning a basic Runner
  * ```ts
