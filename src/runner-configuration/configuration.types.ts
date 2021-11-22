@@ -88,6 +88,7 @@ export type RunnersConfiguration = {
 export type Executor = "docker+machine" | "docker";
 
 /**
+ * This defines the Docker Container parameters.
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
  */
 export type DockerConfiguration = {
@@ -133,6 +134,7 @@ export type CacheS3Configuration = {
 };
 
 /**
+ * The following parameters define the Docker Machine-based autoscaling feature.
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
  */
 export type MachineConfiguration = {

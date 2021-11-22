@@ -118,6 +118,7 @@ export interface RunnerProps {
     machineImage?: IMachineImage;
     /**
      * Instance type for manager EC2 instance. It's a combination of a class and size.
+     * @default InstanceType.of(InstanceClass.T3, InstanceSize.NANO)
      */
     instanceType?: InstanceType;
     /**
@@ -128,6 +129,7 @@ export interface RunnerProps {
   runners?: {
     /**
      * Instance type for runner EC2 instances. It's a combination of a class and size.
+     * @default InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
      */
     instanceType?: InstanceType; //
     /**
@@ -135,11 +137,43 @@ export interface RunnerProps {
      */
     machineImage?: IMachineImage; //
     /**
+     * This defines the Docker Container parameters.
+     * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
      *
+     * @example
+     * ```
+     * {
+     *   tls_verify: false,
+     *   image: "docker:19.03.5",
+     *   privileged: true,
+     *   cap_add: ["CAP_SYS_ADMIN"],
+     *   wait_for_services_timeout: 300,
+     *   disable_cache: false,
+     *   volumes: ["/certs/client", "/cache"],
+     *   shm_size: 0,
+     * }
+     * ```
      */
     docker?: Partial<DockerConfiguration>;
     /**
+     * The following parameters define the Docker Machine-based autoscaling feature.
+     * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
      *
+     * @example
+     * ```
+     * {
+     *   IdleCount: 0,
+     *   IdleTime: 300,
+     *   MaxBuilds: 20,
+     *   MachineDriver: "amazonec2",
+     *   MachineName: "gitlab-runner-%s",
+     *   autoscaling: {
+     *     Periods: ["* * 7-22 * * mon-fri *"],
+     *     IdleCount: 1,
+     *     IdleTime: 1800,
+     *     Timezone: "Etc/UTC",
+     *   },
+     * };
      */
     machine?: Partial<MachineConfiguration>;
   };
@@ -190,14 +224,20 @@ export class Runner extends Construct {
     const { manager, cache, runners, network, gitlabToken }: RunnerProps =
       props;
 
-    /** S3 Bucket for Runners' cache */
+    /**
+     * S3 Bucket for Runners' cache
+     */
     this.cacheBucket =
       cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
 
-    /** Network */
+    /**
+     * Network
+     */
     this.network = new Network(scope, "Network", network);
 
-    /** IAM */
+    /**
+     * IAM
+     */
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
     const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
       scope,
@@ -205,7 +245,9 @@ export class Runner extends Construct {
       "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
     );
 
-    /** GitLab Runners */
+    /**
+     * GitLab Runners
+     */
     const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(
       scope,
@@ -238,7 +280,9 @@ export class Runner extends Construct {
     const runnersMachineImage =
       runners?.machineImage || MachineImage.genericLinux(runnerAmiMap);
 
-    /** GitLab Manager */
+    /**
+     * GitLab Manager
+     */
     const managerSecurityGroup = new SecurityGroup(
       scope,
       "ManagerSecurityGroup",
@@ -363,9 +407,6 @@ export class Runner extends Construct {
       },
     });
 
-    /* Manager:
-     * Type: 'AWS::EC2::Instance'
-     */
     const userData = UserData.forLinux({});
     userData.addCommands(
       `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
