@@ -312,8 +312,18 @@ export class Runner extends Construct {
             },
             {
               Effect: "Allow",
+              Action: ["ec2:RunInstances"],
+              Resource: ["*"],
+              Condition: {
+                StringEquals: {
+                  "ec2:InstanceType": [`${runnersInstanceType.toString()}`],
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.ref}`,
+                },
+              },
+            },
+            {
+              Effect: "Allow",
               Action: [
-                "ec2:RunInstances",
                 "ec2:TerminateInstances",
                 "ec2:StopInstances",
                 "ec2:StartInstances",
@@ -321,8 +331,8 @@ export class Runner extends Construct {
               ],
               Resource: ["*"],
               Condition: {
-                ArnEquals: {
-                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
+                StringLike: {
+                  "ec2:ResourceTag/Name": "*gitlab-runner-*",
                 },
               },
             },

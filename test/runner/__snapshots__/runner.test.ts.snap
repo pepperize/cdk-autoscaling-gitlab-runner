@@ -635,21 +635,30 @@ yum update -y aws-cfn-bootstrap
                   "Resource": "*",
                 },
                 Object {
+                  "Action": "ec2:RunInstances",
+                  "Condition": Object {
+                    "StringEquals": Object {
+                      "ec2:InstanceProfile": Object {
+                        "Ref": "RunnersInstanceProfile",
+                      },
+                      "ec2:InstanceType": Array [
+                        "t3.micro",
+                      ],
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
                   "Action": Array [
-                    "ec2:RunInstances",
                     "ec2:TerminateInstances",
                     "ec2:StopInstances",
                     "ec2:StartInstances",
                     "ec2:RebootInstances",
                   ],
                   "Condition": Object {
-                    "ArnEquals": Object {
-                      "ec2:InstanceProfile": Object {
-                        "Fn::GetAtt": Array [
-                          "RunnersInstanceProfile",
-                          "Arn",
-                        ],
-                      },
+                    "StringLike": Object {
+                      "ec2:ResourceTag/Name": "*gitlab-runner-*",
                     },
                   },
                   "Effect": "Allow",
