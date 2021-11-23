@@ -1,6 +1,6 @@
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Construct, Stack, StackProps } from "@aws-cdk/core";
-import { GitlabRunnerAutoscaling } from "./runner/runner";
+import { GitlabRunnerAutoscaling } from "./runner";
 
 export type GitlabRunnerStackProps = StackProps;
 
