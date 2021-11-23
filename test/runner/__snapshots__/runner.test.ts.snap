@@ -600,20 +600,12 @@ yum update -y aws-cfn-bootstrap
                         "Name",
                       ],
                     },
-                    "StringEquals": Object {
-                      "ec2:InstanceProfile": Object {
-                        "Ref": "RunnersInstanceProfile",
-                      },
-                    },
                     "StringLike": Object {
                       "aws:RequestTag/Name": "*gitlab-runner-*",
                     },
                   },
                   "Effect": "Allow",
-                  "Resource": Array [
-                    "arn:aws:ec2:*:*:instance/*",
-                    "arn:aws:ec2:*:*:volume/*",
-                  ],
+                  "Resource": "*",
                 },
                 Object {
                   "Action": Array [
