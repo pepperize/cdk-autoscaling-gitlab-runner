@@ -1,6 +1,6 @@
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Construct, Stack, StackProps } from "@aws-cdk/core";
-import { Runner } from "./runner/runner";
+import { GitlabRunnerAutoscaling } from "./runner/runner";
 
 /**
  * Documentation:
@@ -15,7 +15,7 @@ export class GitlabRunnerStack extends Stack {
     const vpc = Vpc.fromLookup(this, "GitlabRunnerVpc", {
       vpcId: "vpc-0da907b688369469e",
     });
-    new Runner(this, id, {
+    new GitlabRunnerAutoscaling(this, id, {
       gitlabToken: "iieC-HsJsedAse2vq486",
       network: {
         vpc,

@@ -44,7 +44,7 @@ import { Network, NetworkProps } from "./network";
  * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.
  *
  * @remarks
- * The `cdk-gitlab-runner` defines the {@link RunnerProps} interface and {@link Runner} construct class,
+ * The `cdk-gitlab-runner` defines the {@link GitlabRunnerAutoscalingProps} interface and {@link GitlabRunnerAutoscaling} construct class,
  * which are used to provision a the runner.
  *
  * @packageDocumentation
@@ -80,7 +80,7 @@ export const runnerAmiMap: Record<string, string> = {
 /**
  * Properties of the Gitlab Runner. You have to provide at least the GitLab's Runner's authentication token.
  */
-export interface RunnerProps {
+export interface GitlabRunnerAutoscalingProps {
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
@@ -126,7 +126,7 @@ export interface RunnerProps {
 }
 
 /**
- * The Gitlab Runner
+ * The Gitlab Runner autoscaling on EC2 by Docker Machine.
  *
  * @example Provisioning a basic Runner
  * ```ts
@@ -143,7 +143,7 @@ export interface RunnerProps {
  * });
  * ```
  */
-export class Runner extends Construct {
+export class GitlabRunnerAutoscaling extends Construct {
   readonly network: Network;
 
   readonly cacheBucket: IBucket;
@@ -165,10 +165,15 @@ export class Runner extends Construct {
     role: IRole;
   };
 
-  constructor(scope: Stack, id: string, props: RunnerProps) {
+  constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
-    const { manager, cache, runners, network, gitlabToken }: RunnerProps =
-      props;
+    const {
+      manager,
+      cache,
+      runners,
+      network,
+      gitlabToken,
+    }: GitlabRunnerAutoscalingProps = props;
 
     /** S3 Bucket for Runners' cache */
     this.cacheBucket =
