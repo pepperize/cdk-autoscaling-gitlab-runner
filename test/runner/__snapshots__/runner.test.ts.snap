@@ -594,6 +594,16 @@ yum update -y aws-cfn-bootstrap
                     "ec2:CreateTags",
                     "ssm:UpdateInstanceInformation",
                   ],
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "Name",
+                      ],
+                    },
+                    "StringLike": Object {
+                      "aws:RequestTag/Name": "*gitlab-runner-*",
+                    },
+                  },
                   "Effect": "Allow",
                   "Resource": "*",
                 },
