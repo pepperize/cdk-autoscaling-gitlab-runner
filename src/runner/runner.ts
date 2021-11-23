@@ -359,10 +359,6 @@ export class GitlabRunnerAutoscaling extends Construct {
       `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
     );
 
-    const cfnHupRestartHandle = new InitServiceRestartHandle();
-    cfnHupRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
-    cfnHupRestartHandle._addFile("/etc/cfn/hooks.d/cfn-auto-reloader.conf");
-
     const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
     gitlabRunnerConfigRestartHandle._addFile("/etc/gitlab-runner/config.toml");
 
