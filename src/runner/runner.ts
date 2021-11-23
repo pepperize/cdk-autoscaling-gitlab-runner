@@ -50,6 +50,9 @@ import { Network, NetworkProps } from "./network";
  * @packageDocumentation
  */
 
+/**
+ * A record of Region: string and AmiID: string
+ */
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
   "eu-north-1": "ami-d16fe6af",
@@ -69,9 +72,12 @@ export const managerAmiMap: Record<string, string> = {
   "us-west-1": "ami-0019ef04ac50be30f",
   "us-west-2": "ami-061392db613a6357b",
 };
+
+/**
+ * A record of Region: string and AmiID: string
+ * @see {@link https://cloud-images.ubuntu.com/locator/ec2/}
+ */
 export const runnerAmiMap: Record<string, string> = {
-  // Record<REGION, AMI_ID>
-  // https://cloud-images.ubuntu.com/locator/ec2/
   "eu-central-1": "ami-0a49b025fffbbdac6",
   "us-west-1": "ami-053ac55bdcfe96e85",
   "us-east-1": "ami-083654bd07b5da81d",
@@ -83,7 +89,7 @@ export const runnerAmiMap: Record<string, string> = {
 export interface GitlabRunnerAutoscalingProps {
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
-   * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
+   * @see {@link https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens}
    */
   gitlabToken: string;
 
@@ -95,7 +101,7 @@ export interface GitlabRunnerAutoscalingProps {
 
   /**
    * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
-   * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
+   * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
    */
   cache?: {
     /**
@@ -112,15 +118,64 @@ export interface GitlabRunnerAutoscalingProps {
   network?: NetworkProps;
 
   manager?: {
-    machineImage?: IMachineImage; // An Amazon Machine Image ID for the Manager EC2 instance.
-    instanceType?: InstanceType; // Instance type for manager EC2 instance. It's a combination of a class and size.
-    keyPairName?: string; // A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
+    /**
+     * An Amazon Machine Image ID for the Manager EC2 instance.
+     */
+    machineImage?: IMachineImage;
+    /**
+     * Instance type for manager EC2 instance. It's a combination of a class and size.
+     * @default InstanceType.of(InstanceClass.T3, InstanceSize.NANO)
+     */
+    instanceType?: InstanceType;
+    /**
+     * A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
+     */
+    keyPairName?: string;
   };
-
   runners?: {
-    instanceType?: InstanceType; // Instance type for runner EC2 instances. It's a combination of a class and size.
-    machineImage?: IMachineImage; // An Amazon Machine Image ID for the Runners EC2 instances.
+    /**
+     * Instance type for runner EC2 instances. It's a combination of a class and size.
+     * @default InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
+     */
+    instanceType?: InstanceType; //
+    /**
+     * An Amazon Machine Image ID for the Runners EC2 instances.
+     */
+    machineImage?: IMachineImage; //
+    /**
+     * This defines the Docker Container parameters.
+     * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section}
+     *
+     * @example
+     * ```
+     * {
+     *   tls_verify: false,
+     *   image: "docker:19.03.5",
+     *   privileged: true,
+     *   cap_add: ["CAP_SYS_ADMIN"],
+     *   wait_for_services_timeout: 300,
+     *   disable_cache: false,
+     *   volumes: ["/certs/client", "/cache"],
+     *   shm_size: 0,
+     * }
+     * ```
+     */
     docker?: Partial<DockerConfiguration>;
+    /**
+     * The following parameters define the Docker Machine-based autoscaling feature.
+     * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section}
+     *
+     * @example
+     * ```
+     * {
+     *   IdleCount: 0,
+     *   IdleTime: 300,
+     *   MaxBuilds: 20,
+     *   MachineDriver: "amazonec2",
+     *   MachineName: "gitlab-runner-%s",
+     *   autoscaling: [],
+     * };
+     */
     machine?: Partial<MachineConfiguration>;
   };
 }
@@ -175,14 +230,20 @@ export class GitlabRunnerAutoscaling extends Construct {
       gitlabToken,
     }: GitlabRunnerAutoscalingProps = props;
 
-    /** S3 Bucket for Runners' cache */
+    /**
+     * S3 Bucket for Runners' cache
+     */
     this.cacheBucket =
       cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
 
-    /** Network */
+    /**
+     * Network
+     */
     this.network = new Network(scope, "Network", network);
 
-    /** IAM */
+    /**
+     * IAM
+     */
     const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
     const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
       scope,
@@ -190,7 +251,9 @@ export class GitlabRunnerAutoscaling extends Construct {
       "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
     );
 
-    /** GitLab Runners */
+    /**
+     * GitLab Runners
+     */
     const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(
       scope,
@@ -222,7 +285,9 @@ export class GitlabRunnerAutoscaling extends Construct {
     const runnersMachineImage =
       runners?.machineImage || MachineImage.genericLinux(runnerAmiMap);
 
-    /** GitLab Manager */
+    /**
+     * GitLab Manager
+     */
     const managerSecurityGroup = new SecurityGroup(
       scope,
       "ManagerSecurityGroup",
@@ -351,9 +416,6 @@ export class GitlabRunnerAutoscaling extends Construct {
       },
     });
 
-    /* Manager:
-     * Type: 'AWS::EC2::Instance'
-     */
     const userData = UserData.forLinux({});
     userData.addCommands(
       `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
