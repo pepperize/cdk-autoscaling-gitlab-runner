@@ -167,12 +167,7 @@ export interface GitlabRunnerAutoscalingProps {
      *   MaxBuilds: 20,
      *   MachineDriver: "amazonec2",
      *   MachineName: "gitlab-runner-%s",
-     *   autoscaling: {
-     *     Periods: ["* * 7-22 * * mon-fri *"],
-     *     IdleCount: 1,
-     *     IdleTime: 1800,
-     *     Timezone: "Etc/UTC",
-     *   },
+     *   autoscaling: [],
      * };
      */
     machine?: Partial<MachineConfiguration>;
