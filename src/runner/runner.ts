@@ -206,7 +206,6 @@ export class Runner extends Construct {
       scope,
       "RunnersInstanceProfile",
       {
-        instanceProfileName: "RunnersInstanceProfile",
         roles: [runnersRole.roleName],
       }
     );
@@ -287,10 +286,6 @@ export class Runner extends Construct {
               Action: ["ec2:CreateTags", "ssm:UpdateInstanceInformation"],
               Resource: ["*"],
               Condition: {
-                StringEquals: {
-                  "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
-                },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-runner-*",
                 },
@@ -301,17 +296,28 @@ export class Runner extends Construct {
             },
             {
               Effect: "Allow",
-              Action: ["ec2:RunInstances", "ec2:RequestSpotInstances"],
+              Action: [
+                "ec2:RequestSpotInstances",
+                "ec2:CancelSpotInstanceRequests",
+              ],
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                   "ec2:Region": `${scope.region}`,
-                  "ec2:Tenancy": "default",
                 },
                 ArnEqualsIfExists: {
-                  "ec2:Vpc": `arn:${scope.partition}:ec2:${scope.region}:${scope.account}:vpc/${this.network.vpc.vpcId}`,
-                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
+                  "ec2:Vpc": `${this.network.vpc.vpcArn}`,
+                },
+              },
+            },
+            {
+              Effect: "Allow",
+              Action: ["ec2:RunInstances"],
+              Resource: ["*"],
+              Condition: {
+                StringEquals: {
+                  "ec2:InstanceType": [`${runnersInstanceType.toString()}`],
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.ref}`,
                 },
               },
             },
@@ -327,9 +333,6 @@ export class Runner extends Construct {
               Condition: {
                 StringLike: {
                   "ec2:ResourceTag/Name": "*gitlab-runner-*",
-                },
-                ArnEquals: {
-                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
@@ -384,8 +387,8 @@ export class Runner extends Construct {
           InitPackage.yum("gitlab-runner"),
           InitPackage.yum("tzdata"),
           InitCommand.shellCommand(
-            //"curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
-            "curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+            "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+            //"curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
             { key: "10-docker-machine" }
           ),
           InitCommand.shellCommand("gitlab-runner start", {

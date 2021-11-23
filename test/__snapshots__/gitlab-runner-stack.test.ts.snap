@@ -323,7 +323,11 @@ token = \\"iieC-HsJsedAse2vq486\\"
   \\"amazonec2-subnet-id=p-12345\\",
   \\"amazonec2-security-group=gitlab-runner-RunnersSecurityGroup\\",
   \\"amazonec2-use-private-address=true\\",
-  \\"amazonec2-iam-instance-profile=RunnersInstanceProfile\\",
+  \\"amazonec2-iam-instance-profile=",
+                      Object {
+                        "Ref": "RunnersInstanceProfile",
+                      },
+                      "\\",
   \\"amazonec2-request-spot-instance=true\\",
   \\"amazonec2-spot-price=0.03\\"
 ]
@@ -381,7 +385,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
           "packages": Object {
             "commands": Object {
               "10-docker-machine": Object {
-                "command": "curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
               },
               "20-gitlab-runner-start": Object {
                 "command": "gitlab-runner start",
@@ -483,7 +487,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 0ec5df5ab0d87623
+# fingerprint: 85e1920b64515ebb
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -596,10 +600,6 @@ yum update -y aws-cfn-bootstrap
                         "Name",
                       ],
                     },
-                    "StringEquals": Object {
-                      "ec2:InstanceType": "t3.micro",
-                      "ec2:Region": "us-east-1",
-                    },
                     "StringLike": Object {
                       "aws:RequestTag/Name": "*gitlab-runner-*",
                     },
@@ -609,17 +609,11 @@ yum update -y aws-cfn-bootstrap
                 },
                 Object {
                   "Action": Array [
-                    "ec2:RunInstances",
                     "ec2:RequestSpotInstances",
+                    "ec2:CancelSpotInstanceRequests",
                   ],
                   "Condition": Object {
                     "ArnEqualsIfExists": Object {
-                      "ec2:InstanceProfile": Object {
-                        "Fn::GetAtt": Array [
-                          "RunnersInstanceProfile",
-                          "Arn",
-                        ],
-                      },
                       "ec2:Vpc": Object {
                         "Fn::Join": Array [
                           "",
@@ -634,9 +628,22 @@ yum update -y aws-cfn-bootstrap
                       },
                     },
                     "StringEqualsIfExists": Object {
-                      "ec2:InstanceType": "t3.micro",
                       "ec2:Region": "us-east-1",
-                      "ec2:Tenancy": "default",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": "ec2:RunInstances",
+                  "Condition": Object {
+                    "StringEquals": Object {
+                      "ec2:InstanceProfile": Object {
+                        "Ref": "RunnersInstanceProfile",
+                      },
+                      "ec2:InstanceType": Array [
+                        "t3.micro",
+                      ],
                     },
                   },
                   "Effect": "Allow",
@@ -650,14 +657,6 @@ yum update -y aws-cfn-bootstrap
                     "ec2:RebootInstances",
                   ],
                   "Condition": Object {
-                    "ArnEquals": Object {
-                      "ec2:InstanceProfile": Object {
-                        "Fn::GetAtt": Array [
-                          "RunnersInstanceProfile",
-                          "Arn",
-                        ],
-                      },
-                    },
                     "StringLike": Object {
                       "ec2:ResourceTag/Name": "*gitlab-runner-*",
                     },
@@ -726,7 +725,6 @@ yum update -y aws-cfn-bootstrap
     },
     "RunnersInstanceProfile": Object {
       "Properties": Object {
-        "InstanceProfileName": "RunnersInstanceProfile",
         "Roles": Array [
           Object {
             "Ref": "RunnersRole1AC39F4E",
