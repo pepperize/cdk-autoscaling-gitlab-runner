@@ -285,42 +285,27 @@ export class Runner extends Construct {
               Effect: "Allow",
               Action: ["ec2:CreateTags", "ssm:UpdateInstanceInformation"],
               Resource: ["*"],
-              Condition: {
-                StringEqualsIfExists: {
-                  "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
-                },
-                StringLike: {
-                  "aws:RequestTag/Name": "*gitlab-runner-*",
-                },
-                "ForAllValues:StringEquals": {
-                  "aws:TagKeys": ["Name"],
-                },
-                ArnEquals: {
-                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
-                },
-              },
             },
             {
               Effect: "Allow",
-              Action: ["ec2:RunInstances", "ec2:RequestSpotInstances"],
+              Action: [
+                "ec2:RequestSpotInstances",
+                "ec2:CancelSpotInstanceRequests",
+              ],
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
                   "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
-                  "ec2:Tenancy": "default",
                 },
                 ArnEqualsIfExists: {
                   "ec2:Vpc": `${this.network.vpc.vpcArn}`,
-                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
             {
               Effect: "Allow",
               Action: [
-                "ec2:CancelSpotInstanceRequests",
+                "ec2:RunInstances",
                 "ec2:TerminateInstances",
                 "ec2:StopInstances",
                 "ec2:StartInstances",
@@ -328,10 +313,6 @@ export class Runner extends Construct {
               ],
               Resource: ["*"],
               Condition: {
-                StringEqualsIfExists: {
-                  "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
-                },
                 ArnEquals: {
                   "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
