@@ -50,6 +50,9 @@ import { Network, NetworkProps } from "./network";
  * @packageDocumentation
  */
 
+/**
+ * A record of Region: string and AmiID: string
+ */
 export const managerAmiMap: Record<string, string> = {
   // Record<REGION, AMI_ID>
   "eu-north-1": "ami-d16fe6af",
@@ -69,9 +72,12 @@ export const managerAmiMap: Record<string, string> = {
   "us-west-1": "ami-0019ef04ac50be30f",
   "us-west-2": "ami-061392db613a6357b",
 };
+
+/**
+ * A record of Region: string and AmiID: string
+ * @see {@link https://cloud-images.ubuntu.com/locator/ec2/}
+ */
 export const runnerAmiMap: Record<string, string> = {
-  // Record<REGION, AMI_ID>
-  // https://cloud-images.ubuntu.com/locator/ec2/
   "eu-central-1": "ami-0a49b025fffbbdac6",
   "us-west-1": "ami-053ac55bdcfe96e85",
   "us-east-1": "ami-083654bd07b5da81d",
@@ -83,7 +89,7 @@ export const runnerAmiMap: Record<string, string> = {
 export interface GitlabRunnerAutoscalingProps {
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
-   * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
+   * @see {@link https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens}
    */
   gitlabToken: string;
 
@@ -95,7 +101,7 @@ export interface GitlabRunnerAutoscalingProps {
 
   /**
    * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
-   * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
+   * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
    */
   cache?: {
     /**
@@ -138,7 +144,7 @@ export interface GitlabRunnerAutoscalingProps {
     machineImage?: IMachineImage; //
     /**
      * This defines the Docker Container parameters.
-     * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
+     * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section}
      *
      * @example
      * ```
@@ -157,7 +163,7 @@ export interface GitlabRunnerAutoscalingProps {
     docker?: Partial<DockerConfiguration>;
     /**
      * The following parameters define the Docker Machine-based autoscaling feature.
-     * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
+     * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section}
      *
      * @example
      * ```

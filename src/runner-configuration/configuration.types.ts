@@ -113,7 +113,7 @@ export type CacheConfiguration = {
 };
 
 /**
- * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
+ * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
  */
 export type CacheS3Configuration = {
   /**
@@ -135,7 +135,8 @@ export type CacheS3Configuration = {
 
 /**
  * The following parameters define the Docker Machine-based autoscaling feature.
- * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
+ * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section}
+ * @see {@link https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines}
  */
 export type MachineConfiguration = {
   IdleCount: number;
@@ -148,7 +149,7 @@ export type MachineConfiguration = {
 };
 
 /**
- * https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
+ * @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section}
  */
 export type MachineOptionProps = {
   "instance-type": string;
@@ -198,7 +199,7 @@ export class MachineOptions {
   }
 }
 /**
- * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
+ * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections}
  */
 export type AutoscalingConfiguration = {
   IdleCount: number;
