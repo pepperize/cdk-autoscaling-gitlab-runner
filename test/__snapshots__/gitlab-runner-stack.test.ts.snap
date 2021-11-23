@@ -223,45 +223,6 @@ Object {
       },
       "Metadata": Object {
         "AWS::CloudFormation::Init": Object {
-          "cfnHup": Object {
-            "files": Object {
-              "/etc/cfn/cfn-hup.conf": Object {
-                "content": "[main]
-stack=gitlab-runner
-region=us-east-1
-verbose=true",
-                "encoding": "plain",
-                "group": "root",
-                "mode": "000400",
-                "owner": "root",
-              },
-              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": Object {
-                "content": "[cfn-auto-reloader-hook]
-triggers=post.update
-path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
-action=/opt/aws/bin/cfn-init -v --stack gitlab-runner --region us-east-1 --resource ManagerAutoscalingGroup --configsets default
-runas=root",
-                "encoding": "plain",
-                "group": "root",
-                "mode": "000644",
-                "owner": "root",
-              },
-            },
-            "services": Object {
-              "sysvinit": Object {
-                "cfn-hup": Object {
-                  "enabled": true,
-                  "ensureRunning": true,
-                  "files": Array [
-                    "/etc/cfn/cfn-hup.conf",
-                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-                    "/etc/cfn/cfn-hup.conf",
-                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-                  ],
-                },
-              },
-            },
-          },
           "config": Object {
             "files": Object {
               "/etc/gitlab-runner/config.toml": Object {
@@ -377,7 +338,6 @@ token = \\"iieC-HsJsedAse2vq486\\"
             "default": Array [
               "repositories",
               "packages",
-              "cfnHup",
               "config",
               "restart",
             ],
@@ -487,7 +447,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 85e1920b64515ebb
+# fingerprint: c92801b1e7774395
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

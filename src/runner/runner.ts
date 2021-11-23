@@ -372,13 +372,12 @@ export class GitlabRunnerAutoscaling extends Construct {
     // configs
     const REPOSITORIES = "repositories";
     const PACKAGES = "packages";
-    const CFN_HUP = "cfnHup";
     const CONFIG = "config";
     const RESTART = "restart";
 
     const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
-        default: [REPOSITORIES, PACKAGES, CFN_HUP, CONFIG, RESTART],
+        default: [REPOSITORIES, PACKAGES, CONFIG, RESTART],
       },
       configs: {
         [REPOSITORIES]: new InitConfig([
@@ -398,39 +397,6 @@ export class GitlabRunnerAutoscaling extends Construct {
           ),
           InitCommand.shellCommand("gitlab-runner start", {
             key: "20-gitlab-runner-start",
-          }),
-        ]),
-        [CFN_HUP]: new InitConfig([
-          InitFile.fromString(
-            "/etc/cfn/cfn-hup.conf",
-            `
-[main]
-stack=${scope.stackName}
-region=${scope.region}
-verbose=true
-            `.trim(),
-            {
-              owner: "root",
-              group: "root",
-              mode: "000400",
-              serviceRestartHandles: [cfnHupRestartHandle],
-            }
-          ),
-          InitFile.fromString(
-            "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-            `
-[cfn-auto-reloader-hook]
-triggers=post.update
-path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
-action=/opt/aws/bin/cfn-init -v --stack ${scope.stackName} --region ${scope.region} --resource ManagerAutoscalingGroup --configsets default
-runas=root
-            `.trim(),
-            { serviceRestartHandles: [cfnHupRestartHandle] }
-          ),
-          InitService.enable("cfn-hup", {
-            enabled: true,
-            ensureRunning: true,
-            serviceRestartHandle: cfnHupRestartHandle,
           }),
         ]),
         [CONFIG]: new InitConfig([

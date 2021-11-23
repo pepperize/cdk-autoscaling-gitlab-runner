@@ -223,45 +223,6 @@ Object {
       },
       "Metadata": Object {
         "AWS::CloudFormation::Init": Object {
-          "cfnHup": Object {
-            "files": Object {
-              "/etc/cfn/cfn-hup.conf": Object {
-                "content": "[main]
-stack=MockStack
-region=us-east-1
-verbose=true",
-                "encoding": "plain",
-                "group": "root",
-                "mode": "000400",
-                "owner": "root",
-              },
-              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": Object {
-                "content": "[cfn-auto-reloader-hook]
-triggers=post.update
-path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
-action=/opt/aws/bin/cfn-init -v --stack MockStack --region us-east-1 --resource ManagerAutoscalingGroup --configsets default
-runas=root",
-                "encoding": "plain",
-                "group": "root",
-                "mode": "000644",
-                "owner": "root",
-              },
-            },
-            "services": Object {
-              "sysvinit": Object {
-                "cfn-hup": Object {
-                  "enabled": true,
-                  "ensureRunning": true,
-                  "files": Array [
-                    "/etc/cfn/cfn-hup.conf",
-                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-                    "/etc/cfn/cfn-hup.conf",
-                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-                  ],
-                },
-              },
-            },
-          },
           "config": Object {
             "files": Object {
               "/etc/gitlab-runner/config.toml": Object {
@@ -377,7 +338,6 @@ token = \\"\\"
             "default": Array [
               "repositories",
               "packages",
-              "cfnHup",
               "config",
               "restart",
             ],
@@ -487,7 +447,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: fc206d22905d0458
+# fingerprint: d035fe735f5ad465
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
