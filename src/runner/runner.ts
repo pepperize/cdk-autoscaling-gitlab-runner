@@ -285,6 +285,14 @@ export class Runner extends Construct {
               Effect: "Allow",
               Action: ["ec2:CreateTags", "ssm:UpdateInstanceInformation"],
               Resource: ["*"],
+              Condition: {
+                StringLike: {
+                  "aws:RequestTag/Name": "*gitlab-runner-*",
+                },
+                "ForAllValues:StringEquals": {
+                  "aws:TagKeys": ["Name"],
+                },
+              },
             },
             {
               Effect: "Allow",
