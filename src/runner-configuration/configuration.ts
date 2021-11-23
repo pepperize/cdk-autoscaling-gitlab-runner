@@ -81,7 +81,7 @@ export class Configuration {
               "subnet-id": vpc.subnetId,
               "security-group": `${runner.securityGroupName}`,
               "use-private-address": true,
-              "iam-instance-profile": `${runner.instanceProfile.instanceProfileName}`,
+              "iam-instance-profile": `${runner.instanceProfile.ref}`,
               "request-spot-instance": spot.requestSpotInstance,
               "block-duration-minutes": spot.blockDurationInMinutes,
               "spot-price": spot.spotPrice,

@@ -1,7 +1,7 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { App, Stack } from "@aws-cdk/core";
-import { Runner } from "../../src/runner/runner";
+import { GitlabRunnerAutoscaling } from "../../src/runner/runner";
 
 test("runner", () => {
   const app = new App();
@@ -18,7 +18,7 @@ test("runner", () => {
     publicSubnetIds: ["pub1"],
     availabilityZones: ["us-east-1a"],
   });
-  const runner = new Runner(mockStack, "Runner", {
+  const runner = new GitlabRunnerAutoscaling(mockStack, "Runner", {
     network: {
       vpc: mockVpc,
     },

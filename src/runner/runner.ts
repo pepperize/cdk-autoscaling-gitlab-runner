@@ -44,7 +44,7 @@ import { Network, NetworkProps } from "./network";
  * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.
  *
  * @remarks
- * The `cdk-gitlab-runner` defines the {@link RunnerProps} interface and {@link Runner} construct class,
+ * The `cdk-gitlab-runner` defines the {@link GitlabRunnerAutoscalingProps} interface and {@link GitlabRunnerAutoscaling} construct class,
  * which are used to provision a the runner.
  *
  * @packageDocumentation
@@ -80,7 +80,7 @@ export const runnerAmiMap: Record<string, string> = {
 /**
  * Properties of the Gitlab Runner. You have to provide at least the GitLab's Runner's authentication token.
  */
-export interface RunnerProps {
+export interface GitlabRunnerAutoscalingProps {
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
@@ -180,7 +180,7 @@ export interface RunnerProps {
 }
 
 /**
- * The Gitlab Runner
+ * The Gitlab Runner autoscaling on EC2 by Docker Machine.
  *
  * @example Provisioning a basic Runner
  * ```ts
@@ -197,7 +197,7 @@ export interface RunnerProps {
  * });
  * ```
  */
-export class Runner extends Construct {
+export class GitlabRunnerAutoscaling extends Construct {
   readonly network: Network;
 
   readonly cacheBucket: IBucket;
@@ -219,10 +219,15 @@ export class Runner extends Construct {
     role: IRole;
   };
 
-  constructor(scope: Stack, id: string, props: RunnerProps) {
+  constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
-    const { manager, cache, runners, network, gitlabToken }: RunnerProps =
-      props;
+    const {
+      manager,
+      cache,
+      runners,
+      network,
+      gitlabToken,
+    }: GitlabRunnerAutoscalingProps = props;
 
     /**
      * S3 Bucket for Runners' cache
@@ -268,7 +273,6 @@ export class Runner extends Construct {
       scope,
       "RunnersInstanceProfile",
       {
-        instanceProfileName: "RunnersInstanceProfile",
         roles: [runnersRole.roleName],
       }
     );
@@ -351,10 +355,6 @@ export class Runner extends Construct {
               Action: ["ec2:CreateTags", "ssm:UpdateInstanceInformation"],
               Resource: ["*"],
               Condition: {
-                StringEquals: {
-                  "ec2:Region": `${scope.region}`,
-                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
-                },
                 StringLike: {
                   "aws:RequestTag/Name": "*gitlab-runner-*",
                 },
@@ -365,17 +365,28 @@ export class Runner extends Construct {
             },
             {
               Effect: "Allow",
-              Action: ["ec2:RunInstances", "ec2:RequestSpotInstances"],
+              Action: [
+                "ec2:RequestSpotInstances",
+                "ec2:CancelSpotInstanceRequests",
+              ],
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
-                  "ec2:InstanceType": `${runnersInstanceType.toString()}`,
                   "ec2:Region": `${scope.region}`,
-                  "ec2:Tenancy": "default",
                 },
                 ArnEqualsIfExists: {
-                  "ec2:Vpc": `arn:${scope.partition}:ec2:${scope.region}:${scope.account}:vpc/${this.network.vpc.vpcId}`,
-                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
+                  "ec2:Vpc": `${this.network.vpc.vpcArn}`,
+                },
+              },
+            },
+            {
+              Effect: "Allow",
+              Action: ["ec2:RunInstances"],
+              Resource: ["*"],
+              Condition: {
+                StringEquals: {
+                  "ec2:InstanceType": [`${runnersInstanceType.toString()}`],
+                  "ec2:InstanceProfile": `${runnersInstanceProfile.ref}`,
                 },
               },
             },
@@ -391,9 +402,6 @@ export class Runner extends Construct {
               Condition: {
                 StringLike: {
                   "ec2:ResourceTag/Name": "*gitlab-runner-*",
-                },
-                ArnEquals: {
-                  "ec2:InstanceProfile": `${runnersInstanceProfile.attrArn}`,
                 },
               },
             },
@@ -412,10 +420,6 @@ export class Runner extends Construct {
       `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
     );
 
-    const cfnHupRestartHandle = new InitServiceRestartHandle();
-    cfnHupRestartHandle._addFile("/etc/cfn/cfn-hup.conf");
-    cfnHupRestartHandle._addFile("/etc/cfn/hooks.d/cfn-auto-reloader.conf");
-
     const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
     gitlabRunnerConfigRestartHandle._addFile("/etc/gitlab-runner/config.toml");
 
@@ -425,13 +429,12 @@ export class Runner extends Construct {
     // configs
     const REPOSITORIES = "repositories";
     const PACKAGES = "packages";
-    const CFN_HUP = "cfnHup";
     const CONFIG = "config";
     const RESTART = "restart";
 
     const initConfig = CloudFormationInit.fromConfigSets({
       configSets: {
-        default: [REPOSITORIES, PACKAGES, CFN_HUP, CONFIG, RESTART],
+        default: [REPOSITORIES, PACKAGES, CONFIG, RESTART],
       },
       configs: {
         [REPOSITORIES]: new InitConfig([
@@ -445,45 +448,12 @@ export class Runner extends Construct {
           InitPackage.yum("gitlab-runner"),
           InitPackage.yum("tzdata"),
           InitCommand.shellCommand(
-            //"curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
-            "curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+            "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+            //"curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
             { key: "10-docker-machine" }
           ),
           InitCommand.shellCommand("gitlab-runner start", {
             key: "20-gitlab-runner-start",
-          }),
-        ]),
-        [CFN_HUP]: new InitConfig([
-          InitFile.fromString(
-            "/etc/cfn/cfn-hup.conf",
-            `
-[main]
-stack=${scope.stackName}
-region=${scope.region}
-verbose=true
-            `.trim(),
-            {
-              owner: "root",
-              group: "root",
-              mode: "000400",
-              serviceRestartHandles: [cfnHupRestartHandle],
-            }
-          ),
-          InitFile.fromString(
-            "/etc/cfn/hooks.d/cfn-auto-reloader.conf",
-            `
-[cfn-auto-reloader-hook]
-triggers=post.update
-path=Resources.ManagerAutoscalingGroup.Metadata.AWS::CloudFormation::Init
-action=/opt/aws/bin/cfn-init -v --stack ${scope.stackName} --region ${scope.region} --resource ManagerAutoscalingGroup --configsets default
-runas=root
-            `.trim(),
-            { serviceRestartHandles: [cfnHupRestartHandle] }
-          ),
-          InitService.enable("cfn-hup", {
-            enabled: true,
-            ensureRunning: true,
-            serviceRestartHandle: cfnHupRestartHandle,
           }),
         ]),
         [CONFIG]: new InitConfig([
