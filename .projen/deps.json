@@ -102,6 +102,10 @@
       "type": "build"
     },
     {
+      "name": "@iarna/toml",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-cdk/aws-autoscaling",
       "version": "1.132.0",
       "type": "peer"

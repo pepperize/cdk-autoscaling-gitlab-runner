@@ -45,6 +45,7 @@ const project = new AwsCdkConstructLibrary({
     "@aws-cdk/core:newStyleStackSynthesis": true,
   },
   deps: ["@iarna/toml"],
+  bundledDeps: ["@iarna/toml"],
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                     /* Build dependencies for this module. */
@@ -81,24 +82,10 @@ const project = new AwsCdkConstructLibrary({
 });
 
 project.setScript("preinstall", "npx only-allow npm");
-project.setScript("build", "tsc");
-project.setScript("watch", "tsc -w");
-project.setScript("cdk", "cdk");
-project.setScript(
-  "bootstrap",
-  "cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess"
-);
-project.setScript("synth", "cdk synth");
-project.setScript("deploy", "cdk deploy");
 project.setScript(
   "format",
   "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
 );
 
 project.buildWorkflow.on({ push: {}, pullRequest: {}, workflowDispatch: {} });
-project.buildTask.reset();
-project.buildTask.exec("npx projen");
-project.buildTask.spawn({ name: "test" });
-project.buildTask.spawn({ name: "compile" });
-
 project.synth();
