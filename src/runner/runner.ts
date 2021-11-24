@@ -19,7 +19,6 @@ import {
   MachineImage,
   Port,
   SecurityGroup,
-  SubnetType,
   UserData,
 } from "@aws-cdk/aws-ec2";
 import {
@@ -522,8 +521,7 @@ export class GitlabRunnerAutoscaling extends Construct {
       {
         vpc: this.network.vpc,
         vpcSubnets: {
-          subnetType: SubnetType.PUBLIC,
-          availabilityZones: [this.network.availabilityZone],
+          subnets: [this.network.subnet],
         },
         instanceType: managerInstanceType,
         machineImage: managerMachineImage,
