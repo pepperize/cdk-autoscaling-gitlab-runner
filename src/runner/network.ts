@@ -23,13 +23,6 @@ export type NetworkProps = {
    *  - has an Nat Gateway
    */
   subnetSelection?: SubnetSelection;
-
-  /**
-   * The preferred availability zone for the GitLab Runner.
-   *
-   * If not specified, the first found availability zone will be picked. The selected subnets must be in that availability zone.
-   */
-  availabilityZone?: string;
 };
 
 /**
@@ -51,16 +44,9 @@ export class Network extends Construct {
         maxAzs: 1,
       });
 
-    this.subnet = this.findSubnet(
-      this.vpc,
-      props.availabilityZone,
-      props.subnetSelection
-    );
+    this.subnet = this.findSubnet(this.vpc, props.subnetSelection);
 
-    this.availabilityZone = this.findAvailabilityZone(
-      this.subnet,
-      props.availabilityZone
-    );
+    this.availabilityZone = this.subnet.availabilityZone;
 
     if (!this.hasPrivateSubnet(this.vpc)) {
       Annotations.of(this).addWarning(
@@ -78,19 +64,13 @@ export class Network extends Construct {
    *
    * @exception Throws an error if no private or public is found.
    */
-  private findSubnet(
-    vpc: IVpc,
-    availabilityZone?: string,
-    subnetSelection?: SubnetSelection
-  ): ISubnet {
-    const filterByAZ = availabilityZone ? [availabilityZone] : undefined;
-
+  private findSubnet(vpc: IVpc, subnetSelection?: SubnetSelection): ISubnet {
     const selectedSubnets = vpc.selectSubnets(
       subnetSelection || {
         subnetType: this.hasPrivateSubnet(vpc)
           ? SubnetType.PRIVATE_WITH_NAT
           : SubnetType.PUBLIC,
-        availabilityZones: filterByAZ,
+        availabilityZones: vpc.availabilityZones,
       }
     );
 
@@ -103,16 +83,5 @@ export class Network extends Construct {
     }
 
     return subnet;
-  }
-
-  private findAvailabilityZone(
-    subnet: ISubnet,
-    availabilityZone?: string
-  ): string {
-    if (availabilityZone) {
-      return availabilityZone;
-    }
-
-    return subnet.availabilityZone;
   }
 }
