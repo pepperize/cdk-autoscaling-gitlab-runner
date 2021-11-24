@@ -2,7 +2,7 @@ import { IMachineImage, InstanceType } from "@aws-cdk/aws-ec2";
 import { CfnInstanceProfile } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Stack } from "@aws-cdk/core";
-import { JsonMap, stringify } from "@iarna/toml";
+import { stringify } from "@iarna/toml";
 import {
   defaultAutoscalingConfiguration,
   defaultCacheConfiguration,
@@ -115,6 +115,6 @@ export class Configuration {
    * Returns the configuration as toml formatted string.
    */
   toToml(): string {
-    return stringify(this.globalConfiguration as JsonMap);
+    return stringify(this.globalConfiguration);
   }
 }

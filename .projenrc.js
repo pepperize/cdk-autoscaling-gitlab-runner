@@ -64,9 +64,6 @@ const project = new AwsCdkConstructLibrary({
     mavenGroupId: "your_package_group_id",
     mavenArtifactId: "your_package_target_id",
   },
-  publishToGo: {
-    moduleName: "github.com/owner/repo/subdir",
-  },
   eslint: true,
   eslintOptions: {
     prettier: true,

@@ -7,7 +7,6 @@ export type AnyConfiguration =
   | boolean
   | number
   | string
-  | undefined
   | ConfigurationMap
   | ConfigurationArray
   | ConfigurationArray[];
