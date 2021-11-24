@@ -1,4 +1,10 @@
-import { ISubnet, IVpc, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
+import {
+  ISubnet,
+  IVpc,
+  SubnetSelection,
+  SubnetType,
+  Vpc,
+} from "@aws-cdk/aws-ec2";
 import { Annotations, Construct, Stack } from "@aws-cdk/core";
 
 export type NetworkProps = {
@@ -8,21 +14,15 @@ export type NetworkProps = {
   vpc?: IVpc;
 
   /**
-   * If no existing subnet is provided, the first private or public found will be used.
+   * The GitLab Runner's subnets. It should be either public or private. If more then subnet is selected, then the first found (private) subnet will be used.
+   * @see {@link https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.SubnetSelection.html}
    *
    * A network is considered private, if
    *  - tagged by 'aws-cdk:subnet-type'
    *  - doesn't route to an Internet Gateway (not public)
    *  - has an Nat Gateway
    */
-  subnet?: ISubnet;
-
-  /**
-   * The preferred availability zone for the GitLab Runner.
-   *
-   * If not specified, the first found availability zone will be picked. The selected subnets must be in that availability zone.
-   */
-  availabilityZone?: string;
+  subnetSelection?: SubnetSelection;
 };
 
 /**
@@ -44,13 +44,9 @@ export class Network extends Construct {
         maxAzs: 1,
       });
 
-    this.subnet =
-      props.subnet || this.findSubnet(this.vpc, props.availabilityZone);
+    this.subnet = this.findSubnet(this.vpc, props.subnetSelection);
 
-    this.availabilityZone = this.findAvailabilityZone(
-      this.subnet,
-      props.availabilityZone
-    );
+    this.availabilityZone = this.subnet.availabilityZone;
 
     if (!this.hasPrivateSubnet(this.vpc)) {
       Annotations.of(this).addWarning(
@@ -68,15 +64,15 @@ export class Network extends Construct {
    *
    * @exception Throws an error if no private or public is found.
    */
-  private findSubnet(vpc: IVpc, availabilityZone?: string): ISubnet {
-    const filterByAZ = availabilityZone ? [availabilityZone] : undefined;
-
-    const selectedSubnets = vpc.selectSubnets({
-      subnetType: this.hasPrivateSubnet(vpc)
-        ? SubnetType.PRIVATE_WITH_NAT
-        : SubnetType.PUBLIC,
-      availabilityZones: filterByAZ,
-    });
+  private findSubnet(vpc: IVpc, subnetSelection?: SubnetSelection): ISubnet {
+    const selectedSubnets = vpc.selectSubnets(
+      subnetSelection || {
+        subnetType: this.hasPrivateSubnet(vpc)
+          ? SubnetType.PRIVATE_WITH_NAT
+          : SubnetType.PUBLIC,
+        availabilityZones: vpc.availabilityZones,
+      }
+    );
 
     const subnet = selectedSubnets.subnets.find(() => true);
 
@@ -87,16 +83,5 @@ export class Network extends Construct {
     }
 
     return subnet;
-  }
-
-  private findAvailabilityZone(
-    subnet: ISubnet,
-    availabilityZone?: string
-  ): string {
-    if (availabilityZone) {
-      return availabilityZone;
-    }
-
-    return subnet.availabilityZone;
   }
 }
