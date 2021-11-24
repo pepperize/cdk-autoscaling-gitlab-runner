@@ -1,6 +1,6 @@
-const { NodePackageManager, AwsCdkTypeScriptApp } = require("projen");
+const { NodePackageManager, AwsCdkConstructLibrary } = require("projen");
 
-const project = new AwsCdkTypeScriptApp({
+const project = new AwsCdkConstructLibrary({
   authorName: "Ivan Ovdiienko",
   authorAddress: "ivan.ovdiienko@pepperize.com",
   authorOrganization: "Pepperize",
@@ -30,6 +30,7 @@ const project = new AwsCdkTypeScriptApp({
     "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
   cdkDependencies: [
+    "@aws-cdk/core",
     "@aws-cdk/aws-s3",
     "@aws-cdk/aws-s3-deployment",
     "@aws-cdk/aws-ec2",
