@@ -51,7 +51,7 @@ export interface ConfigurationProps {
 }
 
 /**
- * The GitLab Runner configuration to generate the {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html | config.toml}.
+ * The GitLab Runner configuration to generate the [config.toml]{@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html}.
  */
 export class Configuration {
   /**
