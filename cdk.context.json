@@ -170,5 +170,6 @@
         ]
       }
     ]
-  }
+  },
+  "ami:account=637898683827:filters.architecture.0=x86_64:filters.image-type.0=machine:filters.name.0=ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*:filters.root-device-type.0=ebs:filters.state.0=available:filters.virtualization-type.0=hvm:owners.0=099720109477:region=us-east-1": "ami-022d4249382309a48"
 }

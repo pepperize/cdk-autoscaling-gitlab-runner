@@ -15,6 +15,10 @@ Object {
       "Description": "S3 key for asset version \\"1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1\\"",
       "Type": "String",
     },
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664ebsC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-ebs",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
   },
   "Resources": Object {
     "CacheBucket41D9D0B0": Object {
@@ -277,7 +281,7 @@ token = \\"\\"
   MachineName = \\"gitlab-runner-%s\\"
   MachineOptions = [
   \\"amazonec2-instance-type=t3.micro\\",
-  \\"amazonec2-ami=ami-083654bd07b5da81d\\",
+  \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=vpc123\\",
   \\"amazonec2-zone=a\\",
@@ -430,7 +434,9 @@ token = \\"\\"
         "IamInstanceProfile": Object {
           "Ref": "ManagerAutoscalingGroupInstanceProfile7C061EF0",
         },
-        "ImageId": "ami-0de53d8956e8dcf80",
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664ebsC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
         "InstanceType": "t3.nano",
         "SecurityGroups": Array [
           Object {
@@ -447,7 +453,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: d035fe735f5ad465
+# fingerprint: c671a833982f325c
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

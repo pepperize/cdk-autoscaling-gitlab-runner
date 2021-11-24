@@ -4,6 +4,11 @@ import {
   Signals,
 } from "@aws-cdk/aws-autoscaling";
 import {
+  AmazonLinuxCpuType,
+  AmazonLinuxEdition,
+  AmazonLinuxGeneration,
+  AmazonLinuxStorage,
+  AmazonLinuxVirt,
   CloudFormationInit,
   IMachineImage,
   InitCommand,
@@ -16,6 +21,7 @@ import {
   InstanceSize,
   InstanceType,
   ISecurityGroup,
+  LookupMachineImage,
   MachineImage,
   Port,
   SecurityGroup,
@@ -48,38 +54,6 @@ import { Network, NetworkProps } from "./network";
  *
  * @packageDocumentation
  */
-
-/**
- * A record of Region: string and AmiID: string
- */
-export const managerAmiMap: Record<string, string> = {
-  "eu-north-1": "ami-d16fe6af",
-  "ap-south-1": "ami-0889b8a448de4fc44",
-  "eu-west-3": "ami-0451ae4fd8dd178f7",
-  "eu-west-2": "ami-09ead922c1dad67e4",
-  "eu-west-1": "ami-07683a44e80cd32c5",
-  "ap-northeast-2": "ami-047f7b46bd6dd5d84",
-  "ap-northeast-1": "ami-0f9ae750e8274075b",
-  "sa-east-1": "ami-0669a96e355eac82f",
-  "ca-central-1": "ami-03338e1f67dae0168",
-  "ap-southeast-1": "ami-0b419c3a4b01d1859",
-  "ap-southeast-2": "ami-04481c741a0311bbb",
-  "eu-central-1": "ami-09def150731bdbcc2",
-  "us-east-1": "ami-0de53d8956e8dcf80",
-  "us-east-2": "ami-02bcbb802e03574ba",
-  "us-west-1": "ami-0019ef04ac50be30f",
-  "us-west-2": "ami-061392db613a6357b",
-};
-
-/**
- * A record of Region: string and AmiID: string
- * @see {@link https://cloud-images.ubuntu.com/locator/ec2/}
- */
-export const runnerAmiMap: Record<string, string> = {
-  "eu-central-1": "ami-0a49b025fffbbdac6",
-  "us-west-1": "ami-053ac55bdcfe96e85",
-  "us-east-1": "ami-083654bd07b5da81d",
-};
 
 /**
  * Properties of the Gitlab Runner. You have to provide at least the GitLab's Runner's authentication token.
@@ -117,7 +91,7 @@ export interface GitlabRunnerAutoscalingProps {
 
   manager?: {
     /**
-     * An Amazon Machine Image ID for the Manager EC2 instance.
+     * An Amazon Machine Image ID for the Manager EC2 instance. If empty the latest Amazon 2 Image will be looked up.
      */
     machineImage?: IMachineImage;
     /**
@@ -137,7 +111,9 @@ export interface GitlabRunnerAutoscalingProps {
      */
     instanceType?: InstanceType;
     /**
-     * An Amazon Machine Image ID for the Runners EC2 instances.
+     * An Amazon Machine Image ID for the Runners EC2 instances. If empty the latest Ubuntu 20.04 focal will be looked up.
+     *
+     * @see https://cloud-images.ubuntu.com/locator/ec2/
      */
     machineImage?: IMachineImage;
     /**
@@ -280,8 +256,23 @@ export class GitlabRunnerAutoscaling extends Construct {
       runners?.instanceType ||
       InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
 
-    const runnersMachineImage =
-      runners?.machineImage || MachineImage.genericLinux(runnerAmiMap);
+    const runnersLookupMachineImage = new LookupMachineImage({
+      name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
+      owners: ["099720109477"],
+      filters: {
+        architecture: ["x86_64"],
+        "image-type": ["machine"],
+        state: ["available"],
+        "root-device-type": ["ebs"],
+        "virtualization-type": ["hvm"],
+      },
+    }).getImage(this);
+
+    const runnersMachineImage: IMachineImage =
+      runners?.machineImage ||
+      MachineImage.genericLinux({
+        [scope.region]: runnersLookupMachineImage.imageId,
+      });
 
     /**
      * GitLab Manager
@@ -310,7 +301,14 @@ export class GitlabRunnerAutoscaling extends Construct {
       InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
 
     const managerMachineImage =
-      runners?.machineImage || MachineImage.genericLinux(managerAmiMap);
+      runners?.machineImage ||
+      MachineImage.latestAmazonLinux({
+        generation: AmazonLinuxGeneration.AMAZON_LINUX_2,
+        edition: AmazonLinuxEdition.STANDARD,
+        virtualization: AmazonLinuxVirt.HVM,
+        storage: AmazonLinuxStorage.EBS,
+        cpuType: AmazonLinuxCpuType.X86_64,
+      });
 
     const managerRole = new Role(scope, "ManagerRole", {
       assumedBy: ec2ServicePrincipal,
