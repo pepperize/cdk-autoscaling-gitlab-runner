@@ -7,11 +7,11 @@ import {
 } from "@aws-cdk/aws-ec2";
 import { Annotations, Construct, Stack } from "@aws-cdk/core";
 
-export type NetworkProps = {
+export interface NetworkProps {
   /**
    * If no existing VPC is provided, a default Vpc will be created.
    */
-  vpc?: IVpc;
+  readonly vpc?: IVpc;
 
   /**
    * The GitLab Runner's subnets. It should be either public or private. If more then subnet is selected, then the first found (private) subnet will be used.
@@ -22,8 +22,8 @@ export type NetworkProps = {
    *  - doesn't route to an Internet Gateway (not public)
    *  - has an Nat Gateway
    */
-  subnetSelection?: SubnetSelection;
-};
+  readonly subnetSelection?: SubnetSelection;
+}
 
 /**
  * Network settings for the manager and runners
@@ -35,16 +35,16 @@ export class Network extends Construct {
   readonly availabilityZone: string;
   readonly subnet: ISubnet;
 
-  constructor(scope: Stack, id: string, props: NetworkProps = {}) {
+  constructor(scope: Stack, id: string, props?: NetworkProps) {
     super(scope, id);
 
     this.vpc =
-      props.vpc ||
+      props?.vpc ??
       new Vpc(scope, `Vpc`, {
         maxAzs: 1,
       });
 
-    this.subnet = this.findSubnet(this.vpc, props.subnetSelection);
+    this.subnet = this.findSubnet(this.vpc, props?.subnetSelection);
 
     this.availabilityZone = this.subnet.availabilityZone;
 

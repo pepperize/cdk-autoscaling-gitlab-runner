@@ -1,10 +1,20 @@
-export type RequiredConfiguration =
-  | (Pick<GlobalConfiguration, "runners"> & Partial<GlobalConfiguration>)
-  | {
-      runners:
-        | Partial<RunnersConfiguration>[] &
-            Pick<RunnersConfiguration, "token">[];
-    };
+export type ConfigurationArray =
+  | boolean[]
+  | number[]
+  | string[]
+  | ConfigurationMap[];
+export type AnyConfiguration =
+  | boolean
+  | number
+  | string
+  | undefined
+  | ConfigurationMap
+  | ConfigurationArray
+  | ConfigurationArray[];
+
+export interface ConfigurationMap {
+  [key: string]: AnyConfiguration;
+}
 
 /**
  * https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
@@ -14,28 +24,29 @@ export type GlobalConfiguration = {
    * The limit of the jobs that can be run concurrently across all runners (concurrent).
    * @default 10
    */
-  concurrent: number;
+  readonly concurrent: number;
 
   /**
    * The check_interval option defines how often the runner should check GitLab for new jobs| in seconds.
    * @default 0
    */
-  check_interval: number;
+  readonly check_interval: number;
 
   /**
    * The log_level
    */
-  log_level?: "debug" | "info" | "warn" | "error" | "fatal" | "panic";
+  readonly log_level: "debug" | "info" | "warn" | "error" | "fatal" | "panic";
 
   /**
    * The log format
    */
-  log_format?: "runner" | "text" | "json";
+  readonly log_format: "runner" | "text" | "json";
 
   /**
    * The GitLab Runners configuration.
    */
-  runners: RunnersConfiguration[];
+  readonly runners: RunnersConfiguration[];
+  [key: string]: AnyConfiguration;
 };
 
 /**
@@ -46,43 +57,44 @@ export type RunnersConfiguration = {
    * The runner’s name.
    * @default "gitlab-runner"
    */
-  name: string;
+  readonly name: string;
   /**
    * GitLab instance URL.
    * @default "https://gitlab.com"
    */
-  url: string;
+  readonly url: string;
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
    */
-  token: string;
+  readonly token: string;
   /**
    * Limit how many jobs can be handled concurrently by this registered runner.
    * @default 10
    */
-  limit: number;
+  readonly limit: number;
   /**
    * Maximum build log size in kilobytes.
    * @default 52428800 Default is 50 GB.
    */
-  output_limit: number;
+  readonly output_limit: number;
 
   /**
    * The following executors are available.
    * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-executors
    * @default "docker+machine" Use auto-scaled Docker machines.
    */
-  executor: Executor;
+  readonly executor: Executor;
   /**
    * Append or overwrite environment variables.
    * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
    * @default ["DOCKER_DRIVER=overlay2","DOCKER_TLS_CERTDIR=/certs"]
    */
-  environment: string[];
-  docker: DockerConfiguration;
-  cache?: CacheConfiguration;
-  machine: MachineConfiguration;
+  readonly environment: string[];
+  readonly docker: DockerConfiguration;
+  readonly cache: CacheConfiguration;
+  readonly machine: MachineConfiguration;
+  [key: string]: AnyConfiguration;
 };
 
 export type Executor = "docker+machine" | "docker";
@@ -92,24 +104,26 @@ export type Executor = "docker+machine" | "docker";
  * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
  */
 export type DockerConfiguration = {
-  tls_verify: boolean;
+  readonly tls_verify: boolean;
   /**
    * The image to run jobs with.
    * @default
    */
-  image: string;
-  privileged: boolean;
-  cap_add: string[];
-  wait_for_services_timeout: number;
-  disable_cache: boolean;
-  volumes: string[];
-  shm_size: number;
+  readonly image: string;
+  readonly privileged: boolean;
+  readonly cap_add: string[];
+  readonly wait_for_services_timeout: number;
+  readonly disable_cache: boolean;
+  readonly volumes: string[];
+  readonly shm_size: number;
+  [key: string]: AnyConfiguration;
 };
 
 export type CacheConfiguration = {
-  Type: "s3";
-  Shared: boolean;
-  s3: CacheS3Configuration;
+  readonly Type: "s3";
+  readonly Shared: boolean;
+  readonly s3: CacheS3Configuration;
+  [key: string]: AnyConfiguration;
 };
 
 /**
@@ -120,17 +134,18 @@ export type CacheS3Configuration = {
    * The AWS S3 host.
    * @default "s3.amazonaws.com"
    */
-  ServerAddress: string;
+  readonly ServerAddress: string;
   /**
    * The name of the storage bucket where cache is stored.
    * @default "runners-cache"
    */
-  BucketName: string;
+  readonly BucketName: string;
   /**
    * The name of the S3 region.
    */
-  BucketLocation: string;
-  [key: "AccessKey" | "SecretKey" | string]: string;
+  readonly BucketLocation: string;
+
+  [key: string]: AnyConfiguration;
 };
 
 /**
@@ -139,50 +154,46 @@ export type CacheS3Configuration = {
  * @see {@link https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines}
  */
 export type MachineConfiguration = {
-  IdleCount: number;
-  IdleTime: number;
-  MaxBuilds: number;
-  MachineDriver: "amazonec2" | string;
-  MachineName: string;
-  MachineOptions?: string[];
-  autoscaling: AutoscalingConfiguration[];
+  readonly IdleCount: number;
+  readonly IdleTime: number;
+  readonly MaxBuilds: number;
+  readonly MachineDriver: "amazonec2" | string;
+  readonly MachineName: string;
+  readonly MachineOptions: string[];
+  readonly autoscaling: AutoscalingConfiguration[];
+  [key: string]: AnyConfiguration;
 };
 
 /**
  * @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section}
  */
 export type MachineOptionProps = {
-  "instance-type": string;
-  ami: string;
-  region: string;
-  "vpc-id": string;
+  readonly "instance-type": string;
+  readonly ami: string;
+  readonly region: string;
+  readonly "vpc-id": string;
   /**
    * If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is eu-west-1b it has to be amazonec2-zone=b
    */
-  zone: string;
-  "subnet-id": string;
-  "security-group": string;
+  readonly zone: string;
+  readonly "subnet-id": string;
+  readonly "security-group": string;
   /**
    * Use the private IP address of Docker Machines, but still create a public IP address. Useful to keep the traffic internal and avoid extra costs.
    */
-  "use-private-address": boolean;
-  "iam-instance-profile": string;
-  "request-spot-instance": boolean;
-  "block-duration-minutes"?: number;
-  "spot-price": number;
-  [key: string]: string | boolean | number | undefined;
+  readonly "use-private-address": boolean;
+  readonly "iam-instance-profile": string;
+  readonly "request-spot-instance": boolean;
+  readonly "spot-price": number;
+  [key: string]: AnyConfiguration;
 };
 
 export class MachineOptions {
-  public static fromProps(props: MachineOptionProps): MachineOptions {
+  public static fromProps(props: ConfigurationMap): MachineOptions {
     return new MachineOptions(props);
   }
 
-  constructor(private readonly props: MachineOptionProps) {}
-
-  toJson() {
-    return JSON.stringify(this.toArray());
-  }
+  constructor(private readonly props: ConfigurationMap) {}
 
   toArray(): string[] {
     const options = [];
@@ -202,8 +213,8 @@ export class MachineOptions {
  * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections}
  */
 export type AutoscalingConfiguration = {
-  IdleCount: number;
-  IdleTime: number;
+  readonly IdleCount: number;
+  readonly IdleTime: number;
   /**
    * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
    * https://github.com/gorhill/cronexpr#implementation
@@ -213,8 +224,9 @@ export type AutoscalingConfiguration = {
    * @example
    * // "* * 7-22 * * mon-fri *"
    */
-  Periods: string[];
-  Timezone: Timezone;
+  readonly Periods: string[];
+  readonly Timezone: Timezone;
+  [key: string]: AnyConfiguration;
 };
 
 export type Timezone =

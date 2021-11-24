@@ -3,7 +3,7 @@ const { NodePackageManager, AwsCdkConstructLibrary } = require("projen");
 const project = new AwsCdkConstructLibrary({
   authorName: "Ivan Ovdiienko",
   authorAddress: "ivan.ovdiienko@pepperize.com",
-  authorOrganization: "Pepperize",
+  authorOrganization: true,
   copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
   license: "MIT",
   cdkVersion: "1.132.0",

@@ -2,7 +2,7 @@ import { IMachineImage, InstanceType } from "@aws-cdk/aws-ec2";
 import { CfnInstanceProfile } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Stack } from "@aws-cdk/core";
-import { stringify } from "@iarna/toml";
+import { JsonMap, stringify } from "@iarna/toml";
 import {
   defaultAutoscalingConfiguration,
   defaultCacheConfiguration,
@@ -11,35 +11,43 @@ import {
   defaultMachineConfiguration,
   defaultRunnerConfiguration,
 } from "./configuration.default";
-import { GlobalConfiguration, MachineOptions } from "./configuration.types";
+import {
+  ConfigurationMap,
+  GlobalConfiguration,
+  MachineOptions,
+} from "./configuration.types";
+
+export interface VpcConfigurationProps {
+  readonly vpcId: string;
+  readonly subnetId: string;
+  /**
+   * The availability zone of the vpc contains the region prefixed. The GitLab Runner configuration accepts only the availability zone symbol i.e. a.
+   */
+  readonly availabilityZone: string;
+}
+
+export interface RunnerConfigurationProps {
+  readonly instanceType: InstanceType;
+  readonly machineImage: IMachineImage;
+  readonly securityGroupName: string;
+  readonly instanceProfile: CfnInstanceProfile;
+}
+
+export interface SpotConfigurationProps {
+  readonly requestSpotInstance: boolean;
+  readonly spotPrice: number;
+}
 
 export interface ConfigurationProps {
-  scope: Stack;
+  readonly scope: Stack;
   /**
    * The GitLab Runner's auth token.
    */
-  gitlabToken: string;
-  cache: IBucket;
-  vpc: {
-    vpcId: string;
-    subnetId: string;
-    /**
-     *
-     * The availability zone of the vpc contains the region prefixed. The GitLab Runner configuration accepts only the availability zone symbol i.e. a.
-     */
-    availabilityZone: string;
-  };
-  runner: {
-    instanceType: InstanceType;
-    machineImage: IMachineImage;
-    securityGroupName: string;
-    instanceProfile: CfnInstanceProfile;
-  };
-  spot: {
-    requestSpotInstance: boolean;
-    blockDurationInMinutes?: number;
-    spotPrice: number;
-  };
+  readonly gitlabToken: string;
+  readonly cache: IBucket;
+  readonly vpc: VpcConfigurationProps;
+  readonly runner: RunnerConfigurationProps;
+  readonly spot: SpotConfigurationProps;
 }
 
 /**
@@ -52,7 +60,7 @@ export class Configuration {
   public static fromProps(props: ConfigurationProps) {
     const { scope, gitlabToken, cache, vpc, runner, spot } = props;
 
-    const configuration = {
+    const configuration: GlobalConfiguration = {
       ...defaultConfiguration,
       runners: [
         {
@@ -86,7 +94,6 @@ export class Configuration {
               "use-private-address": true,
               "iam-instance-profile": `${runner.instanceProfile.ref}`,
               "request-spot-instance": spot.requestSpotInstance,
-              "block-duration-minutes": spot.blockDurationInMinutes,
               "spot-price": spot.spotPrice,
             }).toArray(),
             autoscaling: [
@@ -102,12 +109,12 @@ export class Configuration {
     return new Configuration(configuration);
   }
 
-  constructor(readonly configuration: GlobalConfiguration) {}
+  constructor(readonly globalConfiguration: ConfigurationMap) {}
 
   /**
    * Returns the configuration as toml formatted string.
    */
   toToml(): string {
-    return stringify(this.configuration);
+    return stringify(this.globalConfiguration as JsonMap);
   }
 }

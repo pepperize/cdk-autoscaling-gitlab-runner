@@ -12,12 +12,12 @@ export interface CacheProps {
    *
    * @default "runner-cache"
    */
-  bucketName?: string;
+  readonly bucketName?: string;
   /**
    * The number of days after which the created cache objects are deleted from S3.
    * @default 30 days
    */
-  expiration?: Duration;
+  readonly expiration?: Duration;
 }
 
 /**

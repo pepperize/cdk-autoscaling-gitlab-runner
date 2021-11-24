@@ -37,13 +37,9 @@ import {
 } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
-import {
-  Configuration,
-  DockerConfiguration,
-  MachineConfiguration,
-} from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
 import { Network, NetworkProps } from "./network";
+import { Configuration } from "../runner-configuration";
 
 /**
  * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.
@@ -63,102 +59,76 @@ export interface GitlabRunnerAutoscalingProps {
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * @see {@link https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens}
    */
-  gitlabToken: string;
+  readonly gitlabToken: string;
 
   /**
    * GitLab instance URL.
    * @default "https://gitlab.com"
    */
-  gitlabUrl?: string;
+  readonly gitlabUrl?: string;
 
   /**
    * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
    * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
    */
-  cache?: {
-    /**
-     * An existing S3 bucket used as runner's cache.
-     */
-    bucket?: IBucket;
+  readonly cache?: GitlabRunnerAutoscalingCacheProps;
 
-    /**
-     * If no existing S3 bucket is provided, a S3 bucket will be created.
-     */
-    options?: CacheProps;
-  };
+  readonly network?: NetworkProps;
 
-  network?: NetworkProps;
+  readonly manager?: GitlabRunnerAutoscalingManagerProps;
 
-  manager?: {
-    /**
-     * An Amazon Machine Image ID for the Manager EC2 instance. If empty the latest Amazon 2 Image will be looked up.
-     */
-    machineImage?: IMachineImage;
-    /**
-     * Instance type for manager EC2 instance. It's a combination of a class and size.
-     * @default InstanceType.of(InstanceClass.T3, InstanceSize.NANO)
-     */
-    instanceType?: InstanceType;
-    /**
-     * A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
-     */
-    keyPairName?: string;
-  };
-  runners?: {
-    /**
-     * Instance type for runner EC2 instances. It's a combination of a class and size.
-     * @default InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
-     */
-    instanceType?: InstanceType;
-    /**
-     * An Amazon Machine Image ID for the Runners EC2 instances. If empty the latest Ubuntu 20.04 focal will be looked up.
-     *
-     * @see https://cloud-images.ubuntu.com/locator/ec2/
-     */
-    machineImage?: IMachineImage;
-    /**
-     * This defines the Docker Container parameters.
-     * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section}
-     *
-     * @example
-     * ```
-     * {
-     *   tls_verify: false,
-     *   image: "docker:19.03.5",
-     *   privileged: true,
-     *   cap_add: ["CAP_SYS_ADMIN"],
-     *   wait_for_services_timeout: 300,
-     *   disable_cache: false,
-     *   volumes: ["/certs/client", "/cache"],
-     *   shm_size: 0,
-     * }
-     * ```
-     */
-    docker?: Partial<DockerConfiguration>;
-    /**
-     * The following parameters define the Docker Machine-based autoscaling feature.
-     * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section}
-     *
-     * @example
-     * ```
-     * {
-     *   IdleCount: 0,
-     *   IdleTime: 300,
-     *   MaxBuilds: 20,
-     *   MachineDriver: "amazonec2",
-     *   MachineName: "gitlab-runner-%s",
-     *   autoscaling: [],
-     * };
-     */
-    machine?: Partial<MachineConfiguration>;
-  };
+  readonly runners?: GitlabRunnerAutoscalingRunnerProps;
+}
+
+export interface GitlabRunnerAutoscalingCacheProps {
+  /**
+   * An existing S3 bucket used as runner's cache.
+   */
+  readonly bucket?: IBucket;
+
+  /**
+   * If no existing S3 bucket is provided, a S3 bucket will be created.
+   */
+  readonly options?: CacheProps;
+}
+
+export interface GitlabRunnerAutoscalingManagerProps {
+  /**
+   * An Amazon Machine Image ID for the Manager EC2 instance. If empty the latest Amazon 2 Image will be looked up.
+   */
+  readonly machineImage?: IMachineImage;
+
+  /**
+   * Instance type for manager EC2 instance. It's a combination of a class and size.
+   * @default InstanceType.of(InstanceClass.T3, InstanceSize.NANO)
+   */
+  readonly instanceType?: InstanceType;
+
+  /**
+   * A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
+   */
+  readonly keyPairName?: string;
+}
+
+export interface GitlabRunnerAutoscalingRunnerProps {
+  /**
+   * Instance type for runner EC2 instances. It's a combination of a class and size.
+   * @default InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
+   */
+  readonly instanceType?: InstanceType;
+
+  /**
+   * An Amazon Machine Image ID for the Runners EC2 instances. If empty the latest Ubuntu 20.04 focal will be looked up.
+   *
+   * @see https://cloud-images.ubuntu.com/locator/ec2/
+   */
+  readonly machineImage?: IMachineImage;
 }
 
 /**
  * The Gitlab Runner autoscaling on EC2 by Docker Machine.
  *
- * @example Provisioning a basic Runner
- * ```ts
+ * @example <caption>Provisioning a basic Runner</caption>
  * const app = new cdk.App();
  * const stack = new cdk.Stack(app, "RunnerStack", {
  *   env: {
@@ -170,29 +140,15 @@ export interface GitlabRunnerAutoscalingProps {
  * new Runner(scope, "GitlabRunner", {
  *   gitlabToken: "xxxxxxxxxxxxxxxxxxxx",
  * });
- * ```
  */
 export class GitlabRunnerAutoscaling extends Construct {
   readonly network: Network;
 
   readonly cacheBucket: IBucket;
 
-  readonly runners: {
-    securityGroupName: string;
-    securityGroup: ISecurityGroup;
-    role: IRole;
-    instanceProfile: CfnInstanceProfile;
-    instanceType: InstanceType;
-    machineImage: IMachineImage;
-  };
+  readonly runners: GitlabRunnerAutoscalingRunners;
 
-  readonly manager: {
-    securityGroup: ISecurityGroup;
-    instanceType: InstanceType;
-    machineImage: IMachineImage;
-    autoScalingGroup: IAutoScalingGroup;
-    role: IRole;
-  };
+  readonly manager: GitlabRunnerAutoscalingManager;
 
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
@@ -555,4 +511,21 @@ export class GitlabRunnerAutoscaling extends Construct {
       role: managerRole,
     };
   }
+}
+
+export interface GitlabRunnerAutoscalingRunners {
+  readonly securityGroupName: string;
+  readonly securityGroup: ISecurityGroup;
+  readonly role: IRole;
+  readonly instanceProfile: CfnInstanceProfile;
+  readonly instanceType: InstanceType;
+  readonly machineImage: IMachineImage;
+}
+
+export interface GitlabRunnerAutoscalingManager {
+  readonly securityGroup: ISecurityGroup;
+  readonly instanceType: InstanceType;
+  readonly machineImage: IMachineImage;
+  readonly autoScalingGroup: IAutoScalingGroup;
+  readonly role: IRole;
 }

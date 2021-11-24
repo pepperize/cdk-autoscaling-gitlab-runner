@@ -1,20 +1,20 @@
 import {
   AutoscalingConfiguration,
   CacheConfiguration,
+  DockerConfiguration,
   GlobalConfiguration,
   MachineConfiguration,
   RunnersConfiguration,
 } from "./configuration.types";
 
 // Cache
-export type DefaultCacheConfiguration = Omit<CacheConfiguration, "s3">;
-export const defaultCacheConfiguration: DefaultCacheConfiguration = {
+export const defaultCacheConfiguration: CacheConfiguration = {
   Type: "s3",
   Shared: true,
-};
+} as CacheConfiguration;
 
 // Docker
-export const defaultDockerConfiguration = {
+export const defaultDockerConfiguration: DockerConfiguration = {
   tls_verify: false,
   image: "docker:19.03.5",
   privileged: true,
@@ -41,15 +41,10 @@ export const defaultMachineConfiguration: MachineConfiguration = {
   MachineDriver: "amazonec2",
   MachineName: "gitlab-runner-%s",
   autoscaling: [defaultAutoscalingConfiguration],
-};
+} as MachineConfiguration;
 
 // Runners
-export type DefaultRunnerConfiguration = Omit<
-  RunnersConfiguration,
-  "token" | "cache"
-> & { cache: DefaultCacheConfiguration };
-
-export const defaultRunnerConfiguration: DefaultRunnerConfiguration = {
+export const defaultRunnerConfiguration: RunnersConfiguration = {
   name: "gitlab-runner",
   url: "https://gitlab.com",
   limit: 10,
@@ -59,15 +54,13 @@ export const defaultRunnerConfiguration: DefaultRunnerConfiguration = {
   docker: defaultDockerConfiguration,
   cache: defaultCacheConfiguration,
   machine: defaultMachineConfiguration,
-};
+} as RunnersConfiguration;
 
 // Global
-export type DefaultGlobalConfiguration =
-  | Omit<GlobalConfiguration, "runners"> & {
-      runners: DefaultRunnerConfiguration[];
-    };
-export const defaultConfiguration: DefaultGlobalConfiguration = {
+export const defaultConfiguration: GlobalConfiguration = {
   concurrent: 10,
   check_interval: 0,
+  log_format: "runner",
+  log_level: "info",
   runners: [defaultRunnerConfiguration],
 };

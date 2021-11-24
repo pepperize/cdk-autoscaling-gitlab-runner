@@ -36,7 +36,7 @@
   "author": {
     "name": "Ivan Ovdiienko",
     "email": "ivan.ovdiienko@pepperize.com",
-    "organization": "Pepperize"
+    "organization": true
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.132.0",
