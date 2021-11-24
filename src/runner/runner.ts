@@ -426,7 +426,10 @@ export class GitlabRunnerAutoscaling extends Construct {
     const rsyslogConfigRestartHandle = new InitServiceRestartHandle();
     rsyslogConfigRestartHandle._addFile("/etc/rsyslog.d/25-gitlab-runner.conf");
 
-    // configs
+    /**
+     * Config set keys
+     * @see {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html#aws-resource-init-configsets}
+     */
     const REPOSITORIES = "repositories";
     const PACKAGES = "packages";
     const CONFIG = "config";
