@@ -390,7 +390,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
           },
         ],
         "VPCZoneIdentifier": Array [
-          "s-12345",
+          "p-12345",
         ],
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
