@@ -277,7 +277,7 @@ token = \\"\\"
   MachineName = \\"gitlab-runner-%s\\"
   MachineOptions = [
   \\"amazonec2-instance-type=t3.micro\\",
-  \\"amazonec2-ami=ami-083654bd07b5da81d\\",
+  \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=vpc123\\",
   \\"amazonec2-zone=a\\",
@@ -447,7 +447,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: d035fe735f5ad465
+# fingerprint: c671a833982f325c
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

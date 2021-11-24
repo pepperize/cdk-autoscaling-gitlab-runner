@@ -16,6 +16,7 @@ import {
   InstanceSize,
   InstanceType,
   ISecurityGroup,
+  LookupMachineImage,
   MachineImage,
   Port,
   SecurityGroup,
@@ -69,16 +70,6 @@ export const managerAmiMap: Record<string, string> = {
   "us-east-2": "ami-02bcbb802e03574ba",
   "us-west-1": "ami-0019ef04ac50be30f",
   "us-west-2": "ami-061392db613a6357b",
-};
-
-/**
- * A record of Region: string and AmiID: string
- * @see {@link https://cloud-images.ubuntu.com/locator/ec2/}
- */
-export const runnerAmiMap: Record<string, string> = {
-  "eu-central-1": "ami-0a49b025fffbbdac6",
-  "us-west-1": "ami-053ac55bdcfe96e85",
-  "us-east-1": "ami-083654bd07b5da81d",
 };
 
 /**
@@ -280,8 +271,23 @@ export class GitlabRunnerAutoscaling extends Construct {
       runners?.instanceType ||
       InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
 
-    const runnersMachineImage =
-      runners?.machineImage || MachineImage.genericLinux(runnerAmiMap);
+    const runnersLookupMachineImage = new LookupMachineImage({
+      name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
+      owners: ["099720109477"],
+      filters: {
+        architecture: ["x86_64"],
+        "image-type": ["machine"],
+        state: ["available"],
+        "root-device-type": ["ebs"],
+        "virtualization-type": ["hvm"],
+      },
+    }).getImage(this);
+
+    const runnersMachineImage: IMachineImage =
+      runners?.machineImage ||
+      MachineImage.genericLinux({
+        [scope.region]: runnersLookupMachineImage.imageId,
+      });
 
     /**
      * GitLab Manager
