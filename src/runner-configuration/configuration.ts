@@ -77,7 +77,10 @@ export class Configuration {
               ami: runner.machineImage.getImage(scope).imageId,
               region: scope.region,
               "vpc-id": vpc.vpcId,
-              zone: vpc.availabilityZone.replace(scope.region, ""),
+              /**
+               * extract the availabilityZone last character for the needs of gitlab configuration @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section}
+               */
+              zone: vpc.availabilityZone.slice(-1),
               "subnet-id": vpc.subnetId,
               "security-group": `${runner.securityGroupName}`,
               "use-private-address": true,

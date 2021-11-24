@@ -468,7 +468,7 @@ export class GitlabRunnerAutoscaling extends Construct {
               vpc: {
                 vpcId: this.network.vpc.vpcId,
                 subnetId: this.network.subnet.subnetId,
-                availabilityZone: this.network.availabilityZone.slice(-1),
+                availabilityZone: this.network.availabilityZone,
               },
               runner: {
                 instanceType: runnersInstanceType,
