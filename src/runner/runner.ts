@@ -112,6 +112,8 @@ export interface GitlabRunnerAutoscalingProps {
     instanceType?: InstanceType;
     /**
      * An Amazon Machine Image ID for the Runners EC2 instances. If empty the latest Ubuntu 20.04 focal will be looked up.
+     *
+     * @see https://cloud-images.ubuntu.com/locator/ec2/
      */
     machineImage?: IMachineImage;
     /**
