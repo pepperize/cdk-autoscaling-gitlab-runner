@@ -19,6 +19,11 @@ export interface ConfigurationProps {
    * The GitLab Runner's auth token.
    */
   gitlabToken: string;
+  /**
+   * GitLab instance URL.
+   * @default "https://gitlab.com"
+   */
+  gitlabUrl: string;
   cache: IBucket;
   vpc: {
     vpcId: string;
@@ -47,10 +52,10 @@ export interface ConfigurationProps {
  */
 export class Configuration {
   /**
-   * Creates a configuration from the {@link Runner} merged with default presets.
+   * Creates a configuration from the {@link GitlabRunnerAutoscaling} merged with default presets.
    */
   public static fromProps(props: ConfigurationProps) {
-    const { scope, gitlabToken, cache, vpc, runner, spot } = props;
+    const { scope, gitlabToken, gitlabUrl, cache, vpc, runner, spot } = props;
 
     const configuration = {
       ...defaultConfiguration,
@@ -59,6 +64,7 @@ export class Configuration {
           ...defaultRunnerConfiguration,
           name: scope.stackName,
           token: gitlabToken,
+          url: gitlabUrl,
           cache: {
             ...defaultCacheConfiguration,
             s3: {
