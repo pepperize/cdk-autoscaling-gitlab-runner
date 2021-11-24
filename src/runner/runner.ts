@@ -269,7 +269,7 @@ export class GitlabRunnerAutoscaling extends Construct {
       managedPolicies: [ec2ManagedPolicyForSSM],
     });
 
-    const runnersInstanceProfile = new CfnInstanceProfile( // TODO: refactor this low level code
+    const runnersInstanceProfile = new CfnInstanceProfile(
       scope,
       "RunnersInstanceProfile",
       {
