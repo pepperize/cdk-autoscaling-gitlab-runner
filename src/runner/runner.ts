@@ -227,7 +227,6 @@ export class GitlabRunnerAutoscaling extends Construct {
       runners,
       network,
       gitlabToken,
-      gitlabUrl,
     }: GitlabRunnerAutoscalingProps = props;
 
     /**
@@ -463,7 +462,6 @@ export class GitlabRunnerAutoscaling extends Construct {
             Configuration.fromProps({
               scope: scope,
               gitlabToken: gitlabToken,
-              gitlabUrl: gitlabUrl,
               cache: this.cacheBucket,
               vpc: {
                 vpcId: this.network.vpc.vpcId,
