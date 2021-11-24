@@ -1,4 +1,10 @@
-import { ISubnet, IVpc, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
+import {
+  ISubnet,
+  IVpc,
+  SubnetSelection,
+  SubnetType,
+  Vpc,
+} from "@aws-cdk/aws-ec2";
 import { Annotations, Construct, Stack } from "@aws-cdk/core";
 
 export type NetworkProps = {
@@ -8,14 +14,15 @@ export type NetworkProps = {
   vpc?: IVpc;
 
   /**
-   * If no existing subnet is provided, the first private or public found will be used.
+   * Customize subnets
+   * @see {@link https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.SubnetSelection.html}
    *
    * A network is considered private, if
    *  - tagged by 'aws-cdk:subnet-type'
    *  - doesn't route to an Internet Gateway (not public)
    *  - has an Nat Gateway
    */
-  subnet?: ISubnet;
+  subnetSelection?: SubnetSelection;
 
   /**
    * The preferred availability zone for the GitLab Runner.
@@ -44,8 +51,11 @@ export class Network extends Construct {
         maxAzs: 1,
       });
 
-    this.subnet =
-      props.subnet || this.findSubnet(this.vpc, props.availabilityZone);
+    this.subnet = this.findSubnet(
+      this.vpc,
+      props.availabilityZone,
+      props.subnetSelection
+    );
 
     this.availabilityZone = this.findAvailabilityZone(
       this.subnet,
@@ -68,15 +78,21 @@ export class Network extends Construct {
    *
    * @exception Throws an error if no private or public is found.
    */
-  private findSubnet(vpc: IVpc, availabilityZone?: string): ISubnet {
+  private findSubnet(
+    vpc: IVpc,
+    availabilityZone?: string,
+    subnetSelection?: SubnetSelection
+  ): ISubnet {
     const filterByAZ = availabilityZone ? [availabilityZone] : undefined;
 
-    const selectedSubnets = vpc.selectSubnets({
-      subnetType: this.hasPrivateSubnet(vpc)
-        ? SubnetType.PRIVATE_WITH_NAT
-        : SubnetType.PUBLIC,
-      availabilityZones: filterByAZ,
-    });
+    const selectedSubnets = vpc.selectSubnets(
+      subnetSelection || {
+        subnetType: this.hasPrivateSubnet(vpc)
+          ? SubnetType.PRIVATE_WITH_NAT
+          : SubnetType.PUBLIC,
+        availabilityZones: filterByAZ,
+      }
+    );
 
     const subnet = selectedSubnets.subnets.find(() => true);
 
