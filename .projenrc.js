@@ -7,7 +7,7 @@ const project = new AwsCdkConstructLibrary({
   copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
   license: "MIT",
   cdkVersion: "1.132.0",
-  cdkVersionPinning: true,
+  cdkVersionPinning: false,
   defaultReleaseBranch: "main",
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
   description:
@@ -37,13 +37,6 @@ const project = new AwsCdkConstructLibrary({
     "@aws-cdk/aws-iam",
     "@aws-cdk/aws-autoscaling",
   ],
-  appEntrypoint: "main.ts",
-  context: {
-    "@aws-cdk/core:enableStackNameDuplicates": "true",
-    "aws-cdk:enableDiffNoFail": "true",
-    "@aws-cdk/core:stackRelativeExports": "true",
-    "@aws-cdk/core:newStyleStackSynthesis": true,
-  },
   deps: ["@iarna/toml"],
   bundledDeps: ["@iarna/toml"],
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
@@ -87,5 +80,4 @@ project.setScript(
   "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
 );
 
-project.buildWorkflow.on({ push: {}, pullRequest: {}, workflowDispatch: {} });
 project.synth();

@@ -3,6 +3,8 @@
 exports[`configuration 1`] = `
 "concurrent = 10
 check_interval = 0
+log_format = \\"runner\\"
+log_level = \\"info\\"
 
 [[runners]]
 name = \\"gitlab-runner\\"

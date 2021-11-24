@@ -236,6 +236,8 @@ Object {
                     Array [
                       "concurrent = 10
 check_interval = 0
+log_format = \\"runner\\"
+log_level = \\"info\\"
 
 [[runners]]
 name = \\"MockStack\\"
@@ -453,7 +455,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: c671a833982f325c
+# fingerprint: aebc2717614c0403
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

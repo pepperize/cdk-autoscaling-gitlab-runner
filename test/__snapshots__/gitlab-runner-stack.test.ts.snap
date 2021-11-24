@@ -236,6 +236,8 @@ Object {
                     Array [
                       "concurrent = 10
 check_interval = 0
+log_format = \\"runner\\"
+log_level = \\"info\\"
 
 [[runners]]
 name = \\"gitlab-runner\\"
@@ -453,7 +455,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 31b55c55ed0a1d8e
+# fingerprint: 974848b07cb4ce98
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

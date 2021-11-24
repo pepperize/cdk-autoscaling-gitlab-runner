@@ -37,9 +37,9 @@ import {
 } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
+import { Configuration } from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
 import { Network, NetworkProps } from "./network";
-import { Configuration } from "../runner-configuration";
 
 /**
  * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.
