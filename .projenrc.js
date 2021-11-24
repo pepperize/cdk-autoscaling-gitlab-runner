@@ -8,7 +8,7 @@ const project = new AwsCdkTypeScriptApp({
   license: "MIT",
   cdkVersion: "1.132.0",
   cdkVersionPinning: true,
-  defaultReleaseBranch: "master",
+  defaultReleaseBranch: "main",
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
   description:
     "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
