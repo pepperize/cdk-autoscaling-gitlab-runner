@@ -54,7 +54,6 @@ import { Network, NetworkProps } from "./network";
  * A record of Region: string and AmiID: string
  */
 export const managerAmiMap: Record<string, string> = {
-  // Record<REGION, AMI_ID>
   "eu-north-1": "ami-d16fe6af",
   "ap-south-1": "ami-0889b8a448de4fc44",
   "eu-west-3": "ami-0451ae4fd8dd178f7",
@@ -137,11 +136,11 @@ export interface GitlabRunnerAutoscalingProps {
      * Instance type for runner EC2 instances. It's a combination of a class and size.
      * @default InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
      */
-    instanceType?: InstanceType; //
+    instanceType?: InstanceType;
     /**
      * An Amazon Machine Image ID for the Runners EC2 instances.
      */
-    machineImage?: IMachineImage; //
+    machineImage?: IMachineImage;
     /**
      * This defines the Docker Container parameters.
      * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section}
