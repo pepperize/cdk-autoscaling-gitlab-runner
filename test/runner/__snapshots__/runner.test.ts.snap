@@ -240,23 +240,13 @@ log_format = \\"runner\\"
 log_level = \\"info\\"
 
 [[runners]]
+token = \\"\\"
 name = \\"MockStack\\"
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
 environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
-token = \\"\\"
-
-  [runners.docker]
-  tls_verify = false
-  image = \\"docker:19.03.5\\"
-  privileged = true
-  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
-  wait_for_services_timeout = 300
-  disable_cache = false
-  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
-  shm_size = 0
 
   [runners.cache]
   Type = \\"s3\\"
@@ -274,6 +264,16 @@ token = \\"\\"
                       },
                       "\\"
     BucketLocation = \\"us-east-1\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
 
   [runners.machine]
   IdleCount = 0
@@ -455,7 +455,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: aebc2717614c0403
+# fingerprint: c513f51a164b9f7a
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

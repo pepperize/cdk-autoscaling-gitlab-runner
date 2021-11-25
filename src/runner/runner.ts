@@ -417,22 +417,26 @@ export class GitlabRunnerAutoscaling extends Construct {
             "/etc/gitlab-runner/config.toml",
             Configuration.fromProps({
               scope: scope,
-              gitlabToken: gitlabToken,
-              cache: this.cacheBucket,
-              vpc: {
-                vpcId: this.network.vpc.vpcId,
-                subnetId: this.network.subnet.subnetId,
-                availabilityZone: this.network.availabilityZone,
-              },
-              runner: {
-                instanceType: runnersInstanceType,
-                machineImage: runnersMachineImage,
-                securityGroupName: runnersSecurityGroupName,
-                instanceProfile: runnersInstanceProfile,
-              },
-              spot: {
-                requestSpotInstance: true,
-                spotPrice: 0.03,
+              runners: {
+                cache: this.cacheBucket,
+                machine: {
+                  machineOptions: {
+                    instanceType: runnersInstanceType,
+                    machineImage: runnersMachineImage,
+                    instanceProfile: runnersInstanceProfile,
+                    securityGroupName: runnersSecurityGroupName,
+                    vpc: {
+                      vpcId: this.network.vpc.vpcId,
+                      subnetId: this.network.subnet.subnetId,
+                      availabilityZone: this.network.availabilityZone,
+                    },
+                    spot: {
+                      requestSpotInstance: true,
+                      spotPrice: 0.03,
+                    },
+                  },
+                },
+                gitlabToken: gitlabToken,
               },
             }).toToml(),
             {

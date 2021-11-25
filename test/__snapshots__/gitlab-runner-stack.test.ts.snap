@@ -240,23 +240,13 @@ log_format = \\"runner\\"
 log_level = \\"info\\"
 
 [[runners]]
+token = \\"iieC-HsJsedAse2vq486\\"
 name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
 environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
-token = \\"iieC-HsJsedAse2vq486\\"
-
-  [runners.docker]
-  tls_verify = false
-  image = \\"docker:19.03.5\\"
-  privileged = true
-  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
-  wait_for_services_timeout = 300
-  disable_cache = false
-  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
-  shm_size = 0
 
   [runners.cache]
   Type = \\"s3\\"
@@ -274,6 +264,16 @@ token = \\"iieC-HsJsedAse2vq486\\"
                       },
                       "\\"
     BucketLocation = \\"us-east-1\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
 
   [runners.machine]
   IdleCount = 0
@@ -455,7 +455,7 @@ token = \\"iieC-HsJsedAse2vq486\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 974848b07cb4ce98
+# fingerprint: 86f875b766d32576
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

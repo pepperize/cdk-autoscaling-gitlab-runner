@@ -269,32 +269,10 @@ import { ConfigurationProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 const configurationProps: ConfigurationProps = { ... }
 ```
 
-##### `cache`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.cache"></a>
+##### `runners`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.runners"></a>
 
 ```typescript
-public readonly cache: IBucket;
-```
-
-- *Type:* [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket)
-
----
-
-##### `gitlabToken`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.gitlabToken"></a>
-
-```typescript
-public readonly gitlabToken: string;
-```
-
-- *Type:* `string`
-
-The GitLab Runner's auth token.
-
----
-
-##### `runner`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.runner"></a>
-
-```typescript
-public readonly runner: RunnerConfigurationProps;
+public readonly runners: RunnerConfigurationProps;
 ```
 
 - *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps)
@@ -311,23 +289,43 @@ public readonly scope: Stack;
 
 ---
 
-##### `spot`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.spot"></a>
+##### `checkInterval`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.checkInterval"></a>
 
 ```typescript
-public readonly spot: SpotConfigurationProps;
+public readonly checkInterval: number;
 ```
 
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps)
+- *Type:* `number`
 
 ---
 
-##### `vpc`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.vpc"></a>
+##### `concurrent`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.concurrent"></a>
 
 ```typescript
-public readonly vpc: VpcConfigurationProps;
+public readonly concurrent: number;
 ```
 
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps)
+- *Type:* `number`
+
+---
+
+##### `logFormat`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.logFormat"></a>
+
+```typescript
+public readonly logFormat: string;
+```
+
+- *Type:* `string`
+
+---
+
+##### `logLevel`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.logLevel"></a>
+
+```typescript
+public readonly logLevel: string;
+```
+
+- *Type:* `string`
 
 ---
 
@@ -676,6 +674,96 @@ public readonly securityGroupName: string;
 
 ---
 
+### MachineConfigurationOptionsProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { MachineConfigurationOptionsProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
+
+const machineConfigurationOptionsProps: MachineConfigurationOptionsProps = { ... }
+```
+
+##### `instanceProfile`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.instanceProfile"></a>
+
+```typescript
+public readonly instanceProfile: CfnInstanceProfile;
+```
+
+- *Type:* [`@aws-cdk/aws-iam.CfnInstanceProfile`](#@aws-cdk/aws-iam.CfnInstanceProfile)
+
+---
+
+##### `instanceType`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.instanceType"></a>
+
+```typescript
+public readonly instanceType: InstanceType;
+```
+
+- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
+
+---
+
+##### `machineImage`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.machineImage"></a>
+
+```typescript
+public readonly machineImage: IMachineImage;
+```
+
+- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
+
+---
+
+##### `securityGroupName`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.securityGroupName"></a>
+
+```typescript
+public readonly securityGroupName: string;
+```
+
+- *Type:* `string`
+
+---
+
+##### `spot`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.spot"></a>
+
+```typescript
+public readonly spot: SpotConfigurationProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps)
+
+---
+
+##### `vpc`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.vpc"></a>
+
+```typescript
+public readonly vpc: VpcConfigurationProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps)
+
+---
+
+### MachineConfigurationProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { MachineConfigurationProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
+
+const machineConfigurationProps: MachineConfigurationProps = { ... }
+```
+
+##### `options`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.options"></a>
+
+```typescript
+public readonly options: MachineConfigurationOptionsProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps)
+
+---
+
 ### NetworkProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps"></a>
 
 #### Initializer <a name="[object Object].Initializer"></a>
@@ -724,43 +812,117 @@ import { RunnerConfigurationProps } from '@pepperize/cdk-autoscaling-gitlab-runn
 const runnerConfigurationProps: RunnerConfigurationProps = { ... }
 ```
 
-##### `instanceProfile`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.instanceProfile"></a>
+##### `cache`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.cache"></a>
 
 ```typescript
-public readonly instanceProfile: CfnInstanceProfile;
+public readonly cache: IBucket;
 ```
 
-- *Type:* [`@aws-cdk/aws-iam.CfnInstanceProfile`](#@aws-cdk/aws-iam.CfnInstanceProfile)
+- *Type:* [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket)
 
 ---
 
-##### `instanceType`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.instanceType"></a>
+##### `gitlabToken`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.gitlabToken"></a>
 
 ```typescript
-public readonly instanceType: InstanceType;
-```
-
-- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
-
----
-
-##### `machineImage`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.machineImage"></a>
-
-```typescript
-public readonly machineImage: IMachineImage;
-```
-
-- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
-
----
-
-##### `securityGroupName`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.securityGroupName"></a>
-
-```typescript
-public readonly securityGroupName: string;
+public readonly gitlabToken: string;
 ```
 
 - *Type:* `string`
+
+The GitLab Runner's auth token.
+
+---
+
+##### `machine`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.machine"></a>
+
+```typescript
+public readonly machine: MachineConfigurationProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps)
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.environment"></a>
+
+```typescript
+public readonly environment: string[];
+```
+
+- *Type:* `string`[]
+- *Default:* ["DOCKER_DRIVER=overlay2","DOCKER_TLS_CERTDIR=/certs"]
+
+Append or overwrite environment variables.
+
+> {@link https://docs.gitlab.com/runners/configuration/advanced-configuration.html#the-runnerss-section}
+
+---
+
+##### `executor`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.executor"></a>
+
+```typescript
+public readonly executor: string;
+```
+
+- *Type:* `string`
+- *Default:* "docker+machine" Use auto-scaled Docker machines.
+
+The following executors are available.
+
+> {@link https://docs.gitlab.com/runners/configuration/advanced-configuration.html#the-executors}
+
+---
+
+##### `gitlabUrl`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.gitlabUrl"></a>
+
+```typescript
+public readonly gitlabUrl: string;
+```
+
+- *Type:* `string`
+- *Default:* "https://gitlab.com"
+
+GitLab instance URL.
+
+---
+
+##### `limit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.limit"></a>
+
+```typescript
+public readonly limit: number;
+```
+
+- *Type:* `number`
+- *Default:* 10
+
+Limit how many jobs can be handled concurrently by this registered runners.
+
+---
+
+##### `name`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* `string`
+- *Default:* "gitlab-runners"
+
+The runners’s name.
+
+---
+
+##### `outputLimit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.outputLimit"></a>
+
+```typescript
+public readonly outputLimit: number;
+```
+
+- *Type:* `number`
+- *Default:* 52428800 Default is 50 GB.
+
+Maximum build log size in kilobytes.
 
 ---
 
@@ -842,7 +1004,7 @@ public readonly vpcId: string;
 
 ### Configuration <a name="@pepperize/cdk-autoscaling-gitlab-runner.Configuration"></a>
 
-The GitLab Runner configuration to generate the [config.toml]{@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html}.
+The GitLab Runner configuration to generate the [config.toml]{@link https://docs.gitlab.com/runners/configuration/advanced-configuration.html}.
 
 #### Initializers <a name="@pepperize/cdk-autoscaling-gitlab-runner.Configuration.Initializer"></a>
 
