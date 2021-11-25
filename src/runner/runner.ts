@@ -158,6 +158,7 @@ export class GitlabRunnerAutoscaling extends Construct {
       runners,
       network,
       gitlabToken,
+      gitlabUrl,
     }: GitlabRunnerAutoscalingProps = props;
 
     /**
@@ -436,6 +437,7 @@ export class GitlabRunnerAutoscaling extends Construct {
                     },
                   },
                 },
+                gitlabUrl: gitlabUrl,
                 gitlabToken: gitlabToken,
               },
             }).toToml(),
