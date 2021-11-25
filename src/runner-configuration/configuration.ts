@@ -115,10 +115,7 @@ export interface AutoscalingConfigurationProps {
    *
    * [second] [minute] [hour] [day of month] [month] [day of week] [year]
    *
-   * @example
-   * ```ts
-   * ["* * 7-22 * * mon-fri *"]
-   * ```
+   * @example ["* * 7-22 * * mon-fri *"]
    */
   readonly periods?: string[];
   readonly timezone?: Timezone;

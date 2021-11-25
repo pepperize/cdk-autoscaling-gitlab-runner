@@ -213,6 +213,62 @@ public readonly vpc: IVpc;
 
 ## Structs <a name="Structs"></a>
 
+### AutoscalingConfigurationProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfigurationProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { AutoscalingConfigurationProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
+
+const autoscalingConfigurationProps: AutoscalingConfigurationProps = { ... }
+```
+
+##### `idleCount`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfigurationProps.property.idleCount"></a>
+
+```typescript
+public readonly idleCount: number;
+```
+
+- *Type:* `number`
+
+---
+
+##### `idleTime`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfigurationProps.property.idleTime"></a>
+
+```typescript
+public readonly idleTime: number;
+```
+
+- *Type:* `number`
+
+---
+
+##### `periods`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfigurationProps.property.periods"></a>
+
+```typescript
+public readonly periods: string[];
+```
+
+- *Type:* `string`[]
+
+The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
+
+> {@link https://github.com/gorhill/cronexpr#implementation}
+
+[second] [minute] [hour] [day of month] [month] [day of week] [year]
+
+---
+
+##### `timezone`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfigurationProps.property.timezone"></a>
+
+```typescript
+public readonly timezone: string;
+```
+
+- *Type:* `string`
+
+---
+
 ### CacheProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheProps"></a>
 
 #### Initializer <a name="[object Object].Initializer"></a>
@@ -793,6 +849,66 @@ public readonly machineOptions: MachineOptionsConfigurationProps;
 ```
 
 - *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps)
+
+---
+
+##### `autoscaling`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.autoscaling"></a>
+
+```typescript
+public readonly autoscaling: AutoscalingConfigurationProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfigurationProps)
+
+---
+
+##### `idleCount`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.idleCount"></a>
+
+```typescript
+public readonly idleCount: number;
+```
+
+- *Type:* `number`
+
+---
+
+##### `idleTime`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.idleTime"></a>
+
+```typescript
+public readonly idleTime: number;
+```
+
+- *Type:* `number`
+
+---
+
+##### `machineDriver`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.machineDriver"></a>
+
+```typescript
+public readonly machineDriver: string;
+```
+
+- *Type:* `string`
+
+---
+
+##### `machineName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.machineName"></a>
+
+```typescript
+public readonly machineName: string;
+```
+
+- *Type:* `string`
+
+---
+
+##### `maxBuilds`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.maxBuilds"></a>
+
+```typescript
+public readonly maxBuilds: number;
+```
+
+- *Type:* `number`
 
 ---
 
