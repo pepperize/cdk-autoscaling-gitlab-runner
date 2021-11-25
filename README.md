@@ -17,7 +17,10 @@ _Note: it's a really simple and short README. Only basic tips are covered. Feel 
 - **[WebStorm](https://www.jetbrains.com/phpstorm/)**: ^2021.2 or any other IDE for TypeScript development,
 - **[Node.js](https://nodejs.org/download/release/v14.6.0/)**: ^16.6.2,
 - **[npm](https://www.npmjs.com/package/npm/v/6.14.6)**: ^7.20.3 (Comes bundled with Node.js),
-- **[awscli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)** ^1.20.31.
+- **[awscli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)** ^1.20.31,
+- **[dotnet](https://docs.microsoft.com/en-us/dotnet/core/install/)** ^6.0.100,
+- **[OpenJDK](https://jdk.java.net/)** ^11,
+- **[Apache Maven](https://jdk.java.net/)** ^3.8.4,
 
 ### Quick start
 
