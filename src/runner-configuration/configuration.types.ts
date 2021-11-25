@@ -32,14 +32,14 @@ export type GlobalConfiguration = {
   readonly check_interval: number;
 
   /**
-   * The log_level
-   */
-  readonly log_level: "debug" | "info" | "warn" | "error" | "fatal" | "panic";
-
-  /**
    * The log format
    */
-  readonly log_format: "runner" | "text" | "json";
+  readonly log_format: LogFormat;
+
+  /**
+   * The log_level
+   */
+  readonly log_level: LogLevel;
 
   /**
    * The GitLab Runners configuration.
@@ -47,6 +47,10 @@ export type GlobalConfiguration = {
   readonly runners: RunnersConfiguration[];
   [key: string]: AnyConfiguration;
 };
+
+export type LogLevel = "debug" | "info" | "warn" | "error" | "fatal" | "panic";
+
+export type LogFormat = "runner" | "text" | "json";
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section

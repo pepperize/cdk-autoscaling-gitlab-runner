@@ -15,6 +15,8 @@ import {
   ConfigurationMap,
   Executor,
   GlobalConfiguration,
+  LogFormat,
+  LogLevel,
   MachineOptions,
 } from "./configuration.types";
 
@@ -91,10 +93,24 @@ export interface SpotConfigurationProps {
 export interface ConfigurationProps {
   readonly scope: Stack;
   readonly runners: RunnerConfigurationProps;
+  /**
+   * The limit of the jobs that can be run concurrently across all runners (concurrent).
+   * @default 10
+   */
   readonly concurrent?: number;
+  /**
+   * The check_interval option defines how often the runner should check GitLab for new jobs| in seconds.
+   * @default 0
+   */
   readonly checkInterval?: number;
-  readonly logFormat?: "runner" | "text" | "json";
-  readonly logLevel?: "debug" | "info" | "warn" | "error" | "fatal" | "panic";
+  /**
+   * The log format
+   */
+  readonly logFormat?: LogFormat;
+  /**
+   * The log_level
+   */
+  readonly logLevel?: LogLevel;
 }
 
 /**
