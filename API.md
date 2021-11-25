@@ -296,6 +296,9 @@ public readonly checkInterval: number;
 ```
 
 - *Type:* `number`
+- *Default:* 0
+
+The check_interval option defines how often the runner should check GitLab for new jobs| in seconds.
 
 ---
 
@@ -306,6 +309,9 @@ public readonly concurrent: number;
 ```
 
 - *Type:* `number`
+- *Default:* 10
+
+The limit of the jobs that can be run concurrently across all runners (concurrent).
 
 ---
 
@@ -317,6 +323,8 @@ public readonly logFormat: string;
 
 - *Type:* `string`
 
+The log format.
+
 ---
 
 ##### `logLevel`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.logLevel"></a>
@@ -326,6 +334,8 @@ public readonly logLevel: string;
 ```
 
 - *Type:* `string`
+
+The log_level.
 
 ---
 
