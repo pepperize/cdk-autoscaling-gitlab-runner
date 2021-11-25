@@ -296,6 +296,9 @@ public readonly checkInterval: number;
 ```
 
 - *Type:* `number`
+- *Default:* 0
+
+The check_interval option defines how often the runner should check GitLab for new jobs| in seconds.
 
 ---
 
@@ -306,6 +309,9 @@ public readonly concurrent: number;
 ```
 
 - *Type:* `number`
+- *Default:* 10
+
+The limit of the jobs that can be run concurrently across all runners (concurrent).
 
 ---
 
@@ -317,6 +323,8 @@ public readonly logFormat: string;
 
 - *Type:* `string`
 
+The log format.
+
 ---
 
 ##### `logLevel`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationProps.property.logLevel"></a>
@@ -326,6 +334,100 @@ public readonly logLevel: string;
 ```
 
 - *Type:* `string`
+
+The log_level.
+
+---
+
+### DockerConfigurationProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { DockerConfigurationProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
+
+const dockerConfigurationProps: DockerConfigurationProps = { ... }
+```
+
+##### `tlsVerify`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps.property.tlsVerify"></a>
+
+```typescript
+public readonly tlsVerify: boolean;
+```
+
+- *Type:* `boolean`
+
+---
+
+##### `capAdd`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps.property.capAdd"></a>
+
+```typescript
+public readonly capAdd: string[];
+```
+
+- *Type:* `string`[]
+
+---
+
+##### `disableCache`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps.property.disableCache"></a>
+
+```typescript
+public readonly disableCache: boolean;
+```
+
+- *Type:* `boolean`
+
+---
+
+##### `image`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps.property.image"></a>
+
+```typescript
+public readonly image: string;
+```
+
+- *Type:* `string`
+
+The image to run jobs with.
+
+---
+
+##### `privileged`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps.property.privileged"></a>
+
+```typescript
+public readonly privileged: boolean;
+```
+
+- *Type:* `boolean`
+
+---
+
+##### `shmSize`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps.property.shmSize"></a>
+
+```typescript
+public readonly shmSize: number;
+```
+
+- *Type:* `number`
+
+---
+
+##### `volumes`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps.property.volumes"></a>
+
+```typescript
+public readonly volumes: string[];
+```
+
+- *Type:* `string`[]
+
+---
+
+##### `waitForServicesTimeout`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps.property.waitForServicesTimeout"></a>
+
+```typescript
+public readonly waitForServicesTimeout: number;
+```
+
+- *Type:* `number`
 
 ---
 
@@ -841,6 +943,16 @@ public readonly machine: MachineConfigurationProps;
 ```
 
 - *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps)
+
+---
+
+##### `docker`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.docker"></a>
+
+```typescript
+public readonly docker: DockerConfigurationProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfigurationProps)
 
 ---
 

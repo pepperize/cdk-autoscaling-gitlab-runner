@@ -69,7 +69,24 @@ export interface RunnerConfigurationProps {
 
   readonly cache: IBucket;
 
+  readonly docker?: DockerConfigurationProps;
+
   readonly machine: MachineConfigurationProps;
+}
+
+export interface DockerConfigurationProps {
+  readonly tlsVerify: boolean;
+  /**
+   * The image to run jobs with.
+   * @default
+   */
+  readonly image?: string;
+  readonly privileged?: boolean;
+  readonly capAdd?: string[];
+  readonly waitForServicesTimeout?: number;
+  readonly disableCache?: boolean;
+  readonly volumes?: string[];
+  readonly shmSize?: number;
 }
 
 export interface MachineConfigurationProps {
@@ -142,7 +159,8 @@ export class Configuration {
           environment:
             runners.environment ?? defaultRunnerConfiguration.environment,
           cache: {
-            ...defaultCacheConfiguration,
+            Type: defaultCacheConfiguration.Type,
+            Shared: defaultCacheConfiguration.Shared,
             s3: {
               ServerAddress: `s3.${scope.urlSuffix}`,
               BucketName: `${runners.cache.bucketName}`,
@@ -150,7 +168,25 @@ export class Configuration {
             },
           },
           docker: {
-            ...defaultDockerConfiguration,
+            tls_verify:
+              runners.docker?.tlsVerify ||
+              defaultDockerConfiguration.tls_verify,
+            image: runners.docker?.image || defaultDockerConfiguration.image,
+            privileged:
+              runners.docker?.privileged ||
+              defaultDockerConfiguration.privileged,
+            cap_add:
+              runners.docker?.capAdd || defaultDockerConfiguration.cap_add,
+            wait_for_services_timeout:
+              runners.docker?.waitForServicesTimeout ||
+              defaultDockerConfiguration.wait_for_services_timeout,
+            disable_cache:
+              runners.docker?.disableCache ||
+              defaultDockerConfiguration.disable_cache,
+            volumes:
+              runners.docker?.volumes || defaultDockerConfiguration.volumes,
+            shm_size:
+              runners.docker?.shmSize || defaultDockerConfiguration.shm_size,
           },
           machine: {
             ...defaultMachineConfiguration,
