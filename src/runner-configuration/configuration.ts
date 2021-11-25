@@ -12,12 +12,14 @@ import {
   defaultRunnerConfiguration,
 } from "./configuration.default";
 import {
+  AnyConfiguration,
   ConfigurationMap,
   Executor,
   GlobalConfiguration,
   LogFormat,
   LogLevel,
   MachineOptions,
+  Timezone,
 } from "./configuration.types";
 
 export interface VpcConfigurationProps {
@@ -27,6 +29,7 @@ export interface VpcConfigurationProps {
    * The availability zone of the vpc contains the region prefixed. The GitLab Runner configuration accepts only the availability zone symbol i.e. a.
    */
   readonly availabilityZone: string;
+  [key: string]: AnyConfiguration | undefined | any;
 }
 
 export interface RunnerConfigurationProps {
@@ -72,6 +75,8 @@ export interface RunnerConfigurationProps {
   readonly docker?: DockerConfigurationProps;
 
   readonly machine: MachineConfigurationProps;
+
+  [key: string]: AnyConfiguration | undefined | any;
 }
 
 export interface DockerConfigurationProps {
@@ -87,10 +92,37 @@ export interface DockerConfigurationProps {
   readonly disableCache?: boolean;
   readonly volumes?: string[];
   readonly shmSize?: number;
+  [key: string]: AnyConfiguration | undefined | any;
 }
 
 export interface MachineConfigurationProps {
+  readonly idleCount?: number;
+  readonly idleTime?: number;
+  readonly maxBuilds?: number;
+  readonly machineDriver?: "amazonec2" | string;
+  readonly machineName?: string;
   readonly machineOptions: MachineOptionsConfigurationProps;
+  readonly autoscaling?: AutoscalingConfigurationProps;
+  [key: string]: AnyConfiguration | undefined | any;
+}
+
+export interface AutoscalingConfigurationProps {
+  readonly idleCount?: number;
+  readonly idleTime?: number;
+  /**
+   * The Periods setting contains an array of string patterns of time periods represented in a cron-style format.
+   * @see {@link https://github.com/gorhill/cronexpr#implementation}
+   *
+   * [second] [minute] [hour] [day of month] [month] [day of week] [year]
+   *
+   * @example
+   * ```ts
+   * ["* * 7-22 * * mon-fri *"]
+   * ```
+   */
+  readonly periods?: string[];
+  readonly timezone?: Timezone;
+  [key: string]: AnyConfiguration | undefined | any;
 }
 
 export interface MachineOptionsConfigurationProps {
@@ -100,11 +132,13 @@ export interface MachineOptionsConfigurationProps {
   readonly instanceProfile: CfnInstanceProfile;
   readonly vpc: VpcConfigurationProps;
   readonly spot: SpotConfigurationProps;
+  [key: string]: AnyConfiguration | undefined | any;
 }
 
 export interface SpotConfigurationProps {
   readonly requestSpotInstance: boolean;
   readonly spotPrice: number;
+  [key: string]: AnyConfiguration | undefined | any;
 }
 
 export interface ConfigurationProps {
@@ -128,6 +162,7 @@ export interface ConfigurationProps {
    * The log_level
    */
   readonly logLevel?: LogLevel;
+  [key: string]: AnyConfiguration | undefined | any;
 }
 
 /**
@@ -142,8 +177,8 @@ export class Configuration {
       props;
 
     const configuration: GlobalConfiguration = {
-      concurrent: concurrent || defaultConfiguration.concurrent,
-      check_interval: checkInterval || defaultConfiguration.check_interval,
+      concurrent: concurrent ?? defaultConfiguration.concurrent,
+      check_interval: checkInterval ?? defaultConfiguration.check_interval,
       log_format: logFormat || defaultConfiguration.log_format,
       log_level: logLevel || defaultConfiguration.log_level,
       runners: [
@@ -178,7 +213,7 @@ export class Configuration {
             cap_add:
               runners.docker?.capAdd || defaultDockerConfiguration.cap_add,
             wait_for_services_timeout:
-              runners.docker?.waitForServicesTimeout ||
+              runners.docker?.waitForServicesTimeout ??
               defaultDockerConfiguration.wait_for_services_timeout,
             disable_cache:
               runners.docker?.disableCache ||
@@ -186,10 +221,23 @@ export class Configuration {
             volumes:
               runners.docker?.volumes || defaultDockerConfiguration.volumes,
             shm_size:
-              runners.docker?.shmSize || defaultDockerConfiguration.shm_size,
+              runners.docker?.shmSize ?? defaultDockerConfiguration.shm_size,
           },
           machine: {
-            ...defaultMachineConfiguration,
+            IdleCount:
+              runners.machine.idleCount ??
+              defaultMachineConfiguration.IdleCount,
+            IdleTime:
+              runners.machine.idleTime ?? defaultMachineConfiguration.IdleTime,
+            MaxBuilds:
+              runners.machine.maxBuilds ??
+              defaultMachineConfiguration.MaxBuilds,
+            MachineDriver:
+              runners.machine.machineDriver ||
+              defaultMachineConfiguration.MachineDriver,
+            MachineName:
+              runners.machine.machineName ||
+              defaultMachineConfiguration.MachineName,
             MachineOptions: MachineOptions.fromProps({
               "instance-type":
                 runners.machine.machineOptions.instanceType.toString(),
@@ -213,7 +261,18 @@ export class Configuration {
             }).toArray(),
             autoscaling: [
               {
-                ...defaultAutoscalingConfiguration,
+                Periods:
+                  runners.machine.autoscaling?.periods ||
+                  defaultAutoscalingConfiguration.Periods,
+                IdleCount:
+                  runners.machine.autoscaling?.idleCount ??
+                  defaultAutoscalingConfiguration.IdleCount,
+                IdleTime:
+                  runners.machine.autoscaling?.idleTime ??
+                  defaultAutoscalingConfiguration.IdleTime,
+                Timezone:
+                  runners.machine.autoscaling?.timezone ||
+                  defaultAutoscalingConfiguration.Timezone,
               },
             ],
           },
