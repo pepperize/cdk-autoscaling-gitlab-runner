@@ -674,76 +674,6 @@ public readonly securityGroupName: string;
 
 ---
 
-### MachineConfigurationOptionsProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps"></a>
-
-#### Initializer <a name="[object Object].Initializer"></a>
-
-```typescript
-import { MachineConfigurationOptionsProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
-
-const machineConfigurationOptionsProps: MachineConfigurationOptionsProps = { ... }
-```
-
-##### `instanceProfile`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.instanceProfile"></a>
-
-```typescript
-public readonly instanceProfile: CfnInstanceProfile;
-```
-
-- *Type:* [`@aws-cdk/aws-iam.CfnInstanceProfile`](#@aws-cdk/aws-iam.CfnInstanceProfile)
-
----
-
-##### `instanceType`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.instanceType"></a>
-
-```typescript
-public readonly instanceType: InstanceType;
-```
-
-- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
-
----
-
-##### `machineImage`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.machineImage"></a>
-
-```typescript
-public readonly machineImage: IMachineImage;
-```
-
-- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
-
----
-
-##### `securityGroupName`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.securityGroupName"></a>
-
-```typescript
-public readonly securityGroupName: string;
-```
-
-- *Type:* `string`
-
----
-
-##### `spot`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.spot"></a>
-
-```typescript
-public readonly spot: SpotConfigurationProps;
-```
-
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps)
-
----
-
-##### `vpc`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps.property.vpc"></a>
-
-```typescript
-public readonly vpc: VpcConfigurationProps;
-```
-
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps)
-
----
-
 ### MachineConfigurationProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps"></a>
 
 #### Initializer <a name="[object Object].Initializer"></a>
@@ -754,13 +684,83 @@ import { MachineConfigurationProps } from '@pepperize/cdk-autoscaling-gitlab-run
 const machineConfigurationProps: MachineConfigurationProps = { ... }
 ```
 
-##### `options`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.options"></a>
+##### `machineOptions`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.machineOptions"></a>
 
 ```typescript
-public readonly options: MachineConfigurationOptionsProps;
+public readonly machineOptions: MachineOptionsConfigurationProps;
 ```
 
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationOptionsProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps)
+
+---
+
+### MachineOptionsConfigurationProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { MachineOptionsConfigurationProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
+
+const machineOptionsConfigurationProps: MachineOptionsConfigurationProps = { ... }
+```
+
+##### `instanceProfile`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.instanceProfile"></a>
+
+```typescript
+public readonly instanceProfile: CfnInstanceProfile;
+```
+
+- *Type:* [`@aws-cdk/aws-iam.CfnInstanceProfile`](#@aws-cdk/aws-iam.CfnInstanceProfile)
+
+---
+
+##### `instanceType`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.instanceType"></a>
+
+```typescript
+public readonly instanceType: InstanceType;
+```
+
+- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
+
+---
+
+##### `machineImage`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.machineImage"></a>
+
+```typescript
+public readonly machineImage: IMachineImage;
+```
+
+- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
+
+---
+
+##### `securityGroupName`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.securityGroupName"></a>
+
+```typescript
+public readonly securityGroupName: string;
+```
+
+- *Type:* `string`
+
+---
+
+##### `spot`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.spot"></a>
+
+```typescript
+public readonly spot: SpotConfigurationProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps)
+
+---
+
+##### `vpc`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.vpc"></a>
+
+```typescript
+public readonly vpc: VpcConfigurationProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps)
 
 ---
 
