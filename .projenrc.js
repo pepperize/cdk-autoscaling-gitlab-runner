@@ -6,7 +6,7 @@ const project = new AwsCdkConstructLibrary({
   authorOrganization: true,
   copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
   license: "MIT",
-  cdkVersion: "1.132.0",
+  cdkVersion: "1.134.0",
   cdkVersionPinning: false,
   defaultReleaseBranch: "main",
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
