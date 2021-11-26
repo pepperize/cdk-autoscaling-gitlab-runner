@@ -1,8 +1,4 @@
-import {
-  AutoScalingGroup,
-  IAutoScalingGroup,
-  Signals,
-} from "@aws-cdk/aws-autoscaling";
+import { AutoScalingGroup, IAutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
 import {
   AmazonLinuxCpuType,
   AmazonLinuxEdition,
@@ -27,14 +23,7 @@ import {
   SecurityGroup,
   UserData,
 } from "@aws-cdk/aws-ec2";
-import {
-  CfnInstanceProfile,
-  IRole,
-  ManagedPolicy,
-  PolicyDocument,
-  Role,
-  ServicePrincipal,
-} from "@aws-cdk/aws-iam";
+import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
 import { Configuration } from "../runner-configuration";
@@ -172,20 +161,13 @@ export class GitlabRunnerAutoscaling extends Construct {
 
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
-    const {
-      manager,
-      cache,
-      runners,
-      network,
-      gitlabToken,
-      advancedConfiguration,
-    }: GitlabRunnerAutoscalingProps = props;
+    const { manager, cache, runners, network, gitlabToken, advancedConfiguration }: GitlabRunnerAutoscalingProps =
+      props;
 
     /**
      * S3 Bucket for Runners' cache
      */
-    this.cacheBucket =
-      cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
+    this.cacheBucket = cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
 
     /**
      * Network
@@ -206,32 +188,22 @@ export class GitlabRunnerAutoscaling extends Construct {
      * GitLab Runners
      */
     const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
-    const runnersSecurityGroup = new SecurityGroup(
-      scope,
-      "RunnersSecurityGroup",
-      {
-        securityGroupName: runnersSecurityGroupName,
-        description: "Security group for GitLab Runners.",
-        vpc: this.network.vpc,
-      }
-    );
+    const runnersSecurityGroup = new SecurityGroup(scope, "RunnersSecurityGroup", {
+      securityGroupName: runnersSecurityGroupName,
+      description: "Security group for GitLab Runners.",
+      vpc: this.network.vpc,
+    });
 
     const runnersRole = new Role(scope, "RunnersRole", {
       assumedBy: ec2ServicePrincipal,
       managedPolicies: [ec2ManagedPolicyForSSM],
     });
 
-    const runnersInstanceProfile = new CfnInstanceProfile(
-      scope,
-      "RunnersInstanceProfile",
-      {
-        roles: [runnersRole.roleName],
-      }
-    );
+    const runnersInstanceProfile = new CfnInstanceProfile(scope, "RunnersInstanceProfile", {
+      roles: [runnersRole.roleName],
+    });
 
-    const runnersInstanceType =
-      runners?.instanceType ||
-      InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+    const runnersInstanceType = runners?.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
 
     const runnersLookupMachineImage = new LookupMachineImage({
       name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
@@ -254,28 +226,14 @@ export class GitlabRunnerAutoscaling extends Construct {
     /**
      * GitLab Manager
      */
-    const managerSecurityGroup = new SecurityGroup(
-      scope,
-      "ManagerSecurityGroup",
-      {
-        vpc: this.network.vpc,
-        description: "Security group for GitLab Runners Manager.",
-      }
-    );
-    managerSecurityGroup.connections.allowTo(
-      runnersSecurityGroup,
-      Port.tcp(22),
-      "SSH traffic from Manager"
-    );
-    managerSecurityGroup.connections.allowTo(
-      runnersSecurityGroup,
-      Port.tcp(2376),
-      "SSH traffic from Docker"
-    );
+    const managerSecurityGroup = new SecurityGroup(scope, "ManagerSecurityGroup", {
+      vpc: this.network.vpc,
+      description: "Security group for GitLab Runners Manager.",
+    });
+    managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(22), "SSH traffic from Manager");
+    managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(2376), "SSH traffic from Docker");
 
-    const managerInstanceType =
-      runners?.instanceType ||
-      InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
+    const managerInstanceType = runners?.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
 
     const managerMachineImage =
       runners?.machineImage ||
@@ -296,12 +254,7 @@ export class GitlabRunnerAutoscaling extends Construct {
           Statement: [
             {
               Effect: "Allow",
-              Action: [
-                "s3:ListObjects*",
-                "s3:GetObject*",
-                "s3:DeleteObject*",
-                "s3:PutObject*",
-              ],
+              Action: ["s3:ListObjects*", "s3:GetObject*", "s3:DeleteObject*", "s3:PutObject*"],
               Resource: [`${this.cacheBucket.bucketArn}/*`],
             },
             {
@@ -316,12 +269,7 @@ export class GitlabRunnerAutoscaling extends Construct {
           Statement: [
             {
               Effect: "Allow",
-              Action: [
-                "ec2:CreateKeyPair",
-                "ec2:DeleteKeyPair",
-                "ec2:ImportKeyPair",
-                "ec2:Describe*",
-              ],
+              Action: ["ec2:CreateKeyPair", "ec2:DeleteKeyPair", "ec2:ImportKeyPair", "ec2:Describe*"],
               Resource: ["*"],
             },
             {
@@ -339,10 +287,7 @@ export class GitlabRunnerAutoscaling extends Construct {
             },
             {
               Effect: "Allow",
-              Action: [
-                "ec2:RequestSpotInstances",
-                "ec2:CancelSpotInstanceRequests",
-              ],
+              Action: ["ec2:RequestSpotInstances", "ec2:CancelSpotInstanceRequests"],
               Resource: ["*"],
               Condition: {
                 StringEqualsIfExists: {
@@ -366,12 +311,7 @@ export class GitlabRunnerAutoscaling extends Construct {
             },
             {
               Effect: "Allow",
-              Action: [
-                "ec2:TerminateInstances",
-                "ec2:StopInstances",
-                "ec2:StartInstances",
-                "ec2:RebootInstances",
-              ],
+              Action: ["ec2:TerminateInstances", "ec2:StopInstances", "ec2:StartInstances", "ec2:RebootInstances"],
               Resource: ["*"],
               Condition: {
                 StringLike: {
@@ -454,18 +394,11 @@ export class GitlabRunnerAutoscaling extends Construct {
                   idleCount: advancedConfiguration?.runners?.machine?.idleCount,
                   idleTime: advancedConfiguration?.runners?.machine?.idleTime,
                   maxBuilds: advancedConfiguration?.runners?.machine?.maxBuilds,
-                  machineName:
-                    advancedConfiguration?.runners?.machine?.machineName,
+                  machineName: advancedConfiguration?.runners?.machine?.machineName,
                   machineOptions: {
-                    requestSpotInstance:
-                      advancedConfiguration?.runners?.machine?.machineOptions
-                        ?.requestSpotInstance,
-                    spotPrice:
-                      advancedConfiguration?.runners?.machine?.machineOptions
-                        ?.spotPrice,
-                    blockDurationMinutes:
-                      advancedConfiguration?.runners?.machine?.machineOptions
-                        ?.blockDurationMinutes,
+                    requestSpotInstance: advancedConfiguration?.runners?.machine?.machineOptions?.requestSpotInstance,
+                    spotPrice: advancedConfiguration?.runners?.machine?.machineOptions?.spotPrice,
+                    blockDurationMinutes: advancedConfiguration?.runners?.machine?.machineOptions?.blockDurationMinutes,
                     instanceType: runnersInstanceType,
                     machineImage: runnersMachineImage,
                     instanceProfile: runnersInstanceProfile,
@@ -513,30 +446,26 @@ export class GitlabRunnerAutoscaling extends Construct {
       },
     });
 
-    const managerAutoScalingGroup = new AutoScalingGroup(
-      scope,
-      "ManagerAutoscalingGroup",
-      {
-        vpc: this.network.vpc,
-        vpcSubnets: {
-          subnets: [this.network.subnet],
-        },
-        instanceType: managerInstanceType,
-        machineImage: managerMachineImage,
-        keyName: manager?.keyPairName,
-        securityGroup: managerSecurityGroup,
-        role: managerRole,
-        userData: userData,
-        init: initConfig,
-        initOptions: {
-          ignoreFailures: false,
-        },
-        maxCapacity: 1,
-        minCapacity: 1,
-        desiredCapacity: 1,
-        signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
-      }
-    );
+    const managerAutoScalingGroup = new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
+      vpc: this.network.vpc,
+      vpcSubnets: {
+        subnets: [this.network.subnet],
+      },
+      instanceType: managerInstanceType,
+      machineImage: managerMachineImage,
+      keyName: manager?.keyPairName,
+      securityGroup: managerSecurityGroup,
+      role: managerRole,
+      userData: userData,
+      init: initConfig,
+      initOptions: {
+        ignoreFailures: false,
+      },
+      maxCapacity: 1,
+      minCapacity: 1,
+      desiredCapacity: 1,
+      signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
+    });
 
     this.runners = {
       securityGroupName: runnersSecurityGroupName,

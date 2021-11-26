@@ -1,9 +1,4 @@
-import {
-  AnyConfiguration,
-  LogFormat,
-  LogLevel,
-  SpotBlockDurationInMinutes,
-} from "./configuration.types";
+import { AnyConfiguration, LogFormat, LogLevel, SpotBlockDurationInMinutes } from "./configuration.types";
 
 /**
  * You can change the behavior of GitLab Runner and of individual registered runners.

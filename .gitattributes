@@ -12,6 +12,7 @@
 /.gitignore                             	linguist-generated
 /.mergify.yml                           	linguist-generated
 /.npmignore                             	linguist-generated
+/.prettierrc                            	linguist-generated
 /.projen/**                             	linguist-generated
 /.projen/deps.json                      	linguist-generated
 /.projen/tasks.json                     	linguist-generated

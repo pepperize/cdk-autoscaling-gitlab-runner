@@ -1,15 +1,5 @@
-export type ConfigurationArray =
-  | boolean[]
-  | number[]
-  | string[]
-  | ConfigurationMap[];
-export type AnyConfiguration =
-  | boolean
-  | number
-  | string
-  | ConfigurationMap
-  | ConfigurationArray
-  | ConfigurationArray[];
+export type ConfigurationArray = boolean[] | number[] | string[] | ConfigurationMap[];
+export type AnyConfiguration = boolean | number | string | ConfigurationMap | ConfigurationArray | ConfigurationArray[];
 
 export interface ConfigurationMap {
   [key: string]: AnyConfiguration;

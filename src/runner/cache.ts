@@ -1,9 +1,4 @@
-import {
-  BlockPublicAccess,
-  Bucket,
-  BucketEncryption,
-  IBucket,
-} from "@aws-cdk/aws-s3";
+import { BlockPublicAccess, Bucket, BucketEncryption, IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, RemovalPolicy, Stack } from "@aws-cdk/core";
 
 export interface CacheProps {

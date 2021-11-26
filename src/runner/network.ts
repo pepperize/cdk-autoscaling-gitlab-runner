@@ -1,10 +1,4 @@
-import {
-  ISubnet,
-  IVpc,
-  SubnetSelection,
-  SubnetType,
-  Vpc,
-} from "@aws-cdk/aws-ec2";
+import { ISubnet, IVpc, SubnetSelection, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
 import { Annotations, Construct, Stack } from "@aws-cdk/core";
 
 export interface NetworkProps {
@@ -49,9 +43,7 @@ export class Network extends Construct {
     this.availabilityZone = this.subnet.availabilityZone;
 
     if (!this.hasPrivateSubnet(this.vpc)) {
-      Annotations.of(this).addWarning(
-        `No private network found in ${this.vpc.vpcId}, using public addresses.`
-      );
+      Annotations.of(this).addWarning(`No private network found in ${this.vpc.vpcId}, using public addresses.`);
     }
   }
 
@@ -67,9 +59,7 @@ export class Network extends Construct {
   private findSubnet(vpc: IVpc, subnetSelection?: SubnetSelection): ISubnet {
     const selectedSubnets = vpc.selectSubnets(
       subnetSelection || {
-        subnetType: this.hasPrivateSubnet(vpc)
-          ? SubnetType.PRIVATE_WITH_NAT
-          : SubnetType.PUBLIC,
+        subnetType: this.hasPrivateSubnet(vpc) ? SubnetType.PRIVATE_WITH_NAT : SubnetType.PUBLIC,
         availabilityZones: vpc.availabilityZones,
       }
     );
@@ -77,9 +67,7 @@ export class Network extends Construct {
     const subnet = selectedSubnets.subnets.find(() => true);
 
     if (!subnet) {
-      throw new Error(
-        `Neither a private nor a public subnet is found in ${vpc.vpcId}`
-      );
+      throw new Error(`Neither a private nor a public subnet is found in ${vpc.vpcId}`);
     }
 
     return subnet;

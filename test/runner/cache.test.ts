@@ -1,8 +1,5 @@
 import { App, Duration, Stack } from "@aws-cdk/core";
-import {
-  Cache as CacheConstruct,
-  CacheProps as CacheConstructProps,
-} from "../../src/runner/cache";
+import { Cache as CacheConstruct, CacheProps as CacheConstructProps } from "../../src/runner/cache";
 
 const mockApp = new App();
 const stackProps = {

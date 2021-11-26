@@ -169,8 +169,7 @@ export class Configuration {
    * Creates a configuration from the {@link GitlabRunnerAutoscaling} merged with default presets.
    */
   public static fromProps(props: ConfigurationProps) {
-    const { scope, runners, concurrent, checkInterval, logFormat, logLevel } =
-      props;
+    const { scope, runners, concurrent, checkInterval, logFormat, logLevel } = props;
 
     const configuration: GlobalConfiguration = {
       concurrent: concurrent ?? defaultConfiguration.concurrent,
@@ -180,15 +179,12 @@ export class Configuration {
       runners: [
         {
           token: runners.gitlabToken,
-          name:
-            runners.name || scope.stackName || defaultRunnerConfiguration.name,
+          name: runners.name || scope.stackName || defaultRunnerConfiguration.name,
           url: runners.gitlabUrl || defaultRunnerConfiguration.url,
           limit: runners.limit ?? defaultRunnerConfiguration.limit,
-          output_limit:
-            runners.outputLimit ?? defaultRunnerConfiguration.output_limit,
+          output_limit: runners.outputLimit ?? defaultRunnerConfiguration.output_limit,
           executor: defaultRunnerConfiguration.executor,
-          environment:
-            runners.environment ?? defaultRunnerConfiguration.environment,
+          environment: runners.environment ?? defaultRunnerConfiguration.environment,
           cache: {
             Type: defaultCacheConfiguration.Type,
             Shared: defaultCacheConfiguration.Shared,
@@ -199,55 +195,31 @@ export class Configuration {
             },
           },
           docker: {
-            tls_verify:
-              runners.docker?.tlsVerify ||
-              defaultDockerConfiguration.tls_verify,
+            tls_verify: runners.docker?.tlsVerify || defaultDockerConfiguration.tls_verify,
             image: runners.docker?.image || defaultDockerConfiguration.image,
-            privileged:
-              runners.docker?.privileged ||
-              defaultDockerConfiguration.privileged,
-            cap_add:
-              runners.docker?.capAdd || defaultDockerConfiguration.cap_add,
+            privileged: runners.docker?.privileged || defaultDockerConfiguration.privileged,
+            cap_add: runners.docker?.capAdd || defaultDockerConfiguration.cap_add,
             wait_for_services_timeout:
-              runners.docker?.waitForServicesTimeout ??
-              defaultDockerConfiguration.wait_for_services_timeout,
-            disable_cache:
-              runners.docker?.disableCache ||
-              defaultDockerConfiguration.disable_cache,
-            volumes:
-              runners.docker?.volumes || defaultDockerConfiguration.volumes,
-            shm_size:
-              runners.docker?.shmSize ?? defaultDockerConfiguration.shm_size,
+              runners.docker?.waitForServicesTimeout ?? defaultDockerConfiguration.wait_for_services_timeout,
+            disable_cache: runners.docker?.disableCache || defaultDockerConfiguration.disable_cache,
+            volumes: runners.docker?.volumes || defaultDockerConfiguration.volumes,
+            shm_size: runners.docker?.shmSize ?? defaultDockerConfiguration.shm_size,
           },
           machine: {
-            IdleCount:
-              runners.machine.idleCount ??
-              defaultMachineConfiguration.IdleCount,
-            IdleTime:
-              runners.machine.idleTime ?? defaultMachineConfiguration.IdleTime,
-            MaxBuilds:
-              runners.machine.maxBuilds ??
-              defaultMachineConfiguration.MaxBuilds,
-            MachineDriver:
-              runners.machine.machineDriver ||
-              defaultMachineConfiguration.MachineDriver,
-            MachineName: `${
-              runners.machine.machineName ||
-              defaultMachineConfiguration.MachineName
-            }-%s`,
+            IdleCount: runners.machine.idleCount ?? defaultMachineConfiguration.IdleCount,
+            IdleTime: runners.machine.idleTime ?? defaultMachineConfiguration.IdleTime,
+            MaxBuilds: runners.machine.maxBuilds ?? defaultMachineConfiguration.MaxBuilds,
+            MachineDriver: runners.machine.machineDriver || defaultMachineConfiguration.MachineDriver,
+            MachineName: `${runners.machine.machineName || defaultMachineConfiguration.MachineName}-%s`,
             MachineOptions: MachineOptions.fromProps({
-              "instance-type":
-                runners.machine.machineOptions.instanceType.toString(),
-              ami: runners.machine.machineOptions.machineImage.getImage(scope)
-                .imageId,
+              "instance-type": runners.machine.machineOptions.instanceType.toString(),
+              ami: runners.machine.machineOptions.machineImage.getImage(scope).imageId,
               region: scope.region,
               "vpc-id": runners.machine.machineOptions.vpc.vpcId,
               /**
                * extract the availabilityZone last character for the needs of gitlab configuration @see {@link https://docs.gitlab.com/runners/configuration/runners_autoscale_aws/#the-runnerssmachine-section}
                */
-              zone: runners.machine.machineOptions.vpc.availabilityZone.slice(
-                -1
-              ),
+              zone: runners.machine.machineOptions.vpc.availabilityZone.slice(-1),
               "subnet-id": runners.machine.machineOptions.vpc.subnetId,
               "security-group": `${runners.machine.machineOptions.securityGroupName}`,
               "use-private-address": true,
@@ -255,27 +227,17 @@ export class Configuration {
               "request-spot-instance":
                 runners.machine.machineOptions.spot?.requestSpotInstance ||
                 defaultSpotConfiguration.requestSpotInstance,
-              "spot-price":
-                runners.machine.machineOptions.spot?.spotPrice ||
-                defaultSpotConfiguration.spotPrice,
+              "spot-price": runners.machine.machineOptions.spot?.spotPrice || defaultSpotConfiguration.spotPrice,
               "block-duration-minutes":
                 runners.machine.machineOptions.spot?.blockDurationMinutes ??
                 defaultSpotConfiguration.blockDurationMinutes,
             }).toArray(),
             autoscaling: [
               {
-                Periods:
-                  runners.machine.autoscaling?.periods ||
-                  defaultAutoscalingConfiguration.Periods,
-                IdleCount:
-                  runners.machine.autoscaling?.idleCount ??
-                  defaultAutoscalingConfiguration.IdleCount,
-                IdleTime:
-                  runners.machine.autoscaling?.idleTime ??
-                  defaultAutoscalingConfiguration.IdleTime,
-                Timezone:
-                  runners.machine.autoscaling?.timezone ||
-                  defaultAutoscalingConfiguration.Timezone,
+                Periods: runners.machine.autoscaling?.periods || defaultAutoscalingConfiguration.Periods,
+                IdleCount: runners.machine.autoscaling?.idleCount ?? defaultAutoscalingConfiguration.IdleCount,
+                IdleTime: runners.machine.autoscaling?.idleTime ?? defaultAutoscalingConfiguration.IdleTime,
+                Timezone: runners.machine.autoscaling?.timezone || defaultAutoscalingConfiguration.Timezone,
               },
             ],
           },
