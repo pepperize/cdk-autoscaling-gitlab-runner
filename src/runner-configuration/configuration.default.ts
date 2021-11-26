@@ -51,7 +51,7 @@ export const defaultMachineConfiguration: MachineConfiguration = {
   IdleTime: 300,
   MaxBuilds: 20,
   MachineDriver: "amazonec2",
-  MachineName: "gitlab-runner-%s",
+  MachineName: "gitlab-runner",
   autoscaling: [defaultAutoscalingConfiguration],
 } as MachineConfiguration;
 

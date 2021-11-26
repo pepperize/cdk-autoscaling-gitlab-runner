@@ -93,6 +93,10 @@ export interface MachineConfigurationProps {
   readonly idleTime?: number;
   readonly maxBuilds?: number;
   readonly machineDriver?: "amazonec2" | string;
+  /**
+   * MachineName @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section}
+   * It MUST NOT contain `%s`.
+   */
   readonly machineName?: string;
   readonly machineOptions: MachineOptionsConfigurationProps;
   readonly autoscaling?: AutoscalingConfigurationProps;
@@ -225,9 +229,10 @@ export class Configuration {
             MachineDriver:
               runners.machine.machineDriver ||
               defaultMachineConfiguration.MachineDriver,
-            MachineName:
+            MachineName: `${
               runners.machine.machineName ||
-              defaultMachineConfiguration.MachineName,
+              defaultMachineConfiguration.MachineName
+            }-%s`,
             MachineOptions: MachineOptions.fromProps({
               "instance-type":
                 runners.machine.machineOptions.instanceType.toString(),
