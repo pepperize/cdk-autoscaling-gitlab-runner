@@ -14,7 +14,6 @@ import {
 import {
   AnyConfiguration,
   ConfigurationMap,
-  Executor,
   GlobalConfiguration,
   LogFormat,
   LogLevel,
@@ -57,12 +56,6 @@ export interface RunnerConfigurationProps {
    * @default 52428800 Default is 50 GB.
    */
   readonly outputLimit?: number;
-  /**
-   * The following executors are available.
-   * @see {@link https://docs.gitlab.com/runners/configuration/advanced-configuration.html#the-executors}
-   * @default "docker+machine" Use auto-scaled Docker machines.
-   */
-  readonly executor?: Executor;
   /**
    * Append or overwrite environment variables.
    * @see {@link https://docs.gitlab.com/runners/configuration/advanced-configuration.html#the-runnerss-section}
@@ -187,7 +180,7 @@ export class Configuration {
           limit: runners.limit ?? defaultRunnerConfiguration.limit,
           output_limit:
             runners.outputLimit ?? defaultRunnerConfiguration.output_limit,
-          executor: runners.executor ?? defaultRunnerConfiguration.executor,
+          executor: defaultRunnerConfiguration.executor,
           environment:
             runners.environment ?? defaultRunnerConfiguration.environment,
           cache: {
