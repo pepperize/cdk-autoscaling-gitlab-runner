@@ -17,6 +17,7 @@ export interface ConfigurationMap {
 
 /**
  * https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#configuring-the-runner
+ * @internal
  */
 export type GlobalConfiguration = {
   /**
@@ -54,6 +55,7 @@ export type LogFormat = "runner" | "text" | "json";
 
 /**
  * https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
+ * @internal
  */
 export type RunnersConfiguration = {
   /**
@@ -100,11 +102,15 @@ export type RunnersConfiguration = {
   [key: string]: AnyConfiguration;
 };
 
+/**
+ * @internal
+ */
 export type Executor = "docker+machine" | "docker";
 
 /**
  * This defines the Docker Container parameters.
  * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
+ * @internal
  */
 export type DockerConfiguration = {
   readonly tls_verify: boolean;
@@ -122,6 +128,9 @@ export type DockerConfiguration = {
   [key: string]: AnyConfiguration;
 };
 
+/**
+ * @internal
+ */
 export type CacheConfiguration = {
   readonly Type: "s3";
   readonly Shared: boolean;
@@ -131,6 +140,7 @@ export type CacheConfiguration = {
 
 /**
  * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
+ * @internal
  */
 export type CacheS3Configuration = {
   /**
@@ -155,6 +165,7 @@ export type CacheS3Configuration = {
  * The following parameters define the Docker Machine-based autoscaling feature.
  * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section}
  * @see {@link https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines}
+ * @internal
  */
 export type MachineConfiguration = {
   readonly IdleCount: number;
@@ -169,6 +180,7 @@ export type MachineConfiguration = {
 
 /**
  * @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section}
+ * @internal
  */
 export type MachineOptionProps = {
   readonly "instance-type": string;
@@ -191,6 +203,9 @@ export type MachineOptionProps = {
   [key: string]: AnyConfiguration;
 };
 
+/**
+ * @internal
+ */
 export class MachineOptions {
   public static fromProps(props: ConfigurationMap): MachineOptions {
     return new MachineOptions(props);
@@ -214,6 +229,7 @@ export class MachineOptions {
 }
 /**
  * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections}
+ * @internal
  */
 export type AutoscalingConfiguration = {
   readonly IdleCount: number;
