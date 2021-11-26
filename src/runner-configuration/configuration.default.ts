@@ -7,13 +7,19 @@ import {
   RunnersConfiguration,
 } from "./configuration.types";
 
-// Cache
+/**
+ * Cache
+ * @internal
+ */
 export const defaultCacheConfiguration: CacheConfiguration = {
   Type: "s3",
   Shared: true,
 } as CacheConfiguration;
 
-// Docker
+/**
+ * Docker
+ * @internal
+ */
 export const defaultDockerConfiguration: DockerConfiguration = {
   tls_verify: false,
   image: "docker:19.03.5",
@@ -25,7 +31,10 @@ export const defaultDockerConfiguration: DockerConfiguration = {
   shm_size: 0,
 };
 
-// Machine autoscaling
+/**
+ * Machine autoscaling
+ * @internal
+ */
 export const defaultAutoscalingConfiguration: AutoscalingConfiguration = {
   Periods: ["* * 7-22 * * mon-fri *"],
   IdleCount: 1,
@@ -33,7 +42,10 @@ export const defaultAutoscalingConfiguration: AutoscalingConfiguration = {
   Timezone: "Etc/UTC",
 };
 
-// Machine
+/**
+ * Machine
+ * @internal
+ */
 export const defaultMachineConfiguration: MachineConfiguration = {
   IdleCount: 0,
   IdleTime: 300,
@@ -43,7 +55,10 @@ export const defaultMachineConfiguration: MachineConfiguration = {
   autoscaling: [defaultAutoscalingConfiguration],
 } as MachineConfiguration;
 
-// Runners
+/**
+ * Runners
+ * @internal
+ */
 export const defaultRunnerConfiguration: RunnersConfiguration = {
   name: "gitlab-runner",
   url: "https://gitlab.com",
@@ -56,7 +71,10 @@ export const defaultRunnerConfiguration: RunnersConfiguration = {
   machine: defaultMachineConfiguration,
 } as RunnersConfiguration;
 
-// Global
+/**
+ * Global
+ * @internal
+ */
 export const defaultConfiguration: GlobalConfiguration = {
   concurrent: 10,
   check_interval: 0,
