@@ -900,6 +900,8 @@ public readonly machineName: string;
 
 - *Type:* `string`
 
+MachineName @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section} It MUST NOT contain `%s`.
+
 ---
 
 ##### `maxBuilds`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.maxBuilds"></a>
