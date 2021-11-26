@@ -900,6 +900,8 @@ public readonly machineName: string;
 
 - *Type:* `string`
 
+MachineName @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section} It MUST NOT contain `%s`.
+
 ---
 
 ##### `maxBuilds`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfigurationProps.property.maxBuilds"></a>
@@ -962,16 +964,6 @@ public readonly securityGroupName: string;
 
 ---
 
-##### `spot`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.spot"></a>
-
-```typescript
-public readonly spot: SpotConfigurationProps;
-```
-
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps)
-
----
-
 ##### `vpc`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.vpc"></a>
 
 ```typescript
@@ -979,6 +971,16 @@ public readonly vpc: VpcConfigurationProps;
 ```
 
 - *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.VpcConfigurationProps)
+
+---
+
+##### `spot`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptionsConfigurationProps.property.spot"></a>
+
+```typescript
+public readonly spot: SpotConfigurationProps;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps`](#@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps)
 
 ---
 
@@ -1159,7 +1161,17 @@ public readonly requestSpotInstance: boolean;
 
 ---
 
-##### `spotPrice`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps.property.spotPrice"></a>
+##### `blockDurationMinutes`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps.property.blockDurationMinutes"></a>
+
+```typescript
+public readonly blockDurationMinutes: number;
+```
+
+- *Type:* `number`
+
+---
+
+##### `spotPrice`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.SpotConfigurationProps.property.spotPrice"></a>
 
 ```typescript
 public readonly spotPrice: number;

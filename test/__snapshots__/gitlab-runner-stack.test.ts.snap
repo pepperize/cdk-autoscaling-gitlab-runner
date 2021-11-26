@@ -296,7 +296,8 @@ environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
                       },
                       "\\",
   \\"amazonec2-request-spot-instance=true\\",
-  \\"amazonec2-spot-price=0.03\\"
+  \\"amazonec2-spot-price=0.03\\",
+  \\"amazonec2-block-duration-minutes=0\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -455,7 +456,7 @@ environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 86f875b766d32576
+# fingerprint: e58cc43628bdcc4c
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
