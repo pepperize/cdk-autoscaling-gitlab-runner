@@ -48,7 +48,7 @@
     "jest-junit": "^12",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^11",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "projen": "^0.30.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.7",
