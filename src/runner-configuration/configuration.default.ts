@@ -5,6 +5,7 @@ import {
   GlobalConfiguration,
   MachineConfiguration,
   RunnersConfiguration,
+  SpotConfiguration,
 } from "./configuration.types";
 
 /**
@@ -54,6 +55,16 @@ export const defaultMachineConfiguration: MachineConfiguration = {
   MachineName: "gitlab-runner",
   autoscaling: [defaultAutoscalingConfiguration],
 } as MachineConfiguration;
+
+/**
+ * Spot
+ * @internal
+ */
+export const defaultSpotConfiguration: SpotConfiguration = {
+  requestSpotInstance: true,
+  spotPrice: 0.03,
+  blockDurationMinutes: 0,
+};
 
 /**
  * Runners

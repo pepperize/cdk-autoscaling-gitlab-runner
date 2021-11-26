@@ -418,10 +418,44 @@ export class GitlabRunnerAutoscaling extends Construct {
             "/etc/gitlab-runner/config.toml",
             Configuration.fromProps({
               scope: scope,
+              /**
+               {
+                concurrent: 10,
+                checkInterval: 0,
+                logFormat: "runner",
+                logLevel: "info",
+               }
+               */
               runners: {
+                /**
+                 runners: {
+                  name: "gitlab-runner",
+                  gitlabUrl: "https://gitlab.com",
+                  limit: 10,
+                  outputLimit: 52428800,
+                  environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
+                 }
+                */
+                gitlabToken: gitlabToken,
+                gitlabUrl: gitlabUrl,
                 cache: this.cacheBucket,
                 machine: {
+                  /**
+                   runners.machine {
+                    idleCount: 0,
+                    idleTime: 300,
+                    maxBuilds: 20,
+                    machineName: "gitlab-runner",
+                   }
+                   */
                   machineOptions: {
+                    /**
+                     runners.machine.machineOptions {
+                      requestSpotInstance: true,
+                      spotPrice: 0.03,
+                      blockDurationMinutes: 0,
+                     }
+                     */
                     instanceType: runnersInstanceType,
                     machineImage: runnersMachineImage,
                     instanceProfile: runnersInstanceProfile,
@@ -431,14 +465,8 @@ export class GitlabRunnerAutoscaling extends Construct {
                       subnetId: this.network.subnet.subnetId,
                       availabilityZone: this.network.availabilityZone,
                     },
-                    spot: {
-                      requestSpotInstance: true,
-                      spotPrice: 0.03,
-                    },
                   },
                 },
-                gitlabUrl: gitlabUrl,
-                gitlabToken: gitlabToken,
               },
             }).toToml(),
             {

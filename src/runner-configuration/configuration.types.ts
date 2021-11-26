@@ -179,29 +179,16 @@ export type MachineConfiguration = {
 };
 
 /**
- * @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section}
+ * @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances}
  * @internal
  */
-export type MachineOptionProps = {
-  readonly "instance-type": string;
-  readonly ami: string;
-  readonly region: string;
-  readonly "vpc-id": string;
-  /**
-   * If not specified, the availability zone is a, it needs to be set to the same availability zone as the specified subnet, for example when the zone is eu-west-1b it has to be amazonec2-zone=b
-   */
-  readonly zone: string;
-  readonly "subnet-id": string;
-  readonly "security-group": string;
-  /**
-   * Use the private IP address of Docker Machines, but still create a public IP address. Useful to keep the traffic internal and avoid extra costs.
-   */
-  readonly "use-private-address": boolean;
-  readonly "iam-instance-profile": string;
-  readonly "request-spot-instance": boolean;
-  readonly "spot-price": number;
-  [key: string]: AnyConfiguration;
+export type SpotConfiguration = {
+  readonly requestSpotInstance: boolean;
+  readonly spotPrice: number;
+  readonly blockDurationMinutes: SpotBlockDurationInMinutes;
 };
+
+export type SpotBlockDurationInMinutes = 0 | 60 | 120 | 180 | 240 | 300 | 360;
 
 /**
  * @internal

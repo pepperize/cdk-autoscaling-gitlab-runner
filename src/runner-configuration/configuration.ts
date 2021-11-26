@@ -10,6 +10,7 @@ import {
   defaultDockerConfiguration,
   defaultMachineConfiguration,
   defaultRunnerConfiguration,
+  defaultSpotConfiguration,
 } from "./configuration.default";
 import {
   AnyConfiguration,
@@ -18,6 +19,7 @@ import {
   LogFormat,
   LogLevel,
   MachineOptions,
+  SpotBlockDurationInMinutes,
   Timezone,
 } from "./configuration.types";
 
@@ -125,14 +127,14 @@ export interface MachineOptionsConfigurationProps {
   readonly securityGroupName: string;
   readonly instanceProfile: CfnInstanceProfile;
   readonly vpc: VpcConfigurationProps;
-  readonly spot: SpotConfigurationProps;
+  readonly spot?: SpotConfigurationProps;
   [key: string]: AnyConfiguration | undefined | any;
 }
 
 export interface SpotConfigurationProps {
   readonly requestSpotInstance: boolean;
-  readonly spotPrice: number;
-  [key: string]: AnyConfiguration | undefined | any;
+  readonly spotPrice?: number;
+  readonly blockDurationMinutes?: SpotBlockDurationInMinutes;
 }
 
 export interface ConfigurationProps {
@@ -251,8 +253,14 @@ export class Configuration {
               "use-private-address": true,
               "iam-instance-profile": `${runners.machine.machineOptions.instanceProfile.ref}`,
               "request-spot-instance":
-                runners.machine.machineOptions.spot.requestSpotInstance,
-              "spot-price": runners.machine.machineOptions.spot.spotPrice,
+                runners.machine.machineOptions.spot?.requestSpotInstance ||
+                defaultSpotConfiguration.requestSpotInstance,
+              "spot-price":
+                runners.machine.machineOptions.spot?.spotPrice ||
+                defaultSpotConfiguration.spotPrice,
+              "block-duration-minutes":
+                runners.machine.machineOptions.spot?.blockDurationMinutes ??
+                defaultSpotConfiguration.blockDurationMinutes,
             }).toArray(),
             autoscaling: [
               {
