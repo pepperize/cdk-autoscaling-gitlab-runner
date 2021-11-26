@@ -1,10 +1,7 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import {} from "@aws-cdk/aws-ec2";
 import { App } from "@aws-cdk/core";
-import {
-  GitlabRunnerStack,
-  GitlabRunnerStackProps,
-} from "../src/gitlab-runner-stack";
+import { GitlabRunnerStack, GitlabRunnerStackProps } from "../src/gitlab-runner-stack";
 
 test("gitlab-runner", () => {
   const app = new App();
