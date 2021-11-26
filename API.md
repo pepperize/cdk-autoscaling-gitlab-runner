@@ -1087,21 +1087,6 @@ Append or overwrite environment variables.
 
 ---
 
-##### `executor`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.executor"></a>
-
-```typescript
-public readonly executor: string;
-```
-
-- *Type:* `string`
-- *Default:* "docker+machine" Use auto-scaled Docker machines.
-
-The following executors are available.
-
-> {@link https://docs.gitlab.com/runners/configuration/advanced-configuration.html#the-executors}
-
----
-
 ##### `gitlabUrl`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfigurationProps.property.gitlabUrl"></a>
 
 ```typescript
