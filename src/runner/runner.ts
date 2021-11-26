@@ -38,6 +38,7 @@ import {
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
 import { Configuration } from "../runner-configuration";
+import { GitlabRunnerAdvancedConfigurationOptionalProps } from "../runner-configuration/configuration.optional";
 import { Cache, CacheProps } from "./cache";
 import { Network, NetworkProps } from "./network";
 
@@ -73,11 +74,30 @@ export interface GitlabRunnerAutoscalingProps {
    */
   readonly cache?: GitlabRunnerAutoscalingCacheProps;
 
+  /**
+   * The network configuration for the Runner. If not set, the defaults will be used.
+   * @link NetworkProps
+   */
   readonly network?: NetworkProps;
 
+  /**
+   * The manager EC2 instance configuration. If not set, the defaults will be used.
+   * @link GitlabRunnerAutoscalingManagerProps
+   */
   readonly manager?: GitlabRunnerAutoscalingManagerProps;
 
+  /**
+   * The runner EC2 instances configuration. If not set, the defaults will be used.
+   * @link GitlabRunnerAutoscalingProps
+   */
   readonly runners?: GitlabRunnerAutoscalingRunnerProps;
+
+  /**
+   * You can change the behavior of GitLab Runner and of individual registered runners.
+   * This imitates the structure of Gitlab Runner advanced configuration that originally is set with config.toml file.
+   * @link GitlabRunnerAdvancedConfigurationOptionalProps
+   */
+  readonly advancedConfiguration?: GitlabRunnerAdvancedConfigurationOptionalProps;
 }
 
 export interface GitlabRunnerAutoscalingCacheProps {
@@ -137,7 +157,7 @@ export interface GitlabRunnerAutoscalingRunnerProps {
  *   }
  * });
  *
- * new Runner(scope, "GitlabRunner", {
+ * new GitlabRunnerAutoscaling(scope, "GitlabRunner", {
  *   gitlabToken: "xxxxxxxxxxxxxxxxxxxx",
  * });
  */
@@ -158,7 +178,7 @@ export class GitlabRunnerAutoscaling extends Construct {
       runners,
       network,
       gitlabToken,
-      gitlabUrl,
+      advancedConfiguration,
     }: GitlabRunnerAutoscalingProps = props;
 
     /**
@@ -417,45 +437,35 @@ export class GitlabRunnerAutoscaling extends Construct {
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
             Configuration.fromProps({
+              concurrent: advancedConfiguration?.concurrent,
+              checkInterval: advancedConfiguration?.checkInterval,
+              logFormat: advancedConfiguration?.logFormat,
+              logLevel: advancedConfiguration?.logLevel,
               scope: scope,
-              /**
-               {
-                concurrent: 10,
-                checkInterval: 0,
-                logFormat: "runner",
-                logLevel: "info",
-               }
-               */
               runners: {
-                /**
-                 runners: {
-                  name: "gitlab-runner",
-                  gitlabUrl: "https://gitlab.com",
-                  limit: 10,
-                  outputLimit: 52428800,
-                  environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
-                 }
-                */
                 gitlabToken: gitlabToken,
-                gitlabUrl: gitlabUrl,
+                name: advancedConfiguration?.runners?.name,
+                gitlabUrl: advancedConfiguration?.runners?.url,
+                limit: advancedConfiguration?.runners?.limit,
+                outputLimit: advancedConfiguration?.runners?.outputLimit,
+                environment: advancedConfiguration?.runners?.environment,
                 cache: this.cacheBucket,
                 machine: {
-                  /**
-                   runners.machine {
-                    idleCount: 0,
-                    idleTime: 300,
-                    maxBuilds: 20,
-                    machineName: "gitlab-runner",
-                   }
-                   */
+                  idleCount: advancedConfiguration?.runners?.machine?.idleCount,
+                  idleTime: advancedConfiguration?.runners?.machine?.idleTime,
+                  maxBuilds: advancedConfiguration?.runners?.machine?.maxBuilds,
+                  machineName:
+                    advancedConfiguration?.runners?.machine?.machineName,
                   machineOptions: {
-                    /**
-                     runners.machine.machineOptions {
-                      requestSpotInstance: true,
-                      spotPrice: 0.03,
-                      blockDurationMinutes: 0,
-                     }
-                     */
+                    requestSpotInstance:
+                      advancedConfiguration?.runners?.machine?.machineOptions
+                        ?.requestSpotInstance,
+                    spotPrice:
+                      advancedConfiguration?.runners?.machine?.machineOptions
+                        ?.spotPrice,
+                    blockDurationMinutes:
+                      advancedConfiguration?.runners?.machine?.machineOptions
+                        ?.blockDurationMinutes,
                     instanceType: runnersInstanceType,
                     machineImage: runnersMachineImage,
                     instanceProfile: runnersInstanceProfile,
