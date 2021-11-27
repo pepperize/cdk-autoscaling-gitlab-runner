@@ -1,4 +1,4 @@
-const { NodePackageManager, AwsCdkConstructLibrary, JsonFile } = require("projen");
+const { NodePackageManager, AwsCdkConstructLibrary, JsonFile, NpmAccess } = require("projen");
 
 const project = new AwsCdkConstructLibrary({
   authorName: "Ivan Ovdiienko",
@@ -10,6 +10,7 @@ const project = new AwsCdkConstructLibrary({
   cdkVersionPinning: false,
   defaultReleaseBranch: "main",
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
+  npmAccess: NpmAccess.PUBLIC,
   description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
   keywords: [
     "AWS",
