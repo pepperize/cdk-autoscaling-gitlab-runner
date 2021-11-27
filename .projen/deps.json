@@ -1,6 +1,11 @@
 {
   "dependencies": [
     {
+      "name": "@aws-cdk/assert",
+      "version": "^1.134.0",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -15,11 +20,6 @@
     },
     {
       "name": "@typescript-eslint/parser",
-      "type": "build"
-    },
-    {
-      "name": "aws-cdk",
-      "version": "1.132.0",
       "type": "build"
     },
     {
@@ -56,6 +56,22 @@
       "type": "build"
     },
     {
+      "name": "jsii",
+      "type": "build"
+    },
+    {
+      "name": "jsii-diff",
+      "type": "build"
+    },
+    {
+      "name": "jsii-docgen",
+      "type": "build"
+    },
+    {
+      "name": "jsii-pacmak",
+      "type": "build"
+    },
+    {
       "name": "json-schema",
       "type": "build"
     },
@@ -82,51 +98,104 @@
       "type": "build"
     },
     {
-      "name": "ts-node",
-      "version": "^9",
-      "type": "build"
-    },
-    {
       "name": "typescript",
       "type": "build"
     },
     {
-      "name": "@aws-cdk/assert",
-      "version": "1.132.0",
-      "type": "runtime"
+      "name": "@iarna/toml",
+      "type": "bundled"
+    },
+    {
+      "name": "param-case",
+      "type": "bundled"
+    },
+    {
+      "name": "pascal-case",
+      "type": "bundled"
+    },
+    {
+      "name": "snake-case",
+      "type": "bundled"
     },
     {
       "name": "@aws-cdk/aws-autoscaling",
-      "version": "1.132.0",
+      "version": "^1.134.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-ec2",
+      "version": "^1.134.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-iam",
+      "version": "^1.134.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-s3-deployment",
+      "version": "^1.134.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-s3",
+      "version": "^1.134.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/core",
+      "version": "^1.134.0",
+      "type": "peer"
+    },
+    {
+      "name": "constructs",
+      "version": "^3.2.27",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-autoscaling",
+      "version": "^1.134.0",
       "type": "runtime"
     },
     {
       "name": "@aws-cdk/aws-ec2",
-      "version": "1.132.0",
+      "version": "^1.134.0",
       "type": "runtime"
     },
     {
       "name": "@aws-cdk/aws-iam",
-      "version": "1.132.0",
+      "version": "^1.134.0",
       "type": "runtime"
     },
     {
       "name": "@aws-cdk/aws-s3-deployment",
-      "version": "1.132.0",
+      "version": "^1.134.0",
       "type": "runtime"
     },
     {
       "name": "@aws-cdk/aws-s3",
-      "version": "1.132.0",
+      "version": "^1.134.0",
       "type": "runtime"
     },
     {
       "name": "@aws-cdk/core",
-      "version": "1.132.0",
+      "version": "^1.134.0",
       "type": "runtime"
     },
     {
       "name": "@iarna/toml",
+      "type": "runtime"
+    },
+    {
+      "name": "param-case",
+      "type": "runtime"
+    },
+    {
+      "name": "pascal-case",
+      "type": "runtime"
+    },
+    {
+      "name": "snake-case",
       "type": "runtime"
     }
   ],

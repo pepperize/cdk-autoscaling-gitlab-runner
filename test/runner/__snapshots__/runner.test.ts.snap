@@ -234,16 +234,9 @@ Object {
                   "Fn::Join": Array [
                     "",
                     Array [
-                      "concurrent = 10
-check_interval = 0
-
-[[runners]]
-name = \\"MockStack\\"
-url = \\"https://gitlab.com\\"
-limit = 10
-output_limit = 52_428_800
+                      "[[runners]]
+name = \\"gitlab-runner\\"
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
 token = \\"\\"
 
   [runners.docker]
@@ -255,6 +248,34 @@ token = \\"\\"
   disable_cache = false
   volumes = [ \\"/certs/client\\", \\"/cache\\" ]
   shm_size = 0
+
+  [runners.machine]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 20
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%\\"
+  MachineOptions = [
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\",
+  \\"amazonec2-region=us-east-1\\",
+  \\"amazonec2-vpc-id=vpc123\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=pub1\\",
+  \\"amazonec2-security-group=MockStack-RunnersSecurityGroup\\",
+  \\"amazonec2-use-private-address=true\\",
+  \\"amazonec2-iam-instance-profile=",
+                      Object {
+                        "Ref": "RunnersInstanceProfile",
+                      },
+                      "\\"
+]
+
+    [[runners.machine.autoscaling]]
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
 
   [runners.cache]
   Type = \\"s3\\"
@@ -272,36 +293,6 @@ token = \\"\\"
                       },
                       "\\"
     BucketLocation = \\"us-east-1\\"
-
-  [runners.machine]
-  IdleCount = 0
-  IdleTime = 300
-  MaxBuilds = 20
-  MachineDriver = \\"amazonec2\\"
-  MachineName = \\"gitlab-runner-%s\\"
-  MachineOptions = [
-  \\"amazonec2-instance-type=t3.micro\\",
-  \\"amazonec2-ami=ami-1234\\",
-  \\"amazonec2-region=us-east-1\\",
-  \\"amazonec2-vpc-id=vpc123\\",
-  \\"amazonec2-zone=a\\",
-  \\"amazonec2-subnet-id=pub1\\",
-  \\"amazonec2-security-group=MockStack-RunnersSecurityGroup\\",
-  \\"amazonec2-use-private-address=true\\",
-  \\"amazonec2-iam-instance-profile=",
-                      Object {
-                        "Ref": "RunnersInstanceProfile",
-                      },
-                      "\\",
-  \\"amazonec2-request-spot-instance=true\\",
-  \\"amazonec2-spot-price=0.03\\"
-]
-
-    [[runners.machine.autoscaling]]
-    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
-    IdleCount = 1
-    IdleTime = 1_800
-    Timezone = \\"Etc/UTC\\"
 ",
                     ],
                   ],
@@ -453,7 +444,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: c671a833982f325c
+# fingerprint: 3289bd00036ea4b8
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

@@ -12,7 +12,5 @@ test("network", () => {
   expect(network.vpc.vpcId).toBeDefined();
   expect(network.availabilityZone).toEqual(network.vpc.availabilityZones[0]);
   expect(network.availabilityZone).toEqual(network.subnet.availabilityZone);
-  expect(network.vpc.availabilityZones[0]).toEqual(
-    network.subnet.availabilityZone
-  );
+  expect(network.vpc.availabilityZones[0]).toEqual(network.subnet.availabilityZone);
 });

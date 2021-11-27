@@ -20,5 +20,4 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 /.eslintrc.json
-cdk.out/
-.cdk.staging/
+!.jsii

@@ -1,9 +1,4 @@
-import {
-  BlockPublicAccess,
-  Bucket,
-  BucketEncryption,
-  IBucket,
-} from "@aws-cdk/aws-s3";
+import { BlockPublicAccess, Bucket, BucketEncryption, IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, RemovalPolicy, Stack } from "@aws-cdk/core";
 
 export interface CacheProps {
@@ -12,12 +7,12 @@ export interface CacheProps {
    *
    * @default "runner-cache"
    */
-  bucketName?: string;
+  readonly bucketName?: string;
   /**
    * The number of days after which the created cache objects are deleted from S3.
    * @default 30 days
    */
-  expiration?: Duration;
+  readonly expiration?: Duration;
 }
 
 /**

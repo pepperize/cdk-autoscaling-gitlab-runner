@@ -1,17 +1,16 @@
-const { NodePackageManager, AwsCdkTypeScriptApp } = require("projen");
+const { NodePackageManager, AwsCdkConstructLibrary, JsonFile } = require("projen");
 
-const project = new AwsCdkTypeScriptApp({
+const project = new AwsCdkConstructLibrary({
   authorName: "Ivan Ovdiienko",
   authorAddress: "ivan.ovdiienko@pepperize.com",
-  authorOrganization: "Pepperize",
+  authorOrganization: true,
   copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
   license: "MIT",
-  cdkVersion: "1.132.0",
-  cdkVersionPinning: true,
+  cdkVersion: "1.134.0",
+  cdkVersionPinning: false,
   defaultReleaseBranch: "main",
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
-  description:
-    "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
+  description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
   keywords: [
     "AWS",
     "CDK",
@@ -26,24 +25,18 @@ const project = new AwsCdkTypeScriptApp({
     "S3",
     "Shared Cache",
   ],
-  repositoryUrl:
-    "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
+  repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
   cdkDependencies: [
+    "@aws-cdk/core",
     "@aws-cdk/aws-s3",
     "@aws-cdk/aws-s3-deployment",
     "@aws-cdk/aws-ec2",
     "@aws-cdk/aws-iam",
     "@aws-cdk/aws-autoscaling",
   ],
-  appEntrypoint: "main.ts",
-  context: {
-    "@aws-cdk/core:enableStackNameDuplicates": "true",
-    "aws-cdk:enableDiffNoFail": "true",
-    "@aws-cdk/core:stackRelativeExports": "true",
-    "@aws-cdk/core:newStyleStackSynthesis": true,
-  },
-  deps: ["@iarna/toml"],
+  deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
+  bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                     /* Build dependencies for this module. */
@@ -69,9 +62,6 @@ const project = new AwsCdkTypeScriptApp({
     mavenGroupId: "your_package_group_id",
     mavenArtifactId: "your_package_target_id",
   },
-  publishToGo: {
-    moduleName: "github.com/owner/repo/subdir",
-  },
   eslint: true,
   eslintOptions: {
     prettier: true,
@@ -80,24 +70,13 @@ const project = new AwsCdkTypeScriptApp({
 });
 
 project.setScript("preinstall", "npx only-allow npm");
-project.setScript("build", "tsc");
-project.setScript("watch", "tsc -w");
-project.setScript("cdk", "cdk");
-project.setScript(
-  "bootstrap",
-  "cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess"
-);
-project.setScript("synth", "cdk synth");
-project.setScript("deploy", "cdk deploy");
-project.setScript(
-  "format",
-  "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
-);
+project.setScript("format", "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'");
 
-project.buildWorkflow.on({ push: {}, pullRequest: {}, workflowDispatch: {} });
-project.buildTask.reset();
-project.buildTask.exec("npx projen");
-project.buildTask.spawn({ name: "test" });
-project.buildTask.spawn({ name: "compile" });
+new JsonFile(project, ".prettierrc", {
+  obj: {
+    printWidth: 120,
+  },
+  marker: false,
+});
 
 project.synth();

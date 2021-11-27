@@ -1,17 +1,11 @@
-import {
-  ISubnet,
-  IVpc,
-  SubnetSelection,
-  SubnetType,
-  Vpc,
-} from "@aws-cdk/aws-ec2";
+import { ISubnet, IVpc, SubnetSelection, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
 import { Annotations, Construct, Stack } from "@aws-cdk/core";
 
-export type NetworkProps = {
+export interface NetworkProps {
   /**
    * If no existing VPC is provided, a default Vpc will be created.
    */
-  vpc?: IVpc;
+  readonly vpc?: IVpc;
 
   /**
    * The GitLab Runner's subnets. It should be either public or private. If more then subnet is selected, then the first found (private) subnet will be used.
@@ -22,8 +16,8 @@ export type NetworkProps = {
    *  - doesn't route to an Internet Gateway (not public)
    *  - has an Nat Gateway
    */
-  subnetSelection?: SubnetSelection;
-};
+  readonly subnetSelection?: SubnetSelection;
+}
 
 /**
  * Network settings for the manager and runners
@@ -35,23 +29,21 @@ export class Network extends Construct {
   readonly availabilityZone: string;
   readonly subnet: ISubnet;
 
-  constructor(scope: Stack, id: string, props: NetworkProps = {}) {
+  constructor(scope: Stack, id: string, props?: NetworkProps) {
     super(scope, id);
 
     this.vpc =
-      props.vpc ||
+      props?.vpc ??
       new Vpc(scope, `Vpc`, {
         maxAzs: 1,
       });
 
-    this.subnet = this.findSubnet(this.vpc, props.subnetSelection);
+    this.subnet = this.findSubnet(this.vpc, props?.subnetSelection);
 
     this.availabilityZone = this.subnet.availabilityZone;
 
     if (!this.hasPrivateSubnet(this.vpc)) {
-      Annotations.of(this).addWarning(
-        `No private network found in ${this.vpc.vpcId}, using public addresses.`
-      );
+      Annotations.of(this).addWarning(`No private network found in ${this.vpc.vpcId}, using public addresses.`);
     }
   }
 
@@ -67,9 +59,7 @@ export class Network extends Construct {
   private findSubnet(vpc: IVpc, subnetSelection?: SubnetSelection): ISubnet {
     const selectedSubnets = vpc.selectSubnets(
       subnetSelection || {
-        subnetType: this.hasPrivateSubnet(vpc)
-          ? SubnetType.PRIVATE_WITH_NAT
-          : SubnetType.PUBLIC,
+        subnetType: this.hasPrivateSubnet(vpc) ? SubnetType.PRIVATE_WITH_NAT : SubnetType.PUBLIC,
         availabilityZones: vpc.availabilityZones,
       }
     );
@@ -77,9 +67,7 @@ export class Network extends Construct {
     const subnet = selectedSubnets.subnets.find(() => true);
 
     if (!subnet) {
-      throw new Error(
-        `Neither a private nor a public subnet is found in ${vpc.vpcId}`
-      );
+      throw new Error(`Neither a private nor a public subnet is found in ${vpc.vpcId}`);
     }
 
     return subnet;

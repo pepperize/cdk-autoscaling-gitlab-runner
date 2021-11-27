@@ -1,43 +1,49 @@
 {
   "name": "@pepperize/cdk-autoscaling-gitlab-runner",
   "description": "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git"
+  },
   "scripts": {
-    "clobber": "npx projen clobber",
-    "compile": "npx projen compile",
-    "test:compile": "npx projen test:compile",
-    "test": "npx projen test",
-    "build": "tsc",
-    "test:watch": "npx projen test:watch",
-    "test:update": "npx projen test:update",
+    "build": "npx projen build",
     "bump": "npx projen bump",
-    "unbump": "npx projen unbump",
-    "publish:github": "npx projen publish:github",
+    "clobber": "npx projen clobber",
+    "compat": "npx projen compat",
+    "compile": "npx projen compile",
     "default": "npx projen default",
-    "watch": "tsc -w",
+    "docgen": "npx projen docgen",
     "eslint": "npx projen eslint",
-    "synth": "cdk synth",
-    "deploy": "cdk deploy",
-    "destroy": "npx projen destroy",
-    "diff": "npx projen diff",
+    "package": "npx projen package",
+    "post-compile": "npx projen post-compile",
+    "pre-compile": "npx projen pre-compile",
+    "publish:github": "npx projen publish:github",
+    "publish:maven": "npx projen publish:maven",
+    "publish:nuget": "npx projen publish:nuget",
+    "publish:pypi": "npx projen publish:pypi",
     "release": "npx projen release",
+    "test": "npx projen test",
+    "test:update": "npx projen test:update",
+    "test:watch": "npx projen test:watch",
+    "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "upgrade-projen": "npx projen upgrade-projen",
+    "watch": "npx projen watch",
     "projen": "npx projen",
     "preinstall": "npx only-allow npm",
-    "cdk": "cdk",
-    "bootstrap": "cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess",
     "format": "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
   },
   "author": {
     "name": "Ivan Ovdiienko",
-    "organization": "Pepperize"
+    "email": "ivan.ovdiienko@pepperize.com",
+    "organization": true
   },
   "devDependencies": {
+    "@aws-cdk/assert": "^1.134.0",
     "@types/jest": "^27.0.3",
     "@types/node": "^14.17.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "aws-cdk": "1.132.0",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -46,26 +52,45 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.3.1",
     "jest-junit": "^12",
+    "jsii": "^1.46.0",
+    "jsii-diff": "^1.46.0",
+    "jsii-docgen": "^4.1.11",
+    "jsii-pacmak": "^1.46.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^11",
-    "prettier": "^2.4.1",
-    "projen": "^0.30.5",
+    "prettier": "^2.5.0",
+    "projen": "^0.34.18",
     "standard-version": "^9",
     "ts-jest": "^27.0.7",
-    "ts-node": "^9",
     "typescript": "^4.5.2"
   },
-  "dependencies": {
-    "@aws-cdk/assert": "1.132.0",
-    "@aws-cdk/aws-autoscaling": "1.132.0",
-    "@aws-cdk/aws-ec2": "1.132.0",
-    "@aws-cdk/aws-iam": "1.132.0",
-    "@aws-cdk/aws-s3": "1.132.0",
-    "@aws-cdk/aws-s3-deployment": "1.132.0",
-    "@aws-cdk/core": "1.132.0",
-    "@iarna/toml": "^2.2.5"
+  "peerDependencies": {
+    "@aws-cdk/aws-autoscaling": "^1.134.0",
+    "@aws-cdk/aws-ec2": "^1.134.0",
+    "@aws-cdk/aws-iam": "^1.134.0",
+    "@aws-cdk/aws-s3": "^1.134.0",
+    "@aws-cdk/aws-s3-deployment": "^1.134.0",
+    "@aws-cdk/core": "^1.134.0",
+    "constructs": "^3.2.27"
   },
-  "bundledDependencies": [],
+  "dependencies": {
+    "@aws-cdk/aws-autoscaling": "^1.134.0",
+    "@aws-cdk/aws-ec2": "^1.134.0",
+    "@aws-cdk/aws-iam": "^1.134.0",
+    "@aws-cdk/aws-s3": "^1.134.0",
+    "@aws-cdk/aws-s3-deployment": "^1.134.0",
+    "@aws-cdk/core": "^1.134.0",
+    "@iarna/toml": "^2.2.5",
+    "param-case": "^3.0.4",
+    "pascal-case": "^3.1.2",
+    "snake-case": "^3.0.4"
+  },
+  "bundledDependencies": [
+    "@iarna/toml",
+    "param-case",
+    "pascal-case",
+    "snake-case"
+  ],
   "keywords": [
     "AWS",
     "Autoscaling",
@@ -78,8 +103,10 @@
     "Runner",
     "S3",
     "Shared Cache",
-    "Spot Instances"
+    "Spot Instances",
+    "cdk"
   ],
+  "main": "lib/index.js",
   "license": "MIT",
   "version": "0.0.0",
   "jest": {
@@ -119,6 +146,32 @@
       "ts-jest": {
         "tsconfig": "tsconfig.dev.json"
       }
+    }
+  },
+  "types": "lib/index.d.ts",
+  "stability": "stable",
+  "jsii": {
+    "outdir": "dist",
+    "targets": {
+      "java": {
+        "package": "your_java_package",
+        "maven": {
+          "groupId": "your_package_group_id",
+          "artifactId": "your_package_target_id"
+        }
+      },
+      "python": {
+        "distName": "distribution-name",
+        "module": "module_name"
+      },
+      "dotnet": {
+        "namespace": "Organization.Namespace",
+        "packageId": "Package.Name"
+      }
+    },
+    "tsc": {
+      "outDir": "lib",
+      "rootDir": "src"
     }
   },
   "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \"npx projen\"."
