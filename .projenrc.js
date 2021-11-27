@@ -51,11 +51,7 @@ const project = new AwsCdkConstructLibrary({
   release: {
     releaseEveryCommit: true,
   },
-  releaseToNpm: false,
-  a: {
-    distTag: "latest",
-    registry: "registry.npmjs.org",
-  },
+  releaseToNpm: true,
   publishToNuget: {
     dotNetNamespace: "Organization.Namespace",
     packageId: "Package.Name",
