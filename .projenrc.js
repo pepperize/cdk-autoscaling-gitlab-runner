@@ -1,16 +1,7 @@
 const { NodePackageManager, AwsCdkConstructLibrary, JsonFile, NpmAccess } = require("projen");
 
 const project = new AwsCdkConstructLibrary({
-  authorName: "Ivan Ovdiienko",
-  authorAddress: "ivan.ovdiienko@pepperize.com",
-  authorOrganization: true,
-  copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
-  license: "MIT",
-  cdkVersion: "1.134.0",
-  cdkVersionPinning: false,
-  defaultReleaseBranch: "main",
-  name: "@pepperize/cdk-autoscaling-gitlab-runner",
-  npmAccess: NpmAccess.PUBLIC,
+  name: "@pepperize-testing/cdk-autoscaling-gitlab-runner",
   description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
   keywords: [
     "AWS",
@@ -26,8 +17,19 @@ const project = new AwsCdkConstructLibrary({
     "S3",
     "Shared Cache",
   ],
+
+  authorName: "Ivan Ovdiienko",
+  authorAddress: "ivan.ovdiienko@pepperize.com",
+  authorOrganization: true,
+  copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
+  license: "MIT",
+
+  npmAccess: NpmAccess.PUBLIC,
   repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
+
+  cdkVersion: "1.134.0",
+  cdkVersionPinning: false,
   cdkDependencies: [
     "@aws-cdk/core",
     "@aws-cdk/aws-s3",
@@ -39,7 +41,6 @@ const project = new AwsCdkConstructLibrary({
   deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
   bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
-  // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                     /* Build dependencies for this module. */
   // packageName: undefined,          /* The "name" in package.json. */
 
@@ -49,10 +50,11 @@ const project = new AwsCdkConstructLibrary({
     },
   },
 
+  defaultReleaseBranch: "main",
   release: {
     releaseEveryCommit: true,
   },
-  releaseToNpm: false,
+  releaseToNpm: true,
   // publishToNuget: {
   //   dotNetNamespace: "Organization.Namespace",
   //   packageId: "Package.Name",

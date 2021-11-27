@@ -1,5 +1,5 @@
 {
-  "name": "@pepperize/cdk-autoscaling-gitlab-runner",
+  "name": "@pepperize-testing/cdk-autoscaling-gitlab-runner",
   "description": "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
   "repository": {
     "type": "git",
@@ -18,6 +18,7 @@
     "post-compile": "npx projen post-compile",
     "pre-compile": "npx projen pre-compile",
     "publish:github": "npx projen publish:github",
+    "publish:npm": "npx projen publish:npm",
     "publish:pypi": "npx projen publish:pypi",
     "release": "npx projen release",
     "test": "npx projen test",
