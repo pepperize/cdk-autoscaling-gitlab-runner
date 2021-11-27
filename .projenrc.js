@@ -77,7 +77,6 @@ const project = new AwsCdkConstructLibrary({
   gitignore: [".idea"],
 });
 
-project.setScript("preinstall", "npx only-allow npm");
 project.setScript("format", "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'");
 
 new JsonFile(project, ".prettierrc", {
