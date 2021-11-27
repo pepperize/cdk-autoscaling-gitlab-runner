@@ -41,6 +41,13 @@ const project = new AwsCdkConstructLibrary({
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                     /* Build dependencies for this module. */
   // packageName: undefined,          /* The "name" in package.json. */
+
+  depsUpgradeOptions: {
+    workflowOptions: {
+      secret: "PROJEN_GITHUB_TOKEN",
+    },
+  },
+
   release: {
     releaseEveryCommit: true,
   },
@@ -62,10 +69,12 @@ const project = new AwsCdkConstructLibrary({
     mavenGroupId: "your_package_group_id",
     mavenArtifactId: "your_package_target_id",
   },
+
   eslint: true,
   eslintOptions: {
     prettier: true,
   },
+
   gitignore: [".idea"],
 });
 
