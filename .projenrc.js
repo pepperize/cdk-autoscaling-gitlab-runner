@@ -52,20 +52,20 @@ const project = new AwsCdkConstructLibrary({
   release: {
     releaseEveryCommit: true,
   },
-  releaseToNpm: true,
-  publishToNuget: {
-    dotNetNamespace: "Organization.Namespace",
-    packageId: "Package.Name",
-  },
+  releaseToNpm: false,
+  // publishToNuget: {
+  //   dotNetNamespace: "Organization.Namespace",
+  //   packageId: "Package.Name",
+  // },
   publishToPypi: {
-    distName: "distribution-name",
-    module: "module_name",
+    distName: "pepperize.cdk-autoscaling-gitlab-runner",
+    module: "pepperize_cdk_autoscaling_gitlab-runner",
   },
-  publishToMaven: {
-    javaPackage: "your_java_package",
-    mavenGroupId: "your_package_group_id",
-    mavenArtifactId: "your_package_target_id",
-  },
+  // publishToMaven: {
+  //   javaPackage: "your_java_package",
+  //   mavenGroupId: "your_package_group_id",
+  //   mavenArtifactId: "your_package_target_id",
+  // },
 
   eslint: true,
   eslintOptions: {
