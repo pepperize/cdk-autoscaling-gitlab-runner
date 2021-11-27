@@ -1341,6 +1341,8 @@ public readonly autoscaling: AutoscalingConfiguration[];
 
 - *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[]
 
+Optional autoscaling configuration.
+
 ---
 
 ##### `docker`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.docker"></a>
