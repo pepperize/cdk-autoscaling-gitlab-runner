@@ -54,7 +54,7 @@
     "jest-junit": "^12",
     "jsii": "^1.46.0",
     "jsii-diff": "^1.46.0",
-    "jsii-docgen": "^4.1.9",
+    "jsii-docgen": "^4.1.11",
     "jsii-pacmak": "^1.46.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^11",
@@ -80,10 +80,16 @@
     "@aws-cdk/aws-s3": "^1.134.0",
     "@aws-cdk/aws-s3-deployment": "^1.134.0",
     "@aws-cdk/core": "^1.134.0",
-    "@iarna/toml": "^2.2.5"
+    "@iarna/toml": "^2.2.5",
+    "param-case": "^3.0.4",
+    "pascal-case": "^3.1.2",
+    "snake-case": "^3.0.4"
   },
   "bundledDependencies": [
-    "@iarna/toml"
+    "@iarna/toml",
+    "param-case",
+    "pascal-case",
+    "snake-case"
   ],
   "keywords": [
     "AWS",

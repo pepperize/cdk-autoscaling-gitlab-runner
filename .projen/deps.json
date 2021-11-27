@@ -106,6 +106,18 @@
       "type": "bundled"
     },
     {
+      "name": "param-case",
+      "type": "bundled"
+    },
+    {
+      "name": "pascal-case",
+      "type": "bundled"
+    },
+    {
+      "name": "snake-case",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-cdk/aws-autoscaling",
       "version": "^1.134.0",
       "type": "peer"
@@ -172,6 +184,18 @@
     },
     {
       "name": "@iarna/toml",
+      "type": "runtime"
+    },
+    {
+      "name": "param-case",
+      "type": "runtime"
+    },
+    {
+      "name": "pascal-case",
+      "type": "runtime"
+    },
+    {
+      "name": "snake-case",
       "type": "runtime"
     }
   ],

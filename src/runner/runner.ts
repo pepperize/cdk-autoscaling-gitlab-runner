@@ -26,8 +26,13 @@ import {
 import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack } from "@aws-cdk/core";
-import { Configuration } from "../runner-configuration";
-import { GitlabRunnerAdvancedConfigurationOptionalProps } from "../runner-configuration/configuration.optional";
+import {
+  AutoscalingConfiguration,
+  ConfigurationMapper,
+  DockerConfiguration,
+  GlobalConfiguration,
+  MachineConfiguration,
+} from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
 import { Network, NetworkProps } from "./network";
 
@@ -44,7 +49,7 @@ import { Network, NetworkProps } from "./network";
 /**
  * Properties of the Gitlab Runner. You have to provide at least the GitLab's Runner's authentication token.
  */
-export interface GitlabRunnerAutoscalingProps {
+export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * @see {@link https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens}
@@ -57,10 +62,6 @@ export interface GitlabRunnerAutoscalingProps {
    */
   readonly gitlabUrl?: string;
 
-  /**
-   * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
-   * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
-   */
   readonly cache?: GitlabRunnerAutoscalingCacheProps;
 
   /**
@@ -75,20 +76,13 @@ export interface GitlabRunnerAutoscalingProps {
    */
   readonly manager?: GitlabRunnerAutoscalingManagerProps;
 
-  /**
-   * The runner EC2 instances configuration. If not set, the defaults will be used.
-   * @link GitlabRunnerAutoscalingProps
-   */
   readonly runners?: GitlabRunnerAutoscalingRunnerProps;
-
-  /**
-   * You can change the behavior of GitLab Runner and of individual registered runners.
-   * This imitates the structure of Gitlab Runner advanced configuration that originally is set with config.toml file.
-   * @link GitlabRunnerAdvancedConfigurationOptionalProps
-   */
-  readonly advancedConfiguration?: GitlabRunnerAdvancedConfigurationOptionalProps;
 }
 
+/**
+ * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
+ * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
+ */
 export interface GitlabRunnerAutoscalingCacheProps {
   /**
    * An existing S3 bucket used as runner's cache.
@@ -119,6 +113,10 @@ export interface GitlabRunnerAutoscalingManagerProps {
   readonly keyPairName?: string;
 }
 
+/**
+ * The runner EC2 instances configuration. If not set, the defaults will be used.
+ * @link GitlabRunnerAutoscalingProps
+ */
 export interface GitlabRunnerAutoscalingRunnerProps {
   /**
    * Instance type for runner EC2 instances. It's a combination of a class and size.
@@ -132,6 +130,41 @@ export interface GitlabRunnerAutoscalingRunnerProps {
    * @see https://cloud-images.ubuntu.com/locator/ec2/
    */
   readonly machineImage?: IMachineImage;
+
+  /**
+   * Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
+   */
+  readonly role?: IRole;
+  /**
+   * Limit how many jobs can be handled concurrently by this registered runner. 0 (default) means do not limit.
+   * @default 10
+   */
+  readonly limit?: number;
+
+  /**
+   * Maximum build log size in kilobytes. Default is 4096 (4MB).
+   * @default 52428800 (50GB)
+   */
+  readonly outputLimit?: number;
+
+  /**
+   * Append or overwrite environment variables.
+   * @default ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"]
+   */
+  readonly environment?: string[];
+
+  /**
+   * Optional docker configuration
+   */
+  readonly docker?: DockerConfiguration;
+  /**
+   * Optional docker machine configuration
+   */
+  readonly machine?: MachineConfiguration;
+  /**
+   * Optional autoscaling configuration
+   */
+  readonly autoscaling?: AutoscalingConfiguration[];
 }
 
 /**
@@ -161,8 +194,7 @@ export class GitlabRunnerAutoscaling extends Construct {
 
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
-    const { manager, cache, runners, network, gitlabToken, advancedConfiguration }: GitlabRunnerAutoscalingProps =
-      props;
+    const { manager, cache, runners, network }: GitlabRunnerAutoscalingProps = props;
 
     /**
      * S3 Bucket for Runners' cache
@@ -194,10 +226,12 @@ export class GitlabRunnerAutoscaling extends Construct {
       vpc: this.network.vpc,
     });
 
-    const runnersRole = new Role(scope, "RunnersRole", {
-      assumedBy: ec2ServicePrincipal,
-      managedPolicies: [ec2ManagedPolicyForSSM],
-    });
+    const runnersRole =
+      runners?.role ||
+      new Role(scope, "RunnersRole", {
+        assumedBy: ec2ServicePrincipal,
+        managedPolicies: [ec2ManagedPolicyForSSM],
+      });
 
     const runnersInstanceProfile = new CfnInstanceProfile(scope, "RunnersInstanceProfile", {
       roles: [runnersRole.roleName],
@@ -376,39 +410,44 @@ export class GitlabRunnerAutoscaling extends Construct {
         [CONFIG]: new InitConfig([
           InitFile.fromString(
             "/etc/gitlab-runner/config.toml",
-            Configuration.fromProps({
-              concurrent: advancedConfiguration?.concurrent,
-              checkInterval: advancedConfiguration?.checkInterval,
-              logFormat: advancedConfiguration?.logFormat,
-              logLevel: advancedConfiguration?.logLevel,
-              scope: scope,
-              runners: {
-                gitlabToken: gitlabToken,
-                name: advancedConfiguration?.runners?.name,
-                gitlabUrl: advancedConfiguration?.runners?.url,
-                limit: advancedConfiguration?.runners?.limit,
-                outputLimit: advancedConfiguration?.runners?.outputLimit,
-                environment: advancedConfiguration?.runners?.environment,
-                cache: this.cacheBucket,
-                machine: {
-                  idleCount: advancedConfiguration?.runners?.machine?.idleCount,
-                  idleTime: advancedConfiguration?.runners?.machine?.idleTime,
-                  maxBuilds: advancedConfiguration?.runners?.machine?.maxBuilds,
-                  machineName: advancedConfiguration?.runners?.machine?.machineName,
-                  machineOptions: {
-                    requestSpotInstance: advancedConfiguration?.runners?.machine?.machineOptions?.requestSpotInstance,
-                    spotPrice: advancedConfiguration?.runners?.machine?.machineOptions?.spotPrice,
-                    blockDurationMinutes: advancedConfiguration?.runners?.machine?.machineOptions?.blockDurationMinutes,
-                    instanceType: runnersInstanceType,
-                    machineImage: runnersMachineImage,
-                    instanceProfile: runnersInstanceProfile,
-                    securityGroupName: runnersSecurityGroupName,
-                    vpc: {
-                      vpcId: this.network.vpc.vpcId,
-                      subnetId: this.network.subnet.subnetId,
-                      availabilityZone: this.network.availabilityZone,
-                    },
-                  },
+            ConfigurationMapper.withDefaults({
+              globalConfiguration: {
+                concurrent: props?.concurrent,
+                checkInterval: props?.checkInterval,
+                logFormat: props?.logFormat,
+                logLevel: props?.logLevel,
+              },
+              runnerConfiguration: {
+                token: props.gitlabToken,
+                url: props.gitlabUrl,
+                limit: runners?.limit,
+                outputLimit: runners?.outputLimit,
+                environment: runners?.environment,
+              },
+              dockerConfiguration: {
+                ...runners?.docker,
+              },
+              machineConfiguration: {
+                ...runners?.machine,
+                machineOptions: {
+                  ...runners?.machine?.machineOptions,
+                  instanceType: runners?.instanceType?.toString(),
+                  ami: runners?.machineImage?.getImage(scope).imageId,
+                  region: scope.region,
+                  vpcId: this.network.vpc.vpcId,
+                  zone: this.network.availabilityZone.slice(-1),
+                  subnetId: this.network.subnet.subnetId,
+                  securityGroup: `${runnersSecurityGroupName}`,
+                  usePrivateAddress: true,
+                  iamInstanceProfile: `${runnersInstanceProfile.ref}`,
+                },
+              },
+              autoscalingConfigurations: runners?.autoscaling || [],
+              cacheConfiguration: {
+                s3: {
+                  serverAddress: `s3.${scope.urlSuffix}`,
+                  bucketName: `${this.cacheBucket.bucketName}`,
+                  bucketLocation: `${scope.region}`,
                 },
               },
             }).toToml(),

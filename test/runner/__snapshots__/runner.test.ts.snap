@@ -234,19 +234,48 @@ Object {
                   "Fn::Join": Array [
                     "",
                     Array [
-                      "concurrent = 10
-check_interval = 0
-log_format = \\"runner\\"
-log_level = \\"info\\"
-
-[[runners]]
-token = \\"\\"
-name = \\"MockStack\\"
-url = \\"https://gitlab.com\\"
-limit = 10
-output_limit = 52_428_800
+                      "[[runners]]
+name = \\"gitlab-runner\\"
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+token = \\"\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
+
+  [runners.machine]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 20
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%\\"
+  MachineOptions = [
+  \\"amazonec2-region=us-east-1\\",
+  \\"amazonec2-vpc-id=vpc123\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=pub1\\",
+  \\"amazonec2-security-group=MockStack-RunnersSecurityGroup\\",
+  \\"amazonec2-use-private-address=true\\",
+  \\"amazonec2-iam-instance-profile=",
+                      Object {
+                        "Ref": "RunnersInstanceProfile",
+                      },
+                      "\\",
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\"
+]
+
+    [[runners.machine.autoscaling]]
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
 
   [runners.cache]
   Type = \\"s3\\"
@@ -264,47 +293,6 @@ environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
                       },
                       "\\"
     BucketLocation = \\"us-east-1\\"
-
-  [runners.docker]
-  tls_verify = false
-  image = \\"docker:19.03.5\\"
-  privileged = true
-  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
-  wait_for_services_timeout = 300
-  disable_cache = false
-  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
-  shm_size = 0
-
-  [runners.machine]
-  IdleCount = 0
-  IdleTime = 300
-  MaxBuilds = 20
-  MachineDriver = \\"amazonec2\\"
-  MachineName = \\"gitlab-runner-%s\\"
-  MachineOptions = [
-  \\"amazonec2-instance-type=t3.micro\\",
-  \\"amazonec2-ami=ami-1234\\",
-  \\"amazonec2-region=us-east-1\\",
-  \\"amazonec2-vpc-id=vpc123\\",
-  \\"amazonec2-zone=a\\",
-  \\"amazonec2-subnet-id=pub1\\",
-  \\"amazonec2-security-group=MockStack-RunnersSecurityGroup\\",
-  \\"amazonec2-use-private-address=true\\",
-  \\"amazonec2-iam-instance-profile=",
-                      Object {
-                        "Ref": "RunnersInstanceProfile",
-                      },
-                      "\\",
-  \\"amazonec2-request-spot-instance=true\\",
-  \\"amazonec2-spot-price=0.03\\",
-  \\"amazonec2-block-duration-minutes=0\\"
-]
-
-    [[runners.machine.autoscaling]]
-    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
-    IdleCount = 1
-    IdleTime = 1_800
-    Timezone = \\"Etc/UTC\\"
 ",
                     ],
                   ],
@@ -456,7 +444,7 @@ environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 579844bfbd41b0d2
+# fingerprint: 1e8ea353dd32a895
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

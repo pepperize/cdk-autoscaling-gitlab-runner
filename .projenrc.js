@@ -35,8 +35,8 @@ const project = new AwsCdkConstructLibrary({
     "@aws-cdk/aws-iam",
     "@aws-cdk/aws-autoscaling",
   ],
-  deps: ["@iarna/toml"],
-  bundledDeps: ["@iarna/toml"],
+  deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
+  bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
   // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
   // description: undefined,          /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                     /* Build dependencies for this module. */
