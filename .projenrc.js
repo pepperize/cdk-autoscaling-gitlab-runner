@@ -40,7 +40,7 @@ const project = new AwsCdkConstructLibrary({
   ],
   deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
   bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
-  // cdkTestDependencies: undefined,  /* AWS CDK modules required for testing. */
+  cdkTestDependencies: ["@aws-cdk/assertions"] /* AWS CDK modules required for testing. */,
   // devDeps: [],                     /* Build dependencies for this module. */
   // packageName: undefined,          /* The "name" in package.json. */
 

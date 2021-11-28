@@ -431,8 +431,8 @@ export class GitlabRunnerAutoscaling extends Construct {
                 ...runners?.machine,
                 machineOptions: {
                   ...runners?.machine?.machineOptions,
-                  instanceType: runners?.instanceType?.toString(),
-                  ami: runners?.machineImage?.getImage(scope).imageId,
+                  instanceType: runnersInstanceType.toString(),
+                  ami: runnersMachineImage.getImage(scope).imageId,
                   region: scope.region,
                   vpcId: this.network.vpc.vpcId,
                   zone: this.network.availabilityZone.slice(-1),
