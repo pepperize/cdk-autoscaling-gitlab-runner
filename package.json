@@ -162,7 +162,7 @@
       },
       "dotnet": {
         "namespace": "Pepperize.CDK",
-        "packageId": "AutoscalingGitlabRunner"
+        "packageId": "Pepperize.CDK.AutoscalingGitlabRunner"
       }
     },
     "tsc": {
