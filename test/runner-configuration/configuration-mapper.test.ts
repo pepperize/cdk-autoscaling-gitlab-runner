@@ -106,7 +106,7 @@ describe("ConfigurationMapper", () => {
             IdleTime: 300,
             MaxBuilds: 20,
             MachineDriver: "amazonec2",
-            MachineName: "gitlab-runner-%",
+            MachineName: "gitlab-runner-%s",
             MachineOptions: ["amazonec2-request-spot-instance=true", "amazonec2-spot-price=0.03"],
             autoscaling: [{ Periods: ["* * 7-22 * * mon-fri *"], IdleCount: 1, IdleTime: 1800, Timezone: "Etc/UTC" }],
           },

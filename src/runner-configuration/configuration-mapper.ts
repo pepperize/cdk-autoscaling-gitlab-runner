@@ -62,7 +62,7 @@ export class ConfigurationMapper {
         idleTime: 300,
         maxBuilds: 20,
         machineDriver: "amazonec2",
-        machineName: "gitlab-runner-%",
+        machineName: "gitlab-runner-%s",
         ...machineConfiguration,
         machineOptions: {
           requestSpotInstance: true,

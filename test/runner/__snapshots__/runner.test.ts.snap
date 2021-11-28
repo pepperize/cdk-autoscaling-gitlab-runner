@@ -263,7 +263,7 @@ token = \\"\\"
   IdleTime = 300
   MaxBuilds = 20
   MachineDriver = \\"amazonec2\\"
-  MachineName = \\"gitlab-runner-%\\"
+  MachineName = \\"gitlab-runner-%s\\"
   MachineOptions = [
   \\"amazonec2-request-spot-instance=true\\",
   \\"amazonec2-spot-price=0.03\\",
@@ -453,7 +453,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 124d94789dcc68ef
+# fingerprint: dab9a81553866051
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
