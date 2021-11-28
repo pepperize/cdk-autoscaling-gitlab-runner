@@ -412,17 +412,17 @@ export class GitlabRunnerAutoscaling extends Construct {
             "/etc/gitlab-runner/config.toml",
             ConfigurationMapper.withDefaults({
               globalConfiguration: {
-                concurrent: props?.concurrent,
-                checkInterval: props?.checkInterval,
-                logFormat: props?.logFormat,
-                logLevel: props?.logLevel,
+                concurrent: props?.concurrent ?? 10,
+                checkInterval: props?.checkInterval ?? 0,
+                logFormat: props?.logFormat || "runner",
+                logLevel: props?.logLevel || "info",
               },
               runnerConfiguration: {
                 token: props.gitlabToken,
-                url: props.gitlabUrl,
-                limit: runners?.limit,
-                outputLimit: runners?.outputLimit,
-                environment: runners?.environment,
+                url: props.gitlabUrl || "https://gitlab.com",
+                limit: runners?.limit ?? 10,
+                outputLimit: runners?.outputLimit ?? 52428800,
+                environment: runners?.environment || ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
               },
               dockerConfiguration: {
                 ...runners?.docker,

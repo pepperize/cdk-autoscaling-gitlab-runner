@@ -234,9 +234,18 @@ Object {
                   "Fn::Join": Array [
                     "",
                     Array [
-                      "[[runners]]
+                      "concurrent = 10
+check_interval = 0
+log_format = \\"runner\\"
+log_level = \\"info\\"
+
+[[runners]]
 name = \\"gitlab-runner\\"
+url = \\"https://gitlab.com\\"
+limit = 10
+output_limit = 52_428_800
 executor = \\"docker+machine\\"
+environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
 token = \\"\\"
 
   [runners.docker]
@@ -444,7 +453,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 3289bd00036ea4b8
+# fingerprint: 124d94789dcc68ef
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
