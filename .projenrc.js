@@ -57,7 +57,7 @@ const project = new AwsCdkConstructLibrary({
   releaseToNpm: true,
   publishToNuget: {
     dotNetNamespace: "Pepperize.CDK",
-    packageId: "AutoscalingGitlabRunner",
+    packageId: "Pepperize.CDK.AutoscalingGitlabRunner",
   },
   publishToPypi: {
     distName: "pepperize.cdk-autoscaling-gitlab-runner",
