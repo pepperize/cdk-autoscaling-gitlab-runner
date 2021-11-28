@@ -169,6 +169,18 @@
         }
       ]
     },
+    "publish:nuget": {
+      "name": "publish:nuget",
+      "description": "Publish this package to NuGet Gallery",
+      "requiredEnv": [
+        "NUGET_API_KEY"
+      ],
+      "steps": [
+        {
+          "exec": "npx -p jsii-release@latest jsii-release-nuget"
+        }
+      ]
+    },
     "publish:pypi": {
       "name": "publish:pypi",
       "description": "Publish this package to PyPI",
