@@ -195,7 +195,7 @@ public readonly vpc: IVpc;
 
 ### AutoscalingConfiguration <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration"></a>
 
-> {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections}
+> https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
 
 #### Initializer <a name="[object Object].Initializer"></a>
 
@@ -1005,7 +1005,7 @@ The distributed GitLab runner S3 cache.
 
 Either pass an existing bucket or override default options.
 
-> {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
+> https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
 
 #### Initializer <a name="[object Object].Initializer"></a>
 
@@ -1148,7 +1148,9 @@ public readonly machineImage: IMachineImage;
 
 An Amazon Machine Image ID for the Manager EC2 instance.
 
-If empty the latest Amazon 2 Image will be looked up.
+If empty the latest Amazon 2 Image will be looked up.  Should be RHEL flavor like Amazon Linux 2 with yum available for instance initialization.
+
+> https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-init.html
 
 ---
 
@@ -1228,7 +1230,7 @@ public readonly gitlabToken: string;
 
 The GitLab Runner’s authentication token, which is obtained during runner registration.
 
-> {@link https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens}
+> https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
 
 ---
 
@@ -1402,9 +1404,9 @@ public readonly machineImage: IMachineImage;
 
 An Amazon Machine Image ID for the Runners EC2 instances.
 
-If empty the latest Ubuntu 20.04 focal will be looked up.
+If empty the latest Ubuntu 20.04 focal will be looked up.  Any operating system supported by Dcoker Machine's provisioner.
 
-> https://cloud-images.ubuntu.com/locator/ec2/
+> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
 
 ---
 
@@ -1511,7 +1513,7 @@ You can change the behavior of GitLab Runner and of individual registered runner
 
 This imitates the structure of Gitlab Runner advanced configuration that originally is set with config.toml file.
 
-> {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html}
+> https://docs.gitlab.com/runner/configuration/advanced-configuration.html
 
 #### Initializer <a name="[object Object].Initializer"></a>
 
@@ -1592,6 +1594,8 @@ public readonly idleCount: number;
 - *Type:* `number`
 - *Default:* 0
 
+Number of machines that need to be created and waiting in Idle state.
+
 ---
 
 ##### `idleTime`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.idleTime"></a>
@@ -1603,6 +1607,8 @@ public readonly idleTime: number;
 - *Type:* `number`
 - *Default:* 300
 
+Time (in seconds) for machine to be in Idle state before it is removed.
+
 ---
 
 ##### `machineDriver`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.machineDriver"></a>
@@ -1613,6 +1619,8 @@ public readonly machineDriver: string;
 
 - *Type:* `string`
 - *Default:* "amazonec2"
+
+Docker Machine driver.
 
 ---
 
@@ -1635,6 +1643,8 @@ public readonly machineOptions: MachineOptions;
 
 - *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions)
 
+Docker Machine options passed to the Docker Machine driver.
+
 ---
 
 ##### `maxBuilds`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.maxBuilds"></a>
@@ -1645,6 +1655,8 @@ public readonly maxBuilds: number;
 
 - *Type:* `number`
 - *Default:* 20
+
+Maximum job (build) count before machine is removed.
 
 ---
 
@@ -1680,7 +1692,7 @@ The amazonec2-block-duration-minutes parameter.
 
 AWS spot instance duration in minutes (60, 120, 180, 240, 300, or 360).
 
-> {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances}
+> https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
 
 ---
 
@@ -1727,7 +1739,7 @@ The amazonec2-request-spot-instance parameter.
 
 Whether or not to request spot instances.
 
-> {@link https://aws.amazon.com/ec2/spot/}
+> https://aws.amazon.com/ec2/spot/
 
 ---
 
@@ -1756,7 +1768,7 @@ The amazonec2-spot-price parameter.
 
 The bidding price for spot instances.
 
-> {@link https://aws.amazon.com/ec2/spot/pricing/}
+> https://aws.amazon.com/ec2/spot/pricing/
 
 ---
 
@@ -1800,7 +1812,7 @@ public readonly zone: string;
 
 Extract the availabilityZone last character for the needs of gitlab configuration.
 
-> {@link https://docs.gitlab.com/runners/configuration/runners_autoscale_aws/#the-runnerssmachine-section}
+> https://docs.gitlab.com/runners/configuration/runners_autoscale_aws/#the-runnerssmachine-section
 
 ---
 
@@ -1826,7 +1838,7 @@ The GitLab Runner's subnets.
 
 It should be either public or private. If more then subnet is selected, then the first found (private) subnet will be used.
 
-> {@link https://docs.aws.amazon.com/cdk/api/latest/docs/
+> https://docs.aws.amazon.com/cdk/api/latest/docs/
 
 ---
 
