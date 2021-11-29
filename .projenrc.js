@@ -1,8 +1,16 @@
-const { NodePackageManager, AwsCdkConstructLibrary, JsonFile, NpmAccess } = require("projen");
+const {
+  NodePackageManager,
+  NodePackageOptions,
+  AwsCdkConstructLibrary,
+  JsonFile,
+  NpmAccess,
+  AwsCdkTypeScriptApp,
+} = require("projen");
 
-const project = new AwsCdkConstructLibrary({
-  name: "@pepperize-testing/cdk-autoscaling-gitlab-runner",
-  description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
+/**
+ * @type NodePackageOptions
+ */
+const nodePackageOptions = {
   keywords: [
     "AWS",
     "CDK",
@@ -27,6 +35,12 @@ const project = new AwsCdkConstructLibrary({
   npmAccess: NpmAccess.PUBLIC,
   repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
   packageManager: NodePackageManager.NPM,
+};
+
+const project = new AwsCdkConstructLibrary({
+  ...nodePackageOptions,
+  name: "@pepperize-testing/cdk-autoscaling-gitlab-runner",
+  description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
 
   cdkVersion: "1.134.0",
   cdkVersionPinning: false,
@@ -77,7 +91,12 @@ const project = new AwsCdkConstructLibrary({
   gitignore: [".idea"],
 });
 
-project.setScript("format", "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'");
+project.addPackageIgnore("example/");
+
+project.setScript(
+  "format",
+  "prettier --write '{,example/}src/**/*.ts' '{,example/}test/**/*.ts' '.projenrc.js' 'README.md'"
+);
 
 new JsonFile(project, ".prettierrc", {
   obj: {
@@ -87,3 +106,38 @@ new JsonFile(project, ".prettierrc", {
 });
 
 project.synth();
+
+const example = new AwsCdkTypeScriptApp({
+  ...nodePackageOptions,
+  parent: project,
+  outdir: "example",
+
+  name: "@pepperize-testing/cdk-autoscaling-gitlab-runner-example",
+  cdkVersion: "1.129.0",
+  defaultReleaseBranch: "main",
+
+  cdkDependencies: ["@aws-cdk/aws-s3"] /* Which AWS CDK modules (those that start with "@aws-cdk/") this app uses. */,
+  deps: ["@pepperize-testing/cdk-autoscaling-gitlab-runner"] /* Runtime dependencies of this module. */,
+  // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */
+  // devDeps: [],                 /* Build dependencies for this module. */
+  // packageName: undefined,      /* The "name" in package.json. */
+  // release: undefined,          /* Add release management to this project. */
+
+  eslint: true,
+  eslintOptions: {
+    prettier: true,
+  },
+
+  gitignore: ["README.md"],
+});
+
+example.setScript("format", "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'");
+
+new JsonFile(example, ".prettierrc", {
+  obj: {
+    printWidth: 120,
+  },
+  marker: false,
+});
+
+example.synth();
