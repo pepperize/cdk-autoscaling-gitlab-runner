@@ -113,7 +113,7 @@ const example = new AwsCdkTypeScriptApp({
   outdir: "example",
 
   name: "@pepperize-testing/cdk-autoscaling-gitlab-runner-example",
-  cdkVersion: "1.129.0",
+  cdkVersion: "1.134.0",
   defaultReleaseBranch: "main",
 
   cdkDependencies: [
