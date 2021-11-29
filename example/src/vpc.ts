@@ -5,7 +5,7 @@ import { RunnerStackProps } from "./runner-stack-props";
 
 export interface WithCustomVpcStackProps extends RunnerStackProps {}
 
-export class WithCustomVpcStack extends Stack {
+export class VpcStack extends Stack {
   constructor(scope: Construct, id: string, props: WithCustomVpcStackProps) {
     super(scope, id, props);
 

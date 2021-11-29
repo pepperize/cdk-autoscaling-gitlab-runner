@@ -267,7 +267,7 @@ token = \\"your gitlab token\\"
   MachineOptions = [
   \\"amazonec2-request-spot-instance=true\\",
   \\"amazonec2-spot-price=0.03\\",
-  \\"amazonec2-instance-type=t3.small\\",
+  \\"amazonec2-instance-type=t3.large\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=",
@@ -449,7 +449,7 @@ token = \\"your gitlab token\\"
         "ImageId": Object {
           "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664ebsC96584B6F00A464EAD1953AFF4B05118Parameter",
         },
-        "InstanceType": "t3.small",
+        "InstanceType": "t3.large",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -465,7 +465,7 @@ token = \\"your gitlab token\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 13e27d6716ad529f
+# fingerprint: 8d6462a18c2ce03a
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -623,7 +623,7 @@ yum update -y aws-cfn-bootstrap
                         "Ref": "RunnersInstanceProfile",
                       },
                       "ec2:InstanceType": Array [
-                        "t3.small",
+                        "t3.large",
                       ],
                     },
                   },

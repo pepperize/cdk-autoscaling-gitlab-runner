@@ -5,20 +5,29 @@ import { RunnerStackProps } from "./runner-stack-props";
 
 export interface WithCustomMachineImageProps extends RunnerStackProps {}
 
-export class WithCustomMachineImageStack extends Stack {
+export class MachineImageStack extends Stack {
   constructor(scope: Construct, id: string, props: WithCustomMachineImageProps) {
     super(scope, id, props);
 
     const { gitlabToken } = props;
 
-    const amiMap: Record<string, string> = {
+    const managerAmiMap: Record<string, string> = {
+      "us-east-1": "ami-0de53d8956e8dcf80",
+    };
+
+    const runnerAmiMap: Record<string, string> = {
       region: "ami-id",
     };
 
     new GitlabRunnerAutoscaling(this, "Runner", {
       gitlabToken: gitlabToken,
+      manager: {
+        // Amazon Linux, CentOS, ...
+        machineImage: MachineImage.genericLinux(managerAmiMap),
+      },
       runners: {
-        machineImage: MachineImage.genericLinux(amiMap),
+        // Any provisioner https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
+        machineImage: MachineImage.genericLinux(runnerAmiMap),
       },
     });
   }

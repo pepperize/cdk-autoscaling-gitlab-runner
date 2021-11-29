@@ -1,5 +1,5 @@
 import { App, Stack } from "@aws-cdk/core";
-import { Network } from "../../src/runner/network";
+import { Network } from "../../src";
 
 test("network", () => {
   const app = new App();

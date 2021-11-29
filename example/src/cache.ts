@@ -5,7 +5,7 @@ import { RunnerStackProps } from "./runner-stack-props";
 
 export interface WithCustomCacheBucketStackProps extends RunnerStackProps {}
 
-export class WithCustomCacheBucketStack extends Stack {
+export class CacheBucketStack extends Stack {
   constructor(scope: Construct, id: string, props: WithCustomCacheBucketStackProps) {
     super(scope, id, props);
 

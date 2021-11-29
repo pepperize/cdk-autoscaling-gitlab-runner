@@ -1,5 +1,5 @@
 /**
- * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections}
+ * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
  */
 export interface AutoscalingConfiguration {
   readonly idleCount?: number;

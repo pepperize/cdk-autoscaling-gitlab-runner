@@ -1,12 +1,12 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { App } from "@aws-cdk/core";
-import { WithCustomMachineImageStack } from "../src/machine-image";
+import { MachineImageStack } from "../src/machine-image";
 
 describe("MachineImage", () => {
   it("Should set custom instance type", () => {
     const app = new App();
-    const stack = new WithCustomMachineImageStack(app, "MachineImageStack", {
+    const stack = new MachineImageStack(app, "MachineImageStack", {
       gitlabToken: "your gitlab token",
       env: {
         account: "0",

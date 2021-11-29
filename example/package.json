@@ -1,5 +1,5 @@
 {
-  "name": "@pepperize-testing/cdk-autoscaling-gitlab-runner-example",
+  "name": "@pepperize/cdk-autoscaling-gitlab-runner-example",
   "scripts": {
     "build": "npx projen build",
     "clobber": "npx projen clobber",
@@ -50,6 +50,7 @@
   "dependencies": {
     "@aws-cdk/assert": "^1.134.0",
     "@aws-cdk/aws-ec2": "^1.134.0",
+    "@aws-cdk/aws-iam": "^1.134.0",
     "@aws-cdk/aws-s3": "^1.134.0",
     "@aws-cdk/core": "^1.134.0",
     "@pepperize-testing/cdk-autoscaling-gitlab-runner": "^0.0.78"

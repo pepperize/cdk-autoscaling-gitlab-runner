@@ -112,13 +112,14 @@ const example = new AwsCdkTypeScriptApp({
   parent: project,
   outdir: "example",
 
-  name: "@pepperize-testing/cdk-autoscaling-gitlab-runner-example",
+  name: "@pepperize/cdk-autoscaling-gitlab-runner-example",
   cdkVersion: "1.134.0",
   defaultReleaseBranch: "main",
 
   cdkDependencies: [
     "@aws-cdk/aws-s3",
     "@aws-cdk/aws-ec2",
+    "@aws-cdk/aws-iam",
   ] /* Which AWS CDK modules (those that start with "@aws-cdk/") this app uses. */,
   deps: ["@pepperize-testing/cdk-autoscaling-gitlab-runner"] /* Runtime dependencies of this module. */,
   // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */

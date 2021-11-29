@@ -52,7 +52,7 @@ import { Network, NetworkProps } from "./network";
 export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
-   * @see {@link https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens}
+   * @see https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
    */
   readonly gitlabToken: string;
 
@@ -81,7 +81,7 @@ export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
 
 /**
  * The distributed GitLab runner S3 cache. Either pass an existing bucket or override default options.
- * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
+ * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
  */
 export interface GitlabRunnerAutoscalingCacheProps {
   /**
@@ -98,6 +98,11 @@ export interface GitlabRunnerAutoscalingCacheProps {
 export interface GitlabRunnerAutoscalingManagerProps {
   /**
    * An Amazon Machine Image ID for the Manager EC2 instance. If empty the latest Amazon 2 Image will be looked up.
+   *
+   * Should be RHEL flavor like Amazon Linux 2 with yum available for instance initialization.
+   *
+   * @see https://cloudinit.readthedocs.io/en/latest/
+   * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-init.html
    */
   readonly machineImage?: IMachineImage;
 
@@ -127,7 +132,10 @@ export interface GitlabRunnerAutoscalingRunnerProps {
   /**
    * An Amazon Machine Image ID for the Runners EC2 instances. If empty the latest Ubuntu 20.04 focal will be looked up.
    *
+   * Any operating system supported by Dcoker Machine's provisioner.
+   *
    * @see https://cloud-images.ubuntu.com/locator/ec2/
+   * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
    */
   readonly machineImage?: IMachineImage;
 
@@ -376,7 +384,7 @@ export class GitlabRunnerAutoscaling extends Construct {
 
     /**
      * Config set keys
-     * @see {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html#aws-resource-init-configsets}
+     * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html#aws-resource-init-configsets
      */
     const REPOSITORIES = "repositories";
     const PACKAGES = "packages";

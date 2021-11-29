@@ -1,12 +1,12 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { App } from "@aws-cdk/core";
-import { WithCustomDockerMachineConfigurationStack } from "../src/docker-machine";
+import { DockerMachineConfigurationStack } from "../src/docker-machine";
 
 describe("DockerMachineConfiguration", () => {
   it("Should set docker machine properties", () => {
     const app = new App();
-    const stack = new WithCustomDockerMachineConfigurationStack(app, "DockerMachineConfigurationStack", {
+    const stack = new DockerMachineConfigurationStack(app, "DockerMachineConfigurationStack", {
       gitlabToken: "your gitlab token",
       env: {
         account: "0",

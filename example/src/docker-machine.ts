@@ -1,10 +1,10 @@
-import { RunnerStackProps } from "./runner-stack-props";
 import { Construct, Stack } from "@aws-cdk/core";
 import { GitlabRunnerAutoscaling } from "@pepperize-testing/cdk-autoscaling-gitlab-runner";
+import { RunnerStackProps } from "./runner-stack-props";
 
 export interface WithCustomDockerMachineConfigurationProps extends RunnerStackProps {}
 
-export class WithCustomDockerMachineConfigurationStack extends Stack {
+export class DockerMachineConfigurationStack extends Stack {
   constructor(scope: Construct, id: string, props: WithCustomDockerMachineConfigurationProps) {
     super(scope, id, props);
 

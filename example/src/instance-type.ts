@@ -5,7 +5,7 @@ import { RunnerStackProps } from "./runner-stack-props";
 
 export interface WithCustomInstanceTypeProps extends RunnerStackProps {}
 
-export class WithCustomInstanceTypeStack extends Stack {
+export class InstanceTypeStack extends Stack {
   constructor(scope: Construct, id: string, props: WithCustomInstanceTypeProps) {
     super(scope, id, props);
 
@@ -13,8 +13,11 @@ export class WithCustomInstanceTypeStack extends Stack {
 
     new GitlabRunnerAutoscaling(this, "Runner", {
       gitlabToken: gitlabToken,
-      runners: {
+      manager: {
         instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.SMALL),
+      },
+      runners: {
+        instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.LARGE),
       },
     });
   }

@@ -184,7 +184,7 @@
           "exec": "npm install"
         },
         {
-          "exec": "npm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier jest jest-junit json-schema npm-check-updates prettier ts-jest ts-node typescript @aws-cdk/assert @aws-cdk/aws-ec2 @aws-cdk/aws-s3 @aws-cdk/core @pepperize-testing/cdk-autoscaling-gitlab-runner"
+          "exec": "npm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier jest jest-junit json-schema npm-check-updates prettier ts-jest ts-node typescript @aws-cdk/assert @aws-cdk/aws-ec2 @aws-cdk/aws-iam @aws-cdk/aws-s3 @aws-cdk/core @pepperize-testing/cdk-autoscaling-gitlab-runner"
         },
         {
           "exec": "npx projen"

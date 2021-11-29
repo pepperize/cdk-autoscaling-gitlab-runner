@@ -4,7 +4,7 @@ import { RunnerStackProps } from "./runner-stack-props";
 
 export interface WithOnDemandInstancesStackProps extends RunnerStackProps {}
 
-export class WithOnDemandInstancesStack extends Stack {
+export class OnDemandInstancesStack extends Stack {
   constructor(scope: Construct, id: string, props: WithOnDemandInstancesStackProps) {
     super(scope, id, props);
 

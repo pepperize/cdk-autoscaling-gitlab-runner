@@ -1,10 +1,10 @@
 import "@aws-cdk/assert/jest";
 import { App } from "@aws-cdk/core";
-import { WithCustomVpcStack } from "../src/vpc";
+import { VpcStack } from "../src/vpc";
 
 test("WithCustomVpcStack", () => {
   const app = new App();
-  const stack = new WithCustomVpcStack(app, "WithCustomVpcStack", {
+  const stack = new VpcStack(app, "WithCustomVpcStack", {
     gitlabToken: "your gitlab token",
     env: {
       account: "0",

@@ -1,10 +1,10 @@
 import "@aws-cdk/assert/jest";
 import { App } from "@aws-cdk/core";
-import { WithCustomCacheBucketStack } from "../src/cache";
+import { CacheBucketStack } from "../src/cache";
 
 test("WithCustomCacheBucketStack", () => {
   const app = new App();
-  const stack = new WithCustomCacheBucketStack(app, "WithCustomCacheBucketStack", {
+  const stack = new CacheBucketStack(app, "WithCustomCacheBucketStack", {
     gitlabToken: "your gitlab token",
     env: {
       account: "0",

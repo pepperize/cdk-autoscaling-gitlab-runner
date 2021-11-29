@@ -1,12 +1,12 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { App } from "@aws-cdk/core";
-import { WithOnDemandInstancesStack } from "../src/on-demand-instances";
+import { OnDemandInstancesStack } from "../src/on-demand-instances";
 
 describe("OnDemandInstances", () => {
   it("Should set amazonec2-request-spot-instance to false", () => {
     const app = new App();
-    const stack = new WithOnDemandInstancesStack(app, "ZeroConfigStack", {
+    const stack = new OnDemandInstancesStack(app, "ZeroConfigStack", {
       gitlabToken: "your gitlab token",
       env: {
         account: "0",
