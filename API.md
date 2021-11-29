@@ -48,26 +48,6 @@ public readonly bucket: IBucket;
 
 ---
 
-##### `expiration`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.property.expiration"></a>
-
-```typescript
-public readonly expiration: Duration;
-```
-
-- *Type:* [`@aws-cdk/core.Duration`](#@aws-cdk/core.Duration)
-
----
-
-##### `lifeCycleRuleEnabled`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.property.lifeCycleRuleEnabled"></a>
-
-```typescript
-public readonly lifeCycleRuleEnabled: boolean;
-```
-
-- *Type:* `boolean`
-
----
-
 
 ### GitlabRunnerAutoscaling <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling"></a>
 
