@@ -120,10 +120,10 @@ const example = new AwsCdkTypeScriptApp({
     "@aws-cdk/aws-s3",
     "@aws-cdk/aws-ec2",
     "@aws-cdk/aws-iam",
+    "@aws-cdk/assertions",
   ] /* Which AWS CDK modules (those that start with "@aws-cdk/") this app uses. */,
   deps: ["@pepperize-testing/cdk-autoscaling-gitlab-runner"] /* Runtime dependencies of this module. */,
   // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */
-  cdkTestDependencies: ["@aws-cdk/assertions"],
   // packageName: undefined,      /* The "name" in package.json. */
   // release: undefined,          /* Add release management to this project. */
 

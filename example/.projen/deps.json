@@ -91,6 +91,11 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-cdk/assertions",
+      "version": "^1.134.0",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-cdk/aws-ec2",
       "version": "^1.134.0",
       "type": "runtime"

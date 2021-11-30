@@ -1,4 +1,4 @@
-import "@aws-cdk/assert/jest";
+import { Capture, Template } from "@aws-cdk/assertions";
 import { App } from "@aws-cdk/core";
 import { CacheBucketStack } from "../src/cache";
 
@@ -12,6 +12,10 @@ test("WithCustomCacheBucketStack", () => {
     },
   });
 
-  expect(stack).toHaveResource("AWS::S3::Bucket");
-  expect(app.synth().getStackArtifact(stack.artifactId).template).toMatchSnapshot();
+  const template = Template.fromStack(stack);
+  const capture = new Capture();
+
+  template.hasResourceProperties("AWS::S3::Bucket", capture);
+  template.templateMatches(capture);
+  expect(template).toMatchSnapshot();
 });
