@@ -39,7 +39,7 @@ const nodePackageOptions = {
 
 const project = new AwsCdkConstructLibrary({
   ...nodePackageOptions,
-  name: "@pepperize-testing/cdk-autoscaling-gitlab-runner",
+  name: "@pepperize/cdk-autoscaling-gitlab-runner",
   description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
 
   cdkVersion: "1.134.0",
