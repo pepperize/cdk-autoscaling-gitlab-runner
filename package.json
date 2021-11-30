@@ -1,5 +1,5 @@
 {
-  "name": "@pepperize-testing/cdk-autoscaling-gitlab-runner",
+  "name": "@pepperize/cdk-autoscaling-gitlab-runner",
   "description": "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
   "repository": {
     "type": "git",
