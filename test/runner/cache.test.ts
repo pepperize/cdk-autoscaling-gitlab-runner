@@ -1,7 +1,7 @@
+import { Capture, Template } from "@aws-cdk/assertions";
 import { App, Duration, Stack } from "@aws-cdk/core";
 import { Cache as CacheConstruct, CacheProps as CacheConstructProps } from "../../src/runner/cache";
 
-const mockApp = new App();
 const stackProps = {
   env: {
     account: "0",
@@ -9,37 +9,86 @@ const stackProps = {
   },
 };
 
-test("cache-expiration-set-to-0", () => {
-  const mockStack = new Stack(mockApp, "test-stack-0", stackProps);
-  const props: CacheConstructProps = {
-    bucketName: "test-0",
-    expiration: Duration.days(0),
-  };
-  const cache = new CacheConstruct(mockStack, "test-0", props);
+describe("Cache", () => {
+  it("Should set ExpirationInDays to 0", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "stack", stackProps);
+    const props: CacheConstructProps = {
+      bucketName: "bucket",
+      expiration: Duration.days(0),
+    };
+    new CacheConstruct(stack, "cache", props);
 
-  expect(cache.expiration.toDays()).toBe(Duration.days(0).toDays());
-  expect(cache.lifeCycleRuleEnabled).toBe(false);
-});
+    // When
+    const template = Template.fromStack(stack);
 
-test("cache-expiration-not-set-and-becomes-default", () => {
-  const mockStack = new Stack(mockApp, "test-stack-undefined", stackProps);
-  const props: CacheConstructProps = {
-    bucketName: "test-undefined",
-  };
-  const cache = new CacheConstruct(mockStack, "test-undefined", props);
+    // Then
+    template.hasResourceProperties("AWS::S3::Bucket", {
+      LifecycleConfiguration: {
+        Rules: [
+          {
+            ExpirationInDays: 0,
+            Status: "Disabled",
+          },
+        ],
+      },
+    });
+    expect(template).toMatchSnapshot();
+  });
 
-  expect(cache.expiration.toDays()).toBe(Duration.days(30).toDays());
-  expect(cache.lifeCycleRuleEnabled).toBe(true);
-});
+  it("Should set ExpirationInDays to default", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "stack", stackProps);
+    const props: CacheConstructProps = {
+      bucketName: "bucket",
+    };
+    new CacheConstruct(stack, "cache", props);
 
-test("cache-expiration-set-to-value-1", () => {
-  const mockStack = new Stack(mockApp, "test-stack-set-to-value-1", stackProps);
-  const props: CacheConstructProps = {
-    bucketName: "test-set-to-value-1",
-    expiration: Duration.days(1),
-  };
-  const cache = new CacheConstruct(mockStack, "test-set-to-value-1", props);
+    // When
+    const template = Template.fromStack(stack);
 
-  expect(cache.expiration.toDays()).toBe(Duration.days(1).toDays());
-  expect(cache.lifeCycleRuleEnabled).toBe(true);
+    // Then
+    template.hasResourceProperties("AWS::S3::Bucket", {
+      LifecycleConfiguration: {
+        Rules: [
+          {
+            ExpirationInDays: 30,
+            Status: "Enabled",
+          },
+        ],
+      },
+    });
+    expect(template).toMatchSnapshot();
+  });
+
+  it("Should set ExpirationInDays to 1", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "stack", stackProps);
+    const props: CacheConstructProps = {
+      bucketName: "bucket",
+      expiration: Duration.days(1),
+    };
+    new CacheConstruct(stack, "cache", props);
+
+    // When
+    const template = Template.fromStack(stack);
+    const capture = new Capture();
+    template.hasResourceProperties("AWS::S3::Bucket", {
+      LifecycleConfiguration: capture,
+    });
+
+    // Then
+    expect(capture.asObject()).toEqual({
+      Rules: [
+        {
+          ExpirationInDays: 1,
+          Status: "Enabled",
+        },
+      ],
+    });
+    expect(template).toMatchSnapshot();
+  });
 });

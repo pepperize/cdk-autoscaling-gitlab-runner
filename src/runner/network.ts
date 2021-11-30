@@ -9,7 +9,7 @@ export interface NetworkProps {
 
   /**
    * The GitLab Runner's subnets. It should be either public or private. If more then subnet is selected, then the first found (private) subnet will be used.
-   * @see {@link https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.SubnetSelection.html}
+   * @see https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.SubnetSelection.html
    *
    * A network is considered private, if
    *  - tagged by 'aws-cdk:subnet-type'

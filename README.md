@@ -1,5 +1,5 @@
 ![GitHub](https://img.shields.io/github/license/pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)
-![npm (scoped)](https://img.shields.io/npm/v/@pepperize-testing/cdk-autoscaling-gitlab-runner?style=flat-square)
+![npm (scoped)](https://img.shields.io/npm/v/@pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)
 ![PyPI](https://img.shields.io/pypi/v/pepperize.cdk-autoscaling-gitlab-runner?style=flat-square)
 ![Nuget](https://img.shields.io/nuget/v/Pepperize.CDK.AutoscalingGitlabRunner?style=flat-square)
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/pepperize/cdk-autoscaling-gitlab-runner/build/main?label=build&style=flat-square)
@@ -34,7 +34,7 @@ _Note: it's a really simple and short README. Only basic tips are covered. Feel 
 
 2. **Configure your project in `.projenrc.js`**
 
-   - Add `deps: ["@pepperize-testing/cdk-autoscaling-gitlab-runner"],`
+   - Add `deps: ["@pepperize/cdk-autoscaling-gitlab-runner"],`
 
 3. **Update project files and install dependencies**
 
@@ -103,21 +103,153 @@ _Note: it's a really simple and short README. Only basic tips are covered. Feel 
    npm run deploy
    ```
 
-## Development
+## Example
 
-### Quick start
+### Custom cache bucket
 
-Run:
+By default an AWS S3 is created as GitLab Runner's distributed cache.
+It's encrypted with a KMS managed key and public access is blocked.
+A custom S3 Bucket can be configured.
 
+```typescript
+const cache = new Bucket(this, "Cache", {
+  // Your custom bucket
+});
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  gitlabToken: "<auth token>",
+  cache: { bucket: cache },
+});
 ```
-npm install
+
+### Configure Docker Machine
+
+By default docker machine is configured to run privileged with `CAP_SYS_ADMIN` to support [Docker-in-Docker using the OverlayFS driver](https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-overlayfs-driver)
+and cross compiling/building with [multiarch](https://hub.docker.com/r/multiarch/qemu-user-static/).
+
+See [runners.docker section](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section)
+in [Advanced configuration](https://docs.gitlab.com/runner/configuration/advanced-configuration.html)
+
+```typescript
+import { GitlabRunnerAutoscaling } from "@pepperize/cdk-autoscaling-gitlab-runner";
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  gitlabToken: "<auth token>",
+  runners: {
+    environment: [], // Reset the OverlayFS driver for every project
+    docker: {
+      capAdd: [], // Remove the CAP_SYS_ADMIN
+      privileged: false, // Run unprivileged
+    },
+    machine: {
+      idleCount: 2, // Number of idle machine
+      idleTime: 3000, // Waiting time in idle state
+      maxBuilds: 1, // Max builds before instance is removed
+    },
+  },
+});
 ```
 
-```
-npx projen
+### Bigger instance type
+
+By default t3.nano is used for the manager/coordinator and t3.micro instances will be spawned.
+For bigger projects, for example with [webpack](https://webpack.js.org/), this won't be enough memory.
+
+```typescript
+new GitlabRunnerAutoscaling(this, "Runner", {
+  gitlabToken: "<auth token>",
+  manager: {
+    instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
+  },
+  runners: {
+    instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.LARGE),
+  },
+});
 ```
 
-### Maintenance (Projen)
+### Different machine image
+
+By default the latest [Amazon 2 Linux](https://aws.amazon.com/amazon-linux-2/) will be used for the manager/coordinator.
+The manager/coordinator instance's cloud init scripts requires [yum](https://access.redhat.com/solutions/9934) is installed, any RHEL flavor should work.
+The requested runner instances by default using Ubuntu 20.04, any OS implemented by the [Docker Machine provisioner](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision) should work.
+
+```typescript
+new GitlabRunnerAutoscaling(this, "Runner", {
+  gitlabToken: "<auth token>",
+  manager: {
+    machineImage: MachineImage.genericLinux(managerAmiMap),
+  },
+  runners: {
+    machineImage: MachineImage.genericLinux(runnerAmiMap),
+  },
+});
+```
+
+### Spot instances
+
+By default EC2 Spot Instances are requested.
+
+```typescript
+new GitlabRunnerAutoscaling(this, "Runner", {
+  gitlabToken: "<auth token>",
+  runners: {
+    machine: {
+      machineOptions: {
+        requestSpotInstance: false,
+        spotPrice: 0.5,
+      },
+    },
+  },
+});
+```
+
+### Custom runner's role
+
+To deploy from within your GitLab Runner Instances, you may pass a Role with the IAM Policies attached.
+
+```typescript
+const role = new Role(this, "RunnersRole", {
+  assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
+  inlinePolicies: {},
+});
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  gitlabToken: "<auth token>",
+  runners: {
+    role: role,
+  },
+});
+```
+
+### Vpc
+
+If no existing Vpc is passed, a [VPC that spans a whole region](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.Vpc.html) on will be created.
+This can become costly, because AWS CDK configured also the routing for the private subnets and creates NAT Gateways (one per AZ).
+
+```typescript
+const vpc = new Vpc(this, "Vpc", {
+  // Your custom vpc
+});
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  gitlabToken: "<auth token>",
+  network: { vpc: vpc },
+});
+```
+
+### Zero config
+
+Deploys the [Autoscaling GitLab Runner on AWS EC2](https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/) with the default settings mentioned above.
+
+Happy with the presets?
+
+```typescript
+new GitlabRunnerAutoscaling(this, "Runner", {
+  gitlabToken: "<auth token>",
+});
+```
+
+## Projen
 
 This project uses [projen](https://github.com/projen/projen) to maintain project configuration through code. Thus, the synthesized files with projen should never be manually edited (in fact, projen enforces that).
 
@@ -127,14 +259,4 @@ execute `npx projen` to update project configuration files.
 
 > In simple words, developers can only modify `.projenrc.js` file for configuration/maintenance and files under `/src` directory for development.
 
-### Development
-
-The current development branch is `main`. The dev environment is `production`. The commit convention is [Angular](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines).
-
-## ROLLBACK CAUTION
-
-Rollback will **delete all resources** provisioned with this app, **except**:
-
-- KMS key.
-
-These resources should be deleted **manually**
+See also [Create and Publish CDK Constructs Using projen and jsii](https://github.com/seeebiii/projen-test).

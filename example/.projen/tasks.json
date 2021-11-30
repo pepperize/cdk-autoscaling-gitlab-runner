@@ -5,9 +5,6 @@
       "description": "Full release build",
       "steps": [
         {
-          "spawn": "default"
-        },
-        {
           "spawn": "pre-compile"
         },
         {
@@ -23,22 +20,6 @@
           "spawn": "package"
         }
       ]
-    },
-    "bump": {
-      "name": "bump",
-      "description": "Bumps version based on latest git tag and generates a changelog entry",
-      "env": {
-        "OUTFILE": "package.json",
-        "CHANGELOG": "dist/changelog.md",
-        "BUMPFILE": "dist/version.txt",
-        "RELEASETAG": "dist/releasetag.txt"
-      },
-      "steps": [
-        {
-          "builtin": "release/bump-version"
-        }
-      ],
-      "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
     "clobber": {
       "name": "clobber",
@@ -72,23 +53,9 @@
       ],
       "condition": "git diff --exit-code > /dev/null"
     },
-    "compat": {
-      "name": "compat",
-      "description": "Perform API compatibility check against latest version",
-      "steps": [
-        {
-          "exec": "jsii-diff npm:$(node -p \"require('./package.json').name\") -k --ignore-file .compatignore || (echo \"\nUNEXPECTED BREAKING CHANGES: add keys such as 'removed:constructs.Node.of' to .compatignore to skip.\n\" && exit 1)"
-        }
-      ]
-    },
     "compile": {
       "name": "compile",
-      "description": "Only compile",
-      "steps": [
-        {
-          "exec": "jsii --silence-warnings=reserved-word --no-fix-peer-dependencies"
-        }
-      ]
+      "description": "Only compile"
     },
     "default": {
       "name": "default",
@@ -99,12 +66,30 @@
         }
       ]
     },
-    "docgen": {
-      "name": "docgen",
-      "description": "Generate API.md from .jsii manifest",
+    "deploy": {
+      "name": "deploy",
+      "description": "Deploys your CDK app to the AWS cloud",
       "steps": [
         {
-          "exec": "jsii-docgen"
+          "exec": "cdk deploy"
+        }
+      ]
+    },
+    "destroy": {
+      "name": "destroy",
+      "description": "Destroys your cdk app in the AWS cloud",
+      "steps": [
+        {
+          "exec": "cdk destroy"
+        }
+      ]
+    },
+    "diff": {
+      "name": "diff",
+      "description": "Diffs the currently deployed app against your code",
+      "steps": [
+        {
+          "exec": "cdk diff"
         }
       ]
     },
@@ -119,19 +104,14 @@
     },
     "package": {
       "name": "package",
-      "description": "Creates the distribution package",
-      "steps": [
-        {
-          "exec": "jsii-pacmak"
-        }
-      ]
+      "description": "Creates the distribution package"
     },
     "post-compile": {
       "name": "post-compile",
       "description": "Runs after successful compilation",
       "steps": [
         {
-          "spawn": "docgen"
+          "spawn": "synth"
         }
       ]
     },
@@ -139,82 +119,12 @@
       "name": "pre-compile",
       "description": "Prepare the project for compilation"
     },
-    "publish:github": {
-      "name": "publish:github",
-      "description": "Publish this package to GitHub Releases",
-      "requiredEnv": [
-        "GITHUB_TOKEN",
-        "GITHUB_REPOSITORY",
-        "GITHUB_REF"
-      ],
+    "synth": {
+      "name": "synth",
+      "description": "Synthesizes your cdk app into cdk.out (part of \"yarn build\")",
       "steps": [
         {
-          "exec": "errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q \"Release.tag_name already exists\" $errout; then cat $errout; exit $exitcode; fi"
-        }
-      ]
-    },
-    "publish:npm": {
-      "name": "publish:npm",
-      "description": "Publish this package to npm",
-      "env": {
-        "NPM_DIST_TAG": "latest",
-        "NPM_REGISTRY": "registry.npmjs.org"
-      },
-      "requiredEnv": [
-        "NPM_TOKEN"
-      ],
-      "steps": [
-        {
-          "exec": "npx -p jsii-release@latest jsii-release-npm"
-        }
-      ]
-    },
-    "publish:nuget": {
-      "name": "publish:nuget",
-      "description": "Publish this package to NuGet Gallery",
-      "requiredEnv": [
-        "NUGET_API_KEY"
-      ],
-      "steps": [
-        {
-          "exec": "npx -p jsii-release@latest jsii-release-nuget"
-        }
-      ]
-    },
-    "publish:pypi": {
-      "name": "publish:pypi",
-      "description": "Publish this package to PyPI",
-      "requiredEnv": [
-        "TWINE_USERNAME",
-        "TWINE_PASSWORD"
-      ],
-      "steps": [
-        {
-          "exec": "npx -p jsii-release@latest jsii-release-pypi"
-        }
-      ]
-    },
-    "release": {
-      "name": "release",
-      "description": "Prepare a release from \"main\" branch",
-      "env": {
-        "RELEASE": "true"
-      },
-      "steps": [
-        {
-          "exec": "rm -fr dist"
-        },
-        {
-          "spawn": "bump"
-        },
-        {
-          "spawn": "build"
-        },
-        {
-          "spawn": "unbump"
-        },
-        {
-          "exec": "git diff --ignore-space-at-eol --exit-code"
+          "exec": "cdk synth"
         }
       ]
     },
@@ -223,7 +133,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --all --updateSnapshot"
+          "exec": "jest --passWithNoTests --all"
         },
         {
           "spawn": "eslint"
@@ -245,21 +155,6 @@
       "steps": [
         {
           "exec": "jest --watch"
-        }
-      ]
-    },
-    "unbump": {
-      "name": "unbump",
-      "description": "Restores version to 0.0.0",
-      "env": {
-        "OUTFILE": "package.json",
-        "CHANGELOG": "dist/changelog.md",
-        "BUMPFILE": "dist/version.txt",
-        "RELEASETAG": "dist/releasetag.txt"
-      },
-      "steps": [
-        {
-          "builtin": "release/reset-version"
         }
       ]
     },
@@ -289,7 +184,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-cdk/assert @aws-cdk/assertions @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates prettier standard-version ts-jest typescript @iarna/toml param-case pascal-case snake-case @aws-cdk/aws-autoscaling @aws-cdk/aws-ec2 @aws-cdk/aws-iam @aws-cdk/aws-s3-deployment @aws-cdk/aws-s3 @aws-cdk/core constructs @aws-cdk/aws-autoscaling @aws-cdk/aws-ec2 @aws-cdk/aws-iam @aws-cdk/aws-s3-deployment @aws-cdk/aws-s3 @aws-cdk/core @iarna/toml param-case pascal-case snake-case"
+          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier jest jest-junit json-schema npm-check-updates prettier ts-jest ts-node typescript @aws-cdk/assert @aws-cdk/assertions @aws-cdk/aws-ec2 @aws-cdk/aws-iam @aws-cdk/aws-s3 @aws-cdk/core @pepperize-testing/cdk-autoscaling-gitlab-runner"
         },
         {
           "exec": "npx projen"
@@ -334,7 +229,7 @@
       "description": "Watch & compile in the background",
       "steps": [
         {
-          "exec": "jsii -w --silence-warnings=reserved-word --no-fix-peer-dependencies"
+          "exec": "tsc --build -w"
         }
       ]
     }

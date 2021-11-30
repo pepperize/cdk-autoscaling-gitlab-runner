@@ -1,44 +1,58 @@
-# API Reference <a name="API Reference"></a>
+# API Reference <a name="API Reference" id="api-reference"></a>
 
-## Constructs <a name="Constructs"></a>
+## Constructs <a name="Constructs" id="constructs"></a>
 
-### Cache <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache"></a>
+### Cache <a name="@pepperize/cdk-autoscaling-gitlab-runner.Cache" id="pepperizecdkautoscalinggitlabrunnercache"></a>
 
 A GitLab Runner cache consisting of an Amazon S3 bucket.
 
 The bucket is encrypted with a KMS managed master key, it has public access blocked and will be cleared and deleted on CFN stack deletion.
 
-#### Initializers <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.Initializer"></a>
+#### Initializers <a name="@pepperize/cdk-autoscaling-gitlab-runner.Cache.Initializer" id="pepperizecdkautoscalinggitlabrunnercacheinitializer"></a>
 
 ```typescript
-import { Cache } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { Cache } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 new Cache(scope: Stack, id: string, props?: CacheProps)
 ```
 
-##### `scope`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.parameter.scope"></a>
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`scope`](#pepperizecdkautoscalinggitlabrunnercacheparameterscope)<span title="Required">*</span> | [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack) | *No description.* |
+| [`id`](#pepperizecdkautoscalinggitlabrunnercacheparameterid)<span title="Required">*</span> | `string` | *No description.* |
+| [`props`](#pepperizecdkautoscalinggitlabrunnercacheparameterprops) | [`@pepperize/cdk-autoscaling-gitlab-runner.CacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheProps) | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Cache.parameter.scope" id="pepperizecdkautoscalinggitlabrunnercacheparameterscope"></a>
 
 - *Type:* [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack)
 
 ---
 
-##### `id`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Cache.parameter.id" id="pepperizecdkautoscalinggitlabrunnercacheparameterid"></a>
 
 - *Type:* `string`
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Cache.parameter.props" id="pepperizecdkautoscalinggitlabrunnercacheparameterprops"></a>
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.CacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheProps)
 
 ---
 
 
 
-#### Properties <a name="Properties"></a>
+#### Properties <a name="Properties" id="properties"></a>
 
-##### `bucket`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.property.bucket"></a>
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`bucket`](#pepperizecdkautoscalinggitlabrunnercachepropertybucket)<span title="Required">*</span> | [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket) | *No description.* |
+
+---
+
+##### `bucket`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Cache.property.bucket" id="pepperizecdkautoscalinggitlabrunnercachepropertybucket"></a>
 
 ```typescript
 public readonly bucket: IBucket;
@@ -48,62 +62,59 @@ public readonly bucket: IBucket;
 
 ---
 
-##### `expiration`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.property.expiration"></a>
 
-```typescript
-public readonly expiration: Duration;
-```
-
-- *Type:* [`@aws-cdk/core.Duration`](#@aws-cdk/core.Duration)
-
----
-
-##### `lifeCycleRuleEnabled`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Cache.property.lifeCycleRuleEnabled"></a>
-
-```typescript
-public readonly lifeCycleRuleEnabled: boolean;
-```
-
-- *Type:* `boolean`
-
----
-
-
-### GitlabRunnerAutoscaling <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling"></a>
+### GitlabRunnerAutoscaling <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscaling"></a>
 
 The Gitlab Runner autoscaling on EC2 by Docker Machine.
 
-#### Initializers <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.Initializer"></a>
+#### Initializers <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.Initializer" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalinginitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscaling } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscaling } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 new GitlabRunnerAutoscaling(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps)
 ```
 
-##### `scope`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.parameter.scope"></a>
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`scope`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterscope)<span title="Required">*</span> | [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack) | *No description.* |
+| [`id`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterid)<span title="Required">*</span> | `string` | *No description.* |
+| [`props`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterprops)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps) | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.parameter.scope" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterscope"></a>
 
 - *Type:* [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack)
 
 ---
 
-##### `id`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.parameter.id" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterid"></a>
 
 - *Type:* `string`
 
 ---
 
-##### `props`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.parameter.props" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterprops"></a>
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps)
 
 ---
 
 
 
-#### Properties <a name="Properties"></a>
+#### Properties <a name="Properties" id="properties"></a>
 
-##### `cacheBucket`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.cacheBucket"></a>
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`cacheBucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertycachebucket)<span title="Required">*</span> | [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket) | *No description.* |
+| [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertymanager)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager) | *No description.* |
+| [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertynetwork)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.Network`](#@pepperize/cdk-autoscaling-gitlab-runner.Network) | *No description.* |
+| [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertyrunners)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners) | *No description.* |
+
+---
+
+##### `cacheBucket`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.cacheBucket" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertycachebucket"></a>
 
 ```typescript
 public readonly cacheBucket: IBucket;
@@ -113,74 +124,90 @@ public readonly cacheBucket: IBucket;
 
 ---
 
-##### `manager`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.manager"></a>
+##### `manager`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.manager" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertymanager"></a>
 
 ```typescript
 public readonly manager: GitlabRunnerAutoscalingManager;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager)
 
 ---
 
-##### `network`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.network"></a>
+##### `network`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.network" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertynetwork"></a>
 
 ```typescript
 public readonly network: Network;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.Network`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.Network)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.Network`](#@pepperize/cdk-autoscaling-gitlab-runner.Network)
 
 ---
 
-##### `runners`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.runners"></a>
+##### `runners`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.runners" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertyrunners"></a>
 
 ```typescript
 public readonly runners: GitlabRunnerAutoscalingRunners;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners)
 
 ---
 
 
-### Network <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Network"></a>
+### Network <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network" id="pepperizecdkautoscalinggitlabrunnernetwork"></a>
 
 Network settings for the manager and runners.
 
 All EC2 instances should belong to the same subnet, availability zone and vpc.
 
-#### Initializers <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Network.Initializer"></a>
+#### Initializers <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.Initializer" id="pepperizecdkautoscalinggitlabrunnernetworkinitializer"></a>
 
 ```typescript
-import { Network } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { Network } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 new Network(scope: Stack, id: string, props?: NetworkProps)
 ```
 
-##### `scope`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Network.parameter.scope"></a>
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`scope`](#pepperizecdkautoscalinggitlabrunnernetworkparameterscope)<span title="Required">*</span> | [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack) | *No description.* |
+| [`id`](#pepperizecdkautoscalinggitlabrunnernetworkparameterid)<span title="Required">*</span> | `string` | *No description.* |
+| [`props`](#pepperizecdkautoscalinggitlabrunnernetworkparameterprops) | [`@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps) | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.parameter.scope" id="pepperizecdkautoscalinggitlabrunnernetworkparameterscope"></a>
 
 - *Type:* [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack)
 
 ---
 
-##### `id`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Network.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.parameter.id" id="pepperizecdkautoscalinggitlabrunnernetworkparameterid"></a>
 
 - *Type:* `string`
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Network.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.parameter.props" id="pepperizecdkautoscalinggitlabrunnernetworkparameterprops"></a>
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.NetworkProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps)
 
 ---
 
 
 
-#### Properties <a name="Properties"></a>
+#### Properties <a name="Properties" id="properties"></a>
 
-##### `availabilityZone`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Network.property.availabilityZone"></a>
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`availabilityZone`](#pepperizecdkautoscalinggitlabrunnernetworkpropertyavailabilityzone)<span title="Required">*</span> | `string` | *No description.* |
+| [`subnet`](#pepperizecdkautoscalinggitlabrunnernetworkpropertysubnet)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.ISubnet`](#@aws-cdk/aws-ec2.ISubnet) | *No description.* |
+| [`vpc`](#pepperizecdkautoscalinggitlabrunnernetworkpropertyvpc)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc) | *No description.* |
+
+---
+
+##### `availabilityZone`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.property.availabilityZone" id="pepperizecdkautoscalinggitlabrunnernetworkpropertyavailabilityzone"></a>
 
 ```typescript
 public readonly availabilityZone: string;
@@ -190,7 +217,7 @@ public readonly availabilityZone: string;
 
 ---
 
-##### `subnet`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Network.property.subnet"></a>
+##### `subnet`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.property.subnet" id="pepperizecdkautoscalinggitlabrunnernetworkpropertysubnet"></a>
 
 ```typescript
 public readonly subnet: ISubnet;
@@ -200,7 +227,7 @@ public readonly subnet: ISubnet;
 
 ---
 
-##### `vpc`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.Network.property.vpc"></a>
+##### `vpc`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.property.vpc" id="pepperizecdkautoscalinggitlabrunnernetworkpropertyvpc"></a>
 
 ```typescript
 public readonly vpc: IVpc;
@@ -211,21 +238,32 @@ public readonly vpc: IVpc;
 ---
 
 
-## Structs <a name="Structs"></a>
+## Structs <a name="Structs" id="structs"></a>
 
-### AutoscalingConfiguration <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration"></a>
+### AutoscalingConfiguration <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration" id="pepperizecdkautoscalinggitlabrunnerautoscalingconfiguration"></a>
 
-> {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections}
+> https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { AutoscalingConfiguration } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { AutoscalingConfiguration } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const autoscalingConfiguration: AutoscalingConfiguration = { ... }
 ```
 
-##### `idleCount`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration.property.idleCount"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`idleCount`](#pepperizecdkautoscalinggitlabrunnerautoscalingconfigurationpropertyidlecount) | `number` | *No description.* |
+| [`idleTime`](#pepperizecdkautoscalinggitlabrunnerautoscalingconfigurationpropertyidletime) | `number` | *No description.* |
+| [`periods`](#pepperizecdkautoscalinggitlabrunnerautoscalingconfigurationpropertyperiods) | `string`[] | The Periods setting contains an array of string patterns of time periods represented in a cron-style format. https://github.com/gorhill/cronexpr#implementation. |
+| [`timezone`](#pepperizecdkautoscalinggitlabrunnerautoscalingconfigurationpropertytimezone) | `string` | *No description.* |
+
+---
+
+##### `idleCount`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration.property.idleCount" id="pepperizecdkautoscalinggitlabrunnerautoscalingconfigurationpropertyidlecount"></a>
 
 ```typescript
 public readonly idleCount: number;
@@ -235,7 +273,7 @@ public readonly idleCount: number;
 
 ---
 
-##### `idleTime`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration.property.idleTime"></a>
+##### `idleTime`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration.property.idleTime" id="pepperizecdkautoscalinggitlabrunnerautoscalingconfigurationpropertyidletime"></a>
 
 ```typescript
 public readonly idleTime: number;
@@ -245,7 +283,7 @@ public readonly idleTime: number;
 
 ---
 
-##### `periods`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration.property.periods"></a>
+##### `periods`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration.property.periods" id="pepperizecdkautoscalinggitlabrunnerautoscalingconfigurationpropertyperiods"></a>
 
 ```typescript
 public readonly periods: string[];
@@ -259,7 +297,7 @@ The Periods setting contains an array of string patterns of time periods represe
 
 ---
 
-##### `timezone`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration.property.timezone"></a>
+##### `timezone`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration.property.timezone" id="pepperizecdkautoscalinggitlabrunnerautoscalingconfigurationpropertytimezone"></a>
 
 ```typescript
 public readonly timezone: string;
@@ -269,27 +307,37 @@ public readonly timezone: string;
 
 ---
 
-### CacheConfiguration <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheConfiguration"></a>
+### CacheConfiguration <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration" id="pepperizecdkautoscalinggitlabrunnercacheconfiguration"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { CacheConfiguration } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { CacheConfiguration } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const cacheConfiguration: CacheConfiguration = { ... }
 ```
 
-##### `s3`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheConfiguration.property.s3"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`s3`](#pepperizecdkautoscalinggitlabrunnercacheconfigurationpropertys3) | [`@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration) | *No description.* |
+| [`shared`](#pepperizecdkautoscalinggitlabrunnercacheconfigurationpropertyshared) | `boolean` | *No description.* |
+| [`type`](#pepperizecdkautoscalinggitlabrunnercacheconfigurationpropertytype) | `string` | *No description.* |
+
+---
+
+##### `s3`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration.property.s3" id="pepperizecdkautoscalinggitlabrunnercacheconfigurationpropertys3"></a>
 
 ```typescript
 public readonly s3: CacheS3Configuration;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheS3Configuration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheS3Configuration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration)
 
 ---
 
-##### `shared`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheConfiguration.property.shared"></a>
+##### `shared`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration.property.shared" id="pepperizecdkautoscalinggitlabrunnercacheconfigurationpropertyshared"></a>
 
 ```typescript
 public readonly shared: boolean;
@@ -299,7 +347,7 @@ public readonly shared: boolean;
 
 ---
 
-##### `type`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheConfiguration.property.type"></a>
+##### `type`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration.property.type" id="pepperizecdkautoscalinggitlabrunnercacheconfigurationpropertytype"></a>
 
 ```typescript
 public readonly type: string;
@@ -309,17 +357,26 @@ public readonly type: string;
 
 ---
 
-### CacheProps <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheProps"></a>
+### CacheProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheProps" id="pepperizecdkautoscalinggitlabrunnercacheprops"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { CacheProps } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { CacheProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const cacheProps: CacheProps = { ... }
 ```
 
-##### `bucketName`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheProps.property.bucketName"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`bucketName`](#pepperizecdkautoscalinggitlabrunnercachepropspropertybucketname) | `string` | The infix of the physical cache bucket name. |
+| [`expiration`](#pepperizecdkautoscalinggitlabrunnercachepropspropertyexpiration) | [`@aws-cdk/core.Duration`](#@aws-cdk/core.Duration) | The number of days after which the created cache objects are deleted from S3. |
+
+---
+
+##### `bucketName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheProps.property.bucketName" id="pepperizecdkautoscalinggitlabrunnercachepropspropertybucketname"></a>
 
 ```typescript
 public readonly bucketName: string;
@@ -332,7 +389,7 @@ The infix of the physical cache bucket name.
 
 ---
 
-##### `expiration`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheProps.property.expiration"></a>
+##### `expiration`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheProps.property.expiration" id="pepperizecdkautoscalinggitlabrunnercachepropspropertyexpiration"></a>
 
 ```typescript
 public readonly expiration: Duration;
@@ -345,17 +402,29 @@ The number of days after which the created cache objects are deleted from S3.
 
 ---
 
-### CacheS3Configuration <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheS3Configuration"></a>
+### CacheS3Configuration <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration" id="pepperizecdkautoscalinggitlabrunnercaches3configuration"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { CacheS3Configuration } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { CacheS3Configuration } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const cacheS3Configuration: CacheS3Configuration = { ... }
 ```
 
-##### `accessKey`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.accessKey"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`accessKey`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyaccesskey) | `string` | *No description.* |
+| [`bucketLocation`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertybucketlocation) | `string` | The name of the S3 region. |
+| [`bucketName`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertybucketname) | `string` | The name of the storage bucket where cache is stored. |
+| [`secretKey`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertysecretkey) | `string` | *No description.* |
+| [`serverAddress`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyserveraddress) | `string` | The AWS S3 host. |
+
+---
+
+##### `accessKey`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.accessKey" id="pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyaccesskey"></a>
 
 ```typescript
 public readonly accessKey: string;
@@ -365,7 +434,7 @@ public readonly accessKey: string;
 
 ---
 
-##### `bucketLocation`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.bucketLocation"></a>
+##### `bucketLocation`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.bucketLocation" id="pepperizecdkautoscalinggitlabrunnercaches3configurationpropertybucketlocation"></a>
 
 ```typescript
 public readonly bucketLocation: string;
@@ -377,7 +446,7 @@ The name of the S3 region.
 
 ---
 
-##### `bucketName`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.bucketName"></a>
+##### `bucketName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.bucketName" id="pepperizecdkautoscalinggitlabrunnercaches3configurationpropertybucketname"></a>
 
 ```typescript
 public readonly bucketName: string;
@@ -390,7 +459,7 @@ The name of the storage bucket where cache is stored.
 
 ---
 
-##### `secretKey`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.secretKey"></a>
+##### `secretKey`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.secretKey" id="pepperizecdkautoscalinggitlabrunnercaches3configurationpropertysecretkey"></a>
 
 ```typescript
 public readonly secretKey: string;
@@ -400,7 +469,7 @@ public readonly secretKey: string;
 
 ---
 
-##### `serverAddress`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.serverAddress"></a>
+##### `serverAddress`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.serverAddress" id="pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyserveraddress"></a>
 
 ```typescript
 public readonly serverAddress: string;
@@ -413,91 +482,151 @@ The AWS S3 host.
 
 ---
 
-### ConfigurationMapperProps <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps"></a>
+### ConfigurationMapperProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperprops"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { ConfigurationMapperProps } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { ConfigurationMapperProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const configurationMapperProps: ConfigurationMapperProps = { ... }
 ```
 
-##### `autoscalingConfigurations`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.autoscalingConfigurations"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`autoscalingConfigurations`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertyautoscalingconfigurations)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[] | *No description.* |
+| [`cacheConfiguration`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertycacheconfiguration)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration) | *No description.* |
+| [`dockerConfiguration`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertydockerconfiguration)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration) | *No description.* |
+| [`globalConfiguration`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertyglobalconfiguration)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration) | *No description.* |
+| [`machineConfiguration`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertymachineconfiguration)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration) | *No description.* |
+| [`runnerConfiguration`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertyrunnerconfiguration)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration) | *No description.* |
+
+---
+
+##### `autoscalingConfigurations`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.autoscalingConfigurations" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertyautoscalingconfigurations"></a>
 
 ```typescript
 public readonly autoscalingConfigurations: AutoscalingConfiguration[];
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[]
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[]
 
 ---
 
-##### `cacheConfiguration`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.cacheConfiguration"></a>
+##### `cacheConfiguration`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.cacheConfiguration" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertycacheconfiguration"></a>
 
 ```typescript
 public readonly cacheConfiguration: CacheConfiguration;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheConfiguration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration)
 
 ---
 
-##### `dockerConfiguration`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.dockerConfiguration"></a>
+##### `dockerConfiguration`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.dockerConfiguration" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertydockerconfiguration"></a>
 
 ```typescript
 public readonly dockerConfiguration: DockerConfiguration;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration)
 
 ---
 
-##### `globalConfiguration`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.globalConfiguration"></a>
+##### `globalConfiguration`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.globalConfiguration" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertyglobalconfiguration"></a>
 
 ```typescript
 public readonly globalConfiguration: GlobalConfiguration;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.GlobalConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.GlobalConfiguration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration)
 
 ---
 
-##### `machineConfiguration`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.machineConfiguration"></a>
+##### `machineConfiguration`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.machineConfiguration" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertymachineconfiguration"></a>
 
 ```typescript
 public readonly machineConfiguration: MachineConfiguration;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration)
 
 ---
 
-##### `runnerConfiguration`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.runnerConfiguration"></a>
+##### `runnerConfiguration`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps.property.runnerConfiguration" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropspropertyrunnerconfiguration"></a>
 
 ```typescript
 public readonly runnerConfiguration: RunnerConfiguration;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration)
 
 ---
 
-### DockerConfiguration <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration"></a>
+### DockerConfiguration <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration" id="pepperizecdkautoscalinggitlabrunnerdockerconfiguration"></a>
 
 Configure docker on the runners.
 
 > https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { DockerConfiguration } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { DockerConfiguration } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const dockerConfiguration: DockerConfiguration = { ... }
 ```
 
-##### `allowedImages`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.allowedImages"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`allowedImages`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyallowedimages) | `string`[] | Wildcard list of images that can be specified in the .gitlab-ci.yml file. If not present, all images are allowed (equivalent to ["*\/*:*"]). See Restrict Docker images and services. |
+| [`allowedServices`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyallowedservices) | `string`[] | Wildcard list of services that can be specified in the .gitlab-ci.yml file. If not present, all images are allowed (equivalent to [*\/*:*]). See Restrict Docker images and services. |
+| [`cacheDir`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycachedir) | `string` | Directory where Docker caches should be stored. |
+| [`capAdd`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycapadd) | `string`[] | Add additional Linux capabilities to the container. |
+| [`capDrop`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycapdrop) | `string`[] | Drop additional Linux capabilities from the container. |
+| [`cpus`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycpus) | `string` | Number of CPUs (available in Docker 1.13 or later. A string. |
+| [`cpusetCpus`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycpusetcpus) | `string` | The control group’s CpusetCpus. |
+| [`cpuShares`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycpushares) | `number` | Number of CPU shares used to set relative CPU usage. |
+| [`devices`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydevices) | `string`[] | Share additional host devices with the container. |
+| [`disableCache`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydisablecache) | `boolean` | The Docker executor has two levels of caching: a global one (like any other executor) and a local cache based on Docker volumes. |
+| [`disableEntrypointOverwrite`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydisableentrypointoverwrite) | `boolean` | Disable the image entrypoint overwriting. |
+| [`dns`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydns) | `string`[] | A list of DNS servers for the container to use. |
+| [`dnsSearch`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydnssearch) | `string`[] | A list of DNS search domains. |
+| [`extraHosts`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyextrahosts) | `string`[] | Hosts that should be defined in container environment. |
+| [`gpus`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertygpus) | `string`[] | GPU devices for Docker container. |
+| [`helperImage`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyhelperimage) | `string` | (Advanced) The default helper image used to clone repositories and upload artifacts. |
+| [`helperImageFlavor`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyhelperimageflavor) | `string` | Sets the helper image flavor (alpine, alpine3.12, alpine3.13, alpine3.14 or ubuntu). Defaults to alpine. The alpine flavor uses the same version as alpine3.12. |
+| [`host`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyhost) | `string` | Custom Docker endpoint. |
+| [`hostname`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyhostname) | `string` | Custom hostname for the Docker container. |
+| [`image`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyimage) | `string` | The image to run jobs with. |
+| [`links`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertylinks) | `string`[] | Containers that should be linked with container that runs the job. |
+| [`memory`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertymemory) | `string` | The memory limit. |
+| [`memoryReservation`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertymemoryreservation) | `string` | The memory soft limit. |
+| [`memorySwap`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertymemoryswap) | `string` | The total memory limit. |
+| [`networkMode`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertynetworkmode) | `string` | Add container to a custom network. |
+| [`oomKillDisable`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyoomkilldisable) | `boolean` | If an out-of-memory (OOM) error occurs, do not kill processes in a container. |
+| [`oomScoreAdjust`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyoomscoreadjust) | `string` | OOM score adjustment. |
+| [`privileged`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyprivileged) | `boolean` | Make the container run in privileged mode. |
+| [`pullPolicy`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertypullpolicy) | `string` | The image pull policy: never, if-not-present or always (default). |
+| [`runtime`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyruntime) | `string` | The runtime for the Docker container. |
+| [`securityOpt`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertysecurityopt) | `string` | Security options (–security-opt in docker run). |
+| [`shmSize`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyshmsize) | `number` | Shared memory size for images (in bytes). |
+| [`sysctls`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertysysctls) | `string` | The sysctl options. |
+| [`tlsCertPath`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertytlscertpath) | `string` | A directory where ca.pem, cert.pem or key.pem are stored and used to make a secure TLS connection to Docker. Useful in boot2docker. |
+| [`tlsVerify`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertytlsverify) | `boolean` | Enable or disable TLS verification of connections to Docker daemon. |
+| [`usernsMode`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyusernsmode) | `string` | The user namespace mode for the container and Docker services when user namespace remapping option is enabled. |
+| [`volumeDriver`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyvolumedriver) | `string` | The volume driver to use for the container. |
+| [`volumes`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyvolumes) | `string`[] | Additional volumes that should be mounted. |
+| [`volumesFrom`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyvolumesfrom) | `string`[] | A list of volumes to inherit from another container in the form <container name>[:<ro\|rw>]. |
+| [`waitForServicesTimeout`](#pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertywaitforservicestimeout) | `number` | How long to wait for Docker services. |
+
+---
+
+##### `allowedImages`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.allowedImages" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyallowedimages"></a>
 
 ```typescript
 public readonly allowedImages: string[];
@@ -509,7 +638,7 @@ Wildcard list of images that can be specified in the .gitlab-ci.yml file. If not
 
 ---
 
-##### `allowedServices`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.allowedServices"></a>
+##### `allowedServices`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.allowedServices" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyallowedservices"></a>
 
 ```typescript
 public readonly allowedServices: string[];
@@ -521,7 +650,7 @@ Wildcard list of services that can be specified in the .gitlab-ci.yml file. If n
 
 ---
 
-##### `cacheDir`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.cacheDir"></a>
+##### `cacheDir`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.cacheDir" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycachedir"></a>
 
 ```typescript
 public readonly cacheDir: string;
@@ -535,7 +664,7 @@ This path can be absolute or relative to current working directory. See disable_
 
 ---
 
-##### `capAdd`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.capAdd"></a>
+##### `capAdd`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.capAdd" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycapadd"></a>
 
 ```typescript
 public readonly capAdd: string[];
@@ -548,7 +677,7 @@ Add additional Linux capabilities to the container.
 
 ---
 
-##### `capDrop`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.capDrop"></a>
+##### `capDrop`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.capDrop" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycapdrop"></a>
 
 ```typescript
 public readonly capDrop: string[];
@@ -560,7 +689,7 @@ Drop additional Linux capabilities from the container.
 
 ---
 
-##### `cpus`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.cpus"></a>
+##### `cpus`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.cpus" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycpus"></a>
 
 ```typescript
 public readonly cpus: string;
@@ -572,7 +701,7 @@ Number of CPUs (available in Docker 1.13 or later. A string.
 
 ---
 
-##### `cpusetCpus`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.cpusetCpus"></a>
+##### `cpusetCpus`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.cpusetCpus" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycpusetcpus"></a>
 
 ```typescript
 public readonly cpusetCpus: string;
@@ -586,7 +715,7 @@ A string.
 
 ---
 
-##### `cpuShares`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.cpuShares"></a>
+##### `cpuShares`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.cpuShares" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertycpushares"></a>
 
 ```typescript
 public readonly cpuShares: number;
@@ -600,7 +729,7 @@ Default is 1024.
 
 ---
 
-##### `devices`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.devices"></a>
+##### `devices`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.devices" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydevices"></a>
 
 ```typescript
 public readonly devices: string[];
@@ -612,7 +741,7 @@ Share additional host devices with the container.
 
 ---
 
-##### `disableCache`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.disableCache"></a>
+##### `disableCache`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.disableCache" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydisablecache"></a>
 
 ```typescript
 public readonly disableCache: boolean;
@@ -627,7 +756,7 @@ This configuration flag acts only on the local one which disables the use of aut
 
 ---
 
-##### `disableEntrypointOverwrite`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.disableEntrypointOverwrite"></a>
+##### `disableEntrypointOverwrite`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.disableEntrypointOverwrite" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydisableentrypointoverwrite"></a>
 
 ```typescript
 public readonly disableEntrypointOverwrite: boolean;
@@ -639,7 +768,7 @@ Disable the image entrypoint overwriting.
 
 ---
 
-##### `dns`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.dns"></a>
+##### `dns`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.dns" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydns"></a>
 
 ```typescript
 public readonly dns: string[];
@@ -651,7 +780,7 @@ A list of DNS servers for the container to use.
 
 ---
 
-##### `dnsSearch`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.dnsSearch"></a>
+##### `dnsSearch`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.dnsSearch" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertydnssearch"></a>
 
 ```typescript
 public readonly dnsSearch: string[];
@@ -663,7 +792,7 @@ A list of DNS search domains.
 
 ---
 
-##### `extraHosts`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.extraHosts"></a>
+##### `extraHosts`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.extraHosts" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyextrahosts"></a>
 
 ```typescript
 public readonly extraHosts: string[];
@@ -675,7 +804,7 @@ Hosts that should be defined in container environment.
 
 ---
 
-##### `gpus`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.gpus"></a>
+##### `gpus`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.gpus" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertygpus"></a>
 
 ```typescript
 public readonly gpus: string[];
@@ -689,7 +818,7 @@ Uses the same format as the docker cli. View details in the Docker documentation
 
 ---
 
-##### `helperImage`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.helperImage"></a>
+##### `helperImage`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.helperImage" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyhelperimage"></a>
 
 ```typescript
 public readonly helperImage: string;
@@ -701,7 +830,7 @@ public readonly helperImage: string;
 
 ---
 
-##### `helperImageFlavor`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.helperImageFlavor"></a>
+##### `helperImageFlavor`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.helperImageFlavor" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyhelperimageflavor"></a>
 
 ```typescript
 public readonly helperImageFlavor: string;
@@ -713,7 +842,7 @@ Sets the helper image flavor (alpine, alpine3.12, alpine3.13, alpine3.14 or ubun
 
 ---
 
-##### `host`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.host"></a>
+##### `host`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.host" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyhost"></a>
 
 ```typescript
 public readonly host: string;
@@ -727,7 +856,7 @@ Default is DOCKER_HOST environment or unix:///var/run/docker.sock.
 
 ---
 
-##### `hostname`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.hostname"></a>
+##### `hostname`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.hostname" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyhostname"></a>
 
 ```typescript
 public readonly hostname: string;
@@ -739,7 +868,7 @@ Custom hostname for the Docker container.
 
 ---
 
-##### `image`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.image"></a>
+##### `image`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.image" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyimage"></a>
 
 ```typescript
 public readonly image: string;
@@ -751,7 +880,7 @@ The image to run jobs with.
 
 ---
 
-##### `links`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.links"></a>
+##### `links`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.links" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertylinks"></a>
 
 ```typescript
 public readonly links: string[];
@@ -763,7 +892,7 @@ Containers that should be linked with container that runs the job.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.memory"></a>
+##### `memory`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.memory" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertymemory"></a>
 
 ```typescript
 public readonly memory: string;
@@ -777,7 +906,7 @@ A string.
 
 ---
 
-##### `memoryReservation`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.memoryReservation"></a>
+##### `memoryReservation`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.memoryReservation" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertymemoryreservation"></a>
 
 ```typescript
 public readonly memoryReservation: string;
@@ -791,7 +920,7 @@ A string.
 
 ---
 
-##### `memorySwap`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.memorySwap"></a>
+##### `memorySwap`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.memorySwap" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertymemoryswap"></a>
 
 ```typescript
 public readonly memorySwap: string;
@@ -805,7 +934,7 @@ A string.
 
 ---
 
-##### `networkMode`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.networkMode"></a>
+##### `networkMode`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.networkMode" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertynetworkmode"></a>
 
 ```typescript
 public readonly networkMode: string;
@@ -817,7 +946,7 @@ Add container to a custom network.
 
 ---
 
-##### `oomKillDisable`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.oomKillDisable"></a>
+##### `oomKillDisable`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.oomKillDisable" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyoomkilldisable"></a>
 
 ```typescript
 public readonly oomKillDisable: boolean;
@@ -829,7 +958,7 @@ If an out-of-memory (OOM) error occurs, do not kill processes in a container.
 
 ---
 
-##### `oomScoreAdjust`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.oomScoreAdjust"></a>
+##### `oomScoreAdjust`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.oomScoreAdjust" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyoomscoreadjust"></a>
 
 ```typescript
 public readonly oomScoreAdjust: string;
@@ -843,7 +972,7 @@ Positive means kill earlier.
 
 ---
 
-##### `privileged`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.privileged"></a>
+##### `privileged`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.privileged" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyprivileged"></a>
 
 ```typescript
 public readonly privileged: boolean;
@@ -858,7 +987,7 @@ Insecure.
 
 ---
 
-##### `pullPolicy`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.pullPolicy"></a>
+##### `pullPolicy`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.pullPolicy" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertypullpolicy"></a>
 
 ```typescript
 public readonly pullPolicy: string;
@@ -872,7 +1001,7 @@ View details in the pull policies documentation. You can also add multiple pull 
 
 ---
 
-##### `runtime`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.runtime"></a>
+##### `runtime`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.runtime" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyruntime"></a>
 
 ```typescript
 public readonly runtime: string;
@@ -884,7 +1013,7 @@ The runtime for the Docker container.
 
 ---
 
-##### `securityOpt`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.securityOpt"></a>
+##### `securityOpt`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.securityOpt" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertysecurityopt"></a>
 
 ```typescript
 public readonly securityOpt: string;
@@ -898,7 +1027,7 @@ Takes a list of : separated key/values.
 
 ---
 
-##### `shmSize`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.shmSize"></a>
+##### `shmSize`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.shmSize" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyshmsize"></a>
 
 ```typescript
 public readonly shmSize: number;
@@ -911,7 +1040,7 @@ Shared memory size for images (in bytes).
 
 ---
 
-##### `sysctls`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.sysctls"></a>
+##### `sysctls`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.sysctls" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertysysctls"></a>
 
 ```typescript
 public readonly sysctls: string;
@@ -923,7 +1052,7 @@ The sysctl options.
 
 ---
 
-##### `tlsCertPath`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.tlsCertPath"></a>
+##### `tlsCertPath`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.tlsCertPath" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertytlscertpath"></a>
 
 ```typescript
 public readonly tlsCertPath: string;
@@ -935,7 +1064,7 @@ A directory where ca.pem, cert.pem or key.pem are stored and used to make a secu
 
 ---
 
-##### `tlsVerify`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.tlsVerify"></a>
+##### `tlsVerify`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.tlsVerify" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertytlsverify"></a>
 
 ```typescript
 public readonly tlsVerify: boolean;
@@ -950,7 +1079,7 @@ Disabled by default.
 
 ---
 
-##### `usernsMode`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.usernsMode"></a>
+##### `usernsMode`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.usernsMode" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyusernsmode"></a>
 
 ```typescript
 public readonly usernsMode: string;
@@ -964,7 +1093,7 @@ Available in Docker 1.10 or later.
 
 ---
 
-##### `volumeDriver`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.volumeDriver"></a>
+##### `volumeDriver`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.volumeDriver" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyvolumedriver"></a>
 
 ```typescript
 public readonly volumeDriver: string;
@@ -976,7 +1105,7 @@ The volume driver to use for the container.
 
 ---
 
-##### `volumes`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.volumes"></a>
+##### `volumes`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.volumes" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyvolumes"></a>
 
 ```typescript
 public readonly volumes: string[];
@@ -990,7 +1119,7 @@ Same syntax as the Docker -v flag.
 
 ---
 
-##### `volumesFrom`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.volumesFrom"></a>
+##### `volumesFrom`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.volumesFrom" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertyvolumesfrom"></a>
 
 ```typescript
 public readonly volumesFrom: string[];
@@ -1004,7 +1133,7 @@ Access level defaults to read-write, but can be manually set to ro (read-only) o
 
 ---
 
-##### `waitForServicesTimeout`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.waitForServicesTimeout"></a>
+##### `waitForServicesTimeout`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration.property.waitForServicesTimeout" id="pepperizecdkautoscalinggitlabrunnerdockerconfigurationpropertywaitforservicestimeout"></a>
 
 ```typescript
 public readonly waitForServicesTimeout: number;
@@ -1019,23 +1148,32 @@ Set to 0 to disable. Default is 30.
 
 ---
 
-### GitlabRunnerAutoscalingCacheProps <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps"></a>
+### GitlabRunnerAutoscalingCacheProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingcacheprops"></a>
 
 The distributed GitLab runner S3 cache.
 
 Either pass an existing bucket or override default options.
 
-> {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section}
+> https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscalingCacheProps } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscalingCacheProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const gitlabRunnerAutoscalingCacheProps: GitlabRunnerAutoscalingCacheProps = { ... }
 ```
 
-##### `bucket`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps.property.bucket"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`bucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingcachepropspropertybucket) | [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket) | An existing S3 bucket used as runner's cache. |
+| [`options`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingcachepropspropertyoptions) | [`@pepperize/cdk-autoscaling-gitlab-runner.CacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheProps) | If no existing S3 bucket is provided, a S3 bucket will be created. |
+
+---
+
+##### `bucket`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps.property.bucket" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingcachepropspropertybucket"></a>
 
 ```typescript
 public readonly bucket: IBucket;
@@ -1047,29 +1185,41 @@ An existing S3 bucket used as runner's cache.
 
 ---
 
-##### `options`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps.property.options"></a>
+##### `options`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps.property.options" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingcachepropspropertyoptions"></a>
 
 ```typescript
 public readonly options: CacheProps;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.CacheProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.CacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheProps)
 
 If no existing S3 bucket is provided, a S3 bucket will be created.
 
 ---
 
-### GitlabRunnerAutoscalingManager <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager"></a>
+### GitlabRunnerAutoscalingManager <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanager"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscalingManager } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscalingManager } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const gitlabRunnerAutoscalingManager: GitlabRunnerAutoscalingManager = { ... }
 ```
 
-##### `autoScalingGroup`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.autoScalingGroup"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`autoScalingGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyautoscalinggroup)<span title="Required">*</span> | [`@aws-cdk/aws-autoscaling.IAutoScalingGroup`](#@aws-cdk/aws-autoscaling.IAutoScalingGroup) | *No description.* |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyinstancetype)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | *No description.* |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertymachineimage)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | *No description.* |
+| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyrole)<span title="Required">*</span> | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | *No description.* |
+| [`securityGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertysecuritygroup)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup) | *No description.* |
+
+---
+
+##### `autoScalingGroup`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.autoScalingGroup" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyautoscalinggroup"></a>
 
 ```typescript
 public readonly autoScalingGroup: IAutoScalingGroup;
@@ -1079,7 +1229,7 @@ public readonly autoScalingGroup: IAutoScalingGroup;
 
 ---
 
-##### `instanceType`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.instanceType"></a>
+##### `instanceType`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyinstancetype"></a>
 
 ```typescript
 public readonly instanceType: InstanceType;
@@ -1089,7 +1239,7 @@ public readonly instanceType: InstanceType;
 
 ---
 
-##### `machineImage`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.machineImage"></a>
+##### `machineImage`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertymachineimage"></a>
 
 ```typescript
 public readonly machineImage: IMachineImage;
@@ -1099,7 +1249,7 @@ public readonly machineImage: IMachineImage;
 
 ---
 
-##### `role`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.role"></a>
+##### `role`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.role" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyrole"></a>
 
 ```typescript
 public readonly role: IRole;
@@ -1109,7 +1259,7 @@ public readonly role: IRole;
 
 ---
 
-##### `securityGroup`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.securityGroup"></a>
+##### `securityGroup`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.securityGroup" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertysecuritygroup"></a>
 
 ```typescript
 public readonly securityGroup: ISecurityGroup;
@@ -1119,17 +1269,27 @@ public readonly securityGroup: ISecurityGroup;
 
 ---
 
-### GitlabRunnerAutoscalingManagerProps <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps"></a>
+### GitlabRunnerAutoscalingManagerProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerprops"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscalingManagerProps } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscalingManagerProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const gitlabRunnerAutoscalingManagerProps: GitlabRunnerAutoscalingManagerProps = { ... }
 ```
 
-##### `instanceType`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.instanceType"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyinstancetype) | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | Instance type for manager EC2 instance. |
+| [`keyPairName`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertykeypairname) | `string` | A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertymachineimage) | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | An Amazon Machine Image ID for the Manager EC2 instance. |
+
+---
+
+##### `instanceType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyinstancetype"></a>
 
 ```typescript
 public readonly instanceType: InstanceType;
@@ -1144,7 +1304,7 @@ It's a combination of a class and size.
 
 ---
 
-##### `keyPairName`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.keyPairName"></a>
+##### `keyPairName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.keyPairName" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertykeypairname"></a>
 
 ```typescript
 public readonly keyPairName: string;
@@ -1158,7 +1318,7 @@ You won't be able to ssh into an instance without the Key Pair.
 
 ---
 
-##### `machineImage`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.machineImage"></a>
+##### `machineImage`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertymachineimage"></a>
 
 ```typescript
 public readonly machineImage: IMachineImage;
@@ -1168,25 +1328,44 @@ public readonly machineImage: IMachineImage;
 
 An Amazon Machine Image ID for the Manager EC2 instance.
 
-If empty the latest Amazon 2 Image will be looked up.
+If empty the latest Amazon 2 Image will be looked up.  Should be RHEL flavor like Amazon Linux 2 with yum available for instance initialization.
+
+> https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-init.html
 
 ---
 
-### GitlabRunnerAutoscalingProps <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps"></a>
+### GitlabRunnerAutoscalingProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingprops"></a>
 
 Properties of the Gitlab Runner.
 
 You have to provide at least the GitLab's Runner's authentication token.
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscalingProps } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscalingProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const gitlabRunnerAutoscalingProps: GitlabRunnerAutoscalingProps = { ... }
 ```
 
-##### `checkInterval`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.checkInterval"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`checkInterval`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertycheckinterval) | `number` | The check_interval option defines how often the runner should check GitLab for new jobs\| in seconds. |
+| [`concurrent`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyconcurrent) | `number` | The limit of the jobs that can be run concurrently across all runners (concurrent). |
+| [`logFormat`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertylogformat) | `string` | The log format. |
+| [`logLevel`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyloglevel) | `string` | The log_level. |
+| [`gitlabToken`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertygitlabtoken)<span title="Required">*</span> | `string` | The GitLab Runner’s authentication token, which is obtained during runner registration. |
+| [`cache`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertycache) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps) | *No description.* |
+| [`gitlabUrl`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertygitlaburl) | `string` | GitLab instance URL. |
+| [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertymanager) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps) | The manager EC2 instance configuration. |
+| [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertynetwork) | [`@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps) | The network configuration for the Runner. |
+| [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps) | *No description.* |
+
+---
+
+##### `checkInterval`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.checkInterval" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertycheckinterval"></a>
 
 ```typescript
 public readonly checkInterval: number;
@@ -1199,7 +1378,7 @@ The check_interval option defines how often the runner should check GitLab for n
 
 ---
 
-##### `concurrent`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.concurrent"></a>
+##### `concurrent`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.concurrent" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyconcurrent"></a>
 
 ```typescript
 public readonly concurrent: number;
@@ -1212,7 +1391,7 @@ The limit of the jobs that can be run concurrently across all runners (concurren
 
 ---
 
-##### `logFormat`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.logFormat"></a>
+##### `logFormat`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.logFormat" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertylogformat"></a>
 
 ```typescript
 public readonly logFormat: string;
@@ -1225,7 +1404,7 @@ The log format.
 
 ---
 
-##### `logLevel`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.logLevel"></a>
+##### `logLevel`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.logLevel" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyloglevel"></a>
 
 ```typescript
 public readonly logLevel: string;
@@ -1238,7 +1417,7 @@ The log_level.
 
 ---
 
-##### `gitlabToken`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.gitlabToken"></a>
+##### `gitlabToken`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.gitlabToken" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertygitlabtoken"></a>
 
 ```typescript
 public readonly gitlabToken: string;
@@ -1248,21 +1427,21 @@ public readonly gitlabToken: string;
 
 The GitLab Runner’s authentication token, which is obtained during runner registration.
 
-> {@link https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens}
+> https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
 
 ---
 
-##### `cache`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.cache"></a>
+##### `cache`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.cache" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertycache"></a>
 
 ```typescript
 public readonly cache: GitlabRunnerAutoscalingCacheProps;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps)
 
 ---
 
-##### `gitlabUrl`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.gitlabUrl"></a>
+##### `gitlabUrl`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.gitlabUrl" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertygitlaburl"></a>
 
 ```typescript
 public readonly gitlabUrl: string;
@@ -1275,13 +1454,13 @@ GitLab instance URL.
 
 ---
 
-##### `manager`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.manager"></a>
+##### `manager`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.manager" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertymanager"></a>
 
 ```typescript
 public readonly manager: GitlabRunnerAutoscalingManagerProps;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps)
 
 The manager EC2 instance configuration.
 
@@ -1291,13 +1470,13 @@ If not set, the defaults will be used.
 
 ---
 
-##### `network`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.network"></a>
+##### `network`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.network" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertynetwork"></a>
 
 ```typescript
 public readonly network: NetworkProps;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.NetworkProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps)
 
 The network configuration for the Runner.
 
@@ -1307,17 +1486,17 @@ If not set, the defaults will be used.
 
 ---
 
-##### `runners`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.runners"></a>
+##### `runners`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.runners" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners"></a>
 
 ```typescript
 public readonly runners: GitlabRunnerAutoscalingRunnerProps;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps)
 
 ---
 
-### GitlabRunnerAutoscalingRunnerProps <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps"></a>
+### GitlabRunnerAutoscalingRunnerProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerprops"></a>
 
 The runner EC2 instances configuration.
 
@@ -1325,39 +1504,55 @@ If not set, the defaults will be used.
 
 > [GitlabRunnerAutoscalingProps](GitlabRunnerAutoscalingProps)
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscalingRunnerProps } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscalingRunnerProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const gitlabRunnerAutoscalingRunnerProps: GitlabRunnerAutoscalingRunnerProps = { ... }
 ```
 
-##### `autoscaling`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.autoscaling"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`autoscaling`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyautoscaling) | [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[] | Optional autoscaling configuration. |
+| [`docker`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertydocker) | [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration) | Optional docker configuration. |
+| [`environment`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyenvironment) | `string`[] | Append or overwrite environment variables. |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyinstancetype) | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | Instance type for runner EC2 instances. |
+| [`limit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertylimit) | `number` | Limit how many jobs can be handled concurrently by this registered runner. |
+| [`machine`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachine) | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration) | Optional docker machine configuration. |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachineimage) | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | An Amazon Machine Image ID for the Runners EC2 instances. |
+| [`outputLimit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyoutputlimit) | `number` | Maximum build log size in kilobytes. |
+| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyrole) | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances. |
+
+---
+
+##### `autoscaling`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.autoscaling" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyautoscaling"></a>
 
 ```typescript
 public readonly autoscaling: AutoscalingConfiguration[];
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[]
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[]
 
 Optional autoscaling configuration.
 
 ---
 
-##### `docker`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.docker"></a>
+##### `docker`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.docker" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertydocker"></a>
 
 ```typescript
 public readonly docker: DockerConfiguration;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.DockerConfiguration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration)
 
 Optional docker configuration.
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.environment" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyenvironment"></a>
 
 ```typescript
 public readonly environment: string[];
@@ -1370,7 +1565,7 @@ Append or overwrite environment variables.
 
 ---
 
-##### `instanceType`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.instanceType"></a>
+##### `instanceType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyinstancetype"></a>
 
 ```typescript
 public readonly instanceType: InstanceType;
@@ -1385,7 +1580,7 @@ It's a combination of a class and size.
 
 ---
 
-##### `limit`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.limit"></a>
+##### `limit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.limit" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertylimit"></a>
 
 ```typescript
 public readonly limit: number;
@@ -1400,19 +1595,19 @@ Limit how many jobs can be handled concurrently by this registered runner.
 
 ---
 
-##### `machine`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.machine"></a>
+##### `machine`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.machine" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachine"></a>
 
 ```typescript
 public readonly machine: MachineConfiguration;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration)
 
 Optional docker machine configuration.
 
 ---
 
-##### `machineImage`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.machineImage"></a>
+##### `machineImage`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachineimage"></a>
 
 ```typescript
 public readonly machineImage: IMachineImage;
@@ -1422,13 +1617,13 @@ public readonly machineImage: IMachineImage;
 
 An Amazon Machine Image ID for the Runners EC2 instances.
 
-If empty the latest Ubuntu 20.04 focal will be looked up.
+If empty the latest Ubuntu 20.04 focal will be looked up.  Any operating system supported by Dcoker Machine's provisioner.
 
-> https://cloud-images.ubuntu.com/locator/ec2/
+> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
 
 ---
 
-##### `outputLimit`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.outputLimit"></a>
+##### `outputLimit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.outputLimit" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyoutputlimit"></a>
 
 ```typescript
 public readonly outputLimit: number;
@@ -1443,7 +1638,7 @@ Default is 4096 (4MB).
 
 ---
 
-##### `role`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.role"></a>
+##### `role`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.role" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyrole"></a>
 
 ```typescript
 public readonly role: IRole;
@@ -1455,17 +1650,30 @@ Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
 
 ---
 
-### GitlabRunnerAutoscalingRunners <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners"></a>
+### GitlabRunnerAutoscalingRunners <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunners"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscalingRunners } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscalingRunners } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const gitlabRunnerAutoscalingRunners: GitlabRunnerAutoscalingRunners = { ... }
 ```
 
-##### `instanceProfile`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.instanceProfile"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`instanceProfile`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyinstanceprofile)<span title="Required">*</span> | [`@aws-cdk/aws-iam.CfnInstanceProfile`](#@aws-cdk/aws-iam.CfnInstanceProfile) | *No description.* |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyinstancetype)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | *No description.* |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertymachineimage)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | *No description.* |
+| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyrole)<span title="Required">*</span> | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | *No description.* |
+| [`securityGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertysecuritygroup)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup) | *No description.* |
+| [`securityGroupName`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertysecuritygroupname)<span title="Required">*</span> | `string` | *No description.* |
+
+---
+
+##### `instanceProfile`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.instanceProfile" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyinstanceprofile"></a>
 
 ```typescript
 public readonly instanceProfile: CfnInstanceProfile;
@@ -1475,7 +1683,7 @@ public readonly instanceProfile: CfnInstanceProfile;
 
 ---
 
-##### `instanceType`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.instanceType"></a>
+##### `instanceType`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyinstancetype"></a>
 
 ```typescript
 public readonly instanceType: InstanceType;
@@ -1485,7 +1693,7 @@ public readonly instanceType: InstanceType;
 
 ---
 
-##### `machineImage`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.machineImage"></a>
+##### `machineImage`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertymachineimage"></a>
 
 ```typescript
 public readonly machineImage: IMachineImage;
@@ -1495,7 +1703,7 @@ public readonly machineImage: IMachineImage;
 
 ---
 
-##### `role`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.role"></a>
+##### `role`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.role" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyrole"></a>
 
 ```typescript
 public readonly role: IRole;
@@ -1505,7 +1713,7 @@ public readonly role: IRole;
 
 ---
 
-##### `securityGroup`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.securityGroup"></a>
+##### `securityGroup`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.securityGroup" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertysecuritygroup"></a>
 
 ```typescript
 public readonly securityGroup: ISecurityGroup;
@@ -1515,7 +1723,7 @@ public readonly securityGroup: ISecurityGroup;
 
 ---
 
-##### `securityGroupName`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.securityGroupName"></a>
+##### `securityGroupName`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners.property.securityGroupName" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertysecuritygroupname"></a>
 
 ```typescript
 public readonly securityGroupName: string;
@@ -1525,23 +1733,34 @@ public readonly securityGroupName: string;
 
 ---
 
-### GlobalConfiguration <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GlobalConfiguration"></a>
+### GlobalConfiguration <a name="@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration" id="pepperizecdkautoscalinggitlabrunnerglobalconfiguration"></a>
 
 You can change the behavior of GitLab Runner and of individual registered runners.
 
 This imitates the structure of Gitlab Runner advanced configuration that originally is set with config.toml file.
 
-> {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html}
+> https://docs.gitlab.com/runner/configuration/advanced-configuration.html
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GlobalConfiguration } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { GlobalConfiguration } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const globalConfiguration: GlobalConfiguration = { ... }
 ```
 
-##### `checkInterval`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GlobalConfiguration.property.checkInterval"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`checkInterval`](#pepperizecdkautoscalinggitlabrunnerglobalconfigurationpropertycheckinterval) | `number` | The check_interval option defines how often the runner should check GitLab for new jobs\| in seconds. |
+| [`concurrent`](#pepperizecdkautoscalinggitlabrunnerglobalconfigurationpropertyconcurrent) | `number` | The limit of the jobs that can be run concurrently across all runners (concurrent). |
+| [`logFormat`](#pepperizecdkautoscalinggitlabrunnerglobalconfigurationpropertylogformat) | `string` | The log format. |
+| [`logLevel`](#pepperizecdkautoscalinggitlabrunnerglobalconfigurationpropertyloglevel) | `string` | The log_level. |
+
+---
+
+##### `checkInterval`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration.property.checkInterval" id="pepperizecdkautoscalinggitlabrunnerglobalconfigurationpropertycheckinterval"></a>
 
 ```typescript
 public readonly checkInterval: number;
@@ -1554,7 +1773,7 @@ The check_interval option defines how often the runner should check GitLab for n
 
 ---
 
-##### `concurrent`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GlobalConfiguration.property.concurrent"></a>
+##### `concurrent`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration.property.concurrent" id="pepperizecdkautoscalinggitlabrunnerglobalconfigurationpropertyconcurrent"></a>
 
 ```typescript
 public readonly concurrent: number;
@@ -1567,7 +1786,7 @@ The limit of the jobs that can be run concurrently across all runners (concurren
 
 ---
 
-##### `logFormat`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GlobalConfiguration.property.logFormat"></a>
+##### `logFormat`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration.property.logFormat" id="pepperizecdkautoscalinggitlabrunnerglobalconfigurationpropertylogformat"></a>
 
 ```typescript
 public readonly logFormat: string;
@@ -1580,7 +1799,7 @@ The log format.
 
 ---
 
-##### `logLevel`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.GlobalConfiguration.property.logLevel"></a>
+##### `logLevel`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration.property.logLevel" id="pepperizecdkautoscalinggitlabrunnerglobalconfigurationpropertyloglevel"></a>
 
 ```typescript
 public readonly logLevel: string;
@@ -1593,17 +1812,30 @@ The log_level.
 
 ---
 
-### MachineConfiguration <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration"></a>
+### MachineConfiguration <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration" id="pepperizecdkautoscalinggitlabrunnermachineconfiguration"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { MachineConfiguration } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { MachineConfiguration } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const machineConfiguration: MachineConfiguration = { ... }
 ```
 
-##### `idleCount`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.idleCount"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`idleCount`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertyidlecount) | `number` | Number of machines that need to be created and waiting in Idle state. |
+| [`idleTime`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertyidletime) | `number` | Time (in seconds) for machine to be in Idle state before it is removed. |
+| [`machineDriver`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymachinedriver) | `string` | Docker Machine driver. |
+| [`machineName`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymachinename) | `string` | *No description.* |
+| [`machineOptions`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymachineoptions) | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions) | Docker Machine options passed to the Docker Machine driver. |
+| [`maxBuilds`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymaxbuilds) | `number` | Maximum job (build) count before machine is removed. |
+
+---
+
+##### `idleCount`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.idleCount" id="pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertyidlecount"></a>
 
 ```typescript
 public readonly idleCount: number;
@@ -1612,9 +1844,11 @@ public readonly idleCount: number;
 - *Type:* `number`
 - *Default:* 0
 
+Number of machines that need to be created and waiting in Idle state.
+
 ---
 
-##### `idleTime`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.idleTime"></a>
+##### `idleTime`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.idleTime" id="pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertyidletime"></a>
 
 ```typescript
 public readonly idleTime: number;
@@ -1623,9 +1857,11 @@ public readonly idleTime: number;
 - *Type:* `number`
 - *Default:* 300
 
+Time (in seconds) for machine to be in Idle state before it is removed.
+
 ---
 
-##### `machineDriver`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.machineDriver"></a>
+##### `machineDriver`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.machineDriver" id="pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymachinedriver"></a>
 
 ```typescript
 public readonly machineDriver: string;
@@ -1634,9 +1870,11 @@ public readonly machineDriver: string;
 - *Type:* `string`
 - *Default:* "amazonec2"
 
+Docker Machine driver.
+
 ---
 
-##### `machineName`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.machineName"></a>
+##### `machineName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.machineName" id="pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymachinename"></a>
 
 ```typescript
 public readonly machineName: string;
@@ -1647,17 +1885,19 @@ public readonly machineName: string;
 
 ---
 
-##### `machineOptions`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.machineOptions"></a>
+##### `machineOptions`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.machineOptions" id="pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymachineoptions"></a>
 
 ```typescript
 public readonly machineOptions: MachineOptions;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions)
+
+Docker Machine options passed to the Docker Machine driver.
 
 ---
 
-##### `maxBuilds`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.maxBuilds"></a>
+##### `maxBuilds`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.maxBuilds" id="pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymaxbuilds"></a>
 
 ```typescript
 public readonly maxBuilds: number;
@@ -1666,19 +1906,40 @@ public readonly maxBuilds: number;
 - *Type:* `number`
 - *Default:* 20
 
+Maximum job (build) count before machine is removed.
+
 ---
 
-### MachineOptions <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions"></a>
+### MachineOptions <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions" id="pepperizecdkautoscalinggitlabrunnermachineoptions"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { MachineOptions } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { MachineOptions } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const machineOptions: MachineOptions = { ... }
 ```
 
-##### `ami`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.ami"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`ami`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyami) | `string` | *No description.* |
+| [`blockDurationMinutes`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyblockdurationminutes) | `number` | The amazonec2-block-duration-minutes parameter. |
+| [`iamInstanceProfile`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyiaminstanceprofile) | `string` | *No description.* |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyinstancetype) | `string` | *No description.* |
+| [`region`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyregion) | `string` | *No description.* |
+| [`requestSpotInstance`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrequestspotinstance) | `boolean` | The amazonec2-request-spot-instance parameter. |
+| [`securityGroup`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysecuritygroup) | `string` | The SecurityGroup's GroupName, not the GroupId. |
+| [`spotPrice`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyspotprice) | `number` | The amazonec2-spot-price parameter. |
+| [`subnetId`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysubnetid) | `string` | *No description.* |
+| [`usePrivateAddress`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseprivateaddress) | `boolean` | *No description.* |
+| [`vpcId`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyvpcid) | `string` | *No description.* |
+| [`zone`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyzone) | `string` | Extract the availabilityZone last character for the needs of gitlab configuration. |
+
+---
+
+##### `ami`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.ami" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyami"></a>
 
 ```typescript
 public readonly ami: string;
@@ -1688,7 +1949,7 @@ public readonly ami: string;
 
 ---
 
-##### `blockDurationMinutes`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.blockDurationMinutes"></a>
+##### `blockDurationMinutes`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.blockDurationMinutes" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyblockdurationminutes"></a>
 
 ```typescript
 public readonly blockDurationMinutes: number;
@@ -1700,11 +1961,11 @@ The amazonec2-block-duration-minutes parameter.
 
 AWS spot instance duration in minutes (60, 120, 180, 240, 300, or 360).
 
-> {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances}
+> https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
 
 ---
 
-##### `iamInstanceProfile`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.iamInstanceProfile"></a>
+##### `iamInstanceProfile`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.iamInstanceProfile" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyiaminstanceprofile"></a>
 
 ```typescript
 public readonly iamInstanceProfile: string;
@@ -1714,7 +1975,7 @@ public readonly iamInstanceProfile: string;
 
 ---
 
-##### `instanceType`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.instanceType"></a>
+##### `instanceType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.instanceType" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyinstancetype"></a>
 
 ```typescript
 public readonly instanceType: string;
@@ -1724,7 +1985,7 @@ public readonly instanceType: string;
 
 ---
 
-##### `region`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.region"></a>
+##### `region`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.region" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyregion"></a>
 
 ```typescript
 public readonly region: string;
@@ -1734,7 +1995,7 @@ public readonly region: string;
 
 ---
 
-##### `requestSpotInstance`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.requestSpotInstance"></a>
+##### `requestSpotInstance`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.requestSpotInstance" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrequestspotinstance"></a>
 
 ```typescript
 public readonly requestSpotInstance: boolean;
@@ -1747,11 +2008,11 @@ The amazonec2-request-spot-instance parameter.
 
 Whether or not to request spot instances.
 
-> {@link https://aws.amazon.com/ec2/spot/}
+> https://aws.amazon.com/ec2/spot/
 
 ---
 
-##### `securityGroup`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.securityGroup"></a>
+##### `securityGroup`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.securityGroup" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertysecuritygroup"></a>
 
 ```typescript
 public readonly securityGroup: string;
@@ -1763,7 +2024,7 @@ The SecurityGroup's GroupName, not the GroupId.
 
 ---
 
-##### `spotPrice`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.spotPrice"></a>
+##### `spotPrice`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.spotPrice" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyspotprice"></a>
 
 ```typescript
 public readonly spotPrice: number;
@@ -1776,11 +2037,11 @@ The amazonec2-spot-price parameter.
 
 The bidding price for spot instances.
 
-> {@link https://aws.amazon.com/ec2/spot/pricing/}
+> https://aws.amazon.com/ec2/spot/pricing/
 
 ---
 
-##### `subnetId`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.subnetId"></a>
+##### `subnetId`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.subnetId" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertysubnetid"></a>
 
 ```typescript
 public readonly subnetId: string;
@@ -1790,7 +2051,7 @@ public readonly subnetId: string;
 
 ---
 
-##### `usePrivateAddress`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.usePrivateAddress"></a>
+##### `usePrivateAddress`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.usePrivateAddress" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseprivateaddress"></a>
 
 ```typescript
 public readonly usePrivateAddress: boolean;
@@ -1800,7 +2061,7 @@ public readonly usePrivateAddress: boolean;
 
 ---
 
-##### `vpcId`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.vpcId"></a>
+##### `vpcId`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.vpcId" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyvpcid"></a>
 
 ```typescript
 public readonly vpcId: string;
@@ -1810,7 +2071,7 @@ public readonly vpcId: string;
 
 ---
 
-##### `zone`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.MachineOptions.property.zone"></a>
+##### `zone`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.zone" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyzone"></a>
 
 ```typescript
 public readonly zone: string;
@@ -1820,21 +2081,30 @@ public readonly zone: string;
 
 Extract the availabilityZone last character for the needs of gitlab configuration.
 
-> {@link https://docs.gitlab.com/runners/configuration/runners_autoscale_aws/#the-runnerssmachine-section}
+> https://docs.gitlab.com/runners/configuration/runners_autoscale_aws/#the-runnerssmachine-section
 
 ---
 
-### NetworkProps <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.NetworkProps"></a>
+### NetworkProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps" id="pepperizecdkautoscalinggitlabrunnernetworkprops"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { NetworkProps } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { NetworkProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const networkProps: NetworkProps = { ... }
 ```
 
-##### `subnetSelection`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.NetworkProps.property.subnetSelection"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`subnetSelection`](#pepperizecdkautoscalinggitlabrunnernetworkpropspropertysubnetselection) | [`@aws-cdk/aws-ec2.SubnetSelection`](#@aws-cdk/aws-ec2.SubnetSelection) | The GitLab Runner's subnets. |
+| [`vpc`](#pepperizecdkautoscalinggitlabrunnernetworkpropspropertyvpc) | [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc) | If no existing VPC is provided, a default Vpc will be created. |
+
+---
+
+##### `subnetSelection`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps.property.subnetSelection" id="pepperizecdkautoscalinggitlabrunnernetworkpropspropertysubnetselection"></a>
 
 ```typescript
 public readonly subnetSelection: SubnetSelection;
@@ -1846,11 +2116,11 @@ The GitLab Runner's subnets.
 
 It should be either public or private. If more then subnet is selected, then the first found (private) subnet will be used.
 
-> {@link https://docs.aws.amazon.com/cdk/api/latest/docs/
+> https://docs.aws.amazon.com/cdk/api/latest/docs/
 
 ---
 
-##### `vpc`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.NetworkProps.property.vpc"></a>
+##### `vpc`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps.property.vpc" id="pepperizecdkautoscalinggitlabrunnernetworkpropspropertyvpc"></a>
 
 ```typescript
 public readonly vpc: IVpc;
@@ -1862,17 +2132,44 @@ If no existing VPC is provided, a default Vpc will be created.
 
 ---
 
-### RunnerConfiguration <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration"></a>
+### RunnerConfiguration <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration" id="pepperizecdkautoscalinggitlabrunnerrunnerconfiguration"></a>
 
-#### Initializer <a name="[object Object].Initializer"></a>
+#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { RunnerConfiguration } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { RunnerConfiguration } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 const runnerConfiguration: RunnerConfiguration = { ... }
 ```
 
-##### `buildsDir`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.buildsDir"></a>
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`buildsDir`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertybuildsdir) | `string` | Absolute path to a directory where builds are stored in the context of the selected executor. |
+| [`cacheDir`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertycachedir) | `string` | Absolute path to a directory where build caches are stored in context of selected executor. |
+| [`cloneUrl`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertycloneurl) | `string` | Overwrite the URL for the GitLab instance. |
+| [`debugTraceDisabled`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertydebugtracedisabled) | `boolean` | Disables the CI_DEBUG_TRACE feature. |
+| [`environment`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyenvironment) | `string`[] | Append or overwrite environment variables. |
+| [`executor`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyexecutor) | `string` | Select how a project should be built. |
+| [`limit`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertylimit) | `number` | Limit how many jobs can be handled concurrently by this registered runner. |
+| [`name`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyname) | `string` | The runner’s description. |
+| [`outputLimit`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyoutputlimit) | `number` | Maximum build log size in kilobytes. |
+| [`postBuildScript`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertypostbuildscript) | `string` | Commands to be executed on the runner just after executing the build, but before executing after_script. |
+| [`preBuildScript`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyprebuildscript) | `string` | Commands to be executed on the runner after cloning the Git repository, but before executing the build. |
+| [`preCloneScript`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertypreclonescript) | `string` | Commands to be executed on the runner before cloning the Git repository. |
+| [`referees`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyreferees) | `string` | Extra job monitoring workers that pass their results as job artifacts to GitLab. |
+| [`requestConcurrency`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyrequestconcurrency) | `number` | Limit number of concurrent requests for new jobs from GitLab. |
+| [`shell`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyshell) | `string` | Name of shell to generate the script. |
+| [`tlsCaFile`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlscafile) | `string` | When using HTTPS, file that contains the certificates to verify the peer. |
+| [`tlsCertFile`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlscertfile) | `string` | When using HTTPS, file that contains the certificate to authenticate with the peer. |
+| [`tlsKeyFile`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlskeyfile) | `string` | When using HTTPS, file that contains the private key to authenticate with the peer. |
+| [`token`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytoken) | `string` | The runner’s authentication token, which is obtained during runner registration. |
+| [`url`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyurl) | `string` | GitLab instance URL. |
+
+---
+
+##### `buildsDir`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.buildsDir" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertybuildsdir"></a>
 
 ```typescript
 public readonly buildsDir: string;
@@ -1886,7 +2183,7 @@ For example, locally, Docker, or SSH.
 
 ---
 
-##### `cacheDir`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.cacheDir"></a>
+##### `cacheDir`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.cacheDir" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertycachedir"></a>
 
 ```typescript
 public readonly cacheDir: string;
@@ -1900,7 +2197,7 @@ For example, locally, Docker, or SSH. If the docker executor is used, this direc
 
 ---
 
-##### `cloneUrl`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.cloneUrl"></a>
+##### `cloneUrl`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.cloneUrl" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertycloneurl"></a>
 
 ```typescript
 public readonly cloneUrl: string;
@@ -1914,7 +2211,7 @@ Used only if the runner can’t connect to the GitLab URL.
 
 ---
 
-##### `debugTraceDisabled`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.debugTraceDisabled"></a>
+##### `debugTraceDisabled`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.debugTraceDisabled" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertydebugtracedisabled"></a>
 
 ```typescript
 public readonly debugTraceDisabled: boolean;
@@ -1928,7 +2225,7 @@ When set to true, then debug log (trace) remains disabled, even if CI_DEBUG_TRAC
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.environment" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyenvironment"></a>
 
 ```typescript
 public readonly environment: string[];
@@ -1941,7 +2238,7 @@ Append or overwrite environment variables.
 
 ---
 
-##### `executor`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.executor"></a>
+##### `executor`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.executor" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyexecutor"></a>
 
 ```typescript
 public readonly executor: string;
@@ -1954,7 +2251,7 @@ Select how a project should be built.
 
 ---
 
-##### `limit`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.limit"></a>
+##### `limit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.limit" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertylimit"></a>
 
 ```typescript
 public readonly limit: number;
@@ -1969,7 +2266,7 @@ Limit how many jobs can be handled concurrently by this registered runner.
 
 ---
 
-##### `name`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.name"></a>
+##### `name`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.name" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyname"></a>
 
 ```typescript
 public readonly name: string;
@@ -1984,7 +2281,7 @@ Informational only.
 
 ---
 
-##### `outputLimit`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.outputLimit"></a>
+##### `outputLimit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.outputLimit" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyoutputlimit"></a>
 
 ```typescript
 public readonly outputLimit: number;
@@ -1999,7 +2296,7 @@ Default is 4096 (4MB).
 
 ---
 
-##### `postBuildScript`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.postBuildScript"></a>
+##### `postBuildScript`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.postBuildScript" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertypostbuildscript"></a>
 
 ```typescript
 public readonly postBuildScript: string;
@@ -2013,7 +2310,7 @@ To insert multiple commands, use a (triple-quoted) multi-line string or \n chara
 
 ---
 
-##### `preBuildScript`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.preBuildScript"></a>
+##### `preBuildScript`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.preBuildScript" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyprebuildscript"></a>
 
 ```typescript
 public readonly preBuildScript: string;
@@ -2027,7 +2324,7 @@ To insert multiple commands, use a (triple-quoted) multi-line string or \n chara
 
 ---
 
-##### `preCloneScript`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.preCloneScript"></a>
+##### `preCloneScript`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.preCloneScript" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertypreclonescript"></a>
 
 ```typescript
 public readonly preCloneScript: string;
@@ -2041,7 +2338,7 @@ Use it to adjust the Git client configuration first, for example. To insert mult
 
 ---
 
-##### `referees`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.referees"></a>
+##### `referees`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.referees" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyreferees"></a>
 
 ```typescript
 public readonly referees: string;
@@ -2053,7 +2350,7 @@ Extra job monitoring workers that pass their results as job artifacts to GitLab.
 
 ---
 
-##### `requestConcurrency`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.requestConcurrency"></a>
+##### `requestConcurrency`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.requestConcurrency" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyrequestconcurrency"></a>
 
 ```typescript
 public readonly requestConcurrency: number;
@@ -2067,7 +2364,7 @@ Default is 1.
 
 ---
 
-##### `shell`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.shell"></a>
+##### `shell`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.shell" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyshell"></a>
 
 ```typescript
 public readonly shell: string;
@@ -2081,7 +2378,7 @@ Default value is platform dependent.
 
 ---
 
-##### `tlsCaFile`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.tlsCaFile"></a>
+##### `tlsCaFile`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.tlsCaFile" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlscafile"></a>
 
 ```typescript
 public readonly tlsCaFile: string;
@@ -2095,7 +2392,7 @@ See Self-signed certificates or custom Certification Authorities documentation.
 
 ---
 
-##### `tlsCertFile`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.tlsCertFile"></a>
+##### `tlsCertFile`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.tlsCertFile" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlscertfile"></a>
 
 ```typescript
 public readonly tlsCertFile: string;
@@ -2107,7 +2404,7 @@ When using HTTPS, file that contains the certificate to authenticate with the pe
 
 ---
 
-##### `tlsKeyFile`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.tlsKeyFile"></a>
+##### `tlsKeyFile`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.tlsKeyFile" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlskeyfile"></a>
 
 ```typescript
 public readonly tlsKeyFile: string;
@@ -2119,7 +2416,7 @@ When using HTTPS, file that contains the private key to authenticate with the pe
 
 ---
 
-##### `token`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.token"></a>
+##### `token`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.token" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytoken"></a>
 
 ```typescript
 public readonly token: string;
@@ -2133,7 +2430,7 @@ Not the same as the registration token.
 
 ---
 
-##### `url`<sup>Optional</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.url"></a>
+##### `url`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.url" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyurl"></a>
 
 ```typescript
 public readonly url: string;
@@ -2146,57 +2443,76 @@ GitLab instance URL.
 
 ---
 
-## Classes <a name="Classes"></a>
+## Classes <a name="Classes" id="classes"></a>
 
-### ConfigurationMapper <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapper"></a>
+### ConfigurationMapper <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapper" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapper"></a>
 
-#### Methods <a name="Methods"></a>
+#### Methods <a name="Methods" id="methods"></a>
 
-##### `toToml` <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapper.toToml"></a>
+| **Name** | **Description** |
+| --- | --- |
+| [`toToml`](#pepperizecdkautoscalinggitlabrunnerconfigurationmappertotoml) | *No description.* |
+
+---
+
+##### `toToml` <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapper.toToml" id="pepperizecdkautoscalinggitlabrunnerconfigurationmappertotoml"></a>
 
 ```typescript
 public toToml()
 ```
 
-#### Static Functions <a name="Static Functions"></a>
+#### Static Functions <a name="Static Functions" id="static-functions"></a>
 
-##### `fromProps` <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapper.fromProps"></a>
+| **Name** | **Description** |
+| --- | --- |
+| [`fromProps`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperfromprops) | *No description.* |
+| [`withDefaults`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperwithdefaults) | *No description.* |
+
+---
+
+##### `fromProps` <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapper.fromProps" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperfromprops"></a>
 
 ```typescript
-import { ConfigurationMapper } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { ConfigurationMapper } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 ConfigurationMapper.fromProps(props: ConfigurationMapperProps)
 ```
 
-###### `props`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapper.parameter.props"></a>
+###### `props`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapper.parameter.props" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperparameterprops"></a>
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps`](#@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps)
 
 ---
 
-##### `withDefaults` <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapper.withDefaults"></a>
+##### `withDefaults` <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapper.withDefaults" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperwithdefaults"></a>
 
 ```typescript
-import { ConfigurationMapper } from '@pepperize-testing/cdk-autoscaling-gitlab-runner'
+import { ConfigurationMapper } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
 ConfigurationMapper.withDefaults(props: ConfigurationMapperProps)
 ```
 
-###### `props`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapper.parameter.props"></a>
+###### `props`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapper.parameter.props" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperparameterprops"></a>
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps`](#@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps)
 
 ---
 
-#### Properties <a name="Properties"></a>
+#### Properties <a name="Properties" id="properties"></a>
 
-##### `props`<sup>Required</sup> <a name="@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapper.property.props"></a>
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`props`](#pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropertyprops)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps`](#@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps) | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapper.property.props" id="pepperizecdkautoscalinggitlabrunnerconfigurationmapperpropertyprops"></a>
 
 ```typescript
 public readonly props: ConfigurationMapperProps;
 ```
 
-- *Type:* [`@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps`](#@pepperize-testing/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps`](#@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapperProps)
 
 ---
 

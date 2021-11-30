@@ -6,7 +6,7 @@ export interface MachineOptions {
   /**
    * Extract the availabilityZone last character for the needs of gitlab configuration
    *
-   * @see {@link https://docs.gitlab.com/runners/configuration/runners_autoscale_aws/#the-runnerssmachine-section}
+   * @see https://docs.gitlab.com/runners/configuration/runners_autoscale_aws/#the-runnerssmachine-section
    */
   readonly zone?: string;
   readonly subnetId?: string;
@@ -18,21 +18,21 @@ export interface MachineOptions {
   readonly iamInstanceProfile?: string;
   /**
    * The amazonec2-request-spot-instance parameter. Whether or not to request spot instances.
-   * @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances}
-   * @see {@link https://aws.amazon.com/ec2/spot/}
+   * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
+   * @see https://aws.amazon.com/ec2/spot/
    * @default true
    */
   readonly requestSpotInstance?: boolean;
   /**
    * The amazonec2-spot-price parameter. The bidding price for spot instances.
-   * @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances}
-   * @see {@link https://aws.amazon.com/ec2/spot/pricing/}
+   * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
+   * @see https://aws.amazon.com/ec2/spot/pricing/
    * @default 0.03
    */
   readonly spotPrice?: number;
   /**
    * The amazonec2-block-duration-minutes parameter. AWS spot instance duration in minutes (60, 120, 180, 240, 300, or 360).
-   * @see {@link https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances}
+   * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
    */
   readonly blockDurationMinutes?: number;
 }

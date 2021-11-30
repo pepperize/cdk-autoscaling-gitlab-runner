@@ -1,7 +1,7 @@
 /**
  * You can change the behavior of GitLab Runner and of individual registered runners.
  * This imitates the structure of Gitlab Runner advanced configuration that originally is set with config.toml file.
- * @see {@link https://docs.gitlab.com/runner/configuration/advanced-configuration.html}
+ * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html
  */
 export interface GlobalConfiguration {
   /**

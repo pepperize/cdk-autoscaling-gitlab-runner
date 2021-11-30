@@ -1,49 +1,36 @@
 {
-  "name": "@pepperize/cdk-autoscaling-gitlab-runner",
-  "description": "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git"
-  },
+  "name": "@pepperize/cdk-autoscaling-gitlab-runner-example",
   "scripts": {
     "build": "npx projen build",
-    "bump": "npx projen bump",
     "clobber": "npx projen clobber",
-    "compat": "npx projen compat",
     "compile": "npx projen compile",
     "default": "npx projen default",
-    "docgen": "npx projen docgen",
+    "deploy": "npx projen deploy",
+    "destroy": "npx projen destroy",
+    "diff": "npx projen diff",
     "eslint": "npx projen eslint",
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",
     "pre-compile": "npx projen pre-compile",
-    "publish:github": "npx projen publish:github",
-    "publish:npm": "npx projen publish:npm",
-    "publish:nuget": "npx projen publish:nuget",
-    "publish:pypi": "npx projen publish:pypi",
-    "release": "npx projen release",
+    "synth": "npx projen synth",
     "test": "npx projen test",
     "test:update": "npx projen test:update",
     "test:watch": "npx projen test:watch",
-    "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "upgrade-projen": "npx projen upgrade-projen",
-    "watch": "npx projen watch",
     "projen": "npx projen",
-    "format": "prettier --write '{,example/}src/**/*.ts' '{,example/}test/**/*.ts' '.projenrc.js' 'README.md'"
+    "format": "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
   },
   "author": {
     "name": "Ivan Ovdiienko",
-    "email": "ivan.ovdiienko@pepperize.com",
     "organization": true
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.134.0",
-    "@aws-cdk/assertions": "^1.134.0",
-    "@types/jest": "^27.0.3",
+    "@types/jest": "*",
     "@types/node": "^14.17.0",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
+    "aws-cdk": "^1.134.0",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -52,45 +39,24 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.2",
     "jest-junit": "^12",
-    "jsii": "^1.46.0",
-    "jsii-diff": "^1.46.0",
-    "jsii-docgen": "^4.2.0",
-    "jsii-pacmak": "^1.46.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^11",
     "prettier": "^2.5.0",
     "projen": "^0.34.26",
-    "standard-version": "^9",
     "ts-jest": "^27.0.7",
+    "ts-node": "^9",
     "typescript": "^4.5.2"
   },
-  "peerDependencies": {
-    "@aws-cdk/aws-autoscaling": "^1.134.0",
-    "@aws-cdk/aws-ec2": "^1.134.0",
-    "@aws-cdk/aws-iam": "^1.134.0",
-    "@aws-cdk/aws-s3": "^1.134.0",
-    "@aws-cdk/aws-s3-deployment": "^1.134.0",
-    "@aws-cdk/core": "^1.134.0",
-    "constructs": "^3.2.27"
-  },
   "dependencies": {
-    "@aws-cdk/aws-autoscaling": "^1.134.0",
+    "@aws-cdk/assert": "^1.134.0",
+    "@aws-cdk/assertions": "^1.134.0",
     "@aws-cdk/aws-ec2": "^1.134.0",
     "@aws-cdk/aws-iam": "^1.134.0",
     "@aws-cdk/aws-s3": "^1.134.0",
-    "@aws-cdk/aws-s3-deployment": "^1.134.0",
     "@aws-cdk/core": "^1.134.0",
-    "@iarna/toml": "^2.2.5",
-    "param-case": "^3.0.4",
-    "pascal-case": "^3.1.2",
-    "snake-case": "^3.0.4"
+    "@pepperize-testing/cdk-autoscaling-gitlab-runner": "^0.0.78"
   },
-  "bundledDependencies": [
-    "@iarna/toml",
-    "param-case",
-    "pascal-case",
-    "snake-case"
-  ],
+  "bundledDependencies": [],
   "keywords": [
     "AWS",
     "Autoscaling",
@@ -103,10 +69,8 @@
     "Runner",
     "S3",
     "Shared Cache",
-    "Spot Instances",
-    "cdk"
+    "Spot Instances"
   ],
-  "main": "lib/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -149,25 +113,6 @@
       "ts-jest": {
         "tsconfig": "tsconfig.dev.json"
       }
-    }
-  },
-  "types": "lib/index.d.ts",
-  "stability": "stable",
-  "jsii": {
-    "outdir": "dist",
-    "targets": {
-      "python": {
-        "distName": "pepperize.cdk-autoscaling-gitlab-runner",
-        "module": "pepperize_cdk_autoscaling_gitlab-runner"
-      },
-      "dotnet": {
-        "namespace": "Pepperize.CDK",
-        "packageId": "Pepperize.CDK.AutoscalingGitlabRunner"
-      }
-    },
-    "tsc": {
-      "outDir": "lib",
-      "rootDir": "src"
     }
   },
   "resolutions": {
