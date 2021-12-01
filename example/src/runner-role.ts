@@ -1,4 +1,4 @@
-import { PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
+import { ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { Construct, Stack } from "@aws-cdk/core";
 import { GitlabRunnerAutoscaling } from "@pepperize-testing/cdk-autoscaling-gitlab-runner";
 import { RunnerStackProps } from "./runner-stack-props";
@@ -11,6 +11,9 @@ export class RunnersRoleStack extends Stack {
 
     const { gitlabToken } = props;
 
+    /**
+     * Set role (override default runners role)
+     */
     const role = new Role(this, "RunnersRole", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
       inlinePolicies: {
@@ -55,11 +58,23 @@ export class RunnersRoleStack extends Stack {
       },
     });
 
-    new GitlabRunnerAutoscaling(this, "Runner", {
+    const runner = new GitlabRunnerAutoscaling(this, "Runner", {
       gitlabToken: gitlabToken,
       runners: {
         role: role,
       },
     });
+
+    /**
+     * Add role to runners instance profile
+     */
+    const roleForS3FullAccess = new Role(this, "RunnersRole", {
+      assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
+      managedPolicies: [
+        ManagedPolicy.fromManagedPolicyArn(this, "AmazonS3FullAccess", "arn:aws:iam::aws:policy/AmazonS3FullAccess"),
+      ],
+    });
+
+    runner.runners.instanceProfile.roles.push(roleForS3FullAccess.roleName);
   }
 }
