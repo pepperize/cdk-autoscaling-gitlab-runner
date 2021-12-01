@@ -30,7 +30,7 @@ export class Cache extends Construct {
     const uniqueCacheBucketName =
       `${scope.stackName}-${bucketName}-${scope.account}-${scope.region}`.toLocaleLowerCase();
 
-    /* Enabled if not 0. If 0 - cache doesnt't expire. If undefined - expiration sets to expire in 30 days */
+    /* Enabled if not 0. If 0 - cache doesn't expire. If undefined - expiration sets to expire in 30 days */
     const expiration = props.expiration ?? Duration.days(30);
     const lifeCycleRuleEnabled = expiration.toDays() !== 0;
 
