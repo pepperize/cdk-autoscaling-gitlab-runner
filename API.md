@@ -1328,7 +1328,7 @@ public readonly machineImage: IMachineImage;
 
 An Amazon Machine Image ID for the Manager EC2 instance.
 
-If empty the latest Amazon 2 Image will be looked up.  Should be RHEL flavor like Amazon Linux 2 with yum available for instance initialization.
+If empty the latest Amazon 2 Image will be looked up.  Should be RHEL flavor like Amazon Linux 2 with yum available for instance initialization.
 
 > https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-init.html
 
@@ -1617,7 +1617,7 @@ public readonly machineImage: IMachineImage;
 
 An Amazon Machine Image ID for the Runners EC2 instances.
 
-If empty the latest Ubuntu 20.04 focal will be looked up.  Any operating system supported by Dcoker Machine's provisioner.
+If empty the latest Ubuntu 20.04 focal will be looked up.  Any operating system supported by Dcoker Machine's provisioner.
 
 > https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
 
