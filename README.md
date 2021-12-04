@@ -1,10 +1,9 @@
-![GitHub](https://img.shields.io/github/license/pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)
-![npm (scoped)](https://img.shields.io/npm/v/@pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)
-![PyPI](https://img.shields.io/pypi/v/pepperize.cdk-autoscaling-gitlab-runner?style=flat-square)
-![Nuget](https://img.shields.io/nuget/v/Pepperize.CDK.AutoscalingGitlabRunner?style=flat-square)
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/pepperize/cdk-autoscaling-gitlab-runner/build/main?label=build&style=flat-square)
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/pepperize/cdk-autoscaling-gitlab-runner/release/main?label=release&style=flat-square)
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pepperize/cdk-autoscaling-gitlab-runner?sort=semver&style=flat-square)
+[![GitHub](https://img.shields.io/github/license/pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/LICENSE)
+[![npm (scoped)](https://img.shields.io/npm/v/@pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)](https://www.npmjs.com/package/@pepperize/cdk-autoscaling-gitlab-runner)
+[![PyPI](https://img.shields.io/pypi/v/pepperize.cdk-autoscaling-gitlab-runner?style=flat-square)](https://pypi.org/project/pepperize.cdk-autoscaling-gitlab-runner/)
+[![Nuget](https://img.shields.io/nuget/v/Pepperize.CDK.AutoscalingGitlabRunner?style=flat-square)](https://www.nuget.org/packages/Pepperize.CDK.AutoscalingGitlabRunner/)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/pepperize/cdk-autoscaling-gitlab-runner/release/main?label=release&style=flat-square)](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/actions/workflows/release.yml)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pepperize/cdk-autoscaling-gitlab-runner?sort=semver&style=flat-square)](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/releases)
 
 # AWS CDK GitLab Runner autoscaling on EC2
 
@@ -20,6 +19,32 @@ This project provides a CDK construct to [execute jobs on auto-scaled EC2 instan
 > having a bigger [build log size](https://docs.gitlab.com/runner/configuration/advanced-configuration.html)
 
 _Note: it's a really simple and short README. Only basic tips are covered. Feel free to improve it._
+
+## Install
+
+### TypeScript
+
+```shell
+npm install @pepperize/cdk-autoscaling-gitlab-runner
+```
+
+or
+
+```shell
+yarn add @pepperize/cdk-autoscaling-gitlab-runner
+```
+
+### Python
+
+```shell
+pip install pepperize.cdk-autoscaling-gitlab-runner
+```
+
+### C# / .Net
+
+```
+dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
+```
 
 ## Quickstart
 
@@ -124,7 +149,7 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 
 ### Configure Docker Machine
 
-By default docker machine is configured to run privileged with `CAP_SYS_ADMIN` to support [Docker-in-Docker using the OverlayFS driver](https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-overlayfs-driver)
+By default, docker machine is configured to run privileged with `CAP_SYS_ADMIN` to support [Docker-in-Docker using the OverlayFS driver](https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-overlayfs-driver)
 and cross compiling/building with [multiarch](https://hub.docker.com/r/multiarch/qemu-user-static/).
 
 See [runners.docker section](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section)
@@ -152,7 +177,7 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 
 ### Bigger instance type
 
-By default t3.nano is used for the manager/coordinator and t3.micro instances will be spawned.
+By default, t3.nano is used for the manager/coordinator and t3.micro instances will be spawned.
 For bigger projects, for example with [webpack](https://webpack.js.org/), this won't be enough memory.
 
 ```typescript
@@ -169,7 +194,7 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 
 ### Different machine image
 
-By default the latest [Amazon 2 Linux](https://aws.amazon.com/amazon-linux-2/) will be used for the manager/coordinator.
+By default, the latest [Amazon 2 Linux](https://aws.amazon.com/amazon-linux-2/) will be used for the manager/coordinator.
 The manager/coordinator instance's cloud init scripts requires [yum](https://access.redhat.com/solutions/9934) is installed, any RHEL flavor should work.
 The requested runner instances by default using Ubuntu 20.04, any OS implemented by the [Docker Machine provisioner](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision) should work.
 
@@ -187,7 +212,7 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 
 ### Spot instances
 
-By default EC2 Spot Instances are requested.
+By default, EC2 Spot Instances are requested.
 
 ```typescript
 new GitlabRunnerAutoscaling(this, "Runner", {
