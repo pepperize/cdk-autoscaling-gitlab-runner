@@ -158,7 +158,7 @@
     "targets": {
       "python": {
         "distName": "pepperize.cdk-autoscaling-gitlab-runner",
-        "module": "pepperize_cdk_autoscaling_gitlab-runner"
+        "module": "pepperize_cdk_autoscaling_gitlab_runner"
       },
       "dotnet": {
         "namespace": "Pepperize.CDK",

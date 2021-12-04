@@ -75,7 +75,7 @@ const project = new AwsCdkConstructLibrary({
   },
   publishToPypi: {
     distName: "pepperize.cdk-autoscaling-gitlab-runner",
-    module: "pepperize_cdk_autoscaling_gitlab-runner",
+    module: "pepperize_cdk_autoscaling_gitlab_runner",
   },
   // publishToMaven: {
   //   javaPackage: "your_java_package",
