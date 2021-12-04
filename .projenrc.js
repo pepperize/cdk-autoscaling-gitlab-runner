@@ -37,10 +37,6 @@ const nodePackageOptions = {
   packageManager: NodePackageManager.YARN,
 };
 
-const resolutions = {
-  "jest-environment-jsdom": "27.3.1",
-};
-
 const project = new AwsCdkConstructLibrary({
   ...nodePackageOptions,
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
@@ -109,8 +105,6 @@ new JsonFile(project, ".prettierrc", {
   marker: false,
 });
 
-project.package.addField("resolutions", resolutions);
-
 project.synth();
 
 const example = new AwsCdkTypeScriptApp({
@@ -149,7 +143,5 @@ new JsonFile(example, ".prettierrc", {
   },
   marker: false,
 });
-
-example.package.addField("resolutions", resolutions);
 
 example.synth();
