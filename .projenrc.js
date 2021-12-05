@@ -59,7 +59,7 @@ const project = new AwsCdkConstructLibrary({
   // packageName: undefined,          /* The "name" in package.json. */
 
   autoApproveUpgrades: true,
-  autoApproveOptions: { allowedUsernames: ["pflorek"], secret: "PROJEN_GITHUB_TOKEN" },
+  autoApproveOptions: { allowedUsernames: ["pflorek"], secret: "GITHUB_TOKEN" },
   depsUpgradeOptions: {
     workflowOptions: {
       secret: "PROJEN_GITHUB_TOKEN",
