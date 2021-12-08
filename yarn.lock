@@ -1012,7 +1012,7 @@
     chalk "^4.1.2"
     semver "^7.3.5"
 
-"@jsii/spec@1.47.0", "@jsii/spec@^1.46.0", "@jsii/spec@^1.47.0":
+"@jsii/spec@1.47.0", "@jsii/spec@^1.47.0":
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.47.0.tgz#6bc24dbf9f4949a0260d9fb51a2f9d7b30c6b4f4"
   integrity sha512-5F9Qw0lnK8mCumHvpA+XhoBJezgW6q92sLM2jsvo7bzXWXyRRfr1cHl1g5fxQ0yS82B5NMa1fN2n28BsEKs+Gw==
@@ -1256,9 +1256,9 @@
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
 "@types/node@*":
-  version "16.11.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.11.tgz#6ea7342dfb379ea1210835bada87b3c512120234"
-  integrity sha512-KB0sixD67CeecHC33MYn+eYARkqTheIRNuu97y2XMjR7Wu3XibO1vaY6VBV6O/a89SPI81cEUIYT87UqUWlZNw==
+  version "16.11.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.12.tgz#ac7fb693ac587ee182c3780c26eb65546a1a3c10"
+  integrity sha512-+2Iggwg7PxoO5Kyhvsq9VarmPbIelXP070HMImEpbtGCoyWNINQj4wzjbQCXzdHTRXnqufutJb5KAURZANNBAw==
 
 "@types/node@^10.17.60":
   version "10.17.60"
@@ -2876,9 +2876,9 @@ eslint-visitor-keys@^3.0.0, eslint-visitor-keys@^3.1.0:
   integrity sha512-yWJFpu4DtjsWKkt5GeNBBuZMlNcYVs6vRCLoCVEJrTjaSB6LC98gFipNK/erM2Heg/E8mIK+hXG/pJMLK+eRZA==
 
 eslint@^8:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.4.0.tgz#2fa01b271cafc28addc2719e551acff5e89f5230"
-  integrity sha512-kv0XQcAQJL/VD9THQKhTQZVqkJKA+tIj/v2ZKNaIHRAADcJWFb+B/BAewUYuF6UVg1s2xC5qXVoDk0G8sKGeTA==
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.4.1.tgz#d6531bbf3e598dffd7c0c7d35ec52a0b30fdfa2d"
+  integrity sha512-TxU/p7LB1KxQ6+7aztTnO7K0i+h0tDi81YRY9VzB6Id71kNz+fFYnf5HD5UOQmxkzcoa0TlVZf9dpMtUv0GpWg==
   dependencies:
     "@eslint/eslintrc" "^1.0.5"
     "@humanwhocodes/config-array" "^0.9.2"
@@ -4497,18 +4497,18 @@ jsii-diff@^1.47.0:
     typescript "~3.9.10"
     yargs "^16.2.0"
 
-jsii-docgen@^4.2.7:
-  version "4.2.7"
-  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-4.2.7.tgz#e61648b15ae5f161ef1c338460e60185674702c8"
-  integrity sha512-/9SXmb2k+7ZpG4ae3xIUHprRczPmo8pWHkhqHuDT1aNH6jxYO60hPf1Sh8qghXPnLNRzRT2R6nphSuLSo4EIXA==
+jsii-docgen@^4.2.8:
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-4.2.8.tgz#62c3a11b4fd8f481f2334fa5c3b38649749615bb"
+  integrity sha512-aCNRo8KmDwh/PnqksFzkL28uyOGe8y8Tyd9ib7tfESi86QF4A3KXMd1vSN7Zzkv7IIs+k7JsUNImUF0bgcBm9A==
   dependencies:
-    "@jsii/spec" "^1.46.0"
+    "@jsii/spec" "^1.47.0"
     case "^1.6.3"
     fs-extra "^10.0.0"
     glob "^7.2.0"
     glob-promise "^3.4.0"
-    jsii-reflect "^1.46.0"
-    jsii-rosetta "^1.46.0"
+    jsii-reflect "^1.47.0"
+    jsii-rosetta "^1.47.0"
     semver "^7.3.5"
     yargs "^16.2.0"
 
@@ -4531,7 +4531,7 @@ jsii-pacmak@^1.47.0:
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.46.0, jsii-reflect@^1.47.0:
+jsii-reflect@^1.47.0:
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.47.0.tgz#db68dc4b64b0e0d3f4f2cdd69cef82ba623f4dac"
   integrity sha512-UgRWqkPI03wB6dGrTPA9UqUa37ORAnvaHGthWxNTcHIGIRHb4EfM29lYdbsRYO/+4/OiQLvdnZno1kw5rMyYcw==
@@ -4543,7 +4543,7 @@ jsii-reflect@^1.46.0, jsii-reflect@^1.47.0:
     oo-ascii-tree "^1.47.0"
     yargs "^16.2.0"
 
-jsii-rosetta@^1.46.0, jsii-rosetta@^1.47.0:
+jsii-rosetta@^1.47.0:
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/jsii-rosetta/-/jsii-rosetta-1.47.0.tgz#0b886fc70446d7148e5a3d797643fd3e18e2f920"
   integrity sha512-2XyGNsTOr027bRhDuVy0Ygfkg3/u0jV7F5jvpGWq8lbl0yw90mgfi7epQxFfcFZ7zYgEIx5pXfC5UInl/Ntaqw==
@@ -5118,11 +5118,6 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=
 
-node-modules-regexp@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/node-modules-regexp/-/node-modules-regexp-1.0.0.tgz#8d9dbe28964a4ac5712e9131642107c71e90ec40"
-  integrity sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
-
 node-releases@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.1.tgz#3d1d395f204f1f2f29a54358b9fb678765ad2fc5"
@@ -5600,11 +5595,9 @@ pify@^3.0.0:
   integrity sha1-5aSs0sEB/fPZpNB/DbxNtJ3SgXY=
 
 pirates@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.1.tgz#643a92caf894566f91b2b986d2c66950a8e2fb87"
-  integrity sha512-WuNqLTbMI3tmfef2TKxlQmAiLHKtFhlsCZnPIpuv2Ow0RDVO8lfy1Opf4NUzlMXLjPl+Men7AuVdX6TA+s+uGA==
-  dependencies:
-    node-modules-regexp "^1.0.0"
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.4.tgz#07df81e61028e402735cdd49db701e4885b4e6e6"
+  integrity sha512-ZIrVPH+A52Dw84R0L3/VS9Op04PuQ2SEoJL6bkshmiTic/HldyW9Tf7oH5mhJZBK7NmDx27vSMrYEXPXclpDKw==
 
 pkg-dir@^2.0.0:
   version "2.0.0"
