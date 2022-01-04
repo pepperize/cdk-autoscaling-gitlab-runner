@@ -1,4 +1,4 @@
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "@aws-cdk/assertions";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { App, Stack } from "@aws-cdk/core";
 import { GitlabRunnerAutoscaling } from "../../src";
@@ -25,7 +25,8 @@ describe("GitlabRunnerAutoscaling", () => {
       },
       gitlabToken: "",
     });
-    expect(SynthUtils.toCloudFormation(mockStack)).toMatchSnapshot();
+    const template = Template.fromStack(mockStack);
+    expect(template).toMatchSnapshot();
     expect(runner.network.availabilityZone).toBe("us-east-1a");
   });
 });
