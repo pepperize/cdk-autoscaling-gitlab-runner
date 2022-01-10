@@ -2,6 +2,7 @@
   "name": "@pepperize/cdk-autoscaling-gitlab-runner-example",
   "scripts": {
     "build": "npx projen build",
+    "bundle": "npx projen bundle",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
@@ -13,11 +14,13 @@
     "post-compile": "npx projen post-compile",
     "pre-compile": "npx projen pre-compile",
     "synth": "npx projen synth",
+    "synth:silent": "npx projen synth:silent",
     "test": "npx projen test",
     "test:update": "npx projen test:update",
     "test:watch": "npx projen test:watch",
     "upgrade": "npx projen upgrade",
     "upgrade-projen": "npx projen upgrade-projen",
+    "watch": "npx projen watch",
     "projen": "npx projen",
     "format": "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'"
   },
@@ -26,11 +29,14 @@
     "organization": true
   },
   "devDependencies": {
+    "@aws-cdk/assert": "^1.134.0",
+    "@aws-cdk/assertions": "^1.134.0",
     "@types/jest": "*",
-    "@types/node": "^14.17.0",
+    "@types/node": "^12",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "aws-cdk": "^1.134.0",
+    "esbuild": "^0.14.11",
     "eslint": "^8",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -40,7 +46,7 @@
     "jest": "^27.4.2",
     "jest-junit": "^13",
     "json-schema": "^0.4.0",
-    "npm-check-updates": "^11",
+    "npm-check-updates": "^12",
     "prettier": "^2.5.0",
     "projen": "^0.34.26",
     "ts-jest": "^27.0.7",
@@ -48,15 +54,14 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
-    "@aws-cdk/assert": "^1.134.0",
     "@aws-cdk/assertions": "^1.134.0",
     "@aws-cdk/aws-ec2": "^1.134.0",
     "@aws-cdk/aws-iam": "^1.134.0",
     "@aws-cdk/aws-s3": "^1.134.0",
     "@aws-cdk/core": "^1.134.0",
-    "@pepperize-testing/cdk-autoscaling-gitlab-runner": "^0.0.78"
+    "@pepperize-testing/cdk-autoscaling-gitlab-runner": "^0.0.78",
+    "constructs": "^3.2.27"
   },
-  "bundledDependencies": [],
   "keywords": [
     "AWS",
     "Autoscaling",
@@ -78,8 +83,8 @@
   "version": "0.0.0",
   "jest": {
     "testMatch": [
-      "**/__tests__/**/*.ts?(x)",
-      "**/?(*.)+(spec|test).ts?(x)"
+      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
+      "<rootDir>/(test|src)/**/?(*.)+(spec|test).ts?(x)"
     ],
     "clearMocks": true,
     "collectCoverage": true,

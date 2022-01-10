@@ -18,7 +18,6 @@ This project provides a CDK construct to [execute jobs on auto-scaled EC2 instan
 > running on [Spot instances](https://aws.amazon.com/ec2/spot/),
 > having a bigger [build log size](https://docs.gitlab.com/runner/configuration/advanced-configuration.html)
 
-
 ## Install
 
 ### TypeScript

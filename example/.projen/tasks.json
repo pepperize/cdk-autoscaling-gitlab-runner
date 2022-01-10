@@ -21,6 +21,10 @@
         }
       ]
     },
+    "bundle": {
+      "name": "bundle",
+      "description": "Prepare assets"
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
@@ -111,7 +115,7 @@
       "description": "Runs after successful compilation",
       "steps": [
         {
-          "spawn": "synth"
+          "spawn": "synth:silent"
         }
       ]
     },
@@ -121,10 +125,19 @@
     },
     "synth": {
       "name": "synth",
-      "description": "Synthesizes your cdk app into cdk.out (part of \"yarn build\")",
+      "description": "Synthesizes your cdk app into cdk.out",
       "steps": [
         {
           "exec": "cdk synth"
+        }
+      ]
+    },
+    "synth:silent": {
+      "name": "synth:silent",
+      "description": "Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of \"yarn build\")",
+      "steps": [
+        {
+          "exec": "cdk synth > /dev/null"
         }
       ]
     },
@@ -133,7 +146,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --all"
+          "exec": "jest --passWithNoTests --all --updateSnapshot"
         },
         {
           "spawn": "eslint"
@@ -184,7 +197,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit json-schema npm-check-updates prettier ts-jest ts-node typescript @aws-cdk/assert @aws-cdk/assertions @aws-cdk/aws-ec2 @aws-cdk/aws-iam @aws-cdk/aws-s3 @aws-cdk/core @pepperize-testing/cdk-autoscaling-gitlab-runner"
+          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit json-schema npm-check-updates prettier ts-jest ts-node typescript @aws-cdk/assertions @aws-cdk/aws-ec2 @aws-cdk/aws-iam @aws-cdk/aws-s3 @aws-cdk/core @pepperize-testing/cdk-autoscaling-gitlab-runner constructs @aws-cdk/assert @aws-cdk/assertions"
         },
         {
           "exec": "npx projen"
@@ -226,10 +239,13 @@
     },
     "watch": {
       "name": "watch",
-      "description": "Watch & compile in the background",
+      "description": "Watches changes in your source code and rebuilds and deploys to the current account",
       "steps": [
         {
-          "exec": "tsc --build -w"
+          "exec": "cdk deploy --hotswap"
+        },
+        {
+          "exec": "cdk watch"
         }
       ]
     }

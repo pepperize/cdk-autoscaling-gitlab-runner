@@ -2,6 +2,7 @@
 !/.gitattributes
 !/.projen/tasks.json
 !/.projen/deps.json
+!/.projen/files.json
 !/.github/workflows/pull-request-lint.yml
 !/.github/workflows/auto-approve.yml
 !/.github/workflows/stale.yml
@@ -42,6 +43,8 @@ junit.xml
 !/.github/workflows/release.yml
 !/.mergify.yml
 !/.github/pull_request_template.md
+!/.prettierignore
+!/.prettierrc.json
 !/test/
 !/tsconfig.dev.json
 !/src/
@@ -51,5 +54,4 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
-!/.prettierrc
 !/.github/workflows/upgrade-main.yml
