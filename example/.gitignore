@@ -2,6 +2,7 @@
 !/.gitattributes
 !/.projen/tasks.json
 !/.projen/deps.json
+!/.projen/files.json
 !/package.json
 !/LICENSE
 !/.npmignore
@@ -33,6 +34,8 @@ README.md
 /test-reports/
 junit.xml
 /coverage/
+!/.prettierignore
+!/.prettierrc.json
 !/test/
 !/tsconfig.json
 !/tsconfig.dev.json
@@ -40,8 +43,8 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+/assets/
 !/cdk.json
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
-!/.prettierrc

@@ -1,11 +1,4 @@
-const {
-  NodePackageManager,
-  NodePackageOptions,
-  AwsCdkConstructLibrary,
-  JsonFile,
-  NpmAccess,
-  AwsCdkTypeScriptApp,
-} = require("projen");
+const { awscdk, javascript, NodePackageOptions } = require("projen");
 
 /**
  * @type NodePackageOptions
@@ -32,12 +25,12 @@ const nodePackageOptions = {
   copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
   license: "MIT",
 
-  npmAccess: NpmAccess.PUBLIC,
+  npmAccess: javascript.NpmAccess.PUBLIC,
   repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
-  packageManager: NodePackageManager.YARN,
+  packageManager: javascript.NodePackageManager.YARN,
 };
 
-const project = new AwsCdkConstructLibrary({
+const project = new awscdk.AwsCdkConstructLibrary({
   ...nodePackageOptions,
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
   description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
@@ -86,8 +79,11 @@ const project = new AwsCdkConstructLibrary({
   // },
 
   eslint: true,
-  eslintOptions: {
-    prettier: true,
+  prettier: true,
+  prettierOptions: {
+    settings: {
+      printWidth: 120,
+    },
   },
 
   gitignore: [".idea"],
@@ -100,16 +96,9 @@ project.setScript(
   "prettier --write '{,example/}src/**/*.ts' '{,example/}test/**/*.ts' '.projenrc.js' 'README.md'"
 );
 
-new JsonFile(project, ".prettierrc", {
-  obj: {
-    printWidth: 120,
-  },
-  marker: false,
-});
-
 project.synth();
 
-const example = new AwsCdkTypeScriptApp({
+const example = new awscdk.AwsCdkTypeScriptApp({
   ...nodePackageOptions,
   parent: project,
   outdir: "example",
@@ -130,20 +119,16 @@ const example = new AwsCdkTypeScriptApp({
   // release: undefined,          /* Add release management to this project. */
 
   eslint: true,
-  eslintOptions: {
-    prettier: true,
+  prettier: true,
+  prettierOptions: {
+    settings: {
+      printWidth: 120,
+    },
   },
 
   gitignore: ["README.md"],
 });
 
 example.setScript("format", "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'");
-
-new JsonFile(example, ".prettierrc", {
-  obj: {
-    printWidth: 120,
-  },
-  marker: false,
-});
 
 example.synth();
