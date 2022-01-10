@@ -27,8 +27,9 @@ export class Cache extends Construct {
     super(scope, id);
 
     const bucketName = props.bucketName || "runner-cache";
-    const uniqueCacheBucketName =
-      `${scope.stackName}-${bucketName}-${scope.account}-${scope.region}`.toLocaleLowerCase();
+    const uniqueCacheBucketName = `${scope.stackName}-${bucketName}-${scope.account}-${scope.region}`
+      .slice(-63)
+      .toLocaleLowerCase();
 
     /* Enabled if not 0. If 0 - cache doesn't expire. If undefined - expiration sets to expire in 30 days */
     const expiration = props.expiration ?? Duration.days(30);
