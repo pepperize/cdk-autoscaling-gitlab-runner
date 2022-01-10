@@ -4,7 +4,7 @@ import { Cache as CacheConstruct, CacheProps as CacheConstructProps } from "../.
 
 const stackProps = {
   env: {
-    account: "0",
+    account: "123456789012",
     region: "us-east-1",
   },
 };
@@ -13,7 +13,7 @@ describe("Cache", () => {
   it("Should set ExpirationInDays to 0", () => {
     // Given
     const app = new App();
-    const stack = new Stack(app, "stack", stackProps);
+    const stack = new Stack(app, "a-very-very-long-stack-name", stackProps);
     const props: CacheConstructProps = {
       bucketName: "bucket",
       expiration: Duration.days(0),
@@ -33,6 +33,26 @@ describe("Cache", () => {
           },
         ],
       },
+    });
+    expect(template).toMatchSnapshot();
+  });
+
+  it("Should substring last 63 characters of bucket name", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "a-very-very-long-stack-name", stackProps);
+    const props: CacheConstructProps = {
+      bucketName: "and-a-very-very-long-bucket-name",
+      expiration: Duration.days(0),
+    };
+    new CacheConstruct(stack, "cache", props);
+
+    // When
+    const template = Template.fromStack(stack);
+
+    // Then
+    template.hasResourceProperties("AWS::S3::Bucket", {
+      BucketName: "ck-name-and-a-very-very-long-bucket-name-123456789012-us-east-1",
     });
     expect(template).toMatchSnapshot();
   });
