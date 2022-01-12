@@ -50,18 +50,6 @@ import { Network, NetworkProps } from "./network";
  * Properties of the Gitlab Runner. You have to provide at least the GitLab's Runner's authentication token.
  */
 export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
-  /**
-   * The GitLab Runner’s authentication token, which is obtained during runner registration.
-   * @see https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
-   */
-  readonly gitlabToken: string;
-
-  /**
-   * GitLab instance URL.
-   * @default "https://gitlab.com"
-   */
-  readonly gitlabUrl?: string;
-
   readonly cache?: GitlabRunnerAutoscalingCacheProps;
 
   /**
@@ -76,7 +64,7 @@ export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
    */
   readonly manager?: GitlabRunnerAutoscalingManagerProps;
 
-  readonly runners?: GitlabRunnerAutoscalingRunnerProps;
+  readonly runners?: GitlabRunnerAutoscalingRunnerProps[];
 }
 
 /**
@@ -123,6 +111,18 @@ export interface GitlabRunnerAutoscalingManagerProps {
  * @link GitlabRunnerAutoscalingProps
  */
 export interface GitlabRunnerAutoscalingRunnerProps {
+  /**
+   * The GitLab Runner’s authentication token, which is obtained during runner registration.
+   * @see https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
+   */
+  readonly gitlabToken: string;
+
+  /**
+   * GitLab instance URL.
+   * @default "https://gitlab.com"
+   */
+  readonly gitlabUrl?: string;
+
   /**
    * Instance type for runner EC2 instances. It's a combination of a class and size.
    * @default InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
@@ -196,7 +196,7 @@ export class GitlabRunnerAutoscaling extends Construct {
 
   readonly cacheBucket: IBucket;
 
-  readonly runners: GitlabRunnerAutoscalingRunners;
+  readonly runners: GitlabRunnerAutoscalingRunners[];
 
   readonly manager: GitlabRunnerAutoscalingManager;
 

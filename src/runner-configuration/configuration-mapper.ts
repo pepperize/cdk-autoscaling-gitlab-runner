@@ -11,7 +11,7 @@ import { RunnerConfiguration } from "./runner-configuration";
 
 export interface ConfigurationMapperProps {
   readonly globalConfiguration: GlobalConfiguration;
-  readonly runnerConfiguration: RunnerConfiguration;
+  readonly runnerConfiguration: RunnerConfiguration[];
   readonly dockerConfiguration: DockerConfiguration;
   readonly machineConfiguration: MachineConfiguration;
   readonly autoscalingConfigurations: AutoscalingConfiguration[];
