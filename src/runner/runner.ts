@@ -275,10 +275,10 @@ export class GitlabRunnerAutoscaling extends Construct {
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(22), "SSH traffic from Manager");
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(2376), "SSH traffic from Docker");
 
-    const managerInstanceType = runners?.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
+    const managerInstanceType = manager?.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
 
     const managerMachineImage =
-      runners?.machineImage ||
+      manager?.machineImage ||
       MachineImage.latestAmazonLinux({
         generation: AmazonLinuxGeneration.AMAZON_LINUX_2,
         edition: AmazonLinuxEdition.STANDARD,
