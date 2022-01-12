@@ -1,9 +1,17 @@
-const { awscdk, javascript, NodePackageOptions } = require("projen");
+const { awscdk, javascript } = require("projen");
 
-/**
- * @type NodePackageOptions
- */
-const nodePackageOptions = {
+const project = new awscdk.AwsCdkConstructLibrary({
+  authorName: "Ivan Ovdiienko",
+  authorAddress: "ivan.ovdiienko@pepperize.com",
+  authorOrganization: true,
+  copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
+  license: "MIT",
+
+  repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
+  packageManager: javascript.NodePackageManager.YARN,
+  name: "@pepperize/cdk-autoscaling-gitlab-runner",
+  description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
+
   keywords: [
     "AWS",
     "CDK",
@@ -18,22 +26,6 @@ const nodePackageOptions = {
     "S3",
     "Shared Cache",
   ],
-
-  authorName: "Ivan Ovdiienko",
-  authorAddress: "ivan.ovdiienko@pepperize.com",
-  authorOrganization: true,
-  copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
-  license: "MIT",
-
-  npmAccess: javascript.NpmAccess.PUBLIC,
-  repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
-  packageManager: javascript.NodePackageManager.YARN,
-};
-
-const project = new awscdk.AwsCdkConstructLibrary({
-  ...nodePackageOptions,
-  name: "@pepperize/cdk-autoscaling-gitlab-runner",
-  description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
 
   cdkVersion: "1.134.0",
   cdkVersionPinning: false,
@@ -60,6 +52,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
 
   defaultReleaseBranch: "main",
+  npmAccess: javascript.NpmAccess.PUBLIC,
   release: {
     releaseEveryCommit: true,
   },
@@ -89,46 +82,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   gitignore: [".idea"],
 });
 
-project.addPackageIgnore("example/");
-
-project.setScript(
-  "format",
-  "prettier --write '{,example/}src/**/*.ts' '{,example/}test/**/*.ts' '.projenrc.js' 'README.md'"
-);
+project.setScript("format", "prettier --write src/**/*.ts test/**/*.ts .projenrc.js README.md");
 
 project.synth();
-
-const example = new awscdk.AwsCdkTypeScriptApp({
-  ...nodePackageOptions,
-  parent: project,
-  outdir: "example",
-
-  name: "@pepperize/cdk-autoscaling-gitlab-runner-example",
-  cdkVersion: "1.134.0",
-  defaultReleaseBranch: "main",
-
-  cdkDependencies: [
-    "@aws-cdk/aws-s3",
-    "@aws-cdk/aws-ec2",
-    "@aws-cdk/aws-iam",
-    "@aws-cdk/assertions",
-  ] /* Which AWS CDK modules (those that start with "@aws-cdk/") this app uses. */,
-  deps: ["@pepperize-testing/cdk-autoscaling-gitlab-runner"] /* Runtime dependencies of this module. */,
-  // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */
-  // packageName: undefined,      /* The "name" in package.json. */
-  // release: undefined,          /* Add release management to this project. */
-
-  eslint: true,
-  prettier: true,
-  prettierOptions: {
-    settings: {
-      printWidth: 120,
-    },
-  },
-
-  gitignore: ["README.md"],
-});
-
-example.setScript("format", "prettier --write 'src/**/*.ts' test/**/*.ts '.projenrc.js' 'README.md'");
-
-example.synth();
