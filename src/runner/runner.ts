@@ -425,7 +425,7 @@ export class GitlabRunnerAutoscaling extends Construct {
                 logFormat: props?.logFormat || "runner",
                 logLevel: props?.logLevel || "info",
               },
-              runnerConfiguration: {
+              runnersConfiguration: {
                 token: props.gitlabToken,
                 url: props.gitlabUrl || "https://gitlab.com",
                 limit: runners?.limit ?? 10,

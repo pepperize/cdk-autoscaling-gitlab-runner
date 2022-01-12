@@ -5,7 +5,7 @@ describe("ConfigurationMapper", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnerConfiguration: {},
+      runnersConfiguration: {},
       dockerConfiguration: {},
       machineConfiguration: {},
       autoscalingConfigurations: [],
@@ -34,7 +34,7 @@ describe("ConfigurationMapper", () => {
       globalConfiguration: {
         logFormat: undefined,
       },
-      runnerConfiguration: {},
+      runnersConfiguration: {},
       dockerConfiguration: {},
       machineConfiguration: {
         machineOptions: {
@@ -65,7 +65,7 @@ describe("ConfigurationMapper", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnerConfiguration: {},
+      runnersConfiguration: {},
       dockerConfiguration: {},
       machineConfiguration: {},
       autoscalingConfigurations: [],
@@ -118,7 +118,7 @@ describe("ConfigurationMapper", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnerConfiguration: {
+      runnersConfiguration: {
         token: "foo+bar",
       },
       dockerConfiguration: {},

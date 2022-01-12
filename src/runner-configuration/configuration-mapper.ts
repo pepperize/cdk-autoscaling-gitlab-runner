@@ -2,32 +2,17 @@ import { AnyJson, JsonMap, stringify } from "@iarna/toml";
 import { paramCase } from "param-case";
 import { pascalCase } from "pascal-case";
 import { snakeCase } from "snake-case";
-import { AutoscalingConfiguration } from "./autoscaling-configuration";
-import { CacheConfiguration } from "./cache-configuration";
-import { DockerConfiguration } from "./docker-configuration";
 import { GlobalConfiguration } from "./global-configuration";
-import { MachineConfiguration } from "./machine-configuration";
 import { RunnerConfiguration } from "./runner-configuration";
 
 export interface ConfigurationMapperProps {
   readonly globalConfiguration: GlobalConfiguration;
-  readonly runnerConfiguration: RunnerConfiguration[];
-  readonly dockerConfiguration: DockerConfiguration;
-  readonly machineConfiguration: MachineConfiguration;
-  readonly autoscalingConfigurations: AutoscalingConfiguration[];
-  readonly cacheConfiguration: CacheConfiguration;
+  readonly runnersConfiguration: RunnerConfiguration[];
 }
 
 export class ConfigurationMapper {
   public static withDefaults(props: ConfigurationMapperProps) {
-    const {
-      globalConfiguration,
-      runnerConfiguration,
-      dockerConfiguration,
-      machineConfiguration,
-      autoscalingConfigurations,
-      cacheConfiguration,
-    } = props;
+    const { globalConfiguration, runnersConfiguration } = props;
 
     return new ConfigurationMapper({
       globalConfiguration: {
@@ -37,54 +22,57 @@ export class ConfigurationMapper {
         logLevel: "info",
         ...globalConfiguration,
       },
-      runnerConfiguration: {
-        name: "gitlab-runner",
-        url: "https://gitlab.com",
-        limit: 10,
-        outputLimit: 52428800,
-        executor: "docker+machine",
-        environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
-        ...runnerConfiguration,
-      },
-      dockerConfiguration: {
-        tlsVerify: false,
-        image: "docker:19.03.5",
-        privileged: true,
-        capAdd: ["CAP_SYS_ADMIN"],
-        waitForServicesTimeout: 300,
-        disableCache: false,
-        volumes: ["/certs/client", "/cache"],
-        shmSize: 0,
-        ...dockerConfiguration,
-      },
-      machineConfiguration: {
-        idleCount: 0,
-        idleTime: 300,
-        maxBuilds: 20,
-        machineDriver: "amazonec2",
-        machineName: "gitlab-runner-%s",
-        ...machineConfiguration,
-        machineOptions: {
-          requestSpotInstance: true,
-          spotPrice: 0.03,
-          ...machineConfiguration.machineOptions,
-        },
-      },
-      autoscalingConfigurations: autoscalingConfigurations.length
-        ? autoscalingConfigurations
-        : [
-            {
-              periods: ["* * 7-22 * * mon-fri *"],
-              idleCount: 1,
-              idleTime: 1800,
-              timezone: "Etc/UTC",
+      runnersConfiguration: runnersConfiguration.map((runnerConfiguration) => {
+        return {
+          name: "gitlab-runner",
+          url: "https://gitlab.com",
+          limit: 10,
+          outputLimit: 52428800,
+          executor: "docker+machine",
+          environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
+          ...runnerConfiguration,
+          docker: {
+            tlsVerify: false,
+            image: "docker:19.03.5",
+            privileged: true,
+            capAdd: ["CAP_SYS_ADMIN"],
+            waitForServicesTimeout: 300,
+            disableCache: false,
+            volumes: ["/certs/client", "/cache"],
+            shmSize: 0,
+            ...runnerConfiguration.docker,
+          },
+          machine: {
+            idleCount: 0,
+            idleTime: 300,
+            maxBuilds: 20,
+            machineDriver: "amazonec2",
+            machineName: "gitlab-runner-%s",
+            ...runnerConfiguration.machine,
+            machineOptions: {
+              requestSpotInstance: true,
+              spotPrice: 0.03,
+              ...runnerConfiguration.machine.machineOptions,
             },
-          ],
-      cacheConfiguration: {
-        type: "s3",
-        shared: true,
-        ...cacheConfiguration,
-      },
+            autoscaling: runnerConfiguration.machine.autoscaling?.length
+              ? runnerConfiguration.machine.autoscaling
+              : [
+                  {
+                    periods: ["* * 7-22 * * mon-fri *"],
+                    idleCount: 1,
+                    idleTime: 1800,
+                    timezone: "Etc/UTC",
+                  },
+                ],
+          },
+          cache: {
+            type: "s3",
+            shared: true,
+            ...runnerConfiguration.cache,
+            s3: { ...runnerConfiguration.cache?.s3 },
+          },
+        };
+      }),
     });
   }
 
@@ -102,31 +90,44 @@ export class ConfigurationMapper {
    * @internal
    */
   public _toJsonMap(): JsonMap {
-    const {
-      globalConfiguration,
-      runnerConfiguration,
-      dockerConfiguration,
-      machineConfiguration,
-      autoscalingConfigurations,
-      cacheConfiguration,
-    } = this.props;
+    const { globalConfiguration, runnersConfiguration } = this.props;
 
     const result: JsonMap = toJsonMap(globalConfiguration, snakeCase);
 
-    const runner: JsonMap = toJsonMap(runnerConfiguration, snakeCase);
-    result.runners = [runner];
+    result.runners = [] as JsonMap[];
+    for (const config of runnersConfiguration) {
+      const runner: JsonMap = toJsonMap(config, snakeCase);
 
-    runner.docker = toJsonMap(dockerConfiguration, snakeCase);
+      // Fix naming convention inconsistencies
+      runner["tls-ca-file"] = runner.tls_ca_file;
+      delete runner.tls_ca_file;
+      runner["tls-cert-file"] = runner.tls_cert_file;
+      delete runner.tls_ca_file;
+      runner["tls-key-file"] = runner.tls_key_file;
+      delete runner.tls_ca_file;
 
-    const machine = toJsonMap(machineConfiguration, pascalCase);
-    machine.MachineOptions = toProperties(machineConfiguration.machineOptions, (key) => `amazonec2-${paramCase(key)}`);
-    machine.autoscaling = autoscalingConfigurations.map((autoscaling) => toJsonMap(autoscaling, pascalCase));
-    runner.machine = machine;
+      if (config.docker) {
+        runner.docker = toJsonMap(config.docker, snakeCase);
+      }
 
-    const cache = toJsonMap(cacheConfiguration, pascalCase);
-    delete cache.S3;
-    cache.s3 = toJsonMap(cacheConfiguration.s3, pascalCase);
-    runner.cache = cache;
+      runner.machine = toJsonMap(config.machine, pascalCase);
+      runner.machine.MachineOptions = toProperties(
+        config.machine.machineOptions,
+        (key) => `amazonec2-${paramCase(key)}`
+      );
+      if (config.machine.autoscaling) {
+        runner.machine.autoscaling = config.machine.autoscaling.map((autoscaling) =>
+          toJsonMap(autoscaling, pascalCase)
+        );
+      }
+
+      if (config.cache) {
+        runner.cache = toJsonMap({ type: "s3", ...config.cache }, pascalCase);
+        runner.cache.s3 = toJsonMap(config.cache.s3, pascalCase);
+      }
+
+      result.runners.push(runner);
+    }
 
     return result;
   }
