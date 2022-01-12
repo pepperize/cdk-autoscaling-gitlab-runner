@@ -5,11 +5,17 @@ describe("ConfigurationMapper", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnersConfiguration: {},
-      dockerConfiguration: {},
-      machineConfiguration: {},
-      autoscalingConfigurations: [],
-      cacheConfiguration: {},
+      runnersConfiguration: [
+        {
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {},
+          },
+        },
+      ],
     };
 
     // When
@@ -17,15 +23,7 @@ describe("ConfigurationMapper", () => {
     const result = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({
-      runners: [
-        {
-          cache: { s3: {} },
-          docker: {},
-          machine: { MachineOptions: [], autoscaling: [] },
-        },
-      ],
-    });
+    expect(result).toEqual({});
   });
 
   it("Should filter undefined and nullables", () => {
@@ -34,15 +32,20 @@ describe("ConfigurationMapper", () => {
       globalConfiguration: {
         logFormat: undefined,
       },
-      runnersConfiguration: {},
-      dockerConfiguration: {},
-      machineConfiguration: {
-        machineOptions: {
-          blockDurationMinutes: undefined,
+      runnersConfiguration: [
+        {
+          docker: {},
+          machine: {
+            machineOptions: {
+              blockDurationMinutes: undefined,
+            },
+            autoscaling: [],
+          },
+          cache: {
+            s3: {},
+          },
         },
-      },
-      autoscalingConfigurations: [],
-      cacheConfiguration: {},
+      ],
     };
 
     // When
@@ -65,11 +68,17 @@ describe("ConfigurationMapper", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnersConfiguration: {},
-      dockerConfiguration: {},
-      machineConfiguration: {},
-      autoscalingConfigurations: [],
-      cacheConfiguration: {},
+      runnersConfiguration: [
+        {
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {},
+          },
+        },
+      ],
     };
 
     // When
@@ -118,21 +127,24 @@ describe("ConfigurationMapper", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnersConfiguration: {
-        token: "foo+bar",
-      },
-      dockerConfiguration: {},
-      machineConfiguration: {},
-      autoscalingConfigurations: [],
-      cacheConfiguration: {
-        s3: {
-          serverAddress: "s3.amazonaws.com",
-          bucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
-          bucketLocation: "us-east-1",
-          accessKey: "AKIAIOSFODNN7EXAMPLE",
-          secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      runnersConfiguration: [
+        {
+          token: "foo+bar",
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {
+              serverAddress: "s3.amazonaws.com",
+              bucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketLocation: "us-east-1",
+              accessKey: "AKIAIOSFODNN7EXAMPLE",
+              secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            },
+          },
         },
-      },
+      ],
     };
 
     // When

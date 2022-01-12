@@ -235,7 +235,7 @@ export class GitlabRunnerAutoscaling extends Construct {
     });
 
     const runnersRole =
-      runners?.role ||
+      (runners && runners[0].role) ||
       new Role(scope, "RunnersRole", {
         assumedBy: ec2ServicePrincipal,
         managedPolicies: [ec2ManagedPolicyForSSM],
@@ -245,7 +245,8 @@ export class GitlabRunnerAutoscaling extends Construct {
       roles: [runnersRole.roleName],
     });
 
-    const runnersInstanceType = runners?.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+    const runnersInstanceType =
+      (runners && runners[0].instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
 
     const runnersLookupMachineImage = new LookupMachineImage({
       name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
@@ -260,7 +261,7 @@ export class GitlabRunnerAutoscaling extends Construct {
     }).getImage(this);
 
     const runnersMachineImage: IMachineImage =
-      runners?.machineImage ||
+      (runners && runners[0].machineImage) ||
       MachineImage.genericLinux({
         [scope.region]: runnersLookupMachineImage.imageId,
       });
@@ -425,39 +426,33 @@ export class GitlabRunnerAutoscaling extends Construct {
                 logFormat: props?.logFormat || "runner",
                 logLevel: props?.logLevel || "info",
               },
-              runnersConfiguration: {
-                token: props.gitlabToken,
-                url: props.gitlabUrl || "https://gitlab.com",
-                limit: runners?.limit ?? 10,
-                outputLimit: runners?.outputLimit ?? 52428800,
-                environment: runners?.environment || ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
-              },
-              dockerConfiguration: {
-                ...runners?.docker,
-              },
-              machineConfiguration: {
-                ...runners?.machine,
-                machineOptions: {
-                  ...runners?.machine?.machineOptions,
-                  instanceType: runnersInstanceType.toString(),
-                  ami: runnersMachineImage.getImage(scope).imageId,
-                  region: scope.region,
-                  vpcId: this.network.vpc.vpcId,
-                  zone: this.network.availabilityZone.slice(-1),
-                  subnetId: this.network.subnet.subnetId,
-                  securityGroup: `${runnersSecurityGroupName}`,
-                  usePrivateAddress: true,
-                  iamInstanceProfile: `${runnersInstanceProfile.ref}`,
-                },
-              },
-              autoscalingConfigurations: runners?.autoscaling || [],
-              cacheConfiguration: {
-                s3: {
-                  serverAddress: `s3.${scope.urlSuffix}`,
-                  bucketName: `${this.cacheBucket.bucketName}`,
-                  bucketLocation: `${scope.region}`,
-                },
-              },
+              runnersConfiguration: (runners || []).map((runner) => {
+                return {
+                  ...runner,
+                  machine: {
+                    ...runner.machine,
+                    machineOptions: {
+                      ...runner.machine?.machineOptions,
+                      instanceType: runnersInstanceType.toString(),
+                      ami: runnersMachineImage.getImage(scope).imageId,
+                      region: scope.region,
+                      vpcId: this.network.vpc.vpcId,
+                      zone: this.network.availabilityZone.slice(-1),
+                      subnetId: this.network.subnet.subnetId,
+                      securityGroup: `${runnersSecurityGroupName}`,
+                      usePrivateAddress: true,
+                      iamInstanceProfile: `${runnersInstanceProfile.ref}`,
+                    },
+                  },
+                  cache: {
+                    s3: {
+                      serverAddress: `s3.${scope.urlSuffix}`,
+                      bucketName: `${this.cacheBucket.bucketName}`,
+                      bucketLocation: `${scope.region}`,
+                    },
+                  },
+                };
+              }),
             }).toToml(),
             {
               owner: "gitlab-runner",
@@ -514,14 +509,16 @@ export class GitlabRunnerAutoscaling extends Construct {
       signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
     });
 
-    this.runners = {
-      securityGroupName: runnersSecurityGroupName,
-      securityGroup: runnersSecurityGroup,
-      role: runnersRole,
-      instanceProfile: runnersInstanceProfile,
-      instanceType: runnersInstanceType,
-      machineImage: runnersMachineImage,
-    };
+    this.runners = [
+      {
+        securityGroupName: runnersSecurityGroupName,
+        securityGroup: runnersSecurityGroup,
+        role: runnersRole,
+        instanceProfile: runnersInstanceProfile,
+        instanceType: runnersInstanceType,
+        machineImage: runnersMachineImage,
+      },
+    ];
 
     this.manager = {
       securityGroup: managerSecurityGroup,

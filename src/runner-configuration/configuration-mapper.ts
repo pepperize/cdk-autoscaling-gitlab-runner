@@ -69,7 +69,6 @@ export class ConfigurationMapper {
             type: "s3",
             shared: true,
             ...runnerConfiguration.cache,
-            s3: { ...runnerConfiguration.cache?.s3 },
           },
         };
       }),
@@ -108,6 +107,8 @@ export class ConfigurationMapper {
 
       if (config.docker) {
         runner.docker = toJsonMap(config.docker, snakeCase);
+      } else {
+        delete runner.docker;
       }
 
       runner.machine = toJsonMap(config.machine, pascalCase);
@@ -119,11 +120,15 @@ export class ConfigurationMapper {
         runner.machine.autoscaling = config.machine.autoscaling.map((autoscaling) =>
           toJsonMap(autoscaling, pascalCase)
         );
+      } else {
+        delete runner.machine.autoscaling;
       }
 
-      if (config.cache) {
+      if (config.cache && config.cache.s3) {
         runner.cache = toJsonMap({ type: "s3", ...config.cache }, pascalCase);
         runner.cache.s3 = toJsonMap(config.cache.s3, pascalCase);
+      } else {
+        delete runner.cache;
       }
 
       result.runners.push(runner);

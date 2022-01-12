@@ -24,7 +24,11 @@ describe("GitlabRunnerAutoscaling", () => {
       network: {
         vpc: vpc,
       },
-      gitlabToken: "",
+      runners: [
+        {
+          gitlabToken: "",
+        },
+      ],
     });
 
     // Then
@@ -53,7 +57,11 @@ describe("GitlabRunnerAutoscaling", () => {
       network: {
         vpc: vpc,
       },
-      gitlabToken: "",
+      runners: [
+        {
+          gitlabToken: "",
+        },
+      ],
     });
 
     // Then
