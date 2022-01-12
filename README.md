@@ -145,6 +145,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/cache.ts)
+
 ### Configure Docker Machine
 
 By default, docker machine is configured to run privileged with `CAP_SYS_ADMIN` to support [Docker-in-Docker using the OverlayFS driver](https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-overlayfs-driver)
@@ -173,6 +175,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/docker-machine.ts)
+
 ### Bigger instance type
 
 By default, t3.nano is used for the manager/coordinator and t3.micro instances will be spawned.
@@ -189,6 +193,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
   },
 });
 ```
+
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/instance-type.ts)
 
 ### Different machine image
 
@@ -208,6 +214,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/machine-image.ts)
+
 ### Spot instances
 
 By default, EC2 Spot Instances are requested.
@@ -225,6 +233,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
   },
 });
 ```
+
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/on-demand-instances.ts)
 
 ### Custom runner's role
 
@@ -244,6 +254,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/runner-role.ts)
+
 ### Vpc
 
 If no existing Vpc is passed, a [VPC that spans a whole region](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.Vpc.html) on will be created.
@@ -260,6 +272,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/vpc.ts)
+
 ### Zero config
 
 Deploys the [Autoscaling GitLab Runner on AWS EC2](https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/) with the default settings mentioned above.
@@ -271,6 +285,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
   gitlabToken: "<auth token>",
 });
 ```
+
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/zero-config.ts)
 
 ## Projen
 
