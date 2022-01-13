@@ -23,7 +23,7 @@ describe("ConfigurationMapper", () => {
     const result = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({});
+    expect(result).toEqual({}); // Must be empty
   });
 
   it("Should filter undefined and nullables", () => {
@@ -53,15 +53,7 @@ describe("ConfigurationMapper", () => {
     const result = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({
-      runners: [
-        {
-          cache: { s3: {} },
-          docker: {},
-          machine: { MachineOptions: [], autoscaling: [] },
-        },
-      ],
-    });
+    expect(result).toEqual({}); // Must be empty
   });
 
   it("Should return map with defaults", () => {
