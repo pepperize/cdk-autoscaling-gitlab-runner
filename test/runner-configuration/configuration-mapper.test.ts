@@ -1,4 +1,5 @@
-import { ConfigurationMapper, ConfigurationMapperProps } from "../../src";
+import { AnyJson } from "@iarna/toml";
+import { ConfigurationMapper, ConfigurationMapperProps, filter, isEmpty } from "../../src";
 
 describe("ConfigurationMapper", () => {
   it("Should return empty map", () => {
@@ -93,7 +94,6 @@ describe("ConfigurationMapper", () => {
           name: "gitlab-runner",
           output_limit: 52428800,
           url: "https://gitlab.com",
-          cache: { Type: "s3", Shared: true, s3: {} },
           docker: {
             tls_verify: false,
             image: "docker:19.03.5",
@@ -147,5 +147,17 @@ describe("ConfigurationMapper", () => {
 
     // Then
     expect(actual).toMatchSnapshot();
+  });
+  it("Should filter out empty values", () => {
+    // Given
+    const props: AnyJson = {
+      array: [{ empty: undefined }],
+    } as unknown as AnyJson;
+
+    // When
+    const actual = filter(props, (item) => !isEmpty(item));
+
+    // Then
+    expect(actual).toEqual({});
   });
 });

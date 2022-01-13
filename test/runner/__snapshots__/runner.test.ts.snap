@@ -272,12 +272,6 @@ gitlab_token = \\"\\"
                       "\\"
 ]
 
-    [[runners.machine.Autoscaling]]
-    periods = [ \\"* * 7-22 * * mon-fri *\\" ]
-    idleCount = 1
-    idleTime = 1_800
-    timezone = \\"Etc/UTC\\"
-
     [[runners.machine.autoscaling]]
     Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
     IdleCount = 1
@@ -300,19 +294,6 @@ gitlab_token = \\"\\"
                       },
                       "\\"
     bucketLocation = \\"us-east-1\\"
-
-    [runners.cache.s3]
-    ServerAddress = \\"s3.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                      "\\"
-    BucketName = \\"",
-                      Object {
-                        "Ref": "CacheBucket41D9D0B0",
-                      },
-                      "\\"
-    BucketLocation = \\"us-east-1\\"
 
   [runners.docker]
   tls_verify = false
@@ -474,7 +455,7 @@ gitlab_token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: c2bb235565417593
+# fingerprint: d1608ff11e4c64d7
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

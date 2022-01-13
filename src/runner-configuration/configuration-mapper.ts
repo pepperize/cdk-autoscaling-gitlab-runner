@@ -3,8 +3,8 @@ import { paramCase } from "param-case";
 import { pascalCase } from "pascal-case";
 import { snakeCase } from "snake-case";
 import { GlobalConfiguration } from "./global-configuration";
-import { RunnerConfiguration } from "./runner-configuration";
 import { MachineOptions } from "./machine-options";
+import { RunnerConfiguration } from "./runner-configuration";
 
 export interface ConfigurationMapperProps {
   readonly globalConfiguration: GlobalConfiguration;
@@ -66,11 +66,14 @@ export class ConfigurationMapper {
                   },
                 ],
           },
-          cache: {
-            type: "s3",
-            shared: true,
-            ...item.cache,
-          },
+          cache:
+            item.cache?.s3 && Object.keys(item.cache?.s3).length
+              ? {
+                  type: "s3",
+                  shared: true,
+                  ...item.cache,
+                }
+              : undefined,
         };
       }),
     });
@@ -108,40 +111,28 @@ export class ConfigurationMapper {
 
       if (config.docker) {
         runner.docker = toJsonMap(config.docker, snakeCase);
-      } else {
-        delete runner.docker;
       }
 
       runner.machine = toJsonMap(config.machine, pascalCase);
       if (config.machine.machineOptions) {
-        const machineOptions = this._mapMachineOptions(config.machine.machineOptions);
-
-        if (machineOptions.length) {
-          runner.machine.MachineOptions = machineOptions;
-        }
+        runner.machine.MachineOptions = this._mapMachineOptions(config.machine.machineOptions);
       }
-      if (config.machine.autoscaling) {
+      if (config.machine.autoscaling?.length) {
         runner.machine.autoscaling = config.machine.autoscaling.map((autoscaling) =>
           toJsonMap(autoscaling, pascalCase)
         );
-      } else {
-        delete runner.machine.autoscaling;
       }
+      delete runner.machine.Autoscaling;
 
-      if (config.cache && config.cache.s3) {
-        runner.cache = toJsonMap({ type: "s3", ...config.cache }, pascalCase);
+      if (config?.cache?.s3 && Object.keys(config.cache.s3).length) {
+        runner.cache = toJsonMap(config.cache, pascalCase);
         runner.cache.s3 = toJsonMap(config.cache.s3, pascalCase);
+        delete runner.cache.s3;
       } else {
         delete runner.cache;
       }
 
-      if (Object.keys(runner).length) {
-        result.runners.push(runner);
-      }
-    }
-
-    if (result.runners.length == 0) {
-      delete result.runners;
+      result.runners.push(runner);
     }
 
     return filter(result, (item) => !isEmpty(item)) as JsonMap;
@@ -193,7 +184,7 @@ function toProperties<T>(configuration: T, inflector: (s: string) => string): st
   return result;
 }
 
-function isEmpty(subject: AnyJson): boolean {
+export function isEmpty(subject: AnyJson): boolean {
   if (Array.isArray(subject)) {
     return !subject.length;
   }
@@ -210,14 +201,14 @@ function isEmpty(subject: AnyJson): boolean {
   return false;
 }
 
-function filter(subject: AnyJson, predicate: (value: AnyJson) => boolean): AnyJson {
+export function filter(subject: AnyJson, predicate: (value: AnyJson) => boolean): AnyJson {
   if (Array.isArray(subject)) {
     const result: Array<AnyJson> = [];
 
     subject.forEach((element: AnyJson): void => {
       const filtered = filter(element, predicate);
 
-      if (predicate.call(subject, element)) {
+      if (predicate.call(subject, filtered)) {
         result.push(filtered);
       }
     });
@@ -229,11 +220,11 @@ function filter(subject: AnyJson, predicate: (value: AnyJson) => boolean): AnyJs
     const result: JsonMap = {};
 
     for (const key in subject) {
-      let value: AnyJson = subject[key];
-      value = filter(value, predicate);
+      const value: AnyJson = subject[key];
+      const filtered = filter(value, predicate);
 
-      if (predicate.call(subject, value)) {
-        result[key] = value;
+      if (predicate.call(subject, filtered)) {
+        result[key] = filtered;
       }
     }
 
