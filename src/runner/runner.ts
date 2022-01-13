@@ -234,17 +234,6 @@ export class GitlabRunnerAutoscaling extends Construct {
       vpc: this.network.vpc,
     });
 
-    const runnersRole =
-      (runners && runners[0].role) ||
-      new Role(scope, "RunnersRole", {
-        assumedBy: ec2ServicePrincipal,
-        managedPolicies: [ec2ManagedPolicyForSSM],
-      });
-
-    const runnersInstanceProfile = new CfnInstanceProfile(scope, "RunnersInstanceProfile", {
-      roles: [runnersRole.roleName],
-    });
-
     const runnersLookupMachineImage = new LookupMachineImage({
       name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
       owners: ["099720109477"],
@@ -256,12 +245,6 @@ export class GitlabRunnerAutoscaling extends Construct {
         "virtualization-type": ["hvm"],
       },
     }).getImage(this);
-
-    const runnersMachineImage: IMachineImage =
-      (runners && runners[0].machineImage) ||
-      MachineImage.genericLinux({
-        [scope.region]: runnersLookupMachineImage.imageId,
-      });
 
     /**
      * GitLab Manager
@@ -426,6 +409,23 @@ export class GitlabRunnerAutoscaling extends Construct {
               runnersConfiguration: (runners || []).map((runner) => {
                 const runnersInstanceType =
                   (runners && runner.instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+
+                const runnersRole =
+                  (runners && runner.role) ||
+                  new Role(scope, "RunnersRole", {
+                    assumedBy: ec2ServicePrincipal,
+                    managedPolicies: [ec2ManagedPolicyForSSM],
+                  });
+
+                const runnersInstanceProfile = new CfnInstanceProfile(scope, "RunnersInstanceProfile", {
+                  roles: [runnersRole.roleName],
+                });
+
+                const runnersMachineImage: IMachineImage =
+                  (runners && runner.machineImage) ||
+                  MachineImage.genericLinux({
+                    [scope.region]: runnersLookupMachineImage.imageId,
+                  });
                 return {
                   ...runner,
                   machine: {
