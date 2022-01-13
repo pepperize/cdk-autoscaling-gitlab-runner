@@ -521,25 +521,6 @@ export class GitlabRunnerAutoscaling extends Construct {
       desiredCapacity: 1,
       signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
     });
-
-    this.runners = [
-      {
-        securityGroupName: runnersSecurityGroupName,
-        securityGroup: runnersSecurityGroup,
-        role: runnersRole,
-        instanceProfile: runnersInstanceProfile,
-        instanceType: runnersInstanceType,
-        machineImage: runnersMachineImage,
-      },
-    ];
-
-    this.manager = {
-      securityGroup: managerSecurityGroup,
-      instanceType: managerInstanceType,
-      machineImage: managerMachineImage,
-      autoScalingGroup: managerAutoScalingGroup,
-      role: managerRole,
-    };
   }
 }
 
