@@ -20,10 +20,10 @@ describe("ConfigurationMapper", () => {
 
     // When
     const mapper = ConfigurationMapper.fromProps(props);
-    const result = mapper._toJsonMap();
+    const actual = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({}); // Must be empty
+    expect(actual).toEqual({}); // Must be empty
   });
 
   it("Should filter undefined and nullables", () => {
@@ -50,10 +50,10 @@ describe("ConfigurationMapper", () => {
 
     // When
     const mapper = ConfigurationMapper.fromProps(props);
-    const result = mapper._toJsonMap();
+    const actual = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({}); // Must be empty
+    expect(actual).toEqual({}); // Must be empty
   });
 
   it("Should return map with defaults", () => {
@@ -75,10 +75,10 @@ describe("ConfigurationMapper", () => {
 
     // When
     const mapper = ConfigurationMapper.withDefaults(props);
-    const result = mapper._toJsonMap();
+    const actual = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({
+    expect(actual).toEqual({
       check_interval: 0,
       concurrent: 10,
       log_format: "runner",
@@ -141,9 +141,9 @@ describe("ConfigurationMapper", () => {
 
     // When
     const mapper = ConfigurationMapper.withDefaults(props);
-    const result = mapper.toToml();
+    const actual = mapper.toToml();
 
     // Then
-    expect(result).toMatchSnapshot();
+    expect(actual).toMatchSnapshot();
   });
 });
