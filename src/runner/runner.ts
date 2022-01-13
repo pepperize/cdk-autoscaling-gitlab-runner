@@ -245,9 +245,6 @@ export class GitlabRunnerAutoscaling extends Construct {
       roles: [runnersRole.roleName],
     });
 
-    const runnersInstanceType =
-      (runners && runners[0].instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
-
     const runnersLookupMachineImage = new LookupMachineImage({
       name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
       owners: ["099720109477"],
@@ -427,6 +424,8 @@ export class GitlabRunnerAutoscaling extends Construct {
                 logLevel: props?.logLevel || "info",
               },
               runnersConfiguration: (runners || []).map((runner) => {
+                const runnersInstanceType =
+                  (runners && runner.instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
                 return {
                   ...runner,
                   machine: {
