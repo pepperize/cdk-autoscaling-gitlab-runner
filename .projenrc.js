@@ -84,4 +84,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
 project.setScript("format", "prettier --write src/**/*.ts test/**/*.ts .projenrc.js README.md");
 
+project.jest.addTestMatch("**/?(*.)@(spec|test).[tj]s?(x)"); // fix for windows
+
 project.synth();
