@@ -246,17 +246,7 @@ limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
 environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
-token = \\"\\"
-
-  [runners.docker]
-  tls_verify = false
-  image = \\"docker:19.03.5\\"
-  privileged = true
-  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
-  wait_for_services_timeout = 300
-  disable_cache = false
-  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
-  shm_size = 0
+gitlab_token = \\"\\"
 
   [runners.machine]
   IdleCount = 0
@@ -282,6 +272,12 @@ token = \\"\\"
                       "\\"
 ]
 
+    [[runners.machine.Autoscaling]]
+    periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    idleCount = 1
+    idleTime = 1_800
+    timezone = \\"Etc/UTC\\"
+
     [[runners.machine.autoscaling]]
     Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
     IdleCount = 1
@@ -291,6 +287,19 @@ token = \\"\\"
   [runners.cache]
   Type = \\"s3\\"
   Shared = true
+
+    [runners.cache.S3]
+    serverAddress = \\"s3.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                      "\\"
+    bucketName = \\"",
+                      Object {
+                        "Ref": "CacheBucket41D9D0B0",
+                      },
+                      "\\"
+    bucketLocation = \\"us-east-1\\"
 
     [runners.cache.s3]
     ServerAddress = \\"s3.",
@@ -304,6 +313,16 @@ token = \\"\\"
                       },
                       "\\"
     BucketLocation = \\"us-east-1\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
 ",
                     ],
                   ],
@@ -455,7 +474,7 @@ token = \\"\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: a2ec99bc087bc298
+# fingerprint: c2bb235565417593
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -606,8 +625,10 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "StringEquals": Object {
-                      "ec2:InstanceProfile": Object {
-                        "Ref": "RunnersInstanceProfile",
+                      "ForAllValues:StringEquals": Object {
+                        "aws:TagKeys": Array [
+                          "InstanceProfile",
+                        ],
                       },
                       "ec2:InstanceType": Array [
                         "t3.micro",
@@ -634,13 +655,15 @@ yum update -y aws-cfn-bootstrap
                 },
                 Object {
                   "Action": "iam:PassRole",
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::GetAtt": Array [
-                      "RunnersRole1AC39F4E",
-                      "Arn",
-                    ],
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "RunnersRole",
+                      ],
+                    },
                   },
+                  "Effect": "Allow",
+                  "Resource": "*",
                 },
               ],
               "Version": "2012-10-17",
@@ -717,6 +740,12 @@ yum update -y aws-cfn-bootstrap
         },
         "ManagedPolicyArns": Array [
           "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM",
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "RunnersRole",
+            "Value": "RunnersRole",
+          },
         ],
       },
       "Type": "AWS::IAM::Role",

@@ -347,6 +347,7 @@ export class GitlabRunnerAutoscaling extends Construct {
             {
               Effect: "Allow",
               Action: ["iam:PassRole"],
+              Resource: ["*"],
               Condition: {
                 "ForAllValues:StringEquals": {
                   "aws:TagKeys": ["RunnersRole"],
