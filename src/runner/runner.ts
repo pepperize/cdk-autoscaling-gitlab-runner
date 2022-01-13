@@ -327,8 +327,12 @@ export class GitlabRunnerAutoscaling extends Construct {
               Resource: ["*"],
               Condition: {
                 StringEquals: {
-                  "ec2:InstanceType": [`${runnersInstanceType.toString()}`],
-                  "ec2:InstanceProfile": `${runnersInstanceProfile.ref}`,
+                  "ec2:InstanceType": (runners || []).map((runner) => {
+                    const runnersInstanceType =
+                      (runners && runner.instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+                    return runnersInstanceType.toString();
+                  }),
+                  "ec2:InstanceProfile": ,
                 },
               },
             },
