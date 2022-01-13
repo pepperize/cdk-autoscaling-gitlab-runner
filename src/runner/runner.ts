@@ -25,7 +25,7 @@ import {
 } from "@aws-cdk/aws-ec2";
 import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
-import { Construct, Duration, Stack } from "@aws-cdk/core";
+import { Construct, Duration, Stack, Tags } from "@aws-cdk/core";
 import {
   AutoscalingConfiguration,
   ConfigurationMapper,
@@ -332,7 +332,9 @@ export class GitlabRunnerAutoscaling extends Construct {
                       (runners && runner.instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
                     return runnersInstanceType.toString();
                   }),
-                  "ec2:InstanceProfile": ,
+                  "ForAllValues:StringEquals": {
+                    "aws:TagKeys": ["InstanceProfile"],
+                  },
                 },
               },
             },
@@ -349,7 +351,11 @@ export class GitlabRunnerAutoscaling extends Construct {
             {
               Effect: "Allow",
               Action: ["iam:PassRole"],
-              Resource: [`${runnersRole.roleArn}`],
+              Condition: {
+                "ForAllValues:StringEquals": {
+                  "aws:TagKeys": ["RunnersRole"],
+                },
+              },
             },
           ],
         }),
@@ -424,6 +430,10 @@ export class GitlabRunnerAutoscaling extends Construct {
                 const runnersInstanceProfile = new CfnInstanceProfile(scope, "RunnersInstanceProfile", {
                   roles: [runnersRole.roleName],
                 });
+
+                Tags.of(runnersInstanceProfile).add("RunnersInstanceProfile", "RunnersInstanceProfile");
+
+                Tags.of(runnersRole).add("RunnersRole", "RunnersRole");
 
                 const runnersMachineImage: IMachineImage =
                   (runners && runner.machineImage) ||
