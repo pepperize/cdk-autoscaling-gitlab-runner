@@ -144,7 +144,7 @@ export class ConfigurationMapper {
       delete result.runners;
     }
 
-    return filter(result, isEmpty) as JsonMap;
+    return filter(result, (item) => !isEmpty(item)) as JsonMap;
   }
 
   private _mapMachineOptions(machineOptions: MachineOptions): string[] {

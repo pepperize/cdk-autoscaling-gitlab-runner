@@ -7,7 +7,9 @@ describe("ConfigurationMapper", () => {
       globalConfiguration: {},
       runnersConfiguration: [
         {
-          docker: {},
+          docker: {
+            allowedImages: [],
+          },
           machine: {
             autoscaling: [],
           },
