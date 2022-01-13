@@ -4,8 +4,8 @@
  * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section
  * @see https://docs.gitlab.com/runner/configuration/autoscale.html#how-concurrent-limit-and-idlecount-generate-the-upper-limit-of-running-machines
  */
-import { MachineOptions } from "./machine-options";
 import { AutoscalingConfiguration } from "./autoscaling-configuration";
+import { MachineOptions } from "./machine-options";
 
 export interface MachineConfiguration {
   /**

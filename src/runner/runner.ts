@@ -196,10 +196,6 @@ export class GitlabRunnerAutoscaling extends Construct {
 
   readonly cacheBucket: IBucket;
 
-  readonly runners: GitlabRunnerAutoscalingRunners[];
-
-  readonly manager: GitlabRunnerAutoscalingManager;
-
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
     const { manager, cache, runners, network }: GitlabRunnerAutoscalingProps = props;
@@ -501,7 +497,7 @@ export class GitlabRunnerAutoscaling extends Construct {
       },
     });
 
-    const managerAutoScalingGroup = new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
+    new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
       vpc: this.network.vpc,
       vpcSubnets: {
         subnets: [this.network.subnet],

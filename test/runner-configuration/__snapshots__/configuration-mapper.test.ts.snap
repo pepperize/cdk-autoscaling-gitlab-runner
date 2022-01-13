@@ -36,6 +36,12 @@ token = \\"foo+bar\\"
   \\"amazonec2-spot-price=0.03\\"
 ]
 
+    [[runners.machine.Autoscaling]]
+    periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    idleCount = 1
+    idleTime = 1_800
+    timezone = \\"Etc/UTC\\"
+
     [[runners.machine.autoscaling]]
     Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
     IdleCount = 1
@@ -45,6 +51,13 @@ token = \\"foo+bar\\"
   [runners.cache]
   Type = \\"s3\\"
   Shared = true
+
+    [runners.cache.S3]
+    serverAddress = \\"s3.amazonaws.com\\"
+    bucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
+    bucketLocation = \\"us-east-1\\"
+    accessKey = \\"AKIAIOSFODNN7EXAMPLE\\"
+    secretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
 
     [runners.cache.s3]
     ServerAddress = \\"s3.amazonaws.com\\"

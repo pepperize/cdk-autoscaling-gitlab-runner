@@ -1,6 +1,6 @@
+import { CacheConfiguration } from "./cache-configuration";
 import { DockerConfiguration } from "./docker-configuration";
 import { MachineConfiguration } from "./machine-configuration";
-import { CacheConfiguration } from "./cache-configuration";
 
 export interface RunnerConfiguration {
   /**
