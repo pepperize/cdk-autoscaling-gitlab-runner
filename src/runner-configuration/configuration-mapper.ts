@@ -1,9 +1,10 @@
-import { AnyJson, JsonMap, stringify } from "@iarna/toml";
+import { AnyJson, JsonArray, JsonMap, stringify } from "@iarna/toml";
 import { paramCase } from "param-case";
 import { pascalCase } from "pascal-case";
 import { snakeCase } from "snake-case";
 import { GlobalConfiguration } from "./global-configuration";
 import { RunnerConfiguration } from "./runner-configuration";
+import { MachineOptions } from "./machine-options";
 
 export interface ConfigurationMapperProps {
   readonly globalConfiguration: GlobalConfiguration;
@@ -22,7 +23,7 @@ export class ConfigurationMapper {
         logLevel: "info",
         ...globalConfiguration,
       },
-      runnersConfiguration: runnersConfiguration.map((runnerConfiguration) => {
+      runnersConfiguration: runnersConfiguration.map((item): RunnerConfiguration => {
         return {
           name: "gitlab-runner",
           url: "https://gitlab.com",
@@ -30,7 +31,7 @@ export class ConfigurationMapper {
           outputLimit: 52428800,
           executor: "docker+machine",
           environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
-          ...runnerConfiguration,
+          ...item,
           docker: {
             tlsVerify: false,
             image: "docker:19.03.5",
@@ -40,7 +41,7 @@ export class ConfigurationMapper {
             disableCache: false,
             volumes: ["/certs/client", "/cache"],
             shmSize: 0,
-            ...runnerConfiguration.docker,
+            ...item.docker,
           },
           machine: {
             idleCount: 0,
@@ -48,14 +49,14 @@ export class ConfigurationMapper {
             maxBuilds: 20,
             machineDriver: "amazonec2",
             machineName: "gitlab-runner-%s",
-            ...runnerConfiguration.machine,
+            ...item.machine,
             machineOptions: {
               requestSpotInstance: true,
               spotPrice: 0.03,
-              ...runnerConfiguration.machine.machineOptions,
+              ...item.machine.machineOptions,
             },
-            autoscaling: runnerConfiguration.machine.autoscaling?.length
-              ? runnerConfiguration.machine.autoscaling
+            autoscaling: item.machine.autoscaling?.length
+              ? item.machine.autoscaling
               : [
                   {
                     periods: ["* * 7-22 * * mon-fri *"],
@@ -68,7 +69,7 @@ export class ConfigurationMapper {
           cache: {
             type: "s3",
             shared: true,
-            ...runnerConfiguration.cache,
+            ...item.cache,
           },
         };
       }),
@@ -112,10 +113,13 @@ export class ConfigurationMapper {
       }
 
       runner.machine = toJsonMap(config.machine, pascalCase);
-      runner.machine.MachineOptions = toProperties(
-        config.machine.machineOptions,
-        (key) => `amazonec2-${paramCase(key)}`
-      );
+      if (config.machine.machineOptions) {
+        const machineOptions = this._mapMachineOptions(config.machine.machineOptions);
+
+        if (machineOptions.length) {
+          runner.machine.MachineOptions = machineOptions;
+        }
+      }
       if (config.machine.autoscaling) {
         runner.machine.autoscaling = config.machine.autoscaling.map((autoscaling) =>
           toJsonMap(autoscaling, pascalCase)
@@ -131,7 +135,7 @@ export class ConfigurationMapper {
         delete runner.cache;
       }
 
-      if (!Object.keys(runner).length) {
+      if (Object.keys(runner).length) {
         result.runners.push(runner);
       }
     }
@@ -140,7 +144,11 @@ export class ConfigurationMapper {
       delete result.runners;
     }
 
-    return result;
+    return filter(result, isEmpty) as JsonMap;
+  }
+
+  private _mapMachineOptions(machineOptions: MachineOptions): string[] {
+    return toProperties(machineOptions, (key) => `amazonec2-${paramCase(key)}`);
   }
 }
 
@@ -183,4 +191,54 @@ function toProperties<T>(configuration: T, inflector: (s: string) => string): st
   }
 
   return result;
+}
+
+function isEmpty(subject: AnyJson): boolean {
+  if (Array.isArray(subject)) {
+    return !subject.length;
+  }
+  if (typeof subject === "object" && !(subject instanceof Date)) {
+    return !Object.keys(subject).length;
+  }
+  if (subject === undefined) {
+    return true;
+  }
+  if (subject === null) {
+    return true;
+  }
+
+  return false;
+}
+
+function filter(subject: AnyJson, predicate: (value: AnyJson) => boolean): AnyJson {
+  if (Array.isArray(subject)) {
+    const result: Array<AnyJson> = [];
+
+    subject.forEach((element: AnyJson): void => {
+      const filtered = filter(element, predicate);
+
+      if (predicate.call(subject, element)) {
+        result.push(filtered);
+      }
+    });
+
+    return result as JsonArray;
+  }
+
+  if (typeof subject === "object" && !(subject instanceof Date)) {
+    const result: JsonMap = {};
+
+    for (const key in subject) {
+      let value: AnyJson = subject[key];
+      value = filter(value, predicate);
+
+      if (predicate.call(subject, value)) {
+        result[key] = value;
+      }
+    }
+
+    return result;
+  }
+
+  return subject;
 }
