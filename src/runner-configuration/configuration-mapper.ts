@@ -128,7 +128,11 @@ export class ConfigurationMapper {
         delete runner.machine.autoscaling;
       }
 
-      if (config.cache && config.cache.s3) {
+      if (
+        config.cache &&
+        Object.keys(config.cache as Object).length !== 0 &&
+        Object.keys(config.cache.s3 as Object).length !== 0
+      ) {
         runner.cache = toJsonMap({ type: "s3", ...config.cache }, pascalCase);
         runner.cache.s3 = toJsonMap(config.cache.s3, pascalCase);
       } else {
