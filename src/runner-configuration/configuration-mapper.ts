@@ -131,7 +131,13 @@ export class ConfigurationMapper {
         delete runner.cache;
       }
 
-      result.runners.push(runner);
+      if (!Object.keys(runner).length) {
+        result.runners.push(runner);
+      }
+    }
+
+    if (result.runners.length == 0) {
+      delete result.runners;
     }
 
     return result;
