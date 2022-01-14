@@ -33,6 +33,8 @@ export interface GitlabRunnerAutoscalingManagerProps {
    * A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
    */
   readonly keyPairName?: string;
+
+  //readonly runners?: GitlabRunnerAutoscalingJobRunner[]
 }
 
 /**

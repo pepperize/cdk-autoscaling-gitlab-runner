@@ -1,6 +1,14 @@
-import { IMachineImage, InstanceType } from "@aws-cdk/aws-ec2";
+import {
+  IMachineImage,
+  InstanceClass,
+  InstanceSize,
+  InstanceType,
+  LookupMachineImage,
+  MachineImage,
+} from "@aws-cdk/aws-ec2";
 import { IRole } from "@aws-cdk/aws-iam";
 import { AutoscalingConfiguration, DockerConfiguration, MachineConfiguration } from "../runner-configuration";
+import { Construct, Stack } from "@aws-cdk/core";
 
 /**
  * The runner EC2 instances configuration. If not set, the defaults will be used.
@@ -69,4 +77,47 @@ export interface GitlabRunnerAutoscalingJobRunnerProps {
    * Optional autoscaling configuration
    */
   readonly autoscaling?: AutoscalingConfiguration[];
+}
+
+export class GitlabRunnerAutoscalingJobRunner extends Construct {
+  readonly gitlabToken: string;
+  readonly gitlabUrl?: string;
+  readonly instanceType?: InstanceType;
+  readonly machineImage?: IMachineImage;
+  /*  readonly role?: IRole;
+  readonly limit?: number;
+  readonly outputLimit?: number;
+  readonly environment?: string[];
+  readonly docker?: DockerConfiguration;
+  readonly machine?: MachineConfiguration;
+  readonly autoscaling?: AutoscalingConfiguration[];*/
+
+  constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingJobRunnerProps) {
+    super(scope, id);
+    this.gitlabToken = props.gitlabToken;
+    this.gitlabUrl = props.gitlabUrl || "https://gitlab.com";
+    this.instanceType = props.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
+    this.machineImage =
+      props.machineImage ||
+      MachineImage.genericLinux({
+        [scope.region]: new LookupMachineImage({
+          name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
+          owners: ["099720109477"],
+          filters: {
+            architecture: ["x86_64"],
+            "image-type": ["machine"],
+            state: ["available"],
+            "root-device-type": ["ebs"],
+            "virtualization-type": ["hvm"],
+          },
+        }).getImage(scope).imageId,
+      });
+    /*    this.role = props.role;
+    this.limit = props.limit;
+    this.outputLimit = props.outputLimit;
+    this.environment = props.environment;
+    this.docker = props.docker;
+    this.machine = props.machine;
+    this.autoscaling = props.autoscaling;*/
+  }
 }

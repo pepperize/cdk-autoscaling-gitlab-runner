@@ -21,11 +21,11 @@ import {
 import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack, Tags } from "@aws-cdk/core";
-import { ConfigurationMapper, GlobalConfiguration } from "../runner-configuration";
+import {ConfigurationMapper, GlobalConfiguration, LogFormat, LogLevel} from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
 import { GitlabRunnerAutoscalingManager, GitlabRunnerAutoscalingManagerProps } from "./manager";
 import { Network, NetworkProps } from "./network";
-import { GitlabRunnerAutoscalingJobRunnerProps } from "./job-runner";
+import {GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerProps} from "./job-runner";
 
 /**
  * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.
@@ -55,7 +55,7 @@ export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
    */
   readonly manager?: GitlabRunnerAutoscalingManagerProps;
 
-  readonly runners?: GitlabRunnerAutoscalingJobRunnerProps[];
+  readonly runners: GitlabRunnerAutoscalingJobRunnerProps[];
 }
 
 /**
@@ -91,15 +91,43 @@ export interface GitlabRunnerAutoscalingCacheProps {
  * });
  */
 export class GitlabRunnerAutoscaling extends Construct {
+  readonly concurrent?: number;
+
+  readonly checkInterval?: number;
+
+  readonly logFormat?: LogFormat;
+
+  readonly logLevel?: LogLevel;
+
   readonly network: Network;
 
   readonly cacheBucket: IBucket;
 
   readonly manager: GitlabRunnerAutoscalingManager;
 
+  readonly runners: GitlabRunnerAutoscalingJobRunner[];
+
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
-    const { manager, cache, runners, network }: GitlabRunnerAutoscalingProps = props;
+    const {
+      concurrent,
+      checkInterval,
+      logFormat,
+      logLevel,
+      manager,
+      cache,
+      runners,
+      network,
+    }: GitlabRunnerAutoscalingProps = props;
+
+    /**
+     * Global Configuration
+     * @link GlobalConfiguration
+     */
+    this.concurrent = concurrent ?? 10;
+    this.checkInterval = checkInterval ?? 0;
+    this.logFormat = logFormat ?? "runner";
+    this.logLevel = logLevel ?? "info";
 
     /**
      * S3 Bucket for Runners' cache
@@ -124,6 +152,10 @@ export class GitlabRunnerAutoscaling extends Construct {
     /**
      * GitLab Runners
      */
+    this.runners = runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {
+      return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, runnerProps);
+    });
+
     const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(scope, "RunnersSecurityGroup", {
       securityGroupName: runnersSecurityGroupName,
@@ -300,10 +332,10 @@ export class GitlabRunnerAutoscaling extends Construct {
             "/etc/gitlab-runner/config.toml",
             ConfigurationMapper.withDefaults({
               globalConfiguration: {
-                concurrent: props?.concurrent ?? 10,
-                checkInterval: props?.checkInterval ?? 0,
-                logFormat: props?.logFormat || "runner",
-                logLevel: props?.logLevel || "info",
+                concurrent: this.concurrent,
+                checkInterval: this.checkInterval,
+                logFormat: this.logFormat,
+                logLevel: this.logLevel,
               },
               runnersConfiguration: (runners || []).map((runner) => {
                 const runnersInstanceType =
