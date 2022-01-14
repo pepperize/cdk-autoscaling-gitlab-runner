@@ -21,16 +21,11 @@ import {
 import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack, Tags } from "@aws-cdk/core";
-import {
-  AutoscalingConfiguration,
-  ConfigurationMapper,
-  DockerConfiguration,
-  GlobalConfiguration,
-  MachineConfiguration,
-} from "../runner-configuration";
+import { ConfigurationMapper, GlobalConfiguration } from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
 import { GitlabRunnerAutoscalingManager, GitlabRunnerAutoscalingManagerProps } from "./manager";
 import { Network, NetworkProps } from "./network";
+import { GitlabRunnerAutoscalingJobRunnerProps } from "./job-runner";
 
 /**
  * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.
@@ -60,7 +55,7 @@ export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
    */
   readonly manager?: GitlabRunnerAutoscalingManagerProps;
 
-  readonly runners?: GitlabRunnerAutoscalingRunnerProps[];
+  readonly runners?: GitlabRunnerAutoscalingJobRunnerProps[];
 }
 
 /**
@@ -77,75 +72,6 @@ export interface GitlabRunnerAutoscalingCacheProps {
    * If no existing S3 bucket is provided, a S3 bucket will be created.
    */
   readonly options?: CacheProps;
-}
-
-/**
- * The runner EC2 instances configuration. If not set, the defaults will be used.
- * @link GitlabRunnerAutoscalingProps
- */
-export interface GitlabRunnerAutoscalingRunnerProps {
-  /**
-   * The GitLab Runner’s authentication token, which is obtained during runner registration.
-   * @see https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
-   */
-  readonly gitlabToken: string;
-
-  /**
-   * GitLab instance URL.
-   * @default "https://gitlab.com"
-   */
-  readonly gitlabUrl?: string;
-
-  /**
-   * Instance type for runner EC2 instances. It's a combination of a class and size.
-   * @default InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
-   */
-  readonly instanceType?: InstanceType;
-
-  /**
-   * An Amazon Machine Image ID for the Runners EC2 instances. If empty the latest Ubuntu 20.04 focal will be looked up.
-   *
-   * Any operating system supported by Dcoker Machine's provisioner.
-   *
-   * @see https://cloud-images.ubuntu.com/locator/ec2/
-   * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
-   */
-  readonly machineImage?: IMachineImage;
-
-  /**
-   * Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
-   */
-  readonly role?: IRole;
-  /**
-   * Limit how many jobs can be handled concurrently by this registered runner. 0 (default) means do not limit.
-   * @default 10
-   */
-  readonly limit?: number;
-
-  /**
-   * Maximum build log size in kilobytes. Default is 4096 (4MB).
-   * @default 52428800 (50GB)
-   */
-  readonly outputLimit?: number;
-
-  /**
-   * Append or overwrite environment variables.
-   * @default ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"]
-   */
-  readonly environment?: string[];
-
-  /**
-   * Optional docker configuration
-   */
-  readonly docker?: DockerConfiguration;
-  /**
-   * Optional docker machine configuration
-   */
-  readonly machine?: MachineConfiguration;
-  /**
-   * Optional autoscaling configuration
-   */
-  readonly autoscaling?: AutoscalingConfiguration[];
 }
 
 /**

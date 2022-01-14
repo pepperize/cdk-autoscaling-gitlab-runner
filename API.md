@@ -108,6 +108,7 @@ new GitlabRunnerAutoscaling(scope: Stack, id: string, props: GitlabRunnerAutosca
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | [`cacheBucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertycachebucket)<span title="Required">*</span> | [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket) | *No description.* |
+| [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertymanager)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager) | *No description.* |
 | [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertynetwork)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.Network`](#@pepperize/cdk-autoscaling-gitlab-runner.Network) | *No description.* |
 
 ---
@@ -122,6 +123,16 @@ public readonly cacheBucket: IBucket;
 
 ---
 
+##### `manager`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.manager" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertymanager"></a>
+
+```typescript
+public readonly manager: GitlabRunnerAutoscalingManager;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager)
+
+---
+
 ##### `network`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.network" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertynetwork"></a>
 
 ```typescript
@@ -129,6 +140,89 @@ public readonly network: Network;
 ```
 
 - *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.Network`](#@pepperize/cdk-autoscaling-gitlab-runner.Network)
+
+---
+
+
+### GitlabRunnerAutoscalingManager <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanager"></a>
+
+Settings for the manager (coordinator).
+
+Manager coordinates the placement of runner (job executor) instances
+
+#### Initializers <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.Initializer" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerinitializer"></a>
+
+```typescript
+import { GitlabRunnerAutoscalingManager } from '@pepperize/cdk-autoscaling-gitlab-runner'
+
+new GitlabRunnerAutoscalingManager(scope: Stack, id: string, props?: GitlabRunnerAutoscalingManagerProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`scope`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerparameterscope)<span title="Required">*</span> | [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack) | *No description.* |
+| [`id`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerparameterid)<span title="Required">*</span> | `string` | *No description.* |
+| [`props`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerparameterprops) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps) | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.parameter.scope" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerparameterscope"></a>
+
+- *Type:* [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack)
+
+---
+
+##### `id`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.parameter.id" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerparameterid"></a>
+
+- *Type:* `string`
+
+---
+
+##### `props`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.parameter.props" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerparameterprops"></a>
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps)
+
+---
+
+
+
+#### Properties <a name="Properties" id="properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyinstancetype)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | *No description.* |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertymachineimage)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | *No description.* |
+| [`keyPairName`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertykeypairname) | `string` | *No description.* |
+
+---
+
+##### `instanceType`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyinstancetype"></a>
+
+```typescript
+public readonly instanceType: InstanceType;
+```
+
+- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
+
+---
+
+##### `machineImage`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertymachineimage"></a>
+
+```typescript
+public readonly machineImage: IMachineImage;
+```
+
+- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
+
+---
+
+##### `keyPairName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.keyPairName" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertykeypairname"></a>
+
+```typescript
+public readonly keyPairName: string;
+```
+
+- *Type:* `string`
 
 ---
 
@@ -1131,49 +1225,147 @@ If no existing S3 bucket is provided, a S3 bucket will be created.
 
 ---
 
-### GitlabRunnerAutoscalingManager <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanager"></a>
+### GitlabRunnerAutoscalingJobRunnerProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerprops"></a>
+
+The runner EC2 instances configuration.
+
+If not set, the defaults will be used.
+
+> [GitlabRunnerAutoscalingProps](GitlabRunnerAutoscalingProps)
 
 #### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscalingManager } from '@pepperize/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscalingJobRunnerProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
-const gitlabRunnerAutoscalingManager: GitlabRunnerAutoscalingManager = { ... }
+const gitlabRunnerAutoscalingJobRunnerProps: GitlabRunnerAutoscalingJobRunnerProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`autoScalingGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyautoscalinggroup)<span title="Required">*</span> | [`@aws-cdk/aws-autoscaling.IAutoScalingGroup`](#@aws-cdk/aws-autoscaling.IAutoScalingGroup) | *No description.* |
-| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyinstancetype)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | *No description.* |
-| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertymachineimage)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | *No description.* |
-| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyrole)<span title="Required">*</span> | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | *No description.* |
-| [`securityGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertysecuritygroup)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup) | *No description.* |
+| [`gitlabToken`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertygitlabtoken)<span title="Required">*</span> | `string` | The GitLab Runner’s authentication token, which is obtained during runner registration. |
+| [`autoscaling`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyautoscaling) | [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[] | Optional autoscaling configuration. |
+| [`docker`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertydocker) | [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration) | Optional docker configuration. |
+| [`environment`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyenvironment) | `string`[] | Append or overwrite environment variables. |
+| [`gitlabUrl`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertygitlaburl) | `string` | GitLab instance URL. |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyinstancetype) | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | Instance type for runner EC2 instances. |
+| [`limit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertylimit) | `number` | Limit how many jobs can be handled concurrently by this registered runner. |
+| [`machine`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertymachine) | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration) | Optional docker machine configuration. |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertymachineimage) | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | An Amazon Machine Image ID for the Runners EC2 instances. |
+| [`outputLimit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyoutputlimit) | `number` | Maximum build log size in kilobytes. |
+| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyrole) | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances. |
 
 ---
 
-##### `autoScalingGroup`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.autoScalingGroup" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyautoscalinggroup"></a>
+##### `gitlabToken`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.gitlabToken" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertygitlabtoken"></a>
 
 ```typescript
-public readonly autoScalingGroup: IAutoScalingGroup;
+public readonly gitlabToken: string;
 ```
 
-- *Type:* [`@aws-cdk/aws-autoscaling.IAutoScalingGroup`](#@aws-cdk/aws-autoscaling.IAutoScalingGroup)
+- *Type:* `string`
+
+The GitLab Runner’s authentication token, which is obtained during runner registration.
+
+> https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
 
 ---
 
-##### `instanceType`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyinstancetype"></a>
+##### `autoscaling`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.autoscaling" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyautoscaling"></a>
+
+```typescript
+public readonly autoscaling: AutoscalingConfiguration[];
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[]
+
+Optional autoscaling configuration.
+
+---
+
+##### `docker`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.docker" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertydocker"></a>
+
+```typescript
+public readonly docker: DockerConfiguration;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration)
+
+Optional docker configuration.
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.environment" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyenvironment"></a>
+
+```typescript
+public readonly environment: string[];
+```
+
+- *Type:* `string`[]
+- *Default:* ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"]
+
+Append or overwrite environment variables.
+
+---
+
+##### `gitlabUrl`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.gitlabUrl" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertygitlaburl"></a>
+
+```typescript
+public readonly gitlabUrl: string;
+```
+
+- *Type:* `string`
+- *Default:* "https://gitlab.com"
+
+GitLab instance URL.
+
+---
+
+##### `instanceType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyinstancetype"></a>
 
 ```typescript
 public readonly instanceType: InstanceType;
 ```
 
 - *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
+- *Default:* InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
+
+Instance type for runner EC2 instances.
+
+It's a combination of a class and size.
 
 ---
 
-##### `machineImage`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertymachineimage"></a>
+##### `limit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.limit" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertylimit"></a>
+
+```typescript
+public readonly limit: number;
+```
+
+- *Type:* `number`
+- *Default:* 10
+
+Limit how many jobs can be handled concurrently by this registered runner.
+
+0 (default) means do not limit.
+
+---
+
+##### `machine`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.machine" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertymachine"></a>
+
+```typescript
+public readonly machine: MachineConfiguration;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration)
+
+Optional docker machine configuration.
+
+---
+
+##### `machineImage`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertymachineimage"></a>
 
 ```typescript
 public readonly machineImage: IMachineImage;
@@ -1181,9 +1373,30 @@ public readonly machineImage: IMachineImage;
 
 - *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
 
+An Amazon Machine Image ID for the Runners EC2 instances.
+
+If empty the latest Ubuntu 20.04 focal will be looked up.  Any operating system supported by Dcoker Machine's provisioner.
+
+> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
+
 ---
 
-##### `role`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.role" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyrole"></a>
+##### `outputLimit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.outputLimit" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyoutputlimit"></a>
+
+```typescript
+public readonly outputLimit: number;
+```
+
+- *Type:* `number`
+- *Default:* 52428800 (50GB)
+
+Maximum build log size in kilobytes.
+
+Default is 4096 (4MB).
+
+---
+
+##### `role`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.role" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyrole"></a>
 
 ```typescript
 public readonly role: IRole;
@@ -1191,15 +1404,7 @@ public readonly role: IRole;
 
 - *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
 
----
-
-##### `securityGroup`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.property.securityGroup" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertysecuritygroup"></a>
-
-```typescript
-public readonly securityGroup: ISecurityGroup;
-```
-
-- *Type:* [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup)
+Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
 
 ---
 
@@ -1293,7 +1498,7 @@ const gitlabRunnerAutoscalingProps: GitlabRunnerAutoscalingProps = { ... }
 | [`cache`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertycache) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps) | *No description.* |
 | [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertymanager) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps) | The manager EC2 instance configuration. |
 | [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertynetwork) | [`@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps) | The network configuration for the Runner. |
-| [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps)[] | *No description.* |
+| [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps)[] | *No description.* |
 
 ---
 
@@ -1394,193 +1599,10 @@ If not set, the defaults will be used.
 ##### `runners`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.runners" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners"></a>
 
 ```typescript
-public readonly runners: GitlabRunnerAutoscalingRunnerProps[];
+public readonly runners: GitlabRunnerAutoscalingJobRunnerProps[];
 ```
 
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps)[]
-
----
-
-### GitlabRunnerAutoscalingRunnerProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerprops"></a>
-
-The runner EC2 instances configuration.
-
-If not set, the defaults will be used.
-
-> [GitlabRunnerAutoscalingProps](GitlabRunnerAutoscalingProps)
-
-#### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
-
-```typescript
-import { GitlabRunnerAutoscalingRunnerProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
-
-const gitlabRunnerAutoscalingRunnerProps: GitlabRunnerAutoscalingRunnerProps = { ... }
-```
-
-#### Properties <a name="Properties" id="properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| [`gitlabToken`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertygitlabtoken)<span title="Required">*</span> | `string` | The GitLab Runner’s authentication token, which is obtained during runner registration. |
-| [`autoscaling`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyautoscaling) | [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[] | Optional autoscaling configuration. |
-| [`docker`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertydocker) | [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration) | Optional docker configuration. |
-| [`environment`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyenvironment) | `string`[] | Append or overwrite environment variables. |
-| [`gitlabUrl`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertygitlaburl) | `string` | GitLab instance URL. |
-| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyinstancetype) | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | Instance type for runner EC2 instances. |
-| [`limit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertylimit) | `number` | Limit how many jobs can be handled concurrently by this registered runner. |
-| [`machine`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachine) | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration) | Optional docker machine configuration. |
-| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachineimage) | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | An Amazon Machine Image ID for the Runners EC2 instances. |
-| [`outputLimit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyoutputlimit) | `number` | Maximum build log size in kilobytes. |
-| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyrole) | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances. |
-
----
-
-##### `gitlabToken`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.gitlabToken" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertygitlabtoken"></a>
-
-```typescript
-public readonly gitlabToken: string;
-```
-
-- *Type:* `string`
-
-The GitLab Runner’s authentication token, which is obtained during runner registration.
-
-> https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
-
----
-
-##### `autoscaling`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.autoscaling" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyautoscaling"></a>
-
-```typescript
-public readonly autoscaling: AutoscalingConfiguration[];
-```
-
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[]
-
-Optional autoscaling configuration.
-
----
-
-##### `docker`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.docker" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertydocker"></a>
-
-```typescript
-public readonly docker: DockerConfiguration;
-```
-
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration)
-
-Optional docker configuration.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.environment" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyenvironment"></a>
-
-```typescript
-public readonly environment: string[];
-```
-
-- *Type:* `string`[]
-- *Default:* ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"]
-
-Append or overwrite environment variables.
-
----
-
-##### `gitlabUrl`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.gitlabUrl" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertygitlaburl"></a>
-
-```typescript
-public readonly gitlabUrl: string;
-```
-
-- *Type:* `string`
-- *Default:* "https://gitlab.com"
-
-GitLab instance URL.
-
----
-
-##### `instanceType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyinstancetype"></a>
-
-```typescript
-public readonly instanceType: InstanceType;
-```
-
-- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
-- *Default:* InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
-
-Instance type for runner EC2 instances.
-
-It's a combination of a class and size.
-
----
-
-##### `limit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.limit" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertylimit"></a>
-
-```typescript
-public readonly limit: number;
-```
-
-- *Type:* `number`
-- *Default:* 10
-
-Limit how many jobs can be handled concurrently by this registered runner.
-
-0 (default) means do not limit.
-
----
-
-##### `machine`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.machine" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachine"></a>
-
-```typescript
-public readonly machine: MachineConfiguration;
-```
-
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration)
-
-Optional docker machine configuration.
-
----
-
-##### `machineImage`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachineimage"></a>
-
-```typescript
-public readonly machineImage: IMachineImage;
-```
-
-- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
-
-An Amazon Machine Image ID for the Runners EC2 instances.
-
-If empty the latest Ubuntu 20.04 focal will be looked up.  Any operating system supported by Dcoker Machine's provisioner.
-
-> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
-
----
-
-##### `outputLimit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.outputLimit" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyoutputlimit"></a>
-
-```typescript
-public readonly outputLimit: number;
-```
-
-- *Type:* `number`
-- *Default:* 52428800 (50GB)
-
-Maximum build log size in kilobytes.
-
-Default is 4096 (4MB).
-
----
-
-##### `role`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunnerProps.property.role" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyrole"></a>
-
-```typescript
-public readonly role: IRole;
-```
-
-- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
-
-Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps)[]
 
 ---
 
