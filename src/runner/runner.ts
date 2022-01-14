@@ -21,11 +21,11 @@ import {
 import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { IBucket } from "@aws-cdk/aws-s3";
 import { Construct, Duration, Stack, Tags } from "@aws-cdk/core";
-import {ConfigurationMapper, GlobalConfiguration, LogFormat, LogLevel} from "../runner-configuration";
+import { ConfigurationMapper, GlobalConfiguration, LogFormat, LogLevel } from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
+import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerProps } from "./job-runner";
 import { GitlabRunnerAutoscalingManager, GitlabRunnerAutoscalingManagerProps } from "./manager";
 import { Network, NetworkProps } from "./network";
-import {GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerProps} from "./job-runner";
 
 /**
  * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.
