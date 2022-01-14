@@ -1,10 +1,5 @@
-import { AutoScalingGroup, IAutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
+import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
 import {
-  AmazonLinuxCpuType,
-  AmazonLinuxEdition,
-  AmazonLinuxGeneration,
-  AmazonLinuxStorage,
-  AmazonLinuxVirt,
   CloudFormationInit,
   IMachineImage,
   InitCommand,
@@ -34,7 +29,7 @@ import {
   MachineConfiguration,
 } from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
-import { GitlabRunnerAutoscalingManagerProps } from "./manager";
+import { GitlabRunnerAutoscalingManager, GitlabRunnerAutoscalingManagerProps } from "./manager";
 import { Network, NetworkProps } from "./network";
 
 /**
@@ -174,6 +169,8 @@ export class GitlabRunnerAutoscaling extends Construct {
 
   readonly cacheBucket: IBucket;
 
+  readonly manager: GitlabRunnerAutoscalingManager;
+
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
     const { manager, cache, runners, network }: GitlabRunnerAutoscalingProps = props;
@@ -223,24 +220,15 @@ export class GitlabRunnerAutoscaling extends Construct {
     /**
      * GitLab Manager
      */
+
+    this.manager = new GitlabRunnerAutoscalingManager(scope, "Manager", manager);
+
     const managerSecurityGroup = new SecurityGroup(scope, "ManagerSecurityGroup", {
       vpc: this.network.vpc,
       description: "Security group for GitLab Runners Manager.",
     });
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(22), "SSH traffic from Manager");
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(2376), "SSH traffic from Docker");
-
-    const managerInstanceType = manager?.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.NANO);
-
-    const managerMachineImage =
-      manager?.machineImage ||
-      MachineImage.latestAmazonLinux({
-        generation: AmazonLinuxGeneration.AMAZON_LINUX_2,
-        edition: AmazonLinuxEdition.STANDARD,
-        virtualization: AmazonLinuxVirt.HVM,
-        storage: AmazonLinuxStorage.EBS,
-        cpuType: AmazonLinuxCpuType.X86_64,
-      });
 
     const managerRole = new Role(scope, "ManagerRole", {
       assumedBy: ec2ServicePrincipal,
@@ -481,9 +469,9 @@ export class GitlabRunnerAutoscaling extends Construct {
       vpcSubnets: {
         subnets: [this.network.subnet],
       },
-      instanceType: managerInstanceType,
-      machineImage: managerMachineImage,
-      keyName: manager?.keyPairName,
+      instanceType: this.manager.instanceType,
+      machineImage: this.manager.machineImage,
+      keyName: this.manager.keyPairName,
       securityGroup: managerSecurityGroup,
       role: managerRole,
       userData: userData,
@@ -508,10 +496,10 @@ export interface GitlabRunnerAutoscalingRunners {
   readonly machineImage: IMachineImage;
 }
 
-export interface GitlabRunnerAutoscalingManager {
+/*export interface GitlabRunnerAutoscalingManager {
   readonly securityGroup: ISecurityGroup;
   readonly instanceType: InstanceType;
   readonly machineImage: IMachineImage;
   readonly autoScalingGroup: IAutoScalingGroup;
   readonly role: IRole;
-}
+}*/
