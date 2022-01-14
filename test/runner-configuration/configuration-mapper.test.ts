@@ -160,4 +160,51 @@ describe("ConfigurationMapper", () => {
     // Then
     expect(actual).toEqual({});
   });
+  it("Should return multiple runners configuration", () => {
+    // Given
+    const props: ConfigurationMapperProps = {
+      globalConfiguration: {},
+      runnersConfiguration: [
+        {
+          token: "foo+bar",
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {
+              serverAddress: "s3.amazonaws.com",
+              bucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketLocation: "us-east-1",
+              accessKey: "AKIAIOSFODNN7EXAMPLE",
+              secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            },
+          },
+        },
+        {
+          token: "2foo+bar",
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {
+              serverAddress: "2s3.amazonaws.com",
+              bucketName: "2gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketLocation: "2us-east-1",
+              accessKey: "2AKIAIOSFODNN7EXAMPLE",
+              secretKey: "2wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            },
+          },
+        },
+      ],
+    };
+
+    // When
+    const mapper = ConfigurationMapper.withDefaults(props);
+    const actual = mapper.toToml();
+
+    // Then
+    expect(actual).toMatchSnapshot();
+  });
 });
