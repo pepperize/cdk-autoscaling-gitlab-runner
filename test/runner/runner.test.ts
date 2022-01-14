@@ -70,4 +70,31 @@ describe("GitlabRunnerAutoscaling", () => {
     template.hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", capture);
     expect(capture.asObject()).toMatchObject({ InstanceType: "t3.nano" });
   });
+
+  it("Should have multiple runner configuration", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "MockStack", {
+      env: {
+        account: "0",
+        region: "us-east-1",
+      },
+    });
+
+    // When
+    new GitlabRunnerAutoscaling(stack, "Runner", {
+      runners: [
+        {
+          gitlabToken: "runner-1",
+        },
+        {
+          gitlabToken: "runner-2",
+        },
+      ],
+    });
+
+    // Then
+    const template = Template.fromStack(stack);
+    expect(template).toMatchSnapshot();
+  });
 });
