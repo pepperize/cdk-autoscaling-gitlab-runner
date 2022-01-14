@@ -86,8 +86,10 @@ export interface GitlabRunnerAutoscalingCacheProps {
  *   }
  * });
  *
- * new GitlabRunnerAutoscaling(scope, "GitlabRunner", {
- *   gitlabToken: "xxxxxxxxxxxxxxxxxxxx",
+ * new GitlabRunnerAutoscaling(stack, "GitlabRunner", {
+ *   runners: [{
+ *     gitlabToken: "xxxxxxxxxxxxxxxxxxxx"},
+ *   }]
  * });
  */
 export class GitlabRunnerAutoscaling extends Construct {
