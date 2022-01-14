@@ -2004,9 +2004,9 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0:
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
 constructs@^3.3.69:
-  version "3.3.187"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.187.tgz#0e164418e6307fb9f34f8233b467535056b2e4a8"
-  integrity sha512-0Y2R9cTV7+ASjPpFkOYCb3cA7BJRM1OVVwJfZCEUa+Nxpq7EK9K9hoz/8FuvQBVQV3hCu+VisEC5iDcM/Dg2qw==
+  version "3.3.188"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.188.tgz#69da61c5ba2c570ab8b85026a74ff96717b34d9d"
+  integrity sha512-pwp9ernak8Ejxsms6q8QrqFVbXp3n/Fw6oFvW/htGjN+y/oXSTbAqwGk5+oEouLrSzXDax8IMdNDZf1GJ7oZfg==
 
 conventional-changelog-angular@^5.0.12:
   version "5.0.13"
@@ -2458,9 +2458,9 @@ duplexer3@^0.1.4:
   integrity sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI=
 
 electron-to-chromium@^1.4.17:
-  version "1.4.44"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.44.tgz#8a41923afdd6ef5ddabe001626036ba5d1d64ae6"
-  integrity sha512-tHGWiUUmY7GABK8+DNcr474cnZDTzD8x1736SlDosVH8+/vRJeqfaIBAEHFtMjddz/0T4rKKYsxEc8BwQRdBpw==
+  version "1.4.45"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.45.tgz#cf1144091d6683cbd45a231954a745f02fb24598"
+  integrity sha512-czF9eYVuOmlY/vxyMQz2rGlNSjZpxNQYBe1gmQv7al171qOIhgyO9k7D5AKlgeTCSPKk+LHhj5ZyIdmEub9oNg==
 
 emittery@^0.8.1:
   version "0.8.1"
@@ -4224,10 +4224,10 @@ jsii-diff@^1.52.1:
     typescript "~3.9.10"
     yargs "^16.2.0"
 
-jsii-docgen@^4.2.38:
-  version "4.2.38"
-  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-4.2.38.tgz#60a413c7b3a02722d61689b9a6b719adb6162619"
-  integrity sha512-LrYtn4mShUZFDWwWNZbAv6Zt9PeSNJlg0qQZZ9FlwPv5IilLf9El01ahOOiybXYGY3Z465t1B8XYui4J6N92sw==
+jsii-docgen@^4.2.39:
+  version "4.2.39"
+  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-4.2.39.tgz#26167bf88d393c4eb5b2e1ea1ae266e0569cea5c"
+  integrity sha512-h2DNtXP91YaU5PvkVQ+D9XZiAfz9dMgE+lW+01MKZBEp5spMCdEBz2zRl5Caf6ygMJRyU88oRrlOuRykYND1ug==
   dependencies:
     "@jsii/spec" "^1.52.1"
     case "^1.6.3"
@@ -5517,9 +5517,9 @@ redent@^3.0.0:
     strip-indent "^3.0.0"
 
 regexp.prototype.flags@^1.3.0:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/regexp.prototype.flags/-/regexp.prototype.flags-1.3.1.tgz#7ef352ae8d159e758c0eadca6f8fcb4eef07be26"
-  integrity sha512-JiBdRBq91WlY7uRJ0ds7R+dU02i6LKi8r3BuQhNXn+kmeLN+EfHhfjqMRis1zJxnlu88hq/4dx0P2OP3APRTOA==
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/regexp.prototype.flags/-/regexp.prototype.flags-1.3.2.tgz#ea664a0cf7fecf6bf811a84a06ba88c52b38a5a6"
+  integrity sha512-uaro52GSI5be7+ssxjxxnLlleDBN3VHIWQHvBhfeeSXRQkuV/0Jo/hBU+omYH6NUkM+LYpTHnRRf2W/v+x7LzQ==
   dependencies:
     call-bind "^1.0.2"
     define-properties "^1.1.3"
