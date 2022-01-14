@@ -1,30 +1,16 @@
 import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
-import {
-  CloudFormationInit,
-  IMachineImage,
-  InitCommand,
-  InitConfig,
-  InitFile,
-  InitPackage,
-  InitService,
-  InitServiceRestartHandle,
-  InstanceClass,
-  InstanceSize,
-  InstanceType,
-  ISecurityGroup,
-  LookupMachineImage,
-  MachineImage,
-  Port,
-  SecurityGroup,
-  UserData,
-} from "@aws-cdk/aws-ec2";
-import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
+import { Port, SecurityGroup } from "@aws-cdk/aws-ec2";
 import { IBucket } from "@aws-cdk/aws-s3";
-import { Construct, Duration, Stack, Tags } from "@aws-cdk/core";
-import { ConfigurationMapper, GlobalConfiguration, LogFormat, LogLevel } from "../runner-configuration";
+import { Construct, Duration, Stack } from "@aws-cdk/core";
+import {
+  GitlabRunnerAutoscalingManagerConfiguration,
+  GlobalConfiguration,
+  LogFormat,
+  LogLevel,
+} from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
-import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerProps } from "./job-runner";
-import { GitlabRunnerAutoscalingManager, GitlabRunnerAutoscalingManagerProps } from "./manager";
+import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerConfiguration } from "./job-runner";
+import { GitlabRunnerAutoscalingManager } from "./manager";
 import { Network, NetworkProps } from "./network";
 
 /**
@@ -51,11 +37,11 @@ export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
 
   /**
    * The manager EC2 instance configuration. If not set, the defaults will be used.
-   * @link GitlabRunnerAutoscalingManagerProps
+   * @link GitlabRunnerAutoscalingManagerConfiguration
    */
-  readonly manager?: GitlabRunnerAutoscalingManagerProps;
+  readonly manager?: GitlabRunnerAutoscalingManagerConfiguration;
 
-  readonly runners: GitlabRunnerAutoscalingJobRunnerProps[];
+  readonly runners: GitlabRunnerAutoscalingJobRunnerConfiguration[];
 }
 
 /**
@@ -107,8 +93,6 @@ export class GitlabRunnerAutoscaling extends Construct {
 
   readonly manager: GitlabRunnerAutoscalingManager;
 
-  readonly runners: GitlabRunnerAutoscalingJobRunner[];
-
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
     const {
@@ -142,47 +126,14 @@ export class GitlabRunnerAutoscaling extends Construct {
     this.network = new Network(scope, "Network", network);
 
     /**
-     * IAM
+     * Security groups
      */
-    const ec2ServicePrincipal = new ServicePrincipal("ec2.amazonaws.com", {});
-    const ec2ManagedPolicyForSSM = ManagedPolicy.fromManagedPolicyArn(
-      scope,
-      "AmazonEC2RoleforSSM",
-      "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
-    );
-
-    /**
-     * GitLab Runners
-     */
-    this.runners = runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {
-      return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, runnerProps);
-    });
-
     const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(scope, "RunnersSecurityGroup", {
       securityGroupName: runnersSecurityGroupName,
       description: "Security group for GitLab Runners.",
       vpc: this.network.vpc,
     });
-
-    const runnersLookupMachineImage = new LookupMachineImage({
-      name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
-      owners: ["099720109477"],
-      filters: {
-        architecture: ["x86_64"],
-        "image-type": ["machine"],
-        state: ["available"],
-        "root-device-type": ["ebs"],
-        "virtualization-type": ["hvm"],
-      },
-    }).getImage(this);
-
-    /**
-     * GitLab Manager
-     */
-
-    this.manager = new GitlabRunnerAutoscalingManager(scope, "Manager", manager);
-
     const managerSecurityGroup = new SecurityGroup(scope, "ManagerSecurityGroup", {
       vpc: this.network.vpc,
       description: "Security group for GitLab Runners Manager.",
@@ -190,238 +141,26 @@ export class GitlabRunnerAutoscaling extends Construct {
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(22), "SSH traffic from Manager");
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(2376), "SSH traffic from Docker");
 
-    const managerRole = new Role(scope, "ManagerRole", {
-      assumedBy: ec2ServicePrincipal,
-      managedPolicies: [ec2ManagedPolicyForSSM],
-      inlinePolicies: {
-        Cache: PolicyDocument.fromJson({
-          Version: "2012-10-17",
-          Statement: [
-            {
-              Effect: "Allow",
-              Action: ["s3:ListObjects*", "s3:GetObject*", "s3:DeleteObject*", "s3:PutObject*"],
-              Resource: [`${this.cacheBucket.bucketArn}/*`],
-            },
-            {
-              Effect: "Allow",
-              Action: ["s3:ListBucket"],
-              Resource: [`${this.cacheBucket.bucketArn}`],
-            },
-          ],
-        }),
-        Runners: PolicyDocument.fromJson({
-          Version: "2012-10-17",
-          Statement: [
-            {
-              Effect: "Allow",
-              Action: ["ec2:CreateKeyPair", "ec2:DeleteKeyPair", "ec2:ImportKeyPair", "ec2:Describe*"],
-              Resource: ["*"],
-            },
-            {
-              Effect: "Allow",
-              Action: ["ec2:CreateTags", "ssm:UpdateInstanceInformation"],
-              Resource: ["*"],
-              Condition: {
-                StringLike: {
-                  "aws:RequestTag/Name": "*gitlab-runner-*",
-                },
-                "ForAllValues:StringEquals": {
-                  "aws:TagKeys": ["Name"],
-                },
-              },
-            },
-            {
-              Effect: "Allow",
-              Action: ["ec2:RequestSpotInstances", "ec2:CancelSpotInstanceRequests"],
-              Resource: ["*"],
-              Condition: {
-                StringEqualsIfExists: {
-                  "ec2:Region": `${scope.region}`,
-                },
-                ArnEqualsIfExists: {
-                  "ec2:Vpc": `${this.network.vpc.vpcArn}`,
-                },
-              },
-            },
-            {
-              Effect: "Allow",
-              Action: ["ec2:RunInstances"],
-              Resource: ["*"],
-              Condition: {
-                StringEquals: {
-                  "ec2:InstanceType": (runners || []).map((runner) => {
-                    const runnersInstanceType =
-                      (runners && runner.instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
-                    return runnersInstanceType.toString();
-                  }),
-                  "ForAllValues:StringEquals": {
-                    "aws:TagKeys": ["InstanceProfile"],
-                  },
-                },
-              },
-            },
-            {
-              Effect: "Allow",
-              Action: ["ec2:TerminateInstances", "ec2:StopInstances", "ec2:StartInstances", "ec2:RebootInstances"],
-              Resource: ["*"],
-              Condition: {
-                StringLike: {
-                  "ec2:ResourceTag/Name": "*gitlab-runner-*",
-                },
-              },
-            },
-            {
-              Effect: "Allow",
-              Action: ["iam:PassRole"],
-              Resource: ["*"],
-              Condition: {
-                "ForAllValues:StringEquals": {
-                  "aws:TagKeys": ["RunnersRole"],
-                },
-              },
-            },
-          ],
-        }),
-      },
-    });
-
-    const userData = UserData.forLinux({});
-    userData.addCommands(
-      `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
-    );
-
-    const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
-    gitlabRunnerConfigRestartHandle._addFile("/etc/gitlab-runner/config.toml");
-
-    const rsyslogConfigRestartHandle = new InitServiceRestartHandle();
-    rsyslogConfigRestartHandle._addFile("/etc/rsyslog.d/25-gitlab-runner.conf");
-
     /**
-     * Config set keys
-     * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html#aws-resource-init-configsets
+     * GitLab Manager
      */
-    const REPOSITORIES = "repositories";
-    const PACKAGES = "packages";
-    const CONFIG = "config";
-    const RESTART = "restart";
-
-    const initConfig = CloudFormationInit.fromConfigSets({
-      configSets: {
-        default: [REPOSITORIES, PACKAGES, CONFIG, RESTART],
+    this.manager = new GitlabRunnerAutoscalingManager(scope, "Manager", {
+      ...manager,
+      globalConfiguration: {
+        concurrent: this.concurrent,
+        checkInterval: this.checkInterval,
+        logFormat: this.logFormat,
+        logLevel: this.logLevel,
       },
-      configs: {
-        [REPOSITORIES]: new InitConfig([
-          InitCommand.shellCommand(
-            "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash",
-            { key: "10-gitlab-runner" }
-          ),
-        ]),
-        [PACKAGES]: new InitConfig([
-          InitPackage.yum("docker"),
-          InitPackage.yum("gitlab-runner"),
-          InitPackage.yum("tzdata"),
-          InitCommand.shellCommand(
-            "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
-            //"curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
-            { key: "10-docker-machine" }
-          ),
-          InitCommand.shellCommand("gitlab-runner start", {
-            key: "20-gitlab-runner-start",
-          }),
-        ]),
-        [CONFIG]: new InitConfig([
-          InitFile.fromString(
-            "/etc/gitlab-runner/config.toml",
-            ConfigurationMapper.withDefaults({
-              globalConfiguration: {
-                concurrent: this.concurrent,
-                checkInterval: this.checkInterval,
-                logFormat: this.logFormat,
-                logLevel: this.logLevel,
-              },
-              runnersConfiguration: (runners || []).map((runner) => {
-                const runnersInstanceType =
-                  (runners && runner.instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
-
-                const runnersRole =
-                  (runners && runner.role) ||
-                  new Role(scope, "RunnersRole", {
-                    assumedBy: ec2ServicePrincipal,
-                    managedPolicies: [ec2ManagedPolicyForSSM],
-                  });
-
-                const runnersInstanceProfile = new CfnInstanceProfile(scope, "RunnersInstanceProfile", {
-                  roles: [runnersRole.roleName],
-                });
-
-                Tags.of(runnersInstanceProfile).add("RunnersInstanceProfile", "RunnersInstanceProfile");
-
-                Tags.of(runnersRole).add("RunnersRole", "RunnersRole");
-
-                const runnersMachineImage: IMachineImage =
-                  (runners && runner.machineImage) ||
-                  MachineImage.genericLinux({
-                    [scope.region]: runnersLookupMachineImage.imageId,
-                  });
-                return {
-                  ...runner,
-                  machine: {
-                    ...runner.machine,
-                    machineOptions: {
-                      ...runner.machine?.machineOptions,
-                      instanceType: runnersInstanceType.toString(),
-                      ami: runnersMachineImage.getImage(scope).imageId,
-                      region: scope.region,
-                      vpcId: this.network.vpc.vpcId,
-                      zone: this.network.availabilityZone.slice(-1),
-                      subnetId: this.network.subnet.subnetId,
-                      securityGroup: `${runnersSecurityGroupName}`,
-                      usePrivateAddress: true,
-                      iamInstanceProfile: `${runnersInstanceProfile.ref}`,
-                    },
-                  },
-                  cache: {
-                    s3: {
-                      serverAddress: `s3.${scope.urlSuffix}`,
-                      bucketName: `${this.cacheBucket.bucketName}`,
-                      bucketLocation: `${scope.region}`,
-                    },
-                  },
-                };
-              }),
-            }).toToml(),
-            {
-              owner: "gitlab-runner",
-              group: "gitlab-runner",
-              mode: "000600",
-            }
-          ),
-          InitFile.fromString(
-            "/etc/rsyslog.d/25-gitlab-runner.conf",
-            `:programname, isequal, "gitlab-runner" /var/log/gitlab-runner.log`,
-            {
-              owner: "root",
-              group: "root",
-              mode: "000644",
-            }
-          ),
-          InitService.enable("gitlab-runner", {
-            ensureRunning: true,
-            enabled: true,
-            serviceRestartHandle: gitlabRunnerConfigRestartHandle,
-          }),
-          InitService.enable("rsyslog", {
-            ensureRunning: true,
-            enabled: true,
-            serviceRestartHandle: rsyslogConfigRestartHandle,
-          }),
-        ]),
-        [RESTART]: new InitConfig([
-          InitCommand.shellCommand("gitlab-runner restart", {
-            key: "10-gitlab-runner-restart",
-          }),
-        ]),
-      },
+      runnersSecurityGroupName: runnersSecurityGroupName,
+      network: this.network,
+      cacheBucket: this.cacheBucket,
+      runners: runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {
+        return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, {
+          name: `gitlab-runner-${index}`,
+          ...runnerProps,
+        });
+      }),
     });
 
     new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
@@ -433,9 +172,9 @@ export class GitlabRunnerAutoscaling extends Construct {
       machineImage: this.manager.machineImage,
       keyName: this.manager.keyPairName,
       securityGroup: managerSecurityGroup,
-      role: managerRole,
-      userData: userData,
-      init: initConfig,
+      role: this.manager.role,
+      userData: this.manager.userData,
+      init: this.manager.initConfig,
       initOptions: {
         ignoreFailures: false,
       },
@@ -446,20 +185,3 @@ export class GitlabRunnerAutoscaling extends Construct {
     });
   }
 }
-
-export interface GitlabRunnerAutoscalingRunners {
-  readonly securityGroupName: string;
-  readonly securityGroup: ISecurityGroup;
-  readonly role: IRole;
-  readonly instanceProfile: CfnInstanceProfile;
-  readonly instanceType: InstanceType;
-  readonly machineImage: IMachineImage;
-}
-
-/*export interface GitlabRunnerAutoscalingManager {
-  readonly securityGroup: ISecurityGroup;
-  readonly instanceType: InstanceType;
-  readonly machineImage: IMachineImage;
-  readonly autoScalingGroup: IAutoScalingGroup;
-  readonly role: IRole;
-}*/

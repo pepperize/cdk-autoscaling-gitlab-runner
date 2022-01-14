@@ -6,15 +6,21 @@ import {
   LookupMachineImage,
   MachineImage,
 } from "@aws-cdk/aws-ec2";
-import { IRole } from "@aws-cdk/aws-iam";
+import { CfnInstanceProfile, IRole, ManagedPolicy, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { AutoscalingConfiguration, DockerConfiguration, MachineConfiguration } from "../runner-configuration";
-import { Construct, Stack } from "@aws-cdk/core";
+import { Construct, Stack, Tags } from "@aws-cdk/core";
+import { pascalCase } from "pascal-case";
 
 /**
  * The runner EC2 instances configuration. If not set, the defaults will be used.
  * @link GitlabRunnerAutoscalingProps
  */
-export interface GitlabRunnerAutoscalingJobRunnerProps {
+export interface GitlabRunnerAutoscalingJobRunnerConfiguration {
+  /**
+   * The runner’s description. Informational only.
+   * @default "gitlab-runner"
+   */
+  readonly name?: string;
   /**
    * The GitLab Runner’s authentication token, which is obtained during runner registration.
    * @see https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
@@ -79,21 +85,28 @@ export interface GitlabRunnerAutoscalingJobRunnerProps {
   readonly autoscaling?: AutoscalingConfiguration[];
 }
 
+export interface GitlabRunnerAutoscalingJobRunnerProps extends GitlabRunnerAutoscalingJobRunnerConfiguration {
+  readonly instanceProfile?: CfnInstanceProfile;
+}
+
 export class GitlabRunnerAutoscalingJobRunner extends Construct {
+  readonly name: string;
   readonly gitlabToken: string;
-  readonly gitlabUrl?: string;
-  readonly instanceType?: InstanceType;
-  readonly machineImage?: IMachineImage;
-  /*  readonly role?: IRole;
+  readonly gitlabUrl: string;
+  readonly instanceType: InstanceType;
+  readonly machineImage: IMachineImage;
+  readonly role: IRole;
   readonly limit?: number;
   readonly outputLimit?: number;
   readonly environment?: string[];
   readonly docker?: DockerConfiguration;
   readonly machine?: MachineConfiguration;
-  readonly autoscaling?: AutoscalingConfiguration[];*/
+  readonly autoscaling?: AutoscalingConfiguration[];
+  readonly instanceProfile: CfnInstanceProfile;
 
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingJobRunnerProps) {
     super(scope, id);
+    this.name = props.name || "gitlab-runner";
     this.gitlabToken = props.gitlabToken;
     this.gitlabUrl = props.gitlabUrl || "https://gitlab.com";
     this.instanceType = props.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
@@ -112,12 +125,24 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
           },
         }).getImage(scope).imageId,
       });
-    /*    this.role = props.role;
+    this.role =
+      props.role ||
+      new Role(scope, `RunnersRoleFor${pascalCase(this.name)}`, {
+        assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
+        managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2RoleforSSM")],
+      });
     this.limit = props.limit;
     this.outputLimit = props.outputLimit;
     this.environment = props.environment;
     this.docker = props.docker;
     this.machine = props.machine;
-    this.autoscaling = props.autoscaling;*/
+    this.autoscaling = props.autoscaling;
+    this.instanceProfile = new CfnInstanceProfile(scope, "RunnersInstanceProfile", {
+      roles: [this.role.roleName],
+    });
+
+    Tags.of(this.instanceProfile).add("RunnersInstanceProfile", "RunnersInstanceProfile");
+
+    Tags.of(this.role).add("RunnersRole", "RunnersRole");
   }
 }
