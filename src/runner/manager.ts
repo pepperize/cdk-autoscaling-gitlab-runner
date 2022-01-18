@@ -18,16 +18,19 @@ import {
   MachineImage,
   UserData,
 } from "@aws-cdk/aws-ec2";
-import { Construct, Stack } from "@aws-cdk/core";
-import { GitlabRunnerAutoscalingManagerConfiguration } from "../runner-configuration";
-import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
 import { IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { ConfigurationMapper, GlobalConfiguration } from "../runner-configuration";
 import { IBucket } from "@aws-cdk/aws-s3";
+import { Construct, Stack } from "@aws-cdk/core";
+import {
+  GitlabRunnerAutoscalingManagerConfiguration,
+  ConfigurationMapper,
+  GlobalConfiguration,
+} from "../runner-configuration";
+import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
 import { Network } from "./network";
 
 export interface GitlabRunnerAutoscalingManagerProps extends GitlabRunnerAutoscalingManagerConfiguration {
-  readonly globalConfiguration: GlobalConfiguration;
+  readonly globalConfiguration?: GlobalConfiguration;
   readonly runners: GitlabRunnerAutoscalingJobRunner[];
   readonly network: Network;
   readonly cacheBucket: IBucket;
@@ -55,7 +58,14 @@ export class GitlabRunnerAutoscalingManager extends Construct {
 
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingManagerProps) {
     super(scope, id);
-    this.globalConfiguration = props.globalConfiguration;
+    this.globalConfiguration =
+      props.globalConfiguration ||
+      ({
+        concurrent: 10,
+        checkInterval: 0,
+        logFormat: "runner",
+        logLevel: "info",
+      } as GlobalConfiguration);
     this.machineImage =
       props.machineImage ??
       MachineImage.latestAmazonLinux({
