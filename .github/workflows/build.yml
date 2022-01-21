@@ -50,7 +50,7 @@ jobs:
           name: build-artifact
           path: dist
     container:
-      image: jsii/superchain:1-buster-slim
+      image: jsii/superchain:1-buster-slim-node14
   self-mutation:
     needs: build
     runs-on: ubuntu-latest
@@ -80,7 +80,7 @@ jobs:
       - name: Push changes
         run: |-2
             git add .
-            git commit -m -s "chore: self mutation"
+            git commit -s -m "chore: self mutation"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
   package-js:
     needs: build

@@ -1,10 +1,9 @@
-const { awscdk, javascript } = require("projen");
+const { AwsCdkConstructLibrary } = require("@pepperize/projen-awscdk-construct");
+const { javascript } = require("projen");
 
-const project = new awscdk.AwsCdkConstructLibrary({
+const project = new AwsCdkConstructLibrary({
   authorName: "Ivan Ovdiienko",
   authorAddress: "ivan.ovdiienko@pepperize.com",
-  authorOrganization: true,
-  copyrightOwner: "Pepperize UG (haftungsbeschränkt)",
   license: "MIT",
 
   repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
@@ -27,21 +26,12 @@ const project = new awscdk.AwsCdkConstructLibrary({
     "Shared Cache",
   ],
 
-  cdkVersion: "1.134.0",
+  cdkVersion: "2.8.0",
   cdkVersionPinning: false,
-  cdkDependencies: [
-    "@aws-cdk/core",
-    "@aws-cdk/aws-s3",
-    "@aws-cdk/aws-s3-deployment",
-    "@aws-cdk/aws-ec2",
-    "@aws-cdk/aws-iam",
-    "@aws-cdk/aws-autoscaling",
-  ],
   deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
+  devDeps: ["@pepperize/projen-awscdk-construct"],
   bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
-  cdkTestDependencies: ["@aws-cdk/assertions"] /* AWS CDK modules required for testing. */,
-  // devDeps: [],                     /* Build dependencies for this module. */
-  // packageName: undefined,          /* The "name" in package.json. */
+  testDeps: ["@aws-cdk/assertions"] /* AWS CDK modules required for testing. */,
 
   autoApproveUpgrades: true,
   autoApproveOptions: { allowedUsernames: ["pflorek"], secret: "GITHUB_TOKEN" },
@@ -51,8 +41,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
     },
   },
 
-  defaultReleaseBranch: "main",
-  npmAccess: javascript.NpmAccess.PUBLIC,
   release: {
     releaseEveryCommit: true,
   },
@@ -70,18 +58,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   //   mavenGroupId: "your_package_group_id",
   //   mavenArtifactId: "your_package_target_id",
   // },
-
-  eslint: true,
-  prettier: true,
-  prettierOptions: {
-    settings: {
-      printWidth: 120,
-    },
-  },
-
-  gitignore: [".idea"],
 });
-
-project.setScript("format", "prettier --write src/**/*.ts test/**/*.ts .projenrc.js README.md");
 
 project.synth();
