@@ -29,6 +29,7 @@ const project = new AwsCdkConstructLibrary({
   cdkVersion: "2.8.0",
   cdkVersionPinning: false,
   deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
+  devDeps: ["@pepperize/projen-awscdk-construct"],
   bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
   testDeps: ["@aws-cdk/assertions"] /* AWS CDK modules required for testing. */,
 

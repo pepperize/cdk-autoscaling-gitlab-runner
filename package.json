@@ -38,6 +38,7 @@
     "organization": true
   },
   "devDependencies": {
+    "@pepperize/projen-awscdk-construct": "latest",
     "@types/jest": "^27.4.0",
     "@types/node": "^12",
     "@typescript-eslint/eslint-plugin": "^5",

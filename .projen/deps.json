@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@pepperize/projen-awscdk-construct",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
