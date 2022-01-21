@@ -18,7 +18,7 @@ new Cache(scope: Stack, id: string, props?: CacheProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`scope`](#pepperizecdkautoscalinggitlabrunnercacheparameterscope)<span title="Required">*</span> | [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack) | *No description.* |
+| [`scope`](#pepperizecdkautoscalinggitlabrunnercacheparameterscope)<span title="Required">*</span> | [`aws-cdk-lib.Stack`](#aws-cdk-lib.Stack) | *No description.* |
 | [`id`](#pepperizecdkautoscalinggitlabrunnercacheparameterid)<span title="Required">*</span> | `string` | *No description.* |
 | [`props`](#pepperizecdkautoscalinggitlabrunnercacheparameterprops) | [`@pepperize/cdk-autoscaling-gitlab-runner.CacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheProps) | *No description.* |
 
@@ -26,7 +26,7 @@ new Cache(scope: Stack, id: string, props?: CacheProps)
 
 ##### `scope`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Cache.parameter.scope" id="pepperizecdkautoscalinggitlabrunnercacheparameterscope"></a>
 
-- *Type:* [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack)
+- *Type:* [`aws-cdk-lib.Stack`](#aws-cdk-lib.Stack)
 
 ---
 
@@ -48,7 +48,7 @@ new Cache(scope: Stack, id: string, props?: CacheProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`bucket`](#pepperizecdkautoscalinggitlabrunnercachepropertybucket)<span title="Required">*</span> | [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket) | *No description.* |
+| [`bucket`](#pepperizecdkautoscalinggitlabrunnercachepropertybucket)<span title="Required">*</span> | [`aws-cdk-lib.aws_s3.IBucket`](#aws-cdk-lib.aws_s3.IBucket) | *No description.* |
 
 ---
 
@@ -58,7 +58,7 @@ new Cache(scope: Stack, id: string, props?: CacheProps)
 public readonly bucket: IBucket;
 ```
 
-- *Type:* [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket)
+- *Type:* [`aws-cdk-lib.aws_s3.IBucket`](#aws-cdk-lib.aws_s3.IBucket)
 
 ---
 
@@ -77,7 +77,7 @@ new GitlabRunnerAutoscaling(scope: Stack, id: string, props: GitlabRunnerAutosca
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`scope`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterscope)<span title="Required">*</span> | [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack) | *No description.* |
+| [`scope`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterscope)<span title="Required">*</span> | [`aws-cdk-lib.Stack`](#aws-cdk-lib.Stack) | *No description.* |
 | [`id`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterid)<span title="Required">*</span> | `string` | *No description.* |
 | [`props`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterprops)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps) | *No description.* |
 
@@ -85,7 +85,7 @@ new GitlabRunnerAutoscaling(scope: Stack, id: string, props: GitlabRunnerAutosca
 
 ##### `scope`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.parameter.scope" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingparameterscope"></a>
 
-- *Type:* [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack)
+- *Type:* [`aws-cdk-lib.Stack`](#aws-cdk-lib.Stack)
 
 ---
 
@@ -107,7 +107,7 @@ new GitlabRunnerAutoscaling(scope: Stack, id: string, props: GitlabRunnerAutosca
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`cacheBucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertycachebucket)<span title="Required">*</span> | [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket) | *No description.* |
+| [`cacheBucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertycachebucket)<span title="Required">*</span> | [`aws-cdk-lib.aws_s3.IBucket`](#aws-cdk-lib.aws_s3.IBucket) | *No description.* |
 | [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertymanager)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager) | *No description.* |
 | [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertynetwork)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.Network`](#@pepperize/cdk-autoscaling-gitlab-runner.Network) | *No description.* |
 | [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertyrunners)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingRunners) | *No description.* |
@@ -120,7 +120,7 @@ new GitlabRunnerAutoscaling(scope: Stack, id: string, props: GitlabRunnerAutosca
 public readonly cacheBucket: IBucket;
 ```
 
-- *Type:* [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket)
+- *Type:* [`aws-cdk-lib.aws_s3.IBucket`](#aws-cdk-lib.aws_s3.IBucket)
 
 ---
 
@@ -171,7 +171,7 @@ new Network(scope: Stack, id: string, props?: NetworkProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`scope`](#pepperizecdkautoscalinggitlabrunnernetworkparameterscope)<span title="Required">*</span> | [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack) | *No description.* |
+| [`scope`](#pepperizecdkautoscalinggitlabrunnernetworkparameterscope)<span title="Required">*</span> | [`aws-cdk-lib.Stack`](#aws-cdk-lib.Stack) | *No description.* |
 | [`id`](#pepperizecdkautoscalinggitlabrunnernetworkparameterid)<span title="Required">*</span> | `string` | *No description.* |
 | [`props`](#pepperizecdkautoscalinggitlabrunnernetworkparameterprops) | [`@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps) | *No description.* |
 
@@ -179,7 +179,7 @@ new Network(scope: Stack, id: string, props?: NetworkProps)
 
 ##### `scope`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.parameter.scope" id="pepperizecdkautoscalinggitlabrunnernetworkparameterscope"></a>
 
-- *Type:* [`@aws-cdk/core.Stack`](#@aws-cdk/core.Stack)
+- *Type:* [`aws-cdk-lib.Stack`](#aws-cdk-lib.Stack)
 
 ---
 
@@ -202,8 +202,8 @@ new Network(scope: Stack, id: string, props?: NetworkProps)
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | [`availabilityZone`](#pepperizecdkautoscalinggitlabrunnernetworkpropertyavailabilityzone)<span title="Required">*</span> | `string` | *No description.* |
-| [`subnet`](#pepperizecdkautoscalinggitlabrunnernetworkpropertysubnet)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.ISubnet`](#@aws-cdk/aws-ec2.ISubnet) | *No description.* |
-| [`vpc`](#pepperizecdkautoscalinggitlabrunnernetworkpropertyvpc)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc) | *No description.* |
+| [`subnet`](#pepperizecdkautoscalinggitlabrunnernetworkpropertysubnet)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.ISubnet`](#aws-cdk-lib.aws_ec2.ISubnet) | *No description.* |
+| [`vpc`](#pepperizecdkautoscalinggitlabrunnernetworkpropertyvpc)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.IVpc`](#aws-cdk-lib.aws_ec2.IVpc) | *No description.* |
 
 ---
 
@@ -223,7 +223,7 @@ public readonly availabilityZone: string;
 public readonly subnet: ISubnet;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.ISubnet`](#@aws-cdk/aws-ec2.ISubnet)
+- *Type:* [`aws-cdk-lib.aws_ec2.ISubnet`](#aws-cdk-lib.aws_ec2.ISubnet)
 
 ---
 
@@ -233,7 +233,7 @@ public readonly subnet: ISubnet;
 public readonly vpc: IVpc;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc)
+- *Type:* [`aws-cdk-lib.aws_ec2.IVpc`](#aws-cdk-lib.aws_ec2.IVpc)
 
 ---
 
@@ -372,7 +372,7 @@ const cacheProps: CacheProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | [`bucketName`](#pepperizecdkautoscalinggitlabrunnercachepropspropertybucketname) | `string` | The infix of the physical cache bucket name. |
-| [`expiration`](#pepperizecdkautoscalinggitlabrunnercachepropspropertyexpiration) | [`@aws-cdk/core.Duration`](#@aws-cdk/core.Duration) | The number of days after which the created cache objects are deleted from S3. |
+| [`expiration`](#pepperizecdkautoscalinggitlabrunnercachepropspropertyexpiration) | [`aws-cdk-lib.Duration`](#aws-cdk-lib.Duration) | The number of days after which the created cache objects are deleted from S3. |
 
 ---
 
@@ -395,7 +395,7 @@ The infix of the physical cache bucket name.
 public readonly expiration: Duration;
 ```
 
-- *Type:* [`@aws-cdk/core.Duration`](#@aws-cdk/core.Duration)
+- *Type:* [`aws-cdk-lib.Duration`](#aws-cdk-lib.Duration)
 - *Default:* 30 days
 
 The number of days after which the created cache objects are deleted from S3.
@@ -1168,7 +1168,7 @@ const gitlabRunnerAutoscalingCacheProps: GitlabRunnerAutoscalingCacheProps = { .
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`bucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingcachepropspropertybucket) | [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket) | An existing S3 bucket used as runner's cache. |
+| [`bucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingcachepropspropertybucket) | [`aws-cdk-lib.aws_s3.IBucket`](#aws-cdk-lib.aws_s3.IBucket) | An existing S3 bucket used as runner's cache. |
 | [`options`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingcachepropspropertyoptions) | [`@pepperize/cdk-autoscaling-gitlab-runner.CacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheProps) | If no existing S3 bucket is provided, a S3 bucket will be created. |
 
 ---
@@ -1179,7 +1179,7 @@ const gitlabRunnerAutoscalingCacheProps: GitlabRunnerAutoscalingCacheProps = { .
 public readonly bucket: IBucket;
 ```
 
-- *Type:* [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket)
+- *Type:* [`aws-cdk-lib.aws_s3.IBucket`](#aws-cdk-lib.aws_s3.IBucket)
 
 An existing S3 bucket used as runner's cache.
 
@@ -1211,11 +1211,11 @@ const gitlabRunnerAutoscalingManager: GitlabRunnerAutoscalingManager = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`autoScalingGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyautoscalinggroup)<span title="Required">*</span> | [`@aws-cdk/aws-autoscaling.IAutoScalingGroup`](#@aws-cdk/aws-autoscaling.IAutoScalingGroup) | *No description.* |
-| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyinstancetype)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | *No description.* |
-| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertymachineimage)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | *No description.* |
-| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyrole)<span title="Required">*</span> | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | *No description.* |
-| [`securityGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertysecuritygroup)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup) | *No description.* |
+| [`autoScalingGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyautoscalinggroup)<span title="Required">*</span> | [`aws-cdk-lib.aws_autoscaling.IAutoScalingGroup`](#aws-cdk-lib.aws_autoscaling.IAutoScalingGroup) | *No description.* |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyinstancetype)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | *No description.* |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertymachineimage)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | *No description.* |
+| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertyrole)<span title="Required">*</span> | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | *No description.* |
+| [`securityGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropertysecuritygroup)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.ISecurityGroup`](#aws-cdk-lib.aws_ec2.ISecurityGroup) | *No description.* |
 
 ---
 
@@ -1225,7 +1225,7 @@ const gitlabRunnerAutoscalingManager: GitlabRunnerAutoscalingManager = { ... }
 public readonly autoScalingGroup: IAutoScalingGroup;
 ```
 
-- *Type:* [`@aws-cdk/aws-autoscaling.IAutoScalingGroup`](#@aws-cdk/aws-autoscaling.IAutoScalingGroup)
+- *Type:* [`aws-cdk-lib.aws_autoscaling.IAutoScalingGroup`](#aws-cdk-lib.aws_autoscaling.IAutoScalingGroup)
 
 ---
 
@@ -1235,7 +1235,7 @@ public readonly autoScalingGroup: IAutoScalingGroup;
 public readonly instanceType: InstanceType;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
+- *Type:* [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType)
 
 ---
 
@@ -1245,7 +1245,7 @@ public readonly instanceType: InstanceType;
 public readonly machineImage: IMachineImage;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
+- *Type:* [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage)
 
 ---
 
@@ -1255,7 +1255,7 @@ public readonly machineImage: IMachineImage;
 public readonly role: IRole;
 ```
 
-- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+- *Type:* [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole)
 
 ---
 
@@ -1265,7 +1265,7 @@ public readonly role: IRole;
 public readonly securityGroup: ISecurityGroup;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup)
+- *Type:* [`aws-cdk-lib.aws_ec2.ISecurityGroup`](#aws-cdk-lib.aws_ec2.ISecurityGroup)
 
 ---
 
@@ -1283,9 +1283,9 @@ const gitlabRunnerAutoscalingManagerProps: GitlabRunnerAutoscalingManagerProps =
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyinstancetype) | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | Instance type for manager EC2 instance. |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyinstancetype) | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | Instance type for manager EC2 instance. |
 | [`keyPairName`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertykeypairname) | `string` | A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. |
-| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertymachineimage) | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | An Amazon Machine Image ID for the Manager EC2 instance. |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertymachineimage) | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | An Amazon Machine Image ID for the Manager EC2 instance. |
 
 ---
 
@@ -1295,7 +1295,7 @@ const gitlabRunnerAutoscalingManagerProps: GitlabRunnerAutoscalingManagerProps =
 public readonly instanceType: InstanceType;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
+- *Type:* [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType)
 - *Default:* InstanceType.of(InstanceClass.T3, InstanceSize.NANO)
 
 Instance type for manager EC2 instance.
@@ -1324,7 +1324,7 @@ You won't be able to ssh into an instance without the Key Pair.
 public readonly machineImage: IMachineImage;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
+- *Type:* [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage)
 
 An Amazon Machine Image ID for the Manager EC2 instance.
 
@@ -1519,12 +1519,12 @@ const gitlabRunnerAutoscalingRunnerProps: GitlabRunnerAutoscalingRunnerProps = {
 | [`autoscaling`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyautoscaling) | [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[] | Optional autoscaling configuration. |
 | [`docker`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertydocker) | [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration) | Optional docker configuration. |
 | [`environment`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyenvironment) | `string`[] | Append or overwrite environment variables. |
-| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyinstancetype) | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | Instance type for runner EC2 instances. |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyinstancetype) | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | Instance type for runner EC2 instances. |
 | [`limit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertylimit) | `number` | Limit how many jobs can be handled concurrently by this registered runner. |
 | [`machine`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachine) | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration) | Optional docker machine configuration. |
-| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachineimage) | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | An Amazon Machine Image ID for the Runners EC2 instances. |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertymachineimage) | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | An Amazon Machine Image ID for the Runners EC2 instances. |
 | [`outputLimit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyoutputlimit) | `number` | Maximum build log size in kilobytes. |
-| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyrole) | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances. |
+| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerpropspropertyrole) | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances. |
 
 ---
 
@@ -1571,7 +1571,7 @@ Append or overwrite environment variables.
 public readonly instanceType: InstanceType;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
+- *Type:* [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType)
 - *Default:* InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
 
 Instance type for runner EC2 instances.
@@ -1613,7 +1613,7 @@ Optional docker machine configuration.
 public readonly machineImage: IMachineImage;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
+- *Type:* [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage)
 
 An Amazon Machine Image ID for the Runners EC2 instances.
 
@@ -1644,7 +1644,7 @@ Default is 4096 (4MB).
 public readonly role: IRole;
 ```
 
-- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+- *Type:* [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole)
 
 Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
 
@@ -1664,11 +1664,11 @@ const gitlabRunnerAutoscalingRunners: GitlabRunnerAutoscalingRunners = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`instanceProfile`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyinstanceprofile)<span title="Required">*</span> | [`@aws-cdk/aws-iam.CfnInstanceProfile`](#@aws-cdk/aws-iam.CfnInstanceProfile) | *No description.* |
-| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyinstancetype)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType) | *No description.* |
-| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertymachineimage)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage) | *No description.* |
-| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyrole)<span title="Required">*</span> | [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole) | *No description.* |
-| [`securityGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertysecuritygroup)<span title="Required">*</span> | [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup) | *No description.* |
+| [`instanceProfile`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyinstanceprofile)<span title="Required">*</span> | [`aws-cdk-lib.aws_iam.CfnInstanceProfile`](#aws-cdk-lib.aws_iam.CfnInstanceProfile) | *No description.* |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyinstancetype)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | *No description.* |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertymachineimage)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | *No description.* |
+| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertyrole)<span title="Required">*</span> | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | *No description.* |
+| [`securityGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertysecuritygroup)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.ISecurityGroup`](#aws-cdk-lib.aws_ec2.ISecurityGroup) | *No description.* |
 | [`securityGroupName`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingrunnerspropertysecuritygroupname)<span title="Required">*</span> | `string` | *No description.* |
 
 ---
@@ -1679,7 +1679,7 @@ const gitlabRunnerAutoscalingRunners: GitlabRunnerAutoscalingRunners = { ... }
 public readonly instanceProfile: CfnInstanceProfile;
 ```
 
-- *Type:* [`@aws-cdk/aws-iam.CfnInstanceProfile`](#@aws-cdk/aws-iam.CfnInstanceProfile)
+- *Type:* [`aws-cdk-lib.aws_iam.CfnInstanceProfile`](#aws-cdk-lib.aws_iam.CfnInstanceProfile)
 
 ---
 
@@ -1689,7 +1689,7 @@ public readonly instanceProfile: CfnInstanceProfile;
 public readonly instanceType: InstanceType;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.InstanceType`](#@aws-cdk/aws-ec2.InstanceType)
+- *Type:* [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType)
 
 ---
 
@@ -1699,7 +1699,7 @@ public readonly instanceType: InstanceType;
 public readonly machineImage: IMachineImage;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.IMachineImage`](#@aws-cdk/aws-ec2.IMachineImage)
+- *Type:* [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage)
 
 ---
 
@@ -1709,7 +1709,7 @@ public readonly machineImage: IMachineImage;
 public readonly role: IRole;
 ```
 
-- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+- *Type:* [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole)
 
 ---
 
@@ -1719,7 +1719,7 @@ public readonly role: IRole;
 public readonly securityGroup: ISecurityGroup;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup)
+- *Type:* [`aws-cdk-lib.aws_ec2.ISecurityGroup`](#aws-cdk-lib.aws_ec2.ISecurityGroup)
 
 ---
 
@@ -2099,8 +2099,8 @@ const networkProps: NetworkProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`subnetSelection`](#pepperizecdkautoscalinggitlabrunnernetworkpropspropertysubnetselection) | [`@aws-cdk/aws-ec2.SubnetSelection`](#@aws-cdk/aws-ec2.SubnetSelection) | The GitLab Runner's subnets. |
-| [`vpc`](#pepperizecdkautoscalinggitlabrunnernetworkpropspropertyvpc) | [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc) | If no existing VPC is provided, a default Vpc will be created. |
+| [`subnetSelection`](#pepperizecdkautoscalinggitlabrunnernetworkpropspropertysubnetselection) | [`aws-cdk-lib.aws_ec2.SubnetSelection`](#aws-cdk-lib.aws_ec2.SubnetSelection) | The GitLab Runner's subnets. |
+| [`vpc`](#pepperizecdkautoscalinggitlabrunnernetworkpropspropertyvpc) | [`aws-cdk-lib.aws_ec2.IVpc`](#aws-cdk-lib.aws_ec2.IVpc) | If no existing VPC is provided, a default Vpc will be created. |
 
 ---
 
@@ -2110,7 +2110,7 @@ const networkProps: NetworkProps = { ... }
 public readonly subnetSelection: SubnetSelection;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.SubnetSelection`](#@aws-cdk/aws-ec2.SubnetSelection)
+- *Type:* [`aws-cdk-lib.aws_ec2.SubnetSelection`](#aws-cdk-lib.aws_ec2.SubnetSelection)
 
 The GitLab Runner's subnets.
 
@@ -2126,7 +2126,7 @@ It should be either public or private. If more then subnet is selected, then the
 public readonly vpc: IVpc;
 ```
 
-- *Type:* [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc)
+- *Type:* [`aws-cdk-lib.aws_ec2.IVpc`](#aws-cdk-lib.aws_ec2.IVpc)
 
 If no existing VPC is provided, a default Vpc will be created.
 

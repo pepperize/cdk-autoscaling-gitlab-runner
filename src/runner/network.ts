@@ -1,5 +1,6 @@
-import { ISubnet, IVpc, SubnetSelection, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
-import { Annotations, Construct, Stack } from "@aws-cdk/core";
+import { Annotations, Stack } from "aws-cdk-lib";
+import { ISubnet, IVpc, SubnetSelection, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
+import { Construct } from "constructs";
 
 export interface NetworkProps {
   /**

@@ -1,4 +1,5 @@
-import { AutoScalingGroup, IAutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
+import { Duration, Stack } from "aws-cdk-lib";
+import { AutoScalingGroup, IAutoScalingGroup, Signals } from "aws-cdk-lib/aws-autoscaling";
 import {
   AmazonLinuxCpuType,
   AmazonLinuxEdition,
@@ -22,10 +23,10 @@ import {
   Port,
   SecurityGroup,
   UserData,
-} from "@aws-cdk/aws-ec2";
-import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { IBucket } from "@aws-cdk/aws-s3";
-import { Construct, Duration, Stack } from "@aws-cdk/core";
+} from "aws-cdk-lib/aws-ec2";
+import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { IBucket } from "aws-cdk-lib/aws-s3";
+import { Construct } from "constructs";
 import {
   AutoscalingConfiguration,
   ConfigurationMapper,
