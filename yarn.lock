@@ -646,9 +646,9 @@
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
 "@pepperize/projen-awscdk-construct@latest":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.0.12.tgz#dcdbb9203576e16b64c7ca37d55dcbe0995e4ac3"
-  integrity sha512-XSPEJnBRCbOCpL6unO00uBhCLmXrvj0BALQyQnEcPte49ChrDrv7MrPDyhR8b5VoEXuOTg+JXYWTFZ1PNWxh1w==
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.0.13.tgz#74f0c922852ddbc8ff5ee6588b1c85cd66384644"
+  integrity sha512-sJgZEfURJuNgKBuXLfDz6eYtkQNL2I/u1K7HsRnP+gunWIttCJbjFsXhqsswg8j4qSVnn+3HajTHCNvZ4zY0Lw==
   dependencies:
     projen "^0.50.33"
 
@@ -4818,25 +4818,7 @@ progress@^2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-projen@^0.50.17:
-  version "0.50.21"
-  resolved "https://registry.yarnpkg.com/projen/-/projen-0.50.21.tgz#d2c737c50c509bd62b8f110b0926da553ae7d70e"
-  integrity sha512-R2CArSfYo4qYO8NGbxxjM4u0+ATYkMLHI5B5PSrBhN22ubv9iWsCaebMAxT2DXK/AQ00g4aibFxHkdIedzOb3A==
-  dependencies:
-    "@iarna/toml" "^2.2.5"
-    case "^1.6.3"
-    chalk "^4.1.2"
-    conventional-changelog-config-spec "^2.1.0"
-    fs-extra "^9.1.0"
-    glob "^7"
-    ini "^2.0.0"
-    semver "^7.3.5"
-    shx "^0.3.4"
-    xmlbuilder2 "^2.4.1"
-    yaml "^1.10.2"
-    yargs "^16.2.0"
-
-projen@^0.50.33:
+projen@^0.50.17, projen@^0.50.33:
   version "0.50.34"
   resolved "https://registry.yarnpkg.com/projen/-/projen-0.50.34.tgz#07ed3e14a71d4302a210902c467c4900ef75d6b4"
   integrity sha512-o1herymMR4LmYMkdmPh3yBY8TZtMB5HTVR5GptDFKeRKnLr1Kz9KV/ENx7TB0yy1msBQ33EmKC4/EBn+TxFzxg==
