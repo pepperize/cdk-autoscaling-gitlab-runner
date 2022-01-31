@@ -1,5 +1,5 @@
-import { Capture, Template } from "@aws-cdk/assertions";
-import { App, Duration, Stack } from "@aws-cdk/core";
+import { App, Duration, Stack } from "aws-cdk-lib";
+import { Capture, Template } from "aws-cdk-lib/assertions";
 import { Cache as CacheConstruct, CacheProps as CacheConstructProps } from "../../src/runner/cache";
 
 const stackProps = {

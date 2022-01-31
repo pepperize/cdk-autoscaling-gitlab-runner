@@ -1,7 +1,32 @@
-import { AutoScalingGroup, Signals } from "@aws-cdk/aws-autoscaling";
-import { Port, SecurityGroup } from "@aws-cdk/aws-ec2";
-import { IBucket } from "@aws-cdk/aws-s3";
-import { Construct, Duration, Stack } from "@aws-cdk/core";
+import { Duration, Stack } from "aws-cdk-lib";
+import { AutoScalingGroup, IAutoScalingGroup, Signals } from "aws-cdk-lib/aws-autoscaling";
+import {
+  AmazonLinuxCpuType,
+  AmazonLinuxEdition,
+  AmazonLinuxGeneration,
+  AmazonLinuxStorage,
+  AmazonLinuxVirt,
+  CloudFormationInit,
+  IMachineImage,
+  InitCommand,
+  InitConfig,
+  InitFile,
+  InitPackage,
+  InitService,
+  InitServiceRestartHandle,
+  InstanceClass,
+  InstanceSize,
+  InstanceType,
+  ISecurityGroup,
+  LookupMachineImage,
+  MachineImage,
+  Port,
+  SecurityGroup,
+  UserData,
+} from "aws-cdk-lib/aws-ec2";
+import { CfnInstanceProfile, IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { IBucket } from "aws-cdk-lib/aws-s3";
+import { Construct } from "constructs";
 import {
   GitlabRunnerAutoscalingManagerConfiguration,
   GlobalConfiguration,

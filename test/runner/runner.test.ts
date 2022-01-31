@@ -1,6 +1,6 @@
-import { Capture, Template } from "@aws-cdk/assertions";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { App, Stack } from "@aws-cdk/core";
+import { App, Stack } from "aws-cdk-lib";
+import { Capture, Template } from "aws-cdk-lib/assertions";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { GitlabRunnerAutoscaling } from "../../src";
 
 describe("GitlabRunnerAutoscaling", () => {
