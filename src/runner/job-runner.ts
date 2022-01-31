@@ -5,11 +5,12 @@ import {
   InstanceType,
   LookupMachineImage,
   MachineImage,
-} from "@aws-cdk/aws-ec2";
-import { CfnInstanceProfile, IRole, ManagedPolicy, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
+} from "aws-cdk-lib/aws-ec2";
+import { CfnInstanceProfile, IRole, ManagedPolicy, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { AutoscalingConfiguration, DockerConfiguration, MachineConfiguration } from "../runner-configuration";
-import { Construct, Stack, Tags } from "@aws-cdk/core";
+import { Stack, Tags } from "aws-cdk-lib";
 import { pascalCase } from "pascal-case";
+import { Construct } from "constructs";
 
 /**
  * The runner EC2 instances configuration. If not set, the defaults will be used.

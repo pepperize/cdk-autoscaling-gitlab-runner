@@ -1,4 +1,13 @@
 import {
+  GitlabRunnerAutoscalingManagerConfiguration,
+  ConfigurationMapper,
+  GlobalConfiguration,
+} from "../runner-configuration";
+import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
+import { Network } from "./network";
+import { IBucket } from "aws-cdk-lib/aws-s3";
+import { IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import {
   AmazonLinuxCpuType,
   AmazonLinuxEdition,
   AmazonLinuxGeneration,
@@ -7,27 +16,17 @@ import {
   CloudFormationInit,
   IMachineImage,
   InitCommand,
-  InitConfig,
-  InitFile,
-  InitPackage,
-  InitService,
+  InitConfig, InitFile,
+  InitPackage, InitService,
   InitServiceRestartHandle,
   InstanceClass,
   InstanceSize,
   InstanceType,
   MachineImage,
-  UserData,
-} from "@aws-cdk/aws-ec2";
-import { IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { IBucket } from "@aws-cdk/aws-s3";
-import { Construct, Stack } from "@aws-cdk/core";
-import {
-  GitlabRunnerAutoscalingManagerConfiguration,
-  ConfigurationMapper,
-  GlobalConfiguration,
-} from "../runner-configuration";
-import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
-import { Network } from "./network";
+  UserData
+} from "aws-cdk-lib/aws-ec2";
+import { Construct } from "constructs";
+import { Stack } from "aws-cdk-lib";
 
 export interface GitlabRunnerAutoscalingManagerProps extends GitlabRunnerAutoscalingManagerConfiguration {
   readonly globalConfiguration?: GlobalConfiguration;

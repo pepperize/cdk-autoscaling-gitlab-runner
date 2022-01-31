@@ -1,4 +1,4 @@
-import { IMachineImage, InstanceType } from "@aws-cdk/aws-ec2";
+import { IMachineImage, InstanceType } from "aws-cdk-lib/aws-ec2";
 
 export interface GitlabRunnerAutoscalingManagerConfiguration {
   /**

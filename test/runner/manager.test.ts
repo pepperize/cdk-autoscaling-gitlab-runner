@@ -1,7 +1,7 @@
-import { Template } from "@aws-cdk/assertions";
-import { Bucket } from "@aws-cdk/aws-s3";
-import { App, Stack } from "@aws-cdk/core";
-import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingManager, Network } from "../../lib";
+import { Bucket } from "aws-cdk-lib/aws-s3";
+import { App, Stack } from "aws-cdk-lib/core";
+import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingManager, Network } from "../../src";
+import { Template } from "aws-cdk-lib/assertions";
 
 const stackProps = {
   env: {
