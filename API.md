@@ -240,6 +240,7 @@ new GitlabRunnerAutoscalingJobRunner(scope: Stack, id: string, props: GitlabRunn
 | [`autoscaling`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertyautoscaling) | [`@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.AutoscalingConfiguration)[] | *No description.* |
 | [`docker`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertydocker) | [`@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.DockerConfiguration) | *No description.* |
 | [`environment`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertyenvironment) | `string`[] | *No description.* |
+| [`executor`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertyexecutor) | `string`[] | *No description.* |
 | [`limit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertylimit) | `number` | *No description.* |
 | [`machine`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertymachine) | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration) | *No description.* |
 | [`outputLimit`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertyoutputlimit) | `number` | *No description.* |
@@ -340,6 +341,16 @@ public readonly docker: DockerConfiguration;
 
 ```typescript
 public readonly environment: string[];
+```
+
+- *Type:* `string`[]
+
+---
+
+##### `executor`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.property.executor" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertyexecutor"></a>
+
+```typescript
+public readonly executor: string[];
 ```
 
 - *Type:* `string`[]
@@ -2702,7 +2713,6 @@ const runnerConfiguration: RunnerConfiguration = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`machine`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertymachine)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration) | The runner's Docker Machine configuration. |
 | [`buildsDir`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertybuildsdir) | `string` | Absolute path to a directory where builds are stored in the context of the selected executor. |
 | [`cache`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertycache) | [`@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.CacheConfiguration) | The runner's AWS S3 cache configuration. |
 | [`cacheDir`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertycachedir) | `string` | Absolute path to a directory where build caches are stored in context of selected executor. |
@@ -2712,6 +2722,7 @@ const runnerConfiguration: RunnerConfiguration = { ... }
 | [`environment`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyenvironment) | `string`[] | Append or overwrite environment variables. |
 | [`executor`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyexecutor) | `string` | Select how a project should be built. |
 | [`limit`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertylimit) | `number` | Limit how many jobs can be handled concurrently by this registered runner. |
+| [`machine`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertymachine) | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration) | The runner's Docker Machine configuration. |
 | [`name`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyname) | `string` | The runner’s description. |
 | [`outputLimit`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyoutputlimit) | `number` | Maximum build log size in kilobytes. |
 | [`postBuildScript`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertypostbuildscript) | `string` | Commands to be executed on the runner just after executing the build, but before executing after_script. |
@@ -2725,20 +2736,6 @@ const runnerConfiguration: RunnerConfiguration = { ... }
 | [`tlsKeyFile`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlskeyfile) | `string` | When using HTTPS, file that contains the private key to authenticate with the peer. |
 | [`token`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytoken) | `string` | The runner’s authentication token, which is obtained during runner registration. |
 | [`url`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyurl) | `string` | GitLab instance URL. |
-
----
-
-##### `machine`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.machine" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertymachine"></a>
-
-```typescript
-public readonly machine: MachineConfiguration;
-```
-
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration)
-
-The runner's Docker Machine configuration.
-
-> https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
 
 ---
 
@@ -2864,6 +2861,20 @@ public readonly limit: number;
 Limit how many jobs can be handled concurrently by this registered runner.
 
 0 (default) means do not limit.
+
+---
+
+##### `machine`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.machine" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertymachine"></a>
+
+```typescript
+public readonly machine: MachineConfiguration;
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration)
+
+The runner's Docker Machine configuration.
+
+> https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
 
 ---
 

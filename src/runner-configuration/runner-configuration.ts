@@ -121,7 +121,7 @@ export interface RunnerConfiguration {
    *
    * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
    */
-  readonly machine: MachineConfiguration;
+  readonly machine?: MachineConfiguration;
 
   /**
    * The runner's AWS S3 cache configuration

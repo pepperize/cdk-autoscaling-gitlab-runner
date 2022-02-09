@@ -1,9 +1,6 @@
 import { Duration, Stack } from "aws-cdk-lib";
 import { AutoScalingGroup, Signals } from "aws-cdk-lib/aws-autoscaling";
-import {
-  Port,
-  SecurityGroup,
-} from "aws-cdk-lib/aws-ec2";
+import { Port, SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
 import {

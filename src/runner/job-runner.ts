@@ -1,3 +1,4 @@
+import { Stack, Tags } from "aws-cdk-lib";
 import {
   IMachineImage,
   InstanceClass,
@@ -7,10 +8,9 @@ import {
   MachineImage,
 } from "aws-cdk-lib/aws-ec2";
 import { CfnInstanceProfile, IRole, ManagedPolicy, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
-import { AutoscalingConfiguration, DockerConfiguration, MachineConfiguration } from "../runner-configuration";
-import { Stack, Tags } from "aws-cdk-lib";
-import { pascalCase } from "pascal-case";
 import { Construct } from "constructs";
+import { pascalCase } from "pascal-case";
+import { AutoscalingConfiguration, DockerConfiguration, MachineConfiguration } from "../runner-configuration";
 
 /**
  * The runner EC2 instances configuration. If not set, the defaults will be used.
@@ -99,6 +99,7 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
   readonly role: IRole;
   readonly limit?: number;
   readonly outputLimit?: number;
+  readonly executor?: string[];
   readonly environment?: string[];
   readonly docker?: DockerConfiguration;
   readonly machine?: MachineConfiguration;
@@ -138,7 +139,7 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
     this.docker = props.docker;
     this.machine = props.machine;
     this.autoscaling = props.autoscaling;
-    this.instanceProfile = new CfnInstanceProfile(scope, "RunnersInstanceProfile", {
+    this.instanceProfile = new CfnInstanceProfile(scope, `RunnersInstanceProfile-${this.name}`, {
       roles: [this.role.roleName],
     });
 

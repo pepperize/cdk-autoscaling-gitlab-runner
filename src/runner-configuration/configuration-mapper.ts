@@ -53,10 +53,10 @@ export class ConfigurationMapper {
             machineOptions: {
               requestSpotInstance: true,
               spotPrice: 0.03,
-              ...item.machine.machineOptions,
+              ...item.machine?.machineOptions,
             },
-            autoscaling: item.machine.autoscaling?.length
-              ? item.machine.autoscaling
+            autoscaling: item.machine?.autoscaling?.length
+              ? item.machine?.autoscaling
               : [
                   {
                     periods: ["* * 7-22 * * mon-fri *"],
@@ -74,7 +74,7 @@ export class ConfigurationMapper {
                   ...item.cache,
                 }
               : undefined,
-        };
+        } as RunnerConfiguration;
       }),
     });
   }
@@ -114,11 +114,11 @@ export class ConfigurationMapper {
       }
 
       runner.machine = toJsonMap(config.machine, pascalCase);
-      if (config.machine.machineOptions) {
-        runner.machine.MachineOptions = this._mapMachineOptions(config.machine.machineOptions);
+      if (config.machine?.machineOptions) {
+        runner.machine.MachineOptions = this._mapMachineOptions(config.machine?.machineOptions);
       }
-      if (config.machine.autoscaling?.length) {
-        runner.machine.autoscaling = config.machine.autoscaling.map((autoscaling) =>
+      if (config.machine?.autoscaling?.length) {
+        runner.machine.autoscaling = config.machine?.autoscaling.map((autoscaling) =>
           toJsonMap(autoscaling, pascalCase)
         );
       }

@@ -1,12 +1,4 @@
-import {
-  GitlabRunnerAutoscalingManagerConfiguration,
-  ConfigurationMapper,
-  GlobalConfiguration,
-} from "../runner-configuration";
-import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
-import { Network } from "./network";
-import { IBucket } from "aws-cdk-lib/aws-s3";
-import { IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { Stack } from "aws-cdk-lib";
 import {
   AmazonLinuxCpuType,
   AmazonLinuxEdition,
@@ -16,17 +8,28 @@ import {
   CloudFormationInit,
   IMachineImage,
   InitCommand,
-  InitConfig, InitFile,
-  InitPackage, InitService,
+  InitConfig,
+  InitFile,
+  InitPackage,
+  InitService,
   InitServiceRestartHandle,
   InstanceClass,
   InstanceSize,
   InstanceType,
   MachineImage,
-  UserData
+  UserData,
 } from "aws-cdk-lib/aws-ec2";
+import { IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
-import { Stack } from "aws-cdk-lib";
+import {
+  GitlabRunnerAutoscalingManagerConfiguration,
+  ConfigurationMapper,
+  GlobalConfiguration,
+  RunnerConfiguration,
+} from "../runner-configuration";
+import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
+import { Network } from "./network";
 
 export interface GitlabRunnerAutoscalingManagerProps extends GitlabRunnerAutoscalingManagerConfiguration {
   readonly globalConfiguration?: GlobalConfiguration;
@@ -229,7 +232,13 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               globalConfiguration: this.globalConfiguration,
               runnersConfiguration: this.runners.map((runner) => {
                 return {
-                  ...runner,
+                  url: runner.gitlabUrl,
+                  token: runner.gitlabToken,
+                  limit: runner.limit,
+                  outputLimit: runner.outputLimit,
+                  executor: runner.executor,
+                  environment: runner.environment,
+                  // Todo: add flexibility, i.e. ability to add extra key-values with ...runner. Runner MUST be compatible with the configuration
                   machine: {
                     ...runner.machine,
                     machineOptions: {
@@ -252,7 +261,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                       bucketLocation: `${scope.region}`,
                     },
                   },
-                };
+                } as RunnerConfiguration;
               }),
             }).toToml(),
             {
