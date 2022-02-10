@@ -231,18 +231,19 @@ export class GitlabRunnerAutoscalingManager extends Construct {
             ConfigurationMapper.withDefaults({
               globalConfiguration: this.globalConfiguration,
               runnersConfiguration: this.runners.map((runner) => {
+                const configuration = runner.configuration;
                 return {
-                  url: runner.gitlabUrl,
-                  token: runner.gitlabToken,
-                  limit: runner.limit,
-                  outputLimit: runner.outputLimit,
-                  executor: runner.executor,
-                  environment: runner.environment,
-                  // Todo: add flexibility, i.e. ability to add extra key-values with ...runner. Runner MUST be compatible with the configuration
+                  url: configuration.url,
+                  token: configuration.token,
+                  limit: configuration.limit,
+                  outputLimit: configuration.outputLimit,
+                  executor: configuration.executor,
+                  environment: configuration.environment,
+                  ...configuration,
                   machine: {
-                    ...runner.machine,
+                    ...configuration.machine,
                     machineOptions: {
-                      ...runner.machine?.machineOptions,
+                      ...configuration.machine?.machineOptions,
                       instanceType: runner.instanceType.toString(),
                       ami: runner.machineImage.getImage(scope).imageId,
                       region: scope.region,

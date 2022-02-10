@@ -199,9 +199,8 @@ log_format = \\"runner\\"
 log_level = \\"info\\"
 
 [[runners]]
-name = \\"gitlab-runner\\"
-url = \\"https://gitlab.com\\"
-token = \\"runner-1\\"
+token = \\"token\\"
+name = \\"runner-one\\"
 
   [runners.machine]
   IdleCount = 0
@@ -230,7 +229,7 @@ token = \\"runner-1\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfilegitlabrunner0",
+                        "Ref": "RunnersInstanceProfileForRunnerOne",
                       },
                       "\\"
 ]
@@ -269,9 +268,8 @@ token = \\"runner-1\\"
   shm_size = 0
 
 [[runners]]
-name = \\"gitlab-runner\\"
-url = \\"https://gitlab.com\\"
-token = \\"runner-2\\"
+token = \\"tokentwo\\"
+name = \\"runner-two\\"
 
   [runners.machine]
   IdleCount = 0
@@ -300,7 +298,7 @@ token = \\"runner-2\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfilegitlabrunner1",
+                        "Ref": "RunnersInstanceProfileForRunnerTwo",
                       },
                       "\\"
 ]
@@ -490,7 +488,7 @@ token = \\"runner-2\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 10ec579de8282de8
+# fingerprint: 00abb339bfddc5ab
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -747,27 +745,27 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "RunnersInstanceProfilegitlabrunner0": Object {
+    "RunnersInstanceProfileForRunnerOne": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForGitlabRunner0150501FA",
+            "Ref": "RunnersRoleForRunnerOne81D26D07",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersInstanceProfilegitlabrunner1": Object {
+    "RunnersInstanceProfileForRunnerTwo": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForGitlabRunner139210C6B",
+            "Ref": "RunnersRoleForRunnerTwo6CBF071A",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersRoleForGitlabRunner0150501FA": Object {
+    "RunnersRoleForRunnerOne81D26D07": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -804,7 +802,7 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::IAM::Role",
     },
-    "RunnersRoleForGitlabRunner139210C6B": Object {
+    "RunnersRoleForRunnerTwo6CBF071A": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1326,9 +1324,8 @@ log_format = \\"runner\\"
 log_level = \\"info\\"
 
 [[runners]]
-name = \\"gitlab-runner\\"
-url = \\"https://gitlab.com\\"
-token = \\"abc\\"
+token = \\"token\\"
+name = \\"runner-one\\"
 
   [runners.machine]
   IdleCount = 0
@@ -1349,7 +1346,7 @@ token = \\"abc\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfilegitlabrunner0",
+                        "Ref": "RunnersInstanceProfileForRunnerOne",
                       },
                       "\\"
 ]
@@ -1388,9 +1385,8 @@ token = \\"abc\\"
   shm_size = 0
 
 [[runners]]
-name = \\"gitlab-runner\\"
-url = \\"https://gitlab.com\\"
-token = \\"abc2\\"
+token = \\"tokentwo\\"
+name = \\"runner-two\\"
 
   [runners.machine]
   IdleCount = 0
@@ -1411,7 +1407,7 @@ token = \\"abc2\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfilegitlabrunner1",
+                        "Ref": "RunnersInstanceProfileForRunnerTwo",
                       },
                       "\\"
 ]
@@ -1599,7 +1595,7 @@ token = \\"abc2\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 7d56783fe3a9a452
+# fingerprint: 754a56b3378fa6af
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1851,27 +1847,27 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "RunnersInstanceProfilegitlabrunner0": Object {
+    "RunnersInstanceProfileForRunnerOne": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForGitlabRunner0150501FA",
+            "Ref": "RunnersRoleForRunnerOne81D26D07",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersInstanceProfilegitlabrunner1": Object {
+    "RunnersInstanceProfileForRunnerTwo": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForGitlabRunner139210C6B",
+            "Ref": "RunnersRoleForRunnerTwo6CBF071A",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersRoleForGitlabRunner0150501FA": Object {
+    "RunnersRoleForRunnerOne81D26D07": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1908,7 +1904,7 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::IAM::Role",
     },
-    "RunnersRoleForGitlabRunner139210C6B": Object {
+    "RunnersRoleForRunnerTwo6CBF071A": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [

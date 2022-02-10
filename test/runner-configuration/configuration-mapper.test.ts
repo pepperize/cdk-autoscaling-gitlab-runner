@@ -91,7 +91,6 @@ describe("ConfigurationMapper", () => {
           environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
           executor: "docker+machine",
           limit: 10,
-          name: "gitlab-runner",
           output_limit: 52428800,
           url: "https://gitlab.com",
           docker: {

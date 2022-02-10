@@ -199,17 +199,17 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "RunnersInstanceProfilegitlabrunner": Object {
+    "RunnersInstanceProfileForRunner1": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForGitlabRunner159D6A36",
+            "Ref": "RunnersRoleForRunner1802B765C",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersRoleForGitlabRunner159D6A36": Object {
+    "RunnersRoleForRunner1802B765C": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [

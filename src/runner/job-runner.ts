@@ -10,107 +10,55 @@ import {
 import { CfnInstanceProfile, IRole, ManagedPolicy, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 import { pascalCase } from "pascal-case";
-import { AutoscalingConfiguration, DockerConfiguration, MachineConfiguration } from "../runner-configuration";
+import { RunnerConfiguration } from "../runner-configuration";
 
 /**
  * The runner EC2 instances configuration. If not set, the defaults will be used.
  * @link GitlabRunnerAutoscalingProps
  */
-export interface GitlabRunnerAutoscalingJobRunnerConfiguration {
-  /**
-   * The runner’s description. Informational only.
-   * @default "gitlab-runner"
-   */
-  readonly name?: string;
-  /**
-   * The GitLab Runner’s authentication token, which is obtained during runner registration.
-   * @see https://docs.gitlab.com/ee/api/runners.html#registration-and-authentication-tokens
-   */
-  readonly gitlabToken: string;
 
+export interface GitlabRunnerAutoscalingJobRunnerProps {
   /**
-   * GitLab instance URL.
-   * @default "https://gitlab.com"
+   * The runner EC2 instances configuration. If not set, the defaults will be used.
+   * @link RunnerConfiguration
    */
-  readonly gitlabUrl?: string;
-
+  readonly configuration: RunnerConfiguration;
   /**
    * Instance type for runner EC2 instances. It's a combination of a class and size.
    * @default InstanceType.of(InstanceClass.T3, InstanceSize.MICRO)
    */
   readonly instanceType?: InstanceType;
-
   /**
    * An Amazon Machine Image ID for the Runners EC2 instances. If empty the latest Ubuntu 20.04 focal will be looked up.
    *
-   * Any operating system supported by Dcoker Machine's provisioner.
+   * Any operating system supported by Docker Machine's provisioner.
    *
    * @see https://cloud-images.ubuntu.com/locator/ec2/
    * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision
    */
   readonly machineImage?: IMachineImage;
-
   /**
    * Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
    */
   readonly role?: IRole;
-  /**
-   * Limit how many jobs can be handled concurrently by this registered runner. 0 (default) means do not limit.
-   * @default 10
-   */
-  readonly limit?: number;
-
-  /**
-   * Maximum build log size in kilobytes. Default is 4096 (4MB).
-   * @default 52428800 (50GB)
-   */
-  readonly outputLimit?: number;
-
-  /**
-   * Append or overwrite environment variables.
-   * @default ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"]
-   */
-  readonly environment?: string[];
-
-  /**
-   * Optional docker configuration
-   */
-  readonly docker?: DockerConfiguration;
-  /**
-   * Optional docker machine configuration
-   */
-  readonly machine?: MachineConfiguration;
-  /**
-   * Optional autoscaling configuration
-   */
-  readonly autoscaling?: AutoscalingConfiguration[];
-}
-
-export interface GitlabRunnerAutoscalingJobRunnerProps extends GitlabRunnerAutoscalingJobRunnerConfiguration {
-  readonly instanceProfile?: CfnInstanceProfile;
 }
 
 export class GitlabRunnerAutoscalingJobRunner extends Construct {
-  readonly name: string;
-  readonly gitlabToken: string;
-  readonly gitlabUrl: string;
+  private static generateUniqueName(): string {
+    return `gitlab-runner-${new Date().getTime().toString().toString()}${Math.floor(Math.random() * 100000)}`;
+  }
+  readonly configuration: RunnerConfiguration;
   readonly instanceType: InstanceType;
   readonly machineImage: IMachineImage;
   readonly role: IRole;
-  readonly limit?: number;
-  readonly outputLimit?: number;
-  readonly executor?: string[];
-  readonly environment?: string[];
-  readonly docker?: DockerConfiguration;
-  readonly machine?: MachineConfiguration;
-  readonly autoscaling?: AutoscalingConfiguration[];
   readonly instanceProfile: CfnInstanceProfile;
 
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingJobRunnerProps) {
     super(scope, id);
-    this.name = props.name || "gitlab-runner";
-    this.gitlabToken = props.gitlabToken;
-    this.gitlabUrl = props.gitlabUrl || "https://gitlab.com";
+    this.configuration = {
+      ...props.configuration,
+      name: props.configuration.name ?? GitlabRunnerAutoscalingJobRunner.generateUniqueName(),
+    };
     this.instanceType = props.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
     this.machineImage =
       props.machineImage ||
@@ -129,19 +77,17 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
       });
     this.role =
       props.role ||
-      new Role(scope, `RunnersRoleFor${pascalCase(this.name)}`, {
+      new Role(scope, `RunnersRoleFor${pascalCase(this.configuration.name!)}`, {
         assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
         managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2RoleforSSM")],
       });
-    this.limit = props.limit;
-    this.outputLimit = props.outputLimit;
-    this.environment = props.environment;
-    this.docker = props.docker;
-    this.machine = props.machine;
-    this.autoscaling = props.autoscaling;
-    this.instanceProfile = new CfnInstanceProfile(scope, `RunnersInstanceProfile-${this.name}`, {
-      roles: [this.role.roleName],
-    });
+    this.instanceProfile = new CfnInstanceProfile(
+      scope,
+      `RunnersInstanceProfileFor${pascalCase(this.configuration.name!)}`,
+      {
+        roles: [this.role.roleName],
+      }
+    );
 
     Tags.of(this.instanceProfile).add("RunnersInstanceProfile", "RunnersInstanceProfile");
 

@@ -18,7 +18,10 @@ describe("Manager", () => {
     new GitlabRunnerAutoscalingManager(stack, "cache", {
       runners: [
         new GitlabRunnerAutoscalingJobRunner(stack, "Runner1", {
-          gitlabToken: "gitlabtoken1",
+          configuration: {
+            token: "gitlabtoken1",
+            name: "runner1",
+          },
         }),
       ],
       runnersSecurityGroupName: "sg",

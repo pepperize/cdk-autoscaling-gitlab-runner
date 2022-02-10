@@ -8,9 +8,10 @@ import {
   GlobalConfiguration,
   LogFormat,
   LogLevel,
+  RunnerConfiguration,
 } from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
-import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerConfiguration } from "./job-runner";
+import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
 import { GitlabRunnerAutoscalingManager } from "./manager";
 import { Network, NetworkProps } from "./network";
 
@@ -42,7 +43,7 @@ export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
    */
   readonly manager?: GitlabRunnerAutoscalingManagerConfiguration;
 
-  readonly runners: GitlabRunnerAutoscalingJobRunnerConfiguration[];
+  readonly runners: RunnerConfiguration[];
 }
 
 /**
@@ -156,10 +157,9 @@ export class GitlabRunnerAutoscaling extends Construct {
       runnersSecurityGroupName: runnersSecurityGroupName,
       network: this.network,
       cacheBucket: this.cacheBucket,
-      runners: runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {
+      runners: runners.map((runnerConfiguration, index): GitlabRunnerAutoscalingJobRunner => {
         return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, {
-          name: `gitlab-runner-${index}`,
-          ...runnerProps,
+          configuration: runnerConfiguration,
         });
       }),
     });

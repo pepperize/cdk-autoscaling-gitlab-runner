@@ -7,7 +7,6 @@ log_format = \\"runner\\"
 log_level = \\"info\\"
 
 [[runners]]
-name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
@@ -62,7 +61,6 @@ log_format = \\"runner\\"
 log_level = \\"info\\"
 
 [[runners]]
-name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
@@ -109,7 +107,6 @@ token = \\"foo+bar\\"
     secretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
 
 [[runners]]
-name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800

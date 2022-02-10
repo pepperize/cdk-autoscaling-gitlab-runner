@@ -25,7 +25,6 @@ export class ConfigurationMapper {
       },
       runnersConfiguration: runnersConfiguration.map((item): RunnerConfiguration => {
         return {
-          name: "gitlab-runner",
           url: "https://gitlab.com",
           limit: 10,
           outputLimit: 52428800,
