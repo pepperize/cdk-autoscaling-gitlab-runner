@@ -1406,7 +1406,7 @@ output_limit = 52_428_800
 executor = \\"docker+machine\\"
 environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
 token = \\"tokentwo\\"
-name = \\"gitlab-runner-164451831711750836\\"
+name = \\"gitlab-runner-164451847474530739\\"
 
   [runners.machine]
   IdleCount = 0
@@ -1427,7 +1427,7 @@ name = \\"gitlab-runner-164451831711750836\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfileForGitlabRunner164451831711750836",
+                        "Ref": "RunnersInstanceProfileForGitlabRunner164451847474530739",
                       },
                       "\\"
 ]
@@ -1615,7 +1615,7 @@ name = \\"gitlab-runner-164451831711750836\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 848888ae90d08165
+# fingerprint: 6b288c46fee2067c
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1867,11 +1867,11 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "RunnersInstanceProfileForGitlabRunner164451831711750836": Object {
+    "RunnersInstanceProfileForGitlabRunner164451847474530739": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForGitlabRunner164451831711750836269245C7",
+            "Ref": "RunnersRoleForGitlabRunner164451847474530739560027D3",
           },
         ],
       },
@@ -1887,7 +1887,7 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersRoleForGitlabRunner164451831711750836269245C7": Object {
+    "RunnersRoleForGitlabRunner164451847474530739560027D3": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
