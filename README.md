@@ -99,10 +99,14 @@ dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
      vpcId: "<your vpc id>",
    });
    new GitlabRunnerAutoscaling(stack, "GitlabRunner", {
-     gitlabToken: "<your gitlab runner auth token>",
      network: {
-       vpc,
-     },
+        vpc: vpc,
+      },
+     runners: [
+       {
+         token: "<auth token>",
+       },
+     ],
    });
    ```
 
@@ -140,7 +144,11 @@ const cache = new Bucket(this, "Cache", {
 });
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
+   runners: [
+      {
+         token: "<auth token>",
+      },
+   ],
   cache: { bucket: cache },
 });
 ```
@@ -159,19 +167,21 @@ in [Advanced configuration](https://docs.gitlab.com/runner/configuration/advance
 import { GitlabRunnerAutoscaling } from "@pepperize/cdk-autoscaling-gitlab-runner";
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
-  runners: {
-    environment: [], // Reset the OverlayFS driver for every project
-    docker: {
-      capAdd: [], // Remove the CAP_SYS_ADMIN
-      privileged: false, // Run unprivileged
-    },
-    machine: {
-      idleCount: 2, // Number of idle machine
-      idleTime: 3000, // Waiting time in idle state
-      maxBuilds: 1, // Max builds before instance is removed
-    },
-  },
+   runners: [
+      {
+         token: "<auth token>",
+         environment: [], // Reset the OverlayFS driver for every project
+         docker: {
+            capAdd: [], // Remove the CAP_SYS_ADMIN
+            privileged: false, // Run unprivileged
+         },
+         machine: {
+            idleCount: 2, // Number of idle machine
+            idleTime: 3000, // Waiting time in idle state
+            maxBuilds: 1, // Max builds before instance is removed
+         },
+      },
+   ],
 });
 ```
 
@@ -208,9 +218,11 @@ new GitlabRunnerAutoscaling(this, "Runner", {
   manager: {
     machineImage: MachineImage.genericLinux(managerAmiMap),
   },
-  runners: {
-    machineImage: MachineImage.genericLinux(runnerAmiMap),
-  },
+  runners: [
+    {
+      machineImage: MachineImage.genericLinux(runnerAmiMap),
+    },
+  ]
 });
 ```
 
