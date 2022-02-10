@@ -233,12 +233,6 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               runnersConfiguration: this.runners.map((runner) => {
                 const configuration = runner.configuration;
                 return {
-                  url: configuration.url,
-                  token: configuration.token,
-                  limit: configuration.limit,
-                  outputLimit: configuration.outputLimit,
-                  executor: configuration.executor,
-                  environment: configuration.environment,
                   ...configuration,
                   machine: {
                     ...configuration.machine,
