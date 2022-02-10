@@ -1406,7 +1406,7 @@ output_limit = 52_428_800
 executor = \\"docker+machine\\"
 environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
 token = \\"tokentwo\\"
-name = \\"gitlab-runner-164451847474530739\\"
+name = \\"runner-two\\"
 
   [runners.machine]
   IdleCount = 0
@@ -1427,7 +1427,7 @@ name = \\"gitlab-runner-164451847474530739\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfileForGitlabRunner164451847474530739",
+                        "Ref": "RunnersInstanceProfileForRunnerTwo",
                       },
                       "\\"
 ]
@@ -1615,7 +1615,7 @@ name = \\"gitlab-runner-164451847474530739\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 6b288c46fee2067c
+# fingerprint: 16863c938908b914
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1867,16 +1867,6 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "RunnersInstanceProfileForGitlabRunner164451847474530739": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
-            "Ref": "RunnersRoleForGitlabRunner164451847474530739560027D3",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
     "RunnersInstanceProfileForRunnerOne": Object {
       "Properties": Object {
         "Roles": Array [
@@ -1887,7 +1877,17 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersRoleForGitlabRunner164451847474530739560027D3": Object {
+    "RunnersInstanceProfileForRunnerTwo": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "RunnersRoleForRunnerTwo6CBF071A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "RunnersRoleForRunnerOne81D26D07": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1924,7 +1924,7 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::IAM::Role",
     },
-    "RunnersRoleForRunnerOne81D26D07": Object {
+    "RunnersRoleForRunnerTwo6CBF071A": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
