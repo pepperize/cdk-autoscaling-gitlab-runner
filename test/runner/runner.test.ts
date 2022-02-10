@@ -31,6 +31,7 @@ describe("GitlabRunnerAutoscaling", () => {
         },
         {
           token: "tokentwo",
+          name: "runner-two",
         },
       ],
     });
