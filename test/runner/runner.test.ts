@@ -26,12 +26,16 @@ describe("GitlabRunnerAutoscaling", () => {
       },
       runners: [
         {
-          token: "token",
-          name: "runner-one",
+          configuration: {
+            token: "token",
+            name: "runner-one",
+          },
         },
         {
-          token: "tokentwo",
-          name: "runner-two",
+          configuration: {
+            token: "tokentwo",
+            name: "runner-two",
+          },
         },
       ],
     });
@@ -64,8 +68,10 @@ describe("GitlabRunnerAutoscaling", () => {
       },
       runners: [
         {
-          token: "token",
-          name: "runner-one",
+          configuration: {
+            token: "token",
+            name: "runner-one",
+          },
         },
       ],
     });
@@ -91,12 +97,16 @@ describe("GitlabRunnerAutoscaling", () => {
     new GitlabRunnerAutoscaling(stack, "Runner", {
       runners: [
         {
-          token: "token",
-          name: "runner-one",
+          configuration: {
+            token: "token",
+            name: "runner-one",
+          },
         },
         {
-          token: "tokentwo",
-          name: "runner-two",
+          configuration: {
+            token: "tokentwo",
+            name: "runner-two",
+          },
         },
       ],
     });

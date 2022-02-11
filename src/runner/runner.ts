@@ -8,10 +8,9 @@ import {
   GlobalConfiguration,
   LogFormat,
   LogLevel,
-  RunnerConfiguration,
 } from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
-import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
+import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerProps } from "./job-runner";
 import { GitlabRunnerAutoscalingManager } from "./manager";
 import { Network, NetworkProps } from "./network";
 
@@ -43,7 +42,11 @@ export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
    */
   readonly manager?: GitlabRunnerAutoscalingManagerConfiguration;
 
-  readonly runners: RunnerConfiguration[];
+  /**
+   * The runner EC2 instances settings. At least one runner should be set up.
+   * @link GitlabRunnerAutoscalingJobRunnerProps
+   */
+  readonly runners: GitlabRunnerAutoscalingJobRunnerProps[];
 }
 
 /**
@@ -157,10 +160,8 @@ export class GitlabRunnerAutoscaling extends Construct {
       runnersSecurityGroupName: runnersSecurityGroupName,
       network: this.network,
       cacheBucket: this.cacheBucket,
-      runners: runners.map((runnerConfiguration, index): GitlabRunnerAutoscalingJobRunner => {
-        return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, {
-          configuration: runnerConfiguration,
-        });
+      runners: runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {
+        return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, runnerProps);
       }),
     });
 

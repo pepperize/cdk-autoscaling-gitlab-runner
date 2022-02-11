@@ -1464,8 +1464,6 @@ The runner EC2 instances configuration.
 
 If not set, the defaults will be used.
 
-> [GitlabRunnerAutoscalingProps](GitlabRunnerAutoscalingProps)
-
 #### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
@@ -1481,7 +1479,7 @@ const gitlabRunnerAutoscalingJobRunnerProps: GitlabRunnerAutoscalingJobRunnerPro
 | [`configuration`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyconfiguration)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration) | The runner EC2 instances configuration. |
 | [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyinstancetype) | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | Instance type for runner EC2 instances. |
 | [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertymachineimage) | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | An Amazon Machine Image ID for the Runners EC2 instances. |
-| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyrole) | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances. |
+| [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyrole) | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances via Instance Profile. |
 
 ---
 
@@ -1540,7 +1538,7 @@ public readonly role: IRole;
 
 - *Type:* [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole)
 
-Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
+Optionally pass an IAM role, that get's assigned to the EC2 runner instances via Instance Profile.
 
 ---
 
@@ -1762,7 +1760,7 @@ const gitlabRunnerAutoscalingProps: GitlabRunnerAutoscalingProps = { ... }
 | [`concurrent`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyconcurrent) | `number` | The limit of the jobs that can be run concurrently across all runners (concurrent). |
 | [`logFormat`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertylogformat) | `string` | The log format. |
 | [`logLevel`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyloglevel) | `string` | The log_level. |
-| [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration)[] | *No description.* |
+| [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps)[] | The runner EC2 instances settings. |
 | [`cache`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertycache) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps) | *No description.* |
 | [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertymanager) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration) | The manager EC2 instance configuration. |
 | [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertynetwork) | [`@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps) | The network configuration for the Runner. |
@@ -1824,10 +1822,16 @@ The log_level.
 ##### `runners`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.runners" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners"></a>
 
 ```typescript
-public readonly runners: RunnerConfiguration[];
+public readonly runners: GitlabRunnerAutoscalingJobRunnerProps[];
 ```
 
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration)[]
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps)[]
+
+The runner EC2 instances settings.
+
+At least one runner should be set up.
+
+> [GitlabRunnerAutoscalingJobRunnerProps](GitlabRunnerAutoscalingJobRunnerProps)
 
 ---
 

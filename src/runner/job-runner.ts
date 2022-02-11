@@ -14,7 +14,6 @@ import { RunnerConfiguration } from "../runner-configuration";
 
 /**
  * The runner EC2 instances configuration. If not set, the defaults will be used.
- * @link GitlabRunnerAutoscalingProps
  */
 
 export interface GitlabRunnerAutoscalingJobRunnerProps {
@@ -38,7 +37,7 @@ export interface GitlabRunnerAutoscalingJobRunnerProps {
    */
   readonly machineImage?: IMachineImage;
   /**
-   * Optionally pass an IAM role, that get's assigned to the EC2 runner instances.
+   * Optionally pass an IAM role, that get's assigned to the EC2 runner instances via Instance Profile.
    */
   readonly role?: IRole;
 }
