@@ -238,6 +238,43 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
+### Multiple runners configuration
+
+Each runner defines one `[[runners]]` section in the [configuration file](https://docs.gitlab.com/runner/configuration/).
+Use [Specific runners](https://docs.gitlab.com/ee/ci/runners/runners_scope.html#specific-runners) when you want to use runners for specific projects.
+
+```typescript
+const privilegedRole = new Role(this, "PrivilegedRunnersRole", {
+  // role 1
+});
+
+const restrictedRole = new Role(this, "RestrictedRunnersRole", {
+  // role 2
+});
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  runners: [
+    {
+      configuration: {
+        token: "token1",
+        name: "privileged-runner",
+      },
+      role: privilegedRole,
+    },
+    {
+      configuration: {
+        token: "token2",
+        name: "restricted-runner",
+        docker: {
+          privileged: false, // Run unprivileged
+        },
+      },
+      role: restrictedRole,
+    },
+  ],
+});
+```
+
 See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/machine-image.ts)
 
 ### Spot instances
