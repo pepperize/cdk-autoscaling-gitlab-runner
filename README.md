@@ -201,7 +201,7 @@ For bigger projects, for example with [webpack](https://webpack.js.org/), this w
 ```typescript
 new GitlabRunnerAutoscaling(this, "Runner", {
   manager: {
-    instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
+    instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.SMALL),
   },
   runners: [
     {
@@ -299,7 +299,13 @@ const vpc = new Vpc(this, "Vpc", {
 });
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
+  runners: [
+    {
+      configuration: {
+        token: "<auth token>",
+      },
+    },
+  ],
   network: { vpc: vpc },
 });
 ```
