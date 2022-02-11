@@ -100,11 +100,13 @@ dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
    });
    new GitlabRunnerAutoscaling(stack, "GitlabRunner", {
      network: {
-        vpc: vpc,
-      },
+       vpc: vpc,
+     },
      runners: [
        {
-         token: "<auth token>",
+         configuration: {
+           token: "<auth token>",
+         },
        },
      ],
    });
@@ -144,11 +146,13 @@ const cache = new Bucket(this, "Cache", {
 });
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-   runners: [
-      {
-         token: "<auth token>",
+  runners: [
+    {
+      configuration: {
+        token: "<auth token>",
       },
-   ],
+    },
+  ],
   cache: { bucket: cache },
 });
 ```
@@ -167,21 +171,23 @@ in [Advanced configuration](https://docs.gitlab.com/runner/configuration/advance
 import { GitlabRunnerAutoscaling } from "@pepperize/cdk-autoscaling-gitlab-runner";
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-   runners: [
-      {
-         token: "<auth token>",
-         environment: [], // Reset the OverlayFS driver for every project
-         docker: {
-            capAdd: [], // Remove the CAP_SYS_ADMIN
-            privileged: false, // Run unprivileged
-         },
-         machine: {
-            idleCount: 2, // Number of idle machine
-            idleTime: 3000, // Waiting time in idle state
-            maxBuilds: 1, // Max builds before instance is removed
-         },
+  runners: [
+    {
+      configuration: {
+        token: "<auth token>",
+        environment: [], // Reset the OverlayFS driver for every project
+        docker: {
+          capAdd: [], // Remove the CAP_SYS_ADMIN
+          privileged: false, // Run unprivileged
+        },
+        machine: {
+          idleCount: 2, // Number of idle machine
+          idleTime: 3000, // Waiting time in idle state
+          maxBuilds: 1, // Max builds before instance is removed
+        },
       },
-   ],
+    },
+  ],
 });
 ```
 
@@ -194,13 +200,17 @@ For bigger projects, for example with [webpack](https://webpack.js.org/), this w
 
 ```typescript
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
   manager: {
     instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
   },
-  runners: {
-    instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.LARGE),
-  },
+  runners: [
+    {
+      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.LARGE),
+      configuration: {
+        token: "<auth token>",
+      },
+    },
+  ],
 });
 ```
 
@@ -214,15 +224,17 @@ The requested runner instances by default using Ubuntu 20.04, any OS implemented
 
 ```typescript
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
   manager: {
     machineImage: MachineImage.genericLinux(managerAmiMap),
   },
   runners: [
     {
       machineImage: MachineImage.genericLinux(runnerAmiMap),
+      configuration: {
+        token: "<auth token>",
+      },
     },
-  ]
+  ],
 });
 ```
 
@@ -234,15 +246,19 @@ By default, EC2 Spot Instances are requested.
 
 ```typescript
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
-  runners: {
-    machine: {
-      machineOptions: {
-        requestSpotInstance: false,
-        spotPrice: 0.5,
+  runners: [
+    {
+      configuration: {
+        token: "<auth token>",
+        machine: {
+          machineOptions: {
+            requestSpotInstance: false,
+            spotPrice: 0.5,
+          },
+        },
       },
     },
-  },
+  ],
 });
 ```
 
@@ -259,10 +275,14 @@ const role = new Role(this, "RunnersRole", {
 });
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
-  runners: {
-    role: role,
-  },
+  runners: [
+    {
+      role: role,
+      configuration: {
+        token: "<auth token>",
+      },
+    },
+  ],
 });
 ```
 
@@ -294,7 +314,13 @@ Happy with the presets?
 
 ```typescript
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
+  runners: [
+    {
+      configuration: {
+        token: "<auth token>",
+      },
+    },
+  ],
 });
 ```
 
