@@ -88,7 +88,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
       props.role ||
       new Role(scope, "ManagerRole", {
         assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
-        managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2RoleforSSM")],
+        managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")],
         inlinePolicies: {
           Cache: PolicyDocument.fromJson({
             Version: "2012-10-17",
@@ -135,7 +135,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                     "ec2:Region": `${scope.region}`,
                   },
                   ArnEqualsIfExists: {
-                    "ec2:Vpc": `${this.network.vpc.vpcArn}`,
+                    "ec2:Vpc": `arn:aws:ec2:${scope.region}:${scope.account}:vpc/${this.network.vpc.vpcId}`,
                   },
                 },
               },
@@ -144,15 +144,13 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                 Action: ["ec2:RunInstances"],
                 Resource: ["*"],
                 Condition: {
-                  StringEquals: {
+                  "ForAllValues:StringEquals": {
+                    "aws:TagKeys": ["InstanceProfile"],
                     "ec2:InstanceType": (this.runners || []).map((runner) => {
                       const runnersInstanceType =
                         (this.runners && runner.instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
                       return runnersInstanceType.toString();
                     }),
-                    "ForAllValues:StringEquals": {
-                      "aws:TagKeys": ["InstanceProfile"],
-                    },
                   },
                 },
               },

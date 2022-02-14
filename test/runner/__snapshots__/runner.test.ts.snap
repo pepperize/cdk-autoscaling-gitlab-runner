@@ -551,7 +551,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },
@@ -640,11 +640,7 @@ yum update -y aws-cfn-bootstrap
                         "Fn::Join": Array [
                           "",
                           Array [
-                            "arn:",
-                            Object {
-                              "Ref": "AWS::Partition",
-                            },
-                            ":ec2:us-east-1:0:vpc/",
+                            "arn:aws:ec2:us-east-1:0:vpc/",
                             Object {
                               "Ref": "Vpc8378EB38",
                             },
@@ -662,12 +658,10 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
-                    "StringEquals": Object {
-                      "ForAllValues:StringEquals": Object {
-                        "aws:TagKeys": Array [
-                          "InstanceProfile",
-                        ],
-                      },
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "InstanceProfile",
+                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                         "t3.micro",
@@ -1668,7 +1662,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },
@@ -1753,18 +1747,7 @@ yum update -y aws-cfn-bootstrap
                   ],
                   "Condition": Object {
                     "ArnEqualsIfExists": Object {
-                      "ec2:Vpc": Object {
-                        "Fn::Join": Array [
-                          "",
-                          Array [
-                            "arn:",
-                            Object {
-                              "Ref": "AWS::Partition",
-                            },
-                            ":ec2:us-east-1:0:vpc/vpc123",
-                          ],
-                        ],
-                      },
+                      "ec2:Vpc": "arn:aws:ec2:us-east-1:0:vpc/vpc123",
                     },
                     "StringEqualsIfExists": Object {
                       "ec2:Region": "us-east-1",
@@ -1776,12 +1759,10 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
-                    "StringEquals": Object {
-                      "ForAllValues:StringEquals": Object {
-                        "aws:TagKeys": Array [
-                          "InstanceProfile",
-                        ],
-                      },
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "InstanceProfile",
+                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                         "t3.micro",

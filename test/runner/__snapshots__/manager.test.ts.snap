@@ -38,7 +38,7 @@ Object {
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },
@@ -127,11 +127,7 @@ Object {
                         "Fn::Join": Array [
                           "",
                           Array [
-                            "arn:",
-                            Object {
-                              "Ref": "AWS::Partition",
-                            },
-                            ":ec2:us-east-1:123456789012:vpc/",
+                            "arn:aws:ec2:us-east-1:123456789012:vpc/",
                             Object {
                               "Ref": "Vpc8378EB38",
                             },
@@ -149,12 +145,10 @@ Object {
                 Object {
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
-                    "StringEquals": Object {
-                      "ForAllValues:StringEquals": Object {
-                        "aws:TagKeys": Array [
-                          "InstanceProfile",
-                        ],
-                      },
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "InstanceProfile",
+                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                       ],
