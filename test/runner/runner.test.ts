@@ -114,5 +114,8 @@ describe("GitlabRunnerAutoscaling", () => {
     // Then
     const template = Template.fromStack(stack);
     expect(template).toMatchSnapshot();
+    template.hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {});
+    expect(JSON.stringify(template)).toMatch("runner-one");
+    expect(JSON.stringify(template)).toMatch("runner-two");
   });
 });
