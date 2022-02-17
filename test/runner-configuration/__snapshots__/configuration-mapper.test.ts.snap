@@ -1,13 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfigurationMapper Should map snapshot with defaults 1`] = `
+exports[`ConfigurationMapper Should map snapshot with defaults only at empty values when provided a configuration consisting of a mix of empty and defined values 1`] = `
 "concurrent = 10
 check_interval = 0
 log_format = \\"runner\\"
 log_level = \\"info\\"
 
 [[runners]]
-name = \\"gitlab-runner\\"
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
@@ -46,11 +45,111 @@ token = \\"foo+bar\\"
   Type = \\"s3\\"
   Shared = true
 
-    [runners.cache.s3]
-    ServerAddress = \\"s3.amazonaws.com\\"
-    BucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
-    BucketLocation = \\"us-east-1\\"
-    AccessKey = \\"AKIAIOSFODNN7EXAMPLE\\"
-    SecretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
+    [runners.cache.S3]
+    serverAddress = \\"s3.amazonaws.com\\"
+    bucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
+    bucketLocation = \\"us-east-1\\"
+    accessKey = \\"AKIAIOSFODNN7EXAMPLE\\"
+    secretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
+"
+`;
+
+exports[`ConfigurationMapper Should match snapshot when provided multiple runners configuration 1`] = `
+"concurrent = 10
+check_interval = 0
+log_format = \\"runner\\"
+log_level = \\"info\\"
+
+[[runners]]
+url = \\"https://gitlab.com\\"
+limit = 10
+output_limit = 52_428_800
+executor = \\"docker+machine\\"
+environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+token = \\"foo+bar\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
+
+  [runners.machine]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 20
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%s\\"
+  MachineOptions = [
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\"
+]
+
+    [[runners.machine.autoscaling]]
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
+
+  [runners.cache]
+  Type = \\"s3\\"
+  Shared = true
+
+    [runners.cache.S3]
+    serverAddress = \\"s3.amazonaws.com\\"
+    bucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
+    bucketLocation = \\"us-east-1\\"
+    accessKey = \\"AKIAIOSFODNN7EXAMPLE\\"
+    secretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
+
+[[runners]]
+url = \\"https://gitlab.com\\"
+limit = 10
+output_limit = 52_428_800
+executor = \\"docker+machine\\"
+environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+token = \\"2foo+bar\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
+
+  [runners.machine]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 20
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%s\\"
+  MachineOptions = [
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\"
+]
+
+    [[runners.machine.autoscaling]]
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
+
+  [runners.cache]
+  Type = \\"s3\\"
+  Shared = true
+
+    [runners.cache.S3]
+    serverAddress = \\"2s3.amazonaws.com\\"
+    bucketName = \\"2gitlab-runner-cahe-bucket-test-us-east-1\\"
+    bucketLocation = \\"2us-east-1\\"
+    accessKey = \\"2AKIAIOSFODNN7EXAMPLE\\"
+    secretKey = \\"2wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
 "
 `;

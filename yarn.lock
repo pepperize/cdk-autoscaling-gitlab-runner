@@ -671,6 +671,16 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.8.tgz#10f65fe1891fd8cde4957360835e78fd1936bfdd"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
+"@pepperize/cdk-private-bucket@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-private-bucket/-/cdk-private-bucket-0.0.33.tgz#48c744c0c7604a2dcb33aebb7ca127acca57e72a"
+  integrity sha512-XGecapeZVSf14URL6I1k65AF3RwzRHAXZhMOrvEYLo7uUNMMY0wu6WgqIQzPT3W+mzjKCdPvch3FJrZdl0DoZA==
+
+"@pepperize/cdk-security-group@^0.0.25":
+  version "0.0.25"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-security-group/-/cdk-security-group-0.0.25.tgz#fc01b347d80a5c34a894d9ad2174f73a89c54e4e"
+  integrity sha512-lkRkJ3sRs9wmw2MWy3pnx8RVw/PB1G0+2eDHDZBQqPpJvn+4TgmbEUgSNnR0Z3b6TVnDwYTOjCYVNkGhjKcm7Q==
+
 "@pepperize/projen-awscdk-construct@latest":
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.0.33.tgz#b7e2fbcd7ae15520c0bd1be39b5db1615902f7de"

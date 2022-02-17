@@ -1,5 +1,6 @@
+import { PrivateBucket } from "@pepperize/cdk-private-bucket";
 import { Duration, RemovalPolicy, Stack } from "aws-cdk-lib";
-import { BlockPublicAccess, Bucket, BucketEncryption, IBucket } from "aws-cdk-lib/aws-s3";
+import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
 
 export interface CacheProps {
@@ -36,7 +37,7 @@ export class Cache extends Construct {
     const expiration = props.expiration ?? Duration.days(30);
     const lifeCycleRuleEnabled = expiration.toDays() !== 0;
 
-    this.bucket = new Bucket(scope, "CacheBucket", {
+    this.bucket = new PrivateBucket(scope, "CacheBucket", {
       bucketName: uniqueCacheBucketName,
       lifecycleRules: [
         {
@@ -44,8 +45,6 @@ export class Cache extends Construct {
           expiration: expiration,
         },
       ],
-      encryption: BucketEncryption.KMS_MANAGED,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
     });

@@ -85,8 +85,15 @@ dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
    ```shell
    curl --request POST "https://gitlab.com/api/v4/runners" --form "token=<your register token>" --form "description=gitlab-runner" --form "tag_list=pepperize,docker,production"
    ```
+6. **Store runner authentication token in SSM ParameterStore**
 
-6. **Add to your `main.ts`**
+   [Create a SecureString parameter](https://docs.aws.amazon.com/systems-manager/latest/userguide/param-create-cli.html#param-create-cli-securestring)
+
+   ```shell
+   aws ssm put-parameter --name "/gitlab-runner/token" --value "<your runner authentication token>" --type "SecureString"
+   ```
+   
+9. **Add to your `main.ts`**
 
    ```typescript
    import { Vpc } from "@aws-cdk/aws-ec2";
@@ -98,33 +105,43 @@ dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
    const vpc = Vpc.fromLookup(app, "ExistingVpc", {
      vpcId: "<your vpc id>",
    });
+   const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+     parameterName: "/gitlab-runner/token"
+   });
    new GitlabRunnerAutoscaling(stack, "GitlabRunner", {
-     gitlabToken: "<your gitlab runner auth token>",
      network: {
-       vpc,
+       vpc: vpc,
      },
+     runners: [
+       {
+         token: token,
+         configuration: {
+            // optionally configure your runner
+         },
+       },
+     ],
    });
    ```
 
-7. **Create service linked role**
+10. **Create service linked role**
 
-   _(If requesting spot instances, default: true)_
+    _(If requesting spot instances, default: true)_
 
-   ```sh
-   aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
-   ```
+    ```sh
+    aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
+    ```
 
-8. **Configure the AWS CLI**
+11. **Configure the AWS CLI**
 
-   - [AWSume](https://awsu.me/)
-   - [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
-   - [AWS Single Sign-On](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)
+    - [AWSume](https://awsu.me/)
+    - [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+    - [AWS Single Sign-On](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)
 
-9. **Deploy the GitLab Runner**
+12. **Deploy the GitLab Runner**
 
-   ```shell
-   npm run deploy
-   ```
+    ```shell
+    npm run deploy
+    ```
 
 ## Example
 
@@ -138,9 +155,16 @@ A custom S3 Bucket can be configured.
 const cache = new Bucket(this, "Cache", {
   // Your custom bucket
 });
+const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token"
+});
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
+  runners: [
+    {
+      token: token,
+    },
+  ],
   cache: { bucket: cache },
 });
 ```
@@ -157,21 +181,30 @@ in [Advanced configuration](https://docs.gitlab.com/runner/configuration/advance
 
 ```typescript
 import { GitlabRunnerAutoscaling } from "@pepperize/cdk-autoscaling-gitlab-runner";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
+
+const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token"
+});
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
-  runners: {
-    environment: [], // Reset the OverlayFS driver for every project
-    docker: {
-      capAdd: [], // Remove the CAP_SYS_ADMIN
-      privileged: false, // Run unprivileged
+  runners: [
+    {
+      token: token,
+      configuration: {
+        environment: [], // Reset the OverlayFS driver for every project
+        docker: {
+          capAdd: [], // Remove the CAP_SYS_ADMIN
+          privileged: false, // Run unprivileged
+        },
+        machine: {
+          idleCount: 2, // Number of idle machine
+          idleTime: 3000, // Waiting time in idle state
+          maxBuilds: 1, // Max builds before instance is removed
+        },
+      },
     },
-    machine: {
-      idleCount: 2, // Number of idle machine
-      idleTime: 3000, // Waiting time in idle state
-      maxBuilds: 1, // Max builds before instance is removed
-    },
-  },
+  ],
 });
 ```
 
@@ -183,14 +216,23 @@ By default, t3.nano is used for the manager/coordinator and t3.micro instances w
 For bigger projects, for example with [webpack](https://webpack.js.org/), this won't be enough memory.
 
 ```typescript
+const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token"
+});
+
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
   manager: {
-    instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
+    instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.SMALL),
   },
-  runners: {
-    instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.LARGE),
-  },
+  runners: [
+    {
+      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.LARGE),
+      token: token, 
+      configuration: {
+        // optionally configure your runner
+      },
+    },
+  ],
 });
 ```
 
@@ -203,14 +245,68 @@ The manager/coordinator instance's cloud init scripts requires [yum](https://acc
 The requested runner instances by default using Ubuntu 20.04, any OS implemented by the [Docker Machine provisioner](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/tree/main/libmachine/provision) should work.
 
 ```typescript
+const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token"
+});
+
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
   manager: {
     machineImage: MachineImage.genericLinux(managerAmiMap),
   },
-  runners: {
-    machineImage: MachineImage.genericLinux(runnerAmiMap),
-  },
+  runners: [
+    {
+       machineImage: MachineImage.genericLinux(runnerAmiMap),
+       token: token,
+       configuration: {
+          // optionally configure your runner
+       },
+    },
+  ],
+});
+```
+
+### Multiple runners configuration
+
+Each runner defines one `[[runners]]` section in the [configuration file](https://docs.gitlab.com/runner/configuration/).
+Use [Specific runners](https://docs.gitlab.com/ee/ci/runners/runners_scope.html#specific-runners) when you want to use runners for specific projects.
+
+```typescript
+const privilegedRole = new Role(this, "PrivilegedRunnersRole", {
+  // role 1
+});
+
+const restrictedRole = new Role(this, "RestrictedRunnersRole", {
+  // role 2
+});
+
+const token1 = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token1"
+});
+
+const token2 = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token2"
+});
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  runners: [
+    {
+      token: token1,
+      configuration: {
+        name: "privileged-runner",
+      },
+      role: privilegedRole,
+    },
+    {
+      token: token2,
+      configuration: {
+        name: "restricted-runner",
+        docker: {
+          privileged: false, // Run unprivileged
+        },
+      },
+      role: restrictedRole,
+    },
+  ],
 });
 ```
 
@@ -221,16 +317,24 @@ See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example
 By default, EC2 Spot Instances are requested.
 
 ```typescript
+const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token"
+});
+
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
-  runners: {
-    machine: {
-      machineOptions: {
-        requestSpotInstance: false,
-        spotPrice: 0.5,
+  runners: [
+    {
+      token: token,
+      configuration: {
+        machine: {
+          machineOptions: {
+            requestSpotInstance: false,
+            spotPrice: 0.5,
+          },
+        },
       },
     },
-  },
+  ],
 });
 ```
 
@@ -245,12 +349,20 @@ const role = new Role(this, "RunnersRole", {
   assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
   inlinePolicies: {},
 });
+const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token"
+});
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
-  runners: {
-    role: role,
-  },
+  runners: [
+    {
+       role: role,
+       token: token,
+       configuration: {
+          // optionally configure your runner
+       },
+    },
+  ],
 });
 ```
 
@@ -265,9 +377,19 @@ This can become costly, because AWS CDK configured also the routing for the priv
 const vpc = new Vpc(this, "Vpc", {
   // Your custom vpc
 });
+const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token"
+});
 
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
+  runners: [
+    {
+       token: token,
+       configuration: {
+          // optionally configure your runner
+       },
+    },
+  ],
   network: { vpc: vpc },
 });
 ```
@@ -281,8 +403,19 @@ Deploys the [Autoscaling GitLab Runner on AWS EC2](https://docs.gitlab.com/runne
 Happy with the presets?
 
 ```typescript
+const token = StringParameter.fromSecureStringParameterAttributes(stack, "Token", {
+   parameterName: "/gitlab-runner/token"
+});
+
 new GitlabRunnerAutoscaling(this, "Runner", {
-  gitlabToken: "<auth token>",
+  runners: [
+    {
+       token: token,
+       configuration: {
+          // optionally configure your runner
+       },
+    },
+  ],
 });
 ```
 

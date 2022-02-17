@@ -1,3 +1,7 @@
+import { CacheConfiguration } from "./cache-configuration";
+import { DockerConfiguration } from "./docker-configuration";
+import { MachineConfiguration } from "./machine-configuration";
+
 export interface RunnerConfiguration {
   /**
    * The runner’s description. Informational only.
@@ -13,6 +17,10 @@ export interface RunnerConfiguration {
 
   /**
    * The runner’s authentication token, which is obtained during runner registration. Not the same as the registration token.
+   *
+   * <strong>Will be replaced by the runner's props token SSM Parameter</strong>
+   *
+   * @see https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner
    */
   readonly token?: string;
 
@@ -104,6 +112,27 @@ export interface RunnerConfiguration {
    * Extra job monitoring workers that pass their results as job artifacts to GitLab.
    */
   readonly referees?: string;
+
+  /**
+   * The runner's docker configuration.
+   *
+   * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
+   */
+  readonly docker?: DockerConfiguration;
+
+  /**
+   * The runner's Docker Machine configuration.
+   *
+   * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
+   */
+  readonly machine?: MachineConfiguration;
+
+  /**
+   * The runner's AWS S3 cache configuration
+   *
+   * @see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
+   */
+  readonly cache?: CacheConfiguration;
 }
 
 export type Executor = "docker+machine" | "docker";

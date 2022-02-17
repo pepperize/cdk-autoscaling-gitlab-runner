@@ -1,83 +1,87 @@
-import { ConfigurationMapper, ConfigurationMapperProps } from "../../src";
+import { AnyJson } from "@iarna/toml";
+import { ConfigurationMapper, ConfigurationMapperProps, filter, isEmpty } from "../../src";
 
 describe("ConfigurationMapper", () => {
-  it("Should return empty map", () => {
+  it("Should return empty map when provided a configuration consisting of empty values", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnerConfiguration: {},
-      dockerConfiguration: {},
-      machineConfiguration: {},
-      autoscalingConfigurations: [],
-      cacheConfiguration: {},
+      runnersConfiguration: [
+        {
+          docker: {
+            allowedImages: [],
+          },
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {},
+          },
+        },
+      ],
     };
 
     // When
     const mapper = ConfigurationMapper.fromProps(props);
-    const result = mapper._toJsonMap();
+    const actual = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({
-      runners: [
-        {
-          cache: { s3: {} },
-          docker: {},
-          machine: { MachineOptions: [], autoscaling: [] },
-        },
-      ],
-    });
+    expect(actual).toEqual({}); // Should be empty
   });
 
-  it("Should filter undefined and nullables", () => {
+  it("Should return empty map when provided a configuration consisting of undefined and empty values", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {
         logFormat: undefined,
       },
-      runnerConfiguration: {},
-      dockerConfiguration: {},
-      machineConfiguration: {
-        machineOptions: {
-          blockDurationMinutes: undefined,
+      runnersConfiguration: [
+        {
+          docker: {},
+          machine: {
+            machineOptions: {
+              blockDurationMinutes: undefined,
+            },
+            autoscaling: [],
+          },
+          cache: {
+            s3: {},
+          },
         },
-      },
-      autoscalingConfigurations: [],
-      cacheConfiguration: {},
+      ],
     };
 
     // When
     const mapper = ConfigurationMapper.fromProps(props);
-    const result = mapper._toJsonMap();
+    const actual = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({
-      runners: [
-        {
-          cache: { s3: {} },
-          docker: {},
-          machine: { MachineOptions: [], autoscaling: [] },
-        },
-      ],
-    });
+    expect(actual).toEqual({}); // Should be empty
   });
 
-  it("Should return map with defaults", () => {
+  it("Should return map with defaults when provided a configuration consisting of empty values", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnerConfiguration: {},
-      dockerConfiguration: {},
-      machineConfiguration: {},
-      autoscalingConfigurations: [],
-      cacheConfiguration: {},
+      runnersConfiguration: [
+        {
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {},
+          },
+        },
+      ],
     };
 
     // When
     const mapper = ConfigurationMapper.withDefaults(props);
-    const result = mapper._toJsonMap();
+    const actual = mapper._toJsonMap();
 
     // Then
-    expect(result).toEqual({
+    expect(actual).toEqual({
       check_interval: 0,
       concurrent: 10,
       log_format: "runner",
@@ -87,10 +91,8 @@ describe("ConfigurationMapper", () => {
           environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
           executor: "docker+machine",
           limit: 10,
-          name: "gitlab-runner",
           output_limit: 52428800,
           url: "https://gitlab.com",
-          cache: { Type: "s3", Shared: true, s3: {} },
           docker: {
             tls_verify: false,
             image: "docker:19.03.5",
@@ -114,32 +116,94 @@ describe("ConfigurationMapper", () => {
       ],
     });
   });
-  it("Should map snapshot with defaults", () => {
+  it("Should map snapshot with defaults only at empty values when provided a configuration consisting of a mix of empty and defined values", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
-      runnerConfiguration: {
-        token: "foo+bar",
-      },
-      dockerConfiguration: {},
-      machineConfiguration: {},
-      autoscalingConfigurations: [],
-      cacheConfiguration: {
-        s3: {
-          serverAddress: "s3.amazonaws.com",
-          bucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
-          bucketLocation: "us-east-1",
-          accessKey: "AKIAIOSFODNN7EXAMPLE",
-          secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      runnersConfiguration: [
+        {
+          token: "foo+bar",
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {
+              serverAddress: "s3.amazonaws.com",
+              bucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketLocation: "us-east-1",
+              accessKey: "AKIAIOSFODNN7EXAMPLE",
+              secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            },
+          },
         },
-      },
+      ],
     };
 
     // When
     const mapper = ConfigurationMapper.withDefaults(props);
-    const result = mapper.toToml();
+    const actual = mapper.toToml();
 
     // Then
-    expect(result).toMatchSnapshot();
+    expect(actual).toMatchSnapshot();
+  });
+  it("Should return empty values when provided empty values", () => {
+    // Given
+    const props: AnyJson = {
+      array: [{ empty: undefined }],
+    } as unknown as AnyJson;
+
+    // When
+    const actual = filter(props, (item) => !isEmpty(item));
+
+    // Then
+    expect(actual).toEqual({});
+  });
+  it("Should match snapshot when provided multiple runners configuration", () => {
+    // Given
+    const props: ConfigurationMapperProps = {
+      globalConfiguration: {},
+      runnersConfiguration: [
+        {
+          token: "foo+bar",
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {
+              serverAddress: "s3.amazonaws.com",
+              bucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketLocation: "us-east-1",
+              accessKey: "AKIAIOSFODNN7EXAMPLE",
+              secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            },
+          },
+        },
+        {
+          token: "2foo+bar",
+          docker: {},
+          machine: {
+            autoscaling: [],
+          },
+          cache: {
+            s3: {
+              serverAddress: "2s3.amazonaws.com",
+              bucketName: "2gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketLocation: "2us-east-1",
+              accessKey: "2AKIAIOSFODNN7EXAMPLE",
+              secretKey: "2wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            },
+          },
+        },
+      ],
+    };
+
+    // When
+    const mapper = ConfigurationMapper.withDefaults(props);
+    const actual = mapper.toToml();
+
+    // Then
+    expect(actual).toMatchSnapshot();
   });
 });
