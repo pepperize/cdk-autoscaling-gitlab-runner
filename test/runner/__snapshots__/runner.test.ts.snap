@@ -204,8 +204,8 @@ limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
 environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
-token = \\"token\\"
-name = \\"runner-one\\"
+token = \\"gitlab-token1\\"
+name = \\"gitlab-runner1\\"
 
   [runners.machine]
   IdleCount = 0
@@ -216,7 +216,7 @@ name = \\"runner-one\\"
   MachineOptions = [
   \\"amazonec2-request-spot-instance=true\\",
   \\"amazonec2-spot-price=0.03\\",
-  \\"amazonec2-instance-type=t3.micro\\",
+  \\"amazonec2-instance-type=t3.medium\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=",
@@ -234,16 +234,25 @@ name = \\"runner-one\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfileForRunnerOne",
+                        "Ref": "RunnersInstanceProfileForGitlabRunner1",
                       },
                       "\\"
 ]
 
     [[runners.machine.autoscaling]]
-    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
     IdleCount = 1
     IdleTime = 1_800
-    Timezone = \\"Etc/UTC\\"
+    Periods = [ \\"* * 10-18 * * *\\" ]
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = false
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
 
   [runners.cache]
   Type = \\"s3\\"
@@ -262,35 +271,25 @@ name = \\"runner-one\\"
                       "\\"
     bucketLocation = \\"us-east-1\\"
 
-  [runners.docker]
-  tls_verify = false
-  image = \\"docker:19.03.5\\"
-  privileged = true
-  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
-  wait_for_services_timeout = 300
-  disable_cache = false
-  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
-  shm_size = 0
-
 [[runners]]
 url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
 environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
-token = \\"tokentwo\\"
-name = \\"runner-two\\"
+token = \\"gitlab-token2\\"
+name = \\"gitlab-runner2\\"
 
   [runners.machine]
   IdleCount = 0
   IdleTime = 300
-  MaxBuilds = 20
+  MaxBuilds = 5
   MachineDriver = \\"amazonec2\\"
   MachineName = \\"gitlab-runner-%s\\"
   MachineOptions = [
   \\"amazonec2-request-spot-instance=true\\",
   \\"amazonec2-spot-price=0.03\\",
-  \\"amazonec2-instance-type=t3.micro\\",
+  \\"amazonec2-instance-type=t3.small\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
   \\"amazonec2-vpc-id=",
@@ -308,16 +307,87 @@ name = \\"runner-two\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfileForRunnerTwo",
+                        "Ref": "RunnersInstanceProfileForGitlabRunner2",
                       },
                       "\\"
 ]
 
     [[runners.machine.autoscaling]]
-    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    Periods = [ \\"* * 13-17 * * *\\" ]
     IdleCount = 1
-    IdleTime = 1_800
-    Timezone = \\"Etc/UTC\\"
+    IdleTime = 900
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = false
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
+
+  [runners.cache]
+  Type = \\"s3\\"
+  Shared = true
+
+    [runners.cache.S3]
+    serverAddress = \\"s3.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                      "\\"
+    bucketName = \\"",
+                      Object {
+                        "Ref": "CacheBucket41D9D0B0",
+                      },
+                      "\\"
+    bucketLocation = \\"us-east-1\\"
+
+[[runners]]
+url = \\"https://gitlab.com\\"
+limit = 10
+output_limit = 52_428_800
+executor = \\"docker+machine\\"
+environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+token = \\"gitlab-token3\\"
+name = \\"gitlab-runner3\\"
+
+  [runners.machine]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 1
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%s\\"
+  MachineOptions = [
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\",
+  \\"amazonec2-instance-type=t3.xlarge\\",
+  \\"amazonec2-ami=ami-1234\\",
+  \\"amazonec2-region=us-east-1\\",
+  \\"amazonec2-vpc-id=",
+                      Object {
+                        "Ref": "Vpc8378EB38",
+                      },
+                      "\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=",
+                      Object {
+                        "Ref": "VpcPrivateSubnet1Subnet536B997A",
+                      },
+                      "\\",
+  \\"amazonec2-security-group=MockStack-RunnersSecurityGroup\\",
+  \\"amazonec2-use-private-address=true\\",
+  \\"amazonec2-iam-instance-profile=",
+                      Object {
+                        "Ref": "RunnersInstanceProfileForGitlabRunner3",
+                      },
+                      "\\"
+]
+
+    [[runners.machine.autoscaling]]
+    IdleCount = 0
+    Periods = [ \\"* * * * * *\\" ]
 
   [runners.cache]
   Type = \\"s3\\"
@@ -498,7 +568,7 @@ name = \\"runner-two\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 7a20c570c90cac62
+# fingerprint: f8ab8c6914eabdb7
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -663,8 +733,9 @@ yum update -y aws-cfn-bootstrap
                         "InstanceProfile",
                       ],
                       "ec2:InstanceType": Array [
-                        "t3.micro",
-                        "t3.micro",
+                        "t3.medium",
+                        "t3.small",
+                        "t3.xlarge",
                       ],
                     },
                   },
@@ -749,27 +820,37 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "RunnersInstanceProfileForRunnerOne": Object {
+    "RunnersInstanceProfileForGitlabRunner1": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForRunnerOne81D26D07",
+            "Ref": "RunnersRoleForGitlabRunner1E19652F8",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersInstanceProfileForRunnerTwo": Object {
+    "RunnersInstanceProfileForGitlabRunner2": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForRunnerTwo6CBF071A",
+            "Ref": "RunnersRoleForGitlabRunner29CFCD54D",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersRoleForRunnerOne81D26D07": Object {
+    "RunnersInstanceProfileForGitlabRunner3": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "RunnersRoleForGitlabRunner39593D43C",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "RunnersRoleForGitlabRunner1E19652F8": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -806,7 +887,44 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::IAM::Role",
     },
-    "RunnersRoleForRunnerTwo6CBF071A": Object {
+    "RunnersRoleForGitlabRunner29CFCD54D": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonEC2RoleforSSM",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "RunnersRole",
+            "Value": "RunnersRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "RunnersRoleForGitlabRunner39593D43C": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
