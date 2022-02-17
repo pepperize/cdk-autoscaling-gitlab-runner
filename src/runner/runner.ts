@@ -1,17 +1,13 @@
+import { SecurityGroup } from "@pepperize/cdk-security-group";
 import { Duration, Stack } from "aws-cdk-lib";
 import { AutoScalingGroup, Signals } from "aws-cdk-lib/aws-autoscaling";
-import { Port, SecurityGroup } from "aws-cdk-lib/aws-ec2";
+import { Port } from "aws-cdk-lib/aws-ec2";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
-import {
-  GitlabRunnerAutoscalingManagerConfiguration,
-  GlobalConfiguration,
-  LogFormat,
-  LogLevel,
-} from "../runner-configuration";
+import { GlobalConfiguration, LogFormat, LogLevel } from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
 import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerProps } from "./job-runner";
-import { GitlabRunnerAutoscalingManager } from "./manager";
+import { GitlabRunnerAutoscalingManager, GitlabRunnerAutoscalingManagerBaseProps } from "./manager";
 import { Network, NetworkProps } from "./network";
 
 /**
@@ -38,9 +34,9 @@ export interface GitlabRunnerAutoscalingProps extends GlobalConfiguration {
 
   /**
    * The manager EC2 instance configuration. If not set, the defaults will be used.
-   * @link GitlabRunnerAutoscalingManagerConfiguration
+   * @link GitlabRunnerAutoscalingManagerBaseProps
    */
-  readonly manager?: GitlabRunnerAutoscalingManagerConfiguration;
+  readonly manager?: GitlabRunnerAutoscalingManagerBaseProps;
 
   /**
    * The runner EC2 instances settings. At least one runner should be set up.
@@ -157,7 +153,7 @@ export class GitlabRunnerAutoscaling extends Construct {
         logFormat: this.logFormat,
         logLevel: this.logLevel,
       },
-      runnersSecurityGroupName: runnersSecurityGroupName,
+      runnersSecurityGroup: runnersSecurityGroup,
       network: this.network,
       cacheBucket: this.cacheBucket,
       runners: runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {

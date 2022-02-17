@@ -5,5 +5,4 @@ export * from "./docker-configuration";
 export * from "./global-configuration";
 export * from "./machine-configuration";
 export * from "./machine-options";
-export * from "./manager-configuration";
 export * from "./runner-configuration";

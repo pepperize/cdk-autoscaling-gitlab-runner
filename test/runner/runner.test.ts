@@ -1,6 +1,7 @@
 import { App, Stack } from "aws-cdk-lib";
 import { Capture, Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType, Vpc } from "aws-cdk-lib/aws-ec2";
+import { ParameterTier, ParameterType, StringParameter } from "aws-cdk-lib/aws-ssm";
 import { GitlabRunnerAutoscaling, GitlabRunnerAutoscalingJobRunnerProps } from "../../src";
 
 describe("GitlabRunnerAutoscaling", () => {
@@ -18,6 +19,12 @@ describe("GitlabRunnerAutoscaling", () => {
       publicSubnetIds: ["pub1"],
       availabilityZones: ["us-east-1a"],
     });
+    const token = new StringParameter(stack, "imported-token", {
+      parameterName: "/gitlab-runner/token",
+      stringValue: "auth-token",
+      type: ParameterType.SECURE_STRING,
+      tier: ParameterTier.STANDARD,
+    });
 
     // When
     const runner = new GitlabRunnerAutoscaling(stack, "Runner", {
@@ -26,14 +33,14 @@ describe("GitlabRunnerAutoscaling", () => {
       },
       runners: [
         {
+          token: token,
           configuration: {
-            token: "token",
             name: "runner-one",
           },
         },
         {
+          token: token,
           configuration: {
-            token: "tokentwo",
             name: "runner-two",
           },
         },
@@ -60,6 +67,12 @@ describe("GitlabRunnerAutoscaling", () => {
       publicSubnetIds: ["pub1"],
       availabilityZones: ["us-east-1a"],
     });
+    const token = new StringParameter(stack, "imported-token", {
+      parameterName: "/gitlab-runner/token",
+      stringValue: "auth-token",
+      type: ParameterType.SECURE_STRING,
+      tier: ParameterTier.STANDARD,
+    });
 
     // When
     new GitlabRunnerAutoscaling(stack, "Runner", {
@@ -68,8 +81,8 @@ describe("GitlabRunnerAutoscaling", () => {
       },
       runners: [
         {
+          token: token,
           configuration: {
-            token: "token",
             name: "runner-one",
           },
         },
@@ -92,13 +105,19 @@ describe("GitlabRunnerAutoscaling", () => {
         region: "us-east-1",
       },
     });
+    const token = new StringParameter(stack, "imported-token", {
+      parameterName: "/gitlab-runner/token",
+      stringValue: "auth-token",
+      type: ParameterType.SECURE_STRING,
+      tier: ParameterTier.STANDARD,
+    });
 
     /**
      * t3.medium unprivileged work hours 10-18:00, 30 min idle time, teardown after 20 jobs, 1 hot standby
      */
     const runner1: GitlabRunnerAutoscalingJobRunnerProps = {
+      token: token,
       configuration: {
-        token: "gitlab-token1",
         name: "gitlab-runner1",
         machine: {
           maxBuilds: 20, // teardown after 20 jobs
@@ -122,8 +141,8 @@ describe("GitlabRunnerAutoscaling", () => {
      * t3.small unprivileged, work hours 13-17:00, 15 min idle time, teardown after 5 jobs
      */
     const runner2: GitlabRunnerAutoscalingJobRunnerProps = {
+      token: token,
       configuration: {
-        token: "gitlab-token2",
         name: "gitlab-runner2",
         machine: {
           maxBuilds: 5, // teardown after 5 jobs
@@ -147,8 +166,8 @@ describe("GitlabRunnerAutoscaling", () => {
      * t3.xlarge, privileged, no hot standby, teardown after 1 job
      */
     const runner3: GitlabRunnerAutoscalingJobRunnerProps = {
+      token: token,
       configuration: {
-        token: "gitlab-token3",
         name: "gitlab-runner3",
         machine: {
           maxBuilds: 1, // teardown after 1 job

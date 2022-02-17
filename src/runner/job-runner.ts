@@ -8,6 +8,7 @@ import {
   MachineImage,
 } from "aws-cdk-lib/aws-ec2";
 import { CfnInstanceProfile, IRole, ManagedPolicy, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { IStringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { pascalCase } from "pascal-case";
 import { RunnerConfiguration } from "../runner-configuration";
@@ -17,6 +18,12 @@ import { RunnerConfiguration } from "../runner-configuration";
  */
 
 export interface GitlabRunnerAutoscalingJobRunnerProps {
+  /**
+   * The runner’s authentication token, which is obtained during runner registration. Not the same as the registration token.
+   * @see https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner
+   */
+  readonly token: IStringParameter;
+
   /**
    * The runner EC2 instances configuration. If not set, the defaults will be used.
    * @link RunnerConfiguration
@@ -56,6 +63,7 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
     super(scope, id);
     this.configuration = {
       ...props.configuration,
+      token: props.configuration.token ?? props.token?.stringValue,
       name: props.configuration.name ?? GitlabRunnerAutoscalingJobRunner.generateUniqueName(),
     };
     this.instanceType = props.instanceType || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);

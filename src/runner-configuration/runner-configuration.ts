@@ -17,6 +17,9 @@ export interface RunnerConfiguration {
 
   /**
    * The runner’s authentication token, which is obtained during runner registration. Not the same as the registration token.
+   *
+   * <strong>Will be replaced by the runner's props token SSM Parameter</strong>
+   *
    * @see https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner
    */
   readonly token?: string;

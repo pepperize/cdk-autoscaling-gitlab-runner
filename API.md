@@ -1477,6 +1477,7 @@ const gitlabRunnerAutoscalingJobRunnerProps: GitlabRunnerAutoscalingJobRunnerPro
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | [`configuration`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyconfiguration)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration) | The runner EC2 instances configuration. |
+| [`token`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertytoken)<span title="Required">*</span> | [`aws-cdk-lib.aws_ssm.IStringParameter`](#aws-cdk-lib.aws_ssm.IStringParameter) | The runner’s authentication token, which is obtained during runner registration. |
 | [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyinstancetype) | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | Instance type for runner EC2 instances. |
 | [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertymachineimage) | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | An Amazon Machine Image ID for the Runners EC2 instances. |
 | [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyrole) | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances via Instance Profile. |
@@ -1496,6 +1497,22 @@ The runner EC2 instances configuration.
 If not set, the defaults will be used.
 
 > [RunnerConfiguration](RunnerConfiguration)
+
+---
+
+##### `token`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.token" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertytoken"></a>
+
+```typescript
+public readonly token: IStringParameter;
+```
+
+- *Type:* [`aws-cdk-lib.aws_ssm.IStringParameter`](#aws-cdk-lib.aws_ssm.IStringParameter)
+
+The runner’s authentication token, which is obtained during runner registration.
+
+Not the same as the registration token.
+
+> https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner
 
 ---
 
@@ -1542,27 +1559,27 @@ Optionally pass an IAM role, that get's assigned to the EC2 runner instances via
 
 ---
 
-### GitlabRunnerAutoscalingManagerConfiguration <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerconfiguration"></a>
+### GitlabRunnerAutoscalingManagerBaseProps <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerbaseprops"></a>
 
 #### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
-import { GitlabRunnerAutoscalingManagerConfiguration } from '@pepperize/cdk-autoscaling-gitlab-runner'
+import { GitlabRunnerAutoscalingManagerBaseProps } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
-const gitlabRunnerAutoscalingManagerConfiguration: GitlabRunnerAutoscalingManagerConfiguration = { ... }
+const gitlabRunnerAutoscalingManagerBaseProps: GitlabRunnerAutoscalingManagerBaseProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerconfigurationpropertyinstancetype) | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | Instance type for manager EC2 instance. |
-| [`keyPairName`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerconfigurationpropertykeypairname) | `string` | A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. |
-| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerconfigurationpropertymachineimage) | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | An Amazon Machine Image ID for the Manager EC2 instance. |
+| [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerbasepropspropertyinstancetype) | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | Instance type for manager EC2 instance. |
+| [`keyPairName`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerbasepropspropertykeypairname) | `string` | A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. |
+| [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerbasepropspropertymachineimage) | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | An Amazon Machine Image ID for the Manager EC2 instance. |
 
 ---
 
-##### `instanceType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerconfigurationpropertyinstancetype"></a>
+##### `instanceType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps.property.instanceType" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerbasepropspropertyinstancetype"></a>
 
 ```typescript
 public readonly instanceType: InstanceType;
@@ -1577,7 +1594,7 @@ It's a combination of a class and size.
 
 ---
 
-##### `keyPairName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration.property.keyPairName" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerconfigurationpropertykeypairname"></a>
+##### `keyPairName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps.property.keyPairName" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerbasepropspropertykeypairname"></a>
 
 ```typescript
 public readonly keyPairName: string;
@@ -1591,7 +1608,7 @@ You won't be able to ssh into an instance without the Key Pair.
 
 ---
 
-##### `machineImage`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerconfigurationpropertymachineimage"></a>
+##### `machineImage`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps.property.machineImage" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerbasepropspropertymachineimage"></a>
 
 ```typescript
 public readonly machineImage: IMachineImage;
@@ -1627,7 +1644,7 @@ const gitlabRunnerAutoscalingManagerProps: GitlabRunnerAutoscalingManagerProps =
 | [`cacheBucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertycachebucket)<span title="Required">*</span> | [`aws-cdk-lib.aws_s3.IBucket`](#aws-cdk-lib.aws_s3.IBucket) | *No description.* |
 | [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertynetwork)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.Network`](#@pepperize/cdk-autoscaling-gitlab-runner.Network) | *No description.* |
 | [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyrunners)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner)[] | *No description.* |
-| [`runnersSecurityGroupName`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyrunnerssecuritygroupname)<span title="Required">*</span> | `string` | *No description.* |
+| [`runnersSecurityGroup`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyrunnerssecuritygroup)<span title="Required">*</span> | [`@pepperize/cdk-security-group.SecurityGroup`](#@pepperize/cdk-security-group.SecurityGroup) | *No description.* |
 | [`globalConfiguration`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyglobalconfiguration) | [`@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration) | *No description.* |
 | [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyrole) | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | *No description.* |
 
@@ -1708,13 +1725,13 @@ public readonly runners: GitlabRunnerAutoscalingJobRunner[];
 
 ---
 
-##### `runnersSecurityGroupName`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.runnersSecurityGroupName" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyrunnerssecuritygroupname"></a>
+##### `runnersSecurityGroup`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.runnersSecurityGroup" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingmanagerpropspropertyrunnerssecuritygroup"></a>
 
 ```typescript
-public readonly runnersSecurityGroupName: string;
+public readonly runnersSecurityGroup: SecurityGroup;
 ```
 
-- *Type:* `string`
+- *Type:* [`@pepperize/cdk-security-group.SecurityGroup`](#@pepperize/cdk-security-group.SecurityGroup)
 
 ---
 
@@ -1762,7 +1779,7 @@ const gitlabRunnerAutoscalingProps: GitlabRunnerAutoscalingProps = { ... }
 | [`logLevel`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyloglevel) | `string` | The log_level. |
 | [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertyrunners)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps)[] | The runner EC2 instances settings. |
 | [`cache`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertycache) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingCacheProps) | *No description.* |
-| [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertymanager) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration) | The manager EC2 instance configuration. |
+| [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertymanager) | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps) | The manager EC2 instance configuration. |
 | [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertynetwork) | [`@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps`](#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps) | The network configuration for the Runner. |
 
 ---
@@ -1848,16 +1865,16 @@ public readonly cache: GitlabRunnerAutoscalingCacheProps;
 ##### `manager`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps.property.manager" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropspropertymanager"></a>
 
 ```typescript
-public readonly manager: GitlabRunnerAutoscalingManagerConfiguration;
+public readonly manager: GitlabRunnerAutoscalingManagerBaseProps;
 ```
 
-- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerConfiguration)
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps)
 
 The manager EC2 instance configuration.
 
 If not set, the defaults will be used.
 
-> [GitlabRunnerAutoscalingManagerConfiguration](GitlabRunnerAutoscalingManagerConfiguration)
+> [GitlabRunnerAutoscalingManagerBaseProps](GitlabRunnerAutoscalingManagerBaseProps)
 
 ---
 
@@ -2322,7 +2339,7 @@ const runnerConfiguration: RunnerConfiguration = { ... }
 | [`tlsCaFile`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlscafile) | `string` | When using HTTPS, file that contains the certificates to verify the peer. |
 | [`tlsCertFile`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlscertfile) | `string` | When using HTTPS, file that contains the certificate to authenticate with the peer. |
 | [`tlsKeyFile`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytlskeyfile) | `string` | When using HTTPS, file that contains the private key to authenticate with the peer. |
-| [`token`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytoken) | `string` | The runner’s authentication token, which is obtained during runner registration. |
+| [`token`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertytoken) | `string` | The runner’s authentication token, which is obtained during runner registration. Not the same as the registration token. |
 | [`url`](#pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyurl) | `string` | GitLab instance URL. |
 
 ---
@@ -2624,9 +2641,9 @@ public readonly token: string;
 
 - *Type:* `string`
 
-The runner’s authentication token, which is obtained during runner registration.
+The runner’s authentication token, which is obtained during runner registration. Not the same as the registration token.
 
-Not the same as the registration token.
+<strong>Will be replaced by the runner's props token SSM Parameter</strong>
 
 > https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner
 

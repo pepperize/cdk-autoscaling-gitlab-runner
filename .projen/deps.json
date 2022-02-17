@@ -1,6 +1,14 @@
 {
   "dependencies": [
     {
+      "name": "@pepperize/cdk-private-bucket",
+      "type": "build"
+    },
+    {
+      "name": "@pepperize/cdk-security-group",
+      "type": "build"
+    },
+    {
       "name": "@pepperize/projen-awscdk-construct",
       "type": "build"
     },
@@ -124,6 +132,14 @@
     {
       "name": "snake-case",
       "type": "bundled"
+    },
+    {
+      "name": "@pepperize/cdk-private-bucket",
+      "type": "peer"
+    },
+    {
+      "name": "@pepperize/cdk-security-group",
+      "type": "peer"
     },
     {
       "name": "aws-cdk-lib",
