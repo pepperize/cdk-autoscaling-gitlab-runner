@@ -2,7 +2,7 @@ import { AnyJson } from "@iarna/toml";
 import { ConfigurationMapper, ConfigurationMapperProps, filter, isEmpty } from "../../src";
 
 describe("ConfigurationMapper", () => {
-  it("Should return empty map", () => {
+  it("Should return empty map when provided a configuration consisting of empty values", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
@@ -26,10 +26,10 @@ describe("ConfigurationMapper", () => {
     const actual = mapper._toJsonMap();
 
     // Then
-    expect(actual).toEqual({}); // Must be empty
+    expect(actual).toEqual({}); // Should be empty
   });
 
-  it("Should filter undefined and nullables", () => {
+  it("Should return empty map when provided a configuration consisting of undefined and empty values", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {
@@ -56,10 +56,10 @@ describe("ConfigurationMapper", () => {
     const actual = mapper._toJsonMap();
 
     // Then
-    expect(actual).toEqual({}); // Must be empty
+    expect(actual).toEqual({}); // Should be empty
   });
 
-  it("Should return map with defaults", () => {
+  it("Should return map with defaults when provided a configuration consisting of empty values", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
@@ -116,7 +116,7 @@ describe("ConfigurationMapper", () => {
       ],
     });
   });
-  it("Should map snapshot with defaults", () => {
+  it("Should map snapshot with defaults only at empty values when provided a configuration consisting of a mix of empty and defined values", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},
@@ -147,7 +147,7 @@ describe("ConfigurationMapper", () => {
     // Then
     expect(actual).toMatchSnapshot();
   });
-  it("Should filter out empty values", () => {
+  it("Should return empty values when provided empty values", () => {
     // Given
     const props: AnyJson = {
       array: [{ empty: undefined }],
@@ -159,7 +159,7 @@ describe("ConfigurationMapper", () => {
     // Then
     expect(actual).toEqual({});
   });
-  it("Should return multiple runners configuration", () => {
+  it("Should match snapshot when provided multiple runners configuration", () => {
     // Given
     const props: ConfigurationMapperProps = {
       globalConfiguration: {},

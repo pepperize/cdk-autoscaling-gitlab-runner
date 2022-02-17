@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfigurationMapper Should map snapshot with defaults 1`] = `
+exports[`ConfigurationMapper Should map snapshot with defaults only at empty values when provided a configuration consisting of a mix of empty and defined values 1`] = `
 "concurrent = 10
 check_interval = 0
 log_format = \\"runner\\"
@@ -54,7 +54,7 @@ token = \\"foo+bar\\"
 "
 `;
 
-exports[`ConfigurationMapper Should return multiple runners configuration 1`] = `
+exports[`ConfigurationMapper Should match snapshot when provided multiple runners configuration 1`] = `
 "concurrent = 10
 check_interval = 0
 log_format = \\"runner\\"
