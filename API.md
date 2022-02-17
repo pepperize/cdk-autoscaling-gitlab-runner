@@ -110,6 +110,7 @@ new GitlabRunnerAutoscaling(scope: Stack, id: string, props: GitlabRunnerAutosca
 | [`cacheBucket`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertycachebucket)<span title="Required">*</span> | [`aws-cdk-lib.aws_s3.IBucket`](#aws-cdk-lib.aws_s3.IBucket) | *No description.* |
 | [`manager`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertymanager)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager) | *No description.* |
 | [`network`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertynetwork)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.Network`](#@pepperize/cdk-autoscaling-gitlab-runner.Network) | *No description.* |
+| [`runners`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertyrunners)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner)[] | *No description.* |
 | [`checkInterval`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertycheckinterval) | `number` | *No description.* |
 | [`concurrent`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertyconcurrent) | `number` | *No description.* |
 | [`logFormat`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertylogformat) | `string` | *No description.* |
@@ -144,6 +145,16 @@ public readonly network: Network;
 ```
 
 - *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.Network`](#@pepperize/cdk-autoscaling-gitlab-runner.Network)
+
+---
+
+##### `runners`<sup>Required</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.property.runners" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingpropertyrunners"></a>
+
+```typescript
+public readonly runners: GitlabRunnerAutoscalingJobRunner[];
+```
+
+- *Type:* [`@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner`](#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner)[]
 
 ---
 

@@ -73,10 +73,17 @@ export interface GitlabRunnerAutoscalingCacheProps {
  *   }
  * });
  *
+ * const token = new StringParameter(stack, "imported-token", {
+ *   parameterName: "/gitlab-runner/token1",
+ *   stringValue: gitlabToken,
+ *   type: ParameterType.SECURE_STRING,
+ *   tier: ParameterTier.STANDARD,
+ * });
+ *
  * new GitlabRunnerAutoscaling(stack, "GitlabRunner", {
  *   runners: [{
- *     gitlabToken: "xxxxxxxxxxxxxxxxxxxx"},
- *   }]
+ *     token: "xxxxxxxxxxxxxxxxxxxx"
+ *     }],
  * });
  */
 export class GitlabRunnerAutoscaling extends Construct {
@@ -93,6 +100,8 @@ export class GitlabRunnerAutoscaling extends Construct {
   readonly cacheBucket: IBucket;
 
   readonly manager: GitlabRunnerAutoscalingManager;
+
+  readonly runners: GitlabRunnerAutoscalingJobRunner[];
 
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingProps) {
     super(scope, id);
@@ -142,6 +151,10 @@ export class GitlabRunnerAutoscaling extends Construct {
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(22), "SSH traffic from Manager");
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(2376), "SSH traffic from Docker");
 
+    this.runners = runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {
+      return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, runnerProps);
+    });
+
     /**
      * GitLab Manager
      */
@@ -156,9 +169,7 @@ export class GitlabRunnerAutoscaling extends Construct {
       runnersSecurityGroup: runnersSecurityGroup,
       network: this.network,
       cacheBucket: this.cacheBucket,
-      runners: runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {
-        return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, runnerProps);
-      }),
+      runners: this.runners,
     });
 
     new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
