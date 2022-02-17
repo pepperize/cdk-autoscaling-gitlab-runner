@@ -2628,6 +2628,8 @@ The runner’s authentication token, which is obtained during runner registratio
 
 Not the same as the registration token.
 
+> https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner
+
 ---
 
 ##### `url`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration.property.url" id="pepperizecdkautoscalinggitlabrunnerrunnerconfigurationpropertyurl"></a>
