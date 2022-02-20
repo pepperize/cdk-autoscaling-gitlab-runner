@@ -148,9 +148,9 @@ dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
 
 ### Custom cache bucket
 
-By default an AWS S3 is created as GitLab Runner's distributed cache.
-It's encrypted with a KMS managed key and public access is blocked.
-A custom S3 Bucket can be configured.
+By default, an AWS S3 Bucket is created as GitLab Runner's distributed cache.
+It's encrypted and public access is blocked.
+A custom S3 Bucket can be configured:
 
 ```typescript
 const cache = new Bucket(this, "Cache", {
@@ -170,7 +170,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
-See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/cache.ts)
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/cache.ts),
+[GitlabRunnerAutoscalingCacheProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingcacheprops-)
 
 ### Configure Docker Machine
 
@@ -209,7 +210,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
-See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/docker-machine.ts)
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/docker-machine.ts),
+[DockerConfiguration](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#dockerconfiguration-)
 
 ### Bigger instance type
 
@@ -237,7 +239,9 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
-See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/instance-type.ts)
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/instance-type.ts),
+[GitlabRunnerAutoscalingManagerProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingmanagerprops-),
+[GitlabRunnerAutoscalingJobRunnerProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingjobrunnerprops-)
 
 ### Different machine image
 
@@ -265,6 +269,10 @@ new GitlabRunnerAutoscaling(this, "Runner", {
   ],
 });
 ```
+
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/machine-image.ts),
+[GitlabRunnerAutoscalingManagerProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingmanagerprops-),
+[GitlabRunnerAutoscalingJobRunnerProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingjobrunnerprops-)
 
 ### Multiple runners configuration
 
@@ -311,7 +319,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
-See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/machine-image.ts)
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/machine-image.ts),
+[GitlabRunnerAutoscalingProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps)
 
 ### Spot instances
 
@@ -339,7 +348,9 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
-See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/on-demand-instances.ts)
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/on-demand-instances.ts),
+[MachineConfiguration](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#machineconfiguration-),
+[MachineOptions](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#machineoptions-)
 
 ### Custom runner's role
 
@@ -367,7 +378,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
-See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/runner-role.ts)
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/runner-role.ts),
+[GitlabRunnerAutoscalingProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps)
 
 ### Vpc
 
@@ -395,7 +407,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
-See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/vpc.ts)
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/vpc.ts),
+[GitlabRunnerAutoscalingProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps)
 
 ### Zero config
 
@@ -420,7 +433,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
-See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/zero-config.ts)
+See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/zero-config.ts),
+[GitlabRunnerAutoscalingProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps)
 
 ## Projen
 
