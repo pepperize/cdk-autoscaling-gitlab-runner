@@ -1,10 +1,6 @@
 {
   "dependencies": [
     {
-      "name": "@pepperize/cdk-private-bucket",
-      "type": "build"
-    },
-    {
       "name": "@pepperize/cdk-security-group",
       "type": "build"
     },
@@ -134,10 +130,6 @@
       "type": "bundled"
     },
     {
-      "name": "@pepperize/cdk-private-bucket",
-      "type": "peer"
-    },
-    {
       "name": "@pepperize/cdk-security-group",
       "type": "peer"
     },
@@ -153,6 +145,10 @@
     },
     {
       "name": "@iarna/toml",
+      "type": "runtime"
+    },
+    {
+      "name": "@pepperize/cdk-private-bucket",
       "type": "runtime"
     },
     {
