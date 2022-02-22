@@ -14,7 +14,7 @@ const stackProps = {
 };
 
 describe("Manager", () => {
-  it("Should create Manager launch configuration", () => {
+  it("Should match snapshot when Manager launch configuration is being set", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "Stack", stackProps);
@@ -32,6 +32,8 @@ describe("Manager", () => {
       type: ParameterType.SECURE_STRING,
       tier: ParameterTier.STANDARD,
     });
+
+    // When
     new GitlabRunnerAutoscalingManager(stack, "cache", {
       runners: [
         new GitlabRunnerAutoscalingJobRunner(stack, "Runner1", {
@@ -45,8 +47,6 @@ describe("Manager", () => {
       network: new Network(stack, "Network"),
       cacheBucket: new Bucket(stack, "CacheBucket"),
     });
-
-    // When
     const template = Template.fromStack(stack);
 
     // Then

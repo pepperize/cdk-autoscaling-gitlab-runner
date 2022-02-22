@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Network Should match snapshot 1`] = `
+exports[`Network Should match snapshot when the network is being set 1`] = `
 Object {
   "Parameters": Object {
     "BootstrapVersion": Object {

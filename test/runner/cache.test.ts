@@ -10,7 +10,20 @@ const stackProps = {
 };
 
 describe("Cache", () => {
-  it("Should set ExpirationInDays to 0", () => {
+  it("Should match snapshot when Cache is being set", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "Stack", stackProps);
+
+    // When
+    new CacheConstruct(stack, "cache", {});
+    const template = Template.fromStack(stack);
+
+    // Then
+    expect(template).toMatchSnapshot();
+  });
+
+  it("Should have cache expiration disabled when expiration is set to 0", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "a-very-very-long-stack-name", stackProps);
@@ -18,9 +31,10 @@ describe("Cache", () => {
       bucketName: "bucket",
       expiration: Duration.days(0),
     };
-    new CacheConstruct(stack, "cache", props);
 
     // When
+
+    new CacheConstruct(stack, "cache", props);
     const template = Template.fromStack(stack);
 
     // Then
@@ -34,10 +48,9 @@ describe("Cache", () => {
         ],
       },
     });
-    expect(template).toMatchSnapshot();
   });
 
-  it("Should substring last 63 characters of bucket name", () => {
+  it("Should substring last 63 characters of bucket name when provided a very long bucket name", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "a-very-very-long-stack-name", stackProps);
@@ -54,10 +67,9 @@ describe("Cache", () => {
     template.hasResourceProperties("AWS::S3::Bucket", {
       BucketName: "ck-name-and-a-very-very-long-bucket-name-123456789012-us-east-1",
     });
-    expect(template).toMatchSnapshot();
   });
 
-  it("Should set ExpirationInDays to default", () => {
+  it("Should set ExpirationInDays to default (30) with the status Enabled when expiration is not set", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "stack", stackProps);
@@ -80,10 +92,9 @@ describe("Cache", () => {
         ],
       },
     });
-    expect(template).toMatchSnapshot();
   });
 
-  it("Should set ExpirationInDays to 1", () => {
+  it("Should set ExpirationInDays to 1 with the status Enabled when expiration is set to 1", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "stack", stackProps);
@@ -109,6 +120,5 @@ describe("Cache", () => {
         },
       ],
     });
-    expect(template).toMatchSnapshot();
   });
 });
