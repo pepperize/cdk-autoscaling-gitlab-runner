@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GitlabRunnerAutoscaling Should have multiple runner configuration 1`] = `
+exports[`GitlabRunnerAutoscaling Should have multiple runner configuration when it's set through props 1`] = `
 Object {
   "Parameters": Object {
     "BootstrapVersion": Object {
@@ -1504,7 +1504,7 @@ yum update -y aws-cfn-bootstrap
 }
 `;
 
-exports[`GitlabRunnerAutoscaling Should match snapshot 1`] = `
+exports[`GitlabRunnerAutoscaling Should match snapshot when the runner is being used 1`] = `
 Object {
   "Parameters": Object {
     "BootstrapVersion": Object {

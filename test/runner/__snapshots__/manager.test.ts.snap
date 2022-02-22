@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Manager Should create Manager launch configuration 1`] = `
+exports[`Manager Should match snapshot when Manager launch configuration is being set 1`] = `
 Object {
   "Parameters": Object {
     "BootstrapVersion": Object {

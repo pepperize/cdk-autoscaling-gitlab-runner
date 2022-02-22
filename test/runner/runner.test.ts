@@ -5,7 +5,7 @@ import { ParameterTier, ParameterType, StringParameter } from "aws-cdk-lib/aws-s
 import { GitlabRunnerAutoscaling, GitlabRunnerAutoscalingJobRunnerProps } from "../../src";
 
 describe("GitlabRunnerAutoscaling", () => {
-  it("Should match snapshot", () => {
+  it("Should match snapshot when the runner is being used", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "MockStack", {
@@ -28,6 +28,10 @@ describe("GitlabRunnerAutoscaling", () => {
 
     // When
     const runner = new GitlabRunnerAutoscaling(stack, "Runner", {
+      concurrent: 10,
+      checkInterval: 0,
+      logFormat: "runner",
+      logLevel: "info",
       network: {
         vpc: vpc,
       },
@@ -53,7 +57,7 @@ describe("GitlabRunnerAutoscaling", () => {
     expect(runner.network.availabilityZone).toBe("us-east-1a");
   });
 
-  it("Should have manager instance type", () => {
+  it("Should have manager instance type set when it's set through props", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "MockStack", {
@@ -96,7 +100,7 @@ describe("GitlabRunnerAutoscaling", () => {
     expect(capture.asObject()).toMatchObject({ InstanceType: "t3.nano" });
   });
 
-  it("Should have multiple runner configuration", () => {
+  it("Should have multiple runner configuration when it's set through props", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "MockStack", {
@@ -196,5 +200,37 @@ describe("GitlabRunnerAutoscaling", () => {
     expect(JSON.stringify(template)).toMatch("gitlab-runner1");
     expect(JSON.stringify(template)).toMatch("gitlab-runner2");
     expect(JSON.stringify(template)).toMatch("gitlab-runner3");
+  });
+
+  it("Should generate a unique gitlab runner name when provided a configuration without the name set", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "MockStack", {
+      env: {
+        account: "0",
+        region: "us-east-1",
+      },
+    });
+
+    const token = new StringParameter(stack, "imported-token", {
+      parameterName: "/gitlab-runner/token",
+      stringValue: "auth-token",
+      type: ParameterType.SECURE_STRING,
+      tier: ParameterTier.STANDARD,
+    });
+
+    // When
+    new GitlabRunnerAutoscaling(stack, "Runner", {
+      runners: [
+        {
+          token: token,
+          configuration: {},
+        },
+      ],
+    });
+
+    // Then
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {});
   });
 });
