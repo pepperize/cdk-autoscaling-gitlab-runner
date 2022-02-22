@@ -5,7 +5,7 @@ import { ParameterTier, ParameterType, StringParameter } from "aws-cdk-lib/aws-s
 import { GitlabRunnerAutoscaling, GitlabRunnerAutoscalingJobRunnerProps } from "../../src";
 
 describe("GitlabRunnerAutoscaling", () => {
-  it("Should match snapshot", () => {
+  it("Should match snapshot when the runner is being used", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "MockStack", {
@@ -57,7 +57,7 @@ describe("GitlabRunnerAutoscaling", () => {
     expect(runner.network.availabilityZone).toBe("us-east-1a");
   });
 
-  it("Should have manager instance type", () => {
+  it("Should have manager instance type set when it's set through props", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "MockStack", {
@@ -100,7 +100,7 @@ describe("GitlabRunnerAutoscaling", () => {
     expect(capture.asObject()).toMatchObject({ InstanceType: "t3.nano" });
   });
 
-  it("Should have multiple runner configuration", () => {
+  it("Should have multiple runner configuration when it's set through props", () => {
     // Given
     const app = new App();
     const stack = new Stack(app, "MockStack", {
