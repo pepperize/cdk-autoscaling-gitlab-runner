@@ -197,4 +197,36 @@ describe("GitlabRunnerAutoscaling", () => {
     expect(JSON.stringify(template)).toMatch("gitlab-runner2");
     expect(JSON.stringify(template)).toMatch("gitlab-runner3");
   });
+
+  it("Should generate a unique gitlab runner name when provided a configuration without the name set", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "MockStack", {
+      env: {
+        account: "0",
+        region: "us-east-1",
+      },
+    });
+
+    const token = new StringParameter(stack, "imported-token", {
+      parameterName: "/gitlab-runner/token",
+      stringValue: "auth-token",
+      type: ParameterType.SECURE_STRING,
+      tier: ParameterTier.STANDARD,
+    });
+
+    // When
+    new GitlabRunnerAutoscaling(stack, "Runner", {
+      runners: [
+        {
+          token: token,
+          configuration: {},
+        },
+      ],
+    });
+
+    // Then
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {});
+  });
 });
