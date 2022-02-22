@@ -28,6 +28,10 @@ describe("GitlabRunnerAutoscaling", () => {
 
     // When
     const runner = new GitlabRunnerAutoscaling(stack, "Runner", {
+      concurrent: 10,
+      checkInterval: 0,
+      logFormat: "runner",
+      logLevel: "info",
       network: {
         vpc: vpc,
       },
