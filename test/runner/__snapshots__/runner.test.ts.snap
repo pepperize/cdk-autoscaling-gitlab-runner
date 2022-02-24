@@ -1061,7 +1061,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },
@@ -1098,7 +1098,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },
@@ -1135,7 +1135,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },
@@ -2440,7 +2440,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },
@@ -2477,7 +2477,7 @@ yum update -y aws-cfn-bootstrap
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },

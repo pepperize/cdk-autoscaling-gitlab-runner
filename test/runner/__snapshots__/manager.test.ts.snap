@@ -278,7 +278,7 @@ Object {
                 Object {
                   "Ref": "AWS::Partition",
                 },
-                ":iam::aws:policy/AmazonEC2RoleforSSM",
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
               ],
             ],
           },
