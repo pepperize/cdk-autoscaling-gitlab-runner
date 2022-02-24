@@ -24,6 +24,9 @@ const project = new AwsCdkConstructLibrary({
     "Docker in Docker",
     "S3",
     "Shared Cache",
+    "Deployment",
+    "Utilities",
+    "Graviton",
   ],
 
   cdkVersion: "2.8.0",

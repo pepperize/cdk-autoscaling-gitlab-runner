@@ -239,6 +239,8 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 });
 ```
 
+> You may have to disable or configure [Spot instances](#spot-instances)
+
 See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/instance-type.ts),
 [GitlabRunnerAutoscalingManagerProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingmanagerprops-),
 [GitlabRunnerAutoscalingJobRunnerProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingjobrunnerprops-)
@@ -349,8 +351,85 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 ```
 
 See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/on-demand-instances.ts),
+[EC2 spot price](https://aws.amazon.com/de/ec2/spot/pricing/),
 [MachineConfiguration](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#machineconfiguration-),
-[MachineOptions](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#machineoptions-)
+[MachineOptions](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#machineoptions-),
+[Advanced configuration - runners.machine.autoscaling](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachineautoscaling-sections)
+
+### Cross-Compile with Multiarch
+
+To build binaries of different architectures can also use [Multiarch](https://wiki.debian.org/Multiarch)
+
+```typescript
+const token = StringParameter.fromStringParameterAttributes(stack, "Token", {
+  parameterName: "/gitlab-runner/token",
+});
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  runners: [
+    {
+      token: token,
+      configuration: {
+        docker: {
+          privileged: true,
+        },
+      },
+    },
+  ],
+});
+```
+
+Configure your [.gitlab-ci.yml](https://docs.gitlab.com/ee/ci/yaml/) file
+
+```yaml
+build:
+  image: multiarch/debian-debootstrap:armhf-buster
+  services:
+    - docker:stable-dind
+    - name: multiarch/qemu-user-static:register
+      command:
+        - "--reset"
+  script:
+    - make build
+```
+
+See [multiarch/qemu-user-static](https://hub.docker.com/r/multiarch/qemu-user-static)
+
+### Running on AWS Graviton
+
+To run your jobs on [AWS Graviton](https://aws.amazon.com/ec2/graviton/) you have to provide an AMI for arm64 architecture.
+
+```typescript
+const token = StringParameter.fromStringParameterAttributes(stack, "Token", {
+  parameterName: "/gitlab-runner/token",
+});
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  runners: [
+    {
+      token: token,
+      configuration: {
+        instanceType: InstanceType.of(InstanceClass.M6G, InstanceSize.LARGE),
+        machineImage: MachineImage.genericLinux({
+          [this.region]: new LookupMachineImage({
+            name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-*-server-*",
+            owners: ["099720109477"],
+            filters: {
+              architecture: [InstanceArchitecture.ARM_64],
+              "image-type": ["machine"],
+              state: ["available"],
+              "root-device-type": ["ebs"],
+              "virtualization-type": ["hvm"],
+            },
+          }).getImage(this).imageId,
+        }),
+      },
+    },
+  ],
+});
+```
+
+See [Ubuntu Amazon EC2 AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/)
 
 ### Custom runner's role
 
@@ -388,12 +467,12 @@ This can become costly, because AWS CDK configured also the routing for the priv
 
 ```typescript
 const natInstanceProvider = aws_ec2.NatProvider.instance({
-   instanceType: aws_ec2.InstanceType.of(InstanceClass.T3, InstanceSize.NANO), // using a cheaper gateway (not scalable)
+  instanceType: aws_ec2.InstanceType.of(InstanceClass.T3, InstanceSize.NANO), // using a cheaper gateway (not scalable)
 });
 const vpc = new Vpc(this, "Vpc", {
   // Your custom vpc, i.e.:
-   natGatewayProvider: natInstanceProvider,
-   maxAzs: 2,
+  natGatewayProvider: natInstanceProvider,
+  maxAzs: 2,
 });
 
 const token = StringParameter.fromStringParameterAttributes(stack, "Token", {
