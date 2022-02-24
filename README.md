@@ -387,9 +387,15 @@ If no existing Vpc is passed, a [VPC that spans a whole region](https://docs.aws
 This can become costly, because AWS CDK configured also the routing for the private subnets and creates NAT Gateways (one per AZ).
 
 ```typescript
-const vpc = new Vpc(this, "Vpc", {
-  // Your custom vpc
+const natInstanceProvider = aws_ec2.NatProvider.instance({
+   instanceType: aws_ec2.InstanceType.of(InstanceClass.T3, InstanceSize.NANO), // using a cheaper gateway (not scalable)
 });
+const vpc = new Vpc(this, "Vpc", {
+  // Your custom vpc, i.e.:
+   natGatewayProvider: natInstanceProvider,
+   maxAzs: 2,
+});
+
 const token = StringParameter.fromStringParameterAttributes(stack, "Token", {
   parameterName: "/gitlab-runner/token",
 });
