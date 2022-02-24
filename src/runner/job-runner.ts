@@ -86,7 +86,7 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
       props.role ||
       new Role(scope, `RunnersRoleFor${pascalCase(this.configuration.name!)}`, {
         assumedBy: new ServicePrincipal("ec2.amazonaws.com", {}),
-        managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2RoleforSSM")],
+        managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")],
       });
     this.instanceProfile = new CfnInstanceProfile(
       scope,
