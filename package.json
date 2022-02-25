@@ -33,8 +33,8 @@
     "projen": "npx projen"
   },
   "author": {
-    "name": "Ivan Ovdiienko",
-    "email": "ivan.ovdiienko@pepperize.com",
+    "name": "Patrick Florek",
+    "email": "patrick.florek@gmail.com",
     "organization": true
   },
   "devDependencies": {
