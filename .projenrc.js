@@ -2,8 +2,8 @@ const { AwsCdkConstructLibrary } = require("@pepperize/projen-awscdk-construct")
 const { javascript } = require("projen");
 
 const project = new AwsCdkConstructLibrary({
-  authorName: "Ivan Ovdiienko",
-  authorAddress: "ivan.ovdiienko@pepperize.com",
+  authorName: "Patrick Florek",
+  authorAddress: "patrick.florek@gmail.com",
   license: "MIT",
 
   repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
