@@ -14,6 +14,18 @@ export interface MachineOptions {
    * The SecurityGroup's GroupName, not the GroupId.
    */
   readonly securityGroup?: string;
+  /**
+   * The amazonec2-private-address-only parameter. If true, your EC2 instance won’t get assigned a public IP. This is ok if your VPC is configured correctly with an Internet Gateway (IGW), NatGateway (NGW) and routing is fine, but it’s something to consider if you’ve got a more complex configuration.
+   *
+   * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go#L651
+   * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
+   */
+  readonly privateAddressOnly?: boolean;
+  /**
+   * Use the private IP address of Docker Machines, but still create a public IP address. Useful to keep the traffic internal and avoid extra costs.
+   *
+   * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
+   */
   readonly usePrivateAddress?: boolean;
   readonly iamInstanceProfile?: string;
   /**

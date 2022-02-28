@@ -2111,12 +2111,13 @@ const machineOptions: MachineOptions = { ... }
 | [`blockDurationMinutes`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyblockdurationminutes) | `number` | The amazonec2-block-duration-minutes parameter. |
 | [`iamInstanceProfile`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyiaminstanceprofile) | `string` | *No description.* |
 | [`instanceType`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyinstancetype) | `string` | *No description.* |
+| [`privateAddressOnly`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyprivateaddressonly) | `boolean` | The amazonec2-private-address-only parameter. |
 | [`region`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyregion) | `string` | *No description.* |
 | [`requestSpotInstance`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrequestspotinstance) | `boolean` | The amazonec2-request-spot-instance parameter. |
 | [`securityGroup`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysecuritygroup) | `string` | The SecurityGroup's GroupName, not the GroupId. |
 | [`spotPrice`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyspotprice) | `number` | The amazonec2-spot-price parameter. |
 | [`subnetId`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysubnetid) | `string` | *No description.* |
-| [`usePrivateAddress`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseprivateaddress) | `boolean` | *No description.* |
+| [`usePrivateAddress`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseprivateaddress) | `boolean` | Use the private IP address of Docker Machines, but still create a public IP address. |
 | [`vpcId`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyvpcid) | `string` | *No description.* |
 | [`zone`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyzone) | `string` | Extract the availabilityZone last character for the needs of gitlab configuration. |
 
@@ -2165,6 +2166,22 @@ public readonly instanceType: string;
 ```
 
 - *Type:* `string`
+
+---
+
+##### `privateAddressOnly`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.privateAddressOnly" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyprivateaddressonly"></a>
+
+```typescript
+public readonly privateAddressOnly: boolean;
+```
+
+- *Type:* `boolean`
+
+The amazonec2-private-address-only parameter.
+
+If true, your EC2 instance won’t get assigned a public IP. This is ok if your VPC is configured correctly with an Internet Gateway (IGW), NatGateway (NGW) and routing is fine, but it’s something to consider if you’ve got a more complex configuration.
+
+> https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
 
 ---
 
@@ -2241,6 +2258,12 @@ public readonly usePrivateAddress: boolean;
 ```
 
 - *Type:* `boolean`
+
+Use the private IP address of Docker Machines, but still create a public IP address.
+
+Useful to keep the traffic internal and avoid extra costs.
+
+> https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
 
 ---
 
