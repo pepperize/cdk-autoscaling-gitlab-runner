@@ -683,9 +683,9 @@
   integrity sha512-Jd4jPhTxHWLtf7lPpQHEyygzBdx3FbzDIvn/p9QwVXNDPATySO6xk3+v4MWnaEiEyp8rvaQttq5SikAFTuVfnw==
 
 "@pepperize/projen-awscdk-construct@latest":
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.0.39.tgz#ed6bed79dd87ca7a414770fddc30d0797933b692"
-  integrity sha512-mFU2I9x8JvuL3mDEweqn7TbL+MHFt2CSEFOYXLIcO1EEV9jjWNydNv34guEWMJeVFzYzPBMz9fwS+NYIpXf1uQ==
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.0.40.tgz#82d11a4d227be15bfb4385eb0719d90538caf7d5"
+  integrity sha512-lWsCNpIpCEVEvkpKNjVOjxYN3kstm6kMvztF89h2lVkRrfXdvSORhxNb8L7gZY4r2aPvW98z7lVKhaI/XBJgsw==
   dependencies:
     projen "^0.50.33"
 
@@ -5870,9 +5870,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 typescript@^4.5.5:
-  version "4.5.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.5.tgz#d8c953832d28924a9e3d37c73d729c846c5896f3"
-  integrity sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.2.tgz#fe12d2727b708f4eef40f51598b3398baa9611d4"
+  integrity sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==
 
 typescript@~3.9.10:
   version "3.9.10"
