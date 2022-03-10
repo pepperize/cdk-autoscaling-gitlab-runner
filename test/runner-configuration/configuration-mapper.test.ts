@@ -66,9 +66,7 @@ describe("ConfigurationMapper", () => {
       runnersConfiguration: [
         {
           docker: {},
-          machine: {
-            autoscaling: [],
-          },
+          machine: {},
           cache: {
             s3: {},
           },
@@ -124,13 +122,11 @@ describe("ConfigurationMapper", () => {
         {
           token: "foo+bar",
           docker: {},
-          machine: {
-            autoscaling: [],
-          },
+          machine: {},
           cache: {
             s3: {
               serverAddress: "s3.amazonaws.com",
-              bucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketName: "gitlab-runner-cache-bucket-test-us-east-1",
               bucketLocation: "us-east-1",
               accessKey: "AKIAIOSFODNN7EXAMPLE",
               secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
@@ -167,13 +163,11 @@ describe("ConfigurationMapper", () => {
         {
           token: "foo+bar",
           docker: {},
-          machine: {
-            autoscaling: [],
-          },
+          machine: {},
           cache: {
             s3: {
               serverAddress: "s3.amazonaws.com",
-              bucketName: "gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketName: "gitlab-runner-cache-bucket-test-us-east-1",
               bucketLocation: "us-east-1",
               accessKey: "AKIAIOSFODNN7EXAMPLE",
               secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
@@ -189,7 +183,7 @@ describe("ConfigurationMapper", () => {
           cache: {
             s3: {
               serverAddress: "2s3.amazonaws.com",
-              bucketName: "2gitlab-runner-cahe-bucket-test-us-east-1",
+              bucketName: "2gitlab-runner-cache-bucket-test-us-east-1",
               bucketLocation: "2us-east-1",
               accessKey: "2AKIAIOSFODNN7EXAMPLE",
               secretKey: "2wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
