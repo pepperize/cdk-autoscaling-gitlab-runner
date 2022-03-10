@@ -47,7 +47,7 @@ token = \\"foo+bar\\"
 
     [runners.cache.S3]
     serverAddress = \\"s3.amazonaws.com\\"
-    bucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
+    bucketName = \\"gitlab-runner-cache-bucket-test-us-east-1\\"
     bucketLocation = \\"us-east-1\\"
     accessKey = \\"AKIAIOSFODNN7EXAMPLE\\"
     secretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
@@ -101,7 +101,7 @@ token = \\"foo+bar\\"
 
     [runners.cache.S3]
     serverAddress = \\"s3.amazonaws.com\\"
-    bucketName = \\"gitlab-runner-cahe-bucket-test-us-east-1\\"
+    bucketName = \\"gitlab-runner-cache-bucket-test-us-east-1\\"
     bucketLocation = \\"us-east-1\\"
     accessKey = \\"AKIAIOSFODNN7EXAMPLE\\"
     secretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
@@ -135,19 +135,13 @@ token = \\"2foo+bar\\"
   \\"amazonec2-spot-price=0.03\\"
 ]
 
-    [[runners.machine.autoscaling]]
-    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
-    IdleCount = 1
-    IdleTime = 1_800
-    Timezone = \\"Etc/UTC\\"
-
   [runners.cache]
   Type = \\"s3\\"
   Shared = true
 
     [runners.cache.S3]
     serverAddress = \\"2s3.amazonaws.com\\"
-    bucketName = \\"2gitlab-runner-cahe-bucket-test-us-east-1\\"
+    bucketName = \\"2gitlab-runner-cache-bucket-test-us-east-1\\"
     bucketLocation = \\"2us-east-1\\"
     accessKey = \\"2AKIAIOSFODNN7EXAMPLE\\"
     secretKey = \\"2wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"

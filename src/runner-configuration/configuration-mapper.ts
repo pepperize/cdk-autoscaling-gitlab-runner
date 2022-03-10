@@ -54,7 +54,7 @@ export class ConfigurationMapper {
               spotPrice: 0.03,
               ...item.machine?.machineOptions,
             },
-            autoscaling: item.machine?.autoscaling?.length
+            autoscaling: item.machine?.autoscaling
               ? item.machine?.autoscaling
               : [
                   {
