@@ -262,7 +262,9 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                       zone: this.network.availabilityZone.slice(-1),
                       subnetId: this.network.subnet.subnetId,
                       securityGroup: this.runnersSecurityGroupName,
-                      usePrivateAddress: true,
+                      privateAddressOnly:
+                        configuration.machine?.machineOptions?.privateAddressOnly ?? this.network.hasPrivateSubnets(),
+                      usePrivateAddress: configuration.machine?.machineOptions?.usePrivateAddress ?? true,
                       iamInstanceProfile: runner.instanceProfile.ref,
                     },
                   },

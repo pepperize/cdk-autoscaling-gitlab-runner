@@ -331,6 +331,7 @@ token = \\"",
                         ],
                       },
                       "\\",
+  \\"amazonec2-private-address-only=true\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
@@ -418,6 +419,7 @@ token = \\"",
                         ],
                       },
                       "\\",
+  \\"amazonec2-private-address-only=true\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
@@ -505,6 +507,7 @@ token = \\"",
                         ],
                       },
                       "\\",
+  \\"amazonec2-private-address-only=true\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
@@ -696,7 +699,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 8d1c7dedf9c170ed
+# fingerprint: 093c70b8ffcd1ddb
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1827,6 +1830,7 @@ token = \\"",
                         ],
                       },
                       "\\",
+  \\"amazonec2-private-address-only=false\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
@@ -1907,6 +1911,7 @@ token = \\"",
                         ],
                       },
                       "\\",
+  \\"amazonec2-private-address-only=false\\",
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
@@ -2098,7 +2103,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: fd02ba62f3311351
+# fingerprint: b79d5b2c2a784afa
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
