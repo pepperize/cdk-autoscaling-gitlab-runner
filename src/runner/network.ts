@@ -43,13 +43,13 @@ export class Network extends Construct {
 
     this.availabilityZone = this.subnet.availabilityZone;
 
-    if (!this.hasPrivateSubnet(this.vpc)) {
+    if (!this.hasPrivateSubnets()) {
       Annotations.of(this).addWarning(`No private network found in ${this.vpc.vpcId}, using public addresses.`);
     }
   }
 
-  private hasPrivateSubnet(vpc: IVpc): boolean {
-    return !!vpc.privateSubnets.length;
+  public hasPrivateSubnets(): boolean {
+    return !!this.vpc.privateSubnets.length;
   }
 
   /**
@@ -60,7 +60,7 @@ export class Network extends Construct {
   private findSubnet(vpc: IVpc, subnetSelection?: SubnetSelection): ISubnet {
     const selectedSubnets = vpc.selectSubnets(
       subnetSelection || {
-        subnetType: this.hasPrivateSubnet(vpc) ? SubnetType.PRIVATE_WITH_NAT : SubnetType.PUBLIC,
+        subnetType: this.hasPrivateSubnets() ? SubnetType.PRIVATE_WITH_NAT : SubnetType.PUBLIC,
         availabilityZones: vpc.availabilityZones,
       }
     );

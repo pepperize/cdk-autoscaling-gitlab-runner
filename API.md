@@ -511,6 +511,19 @@ new Network(scope: Stack, id: string, props?: NetworkProps)
 
 ---
 
+#### Methods <a name="Methods" id="methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| [`hasPrivateSubnets`](#pepperizecdkautoscalinggitlabrunnernetworkhasprivatesubnets) | *No description.* |
+
+---
+
+##### `hasPrivateSubnets` <a name="@pepperize/cdk-autoscaling-gitlab-runner.Network.hasPrivateSubnets" id="pepperizecdkautoscalinggitlabrunnernetworkhasprivatesubnets"></a>
+
+```typescript
+public hasPrivateSubnets()
+```
 
 
 #### Properties <a name="Properties" id="properties"></a>
