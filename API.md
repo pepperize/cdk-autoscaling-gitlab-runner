@@ -2108,6 +2108,8 @@ Maximum job (build) count before machine is removed.
 
 ### MachineOptions <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions" id="pepperizecdkautoscalinggitlabrunnermachineoptions"></a>
 
+> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go
+
 #### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
@@ -2127,10 +2129,13 @@ const machineOptions: MachineOptions = { ... }
 | [`privateAddressOnly`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyprivateaddressonly) | `boolean` | The amazonec2-private-address-only parameter. |
 | [`region`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyregion) | `string` | *No description.* |
 | [`requestSpotInstance`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrequestspotinstance) | `boolean` | The amazonec2-request-spot-instance parameter. |
+| [`rootSize`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrootsize) | `number` | The root disk size of the instance (in GB). |
 | [`securityGroup`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysecuritygroup) | `string` | The SecurityGroup's GroupName, not the GroupId. |
 | [`spotPrice`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyspotprice) | `number` | The amazonec2-spot-price parameter. |
 | [`subnetId`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysubnetid) | `string` | *No description.* |
+| [`useEbsOptimizedInstance`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseebsoptimizedinstance) | `boolean` | Create an EBS Optimized Instance, instance type must support it. |
 | [`usePrivateAddress`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseprivateaddress) | `boolean` | Use the private IP address of Docker Machines, but still create a public IP address. |
+| [`volumeType`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyvolumetype) | `string` | The Amazon EBS volume type to be attached to the instance. |
 | [`vpcId`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyvpcid) | `string` | *No description.* |
 | [`zone`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyzone) | `string` | Extract the availabilityZone last character for the needs of gitlab configuration. |
 
@@ -2225,6 +2230,21 @@ Whether or not to request spot instances.
 
 ---
 
+##### `rootSize`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.rootSize" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrootsize"></a>
+
+```typescript
+public readonly rootSize: number;
+```
+
+- *Type:* `number`
+- *Default:* 16
+
+The root disk size of the instance (in GB).
+
+> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/docs/drivers/aws.md#options
+
+---
+
 ##### `securityGroup`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.securityGroup" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertysecuritygroup"></a>
 
 ```typescript
@@ -2264,6 +2284,18 @@ public readonly subnetId: string;
 
 ---
 
+##### `useEbsOptimizedInstance`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.useEbsOptimizedInstance" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseebsoptimizedinstance"></a>
+
+```typescript
+public readonly useEbsOptimizedInstance: boolean;
+```
+
+- *Type:* `boolean`
+
+Create an EBS Optimized Instance, instance type must support it.
+
+---
+
 ##### `usePrivateAddress`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.usePrivateAddress" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseprivateaddress"></a>
 
 ```typescript
@@ -2277,6 +2309,19 @@ Use the private IP address of Docker Machines, but still create a public IP addr
 Useful to keep the traffic internal and avoid extra costs.
 
 > https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section
+
+---
+
+##### `volumeType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.volumeType" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertyvolumetype"></a>
+
+```typescript
+public readonly volumeType: string;
+```
+
+- *Type:* `string`
+- *Default:* gp2
+
+The Amazon EBS volume type to be attached to the instance.
 
 ---
 

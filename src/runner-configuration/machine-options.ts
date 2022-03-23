@@ -1,3 +1,7 @@
+/**
+ * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/docs/drivers/aws.md#options
+ * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go
+ */
 export interface MachineOptions {
   readonly instanceType?: string;
   readonly ami?: string;
@@ -47,4 +51,19 @@ export interface MachineOptions {
    * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#cutting-down-costs-with-amazon-ec2-spot-instances
    */
   readonly blockDurationMinutes?: number;
+  /**
+   * The root disk size of the instance (in GB).
+   * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/docs/drivers/aws.md#options
+   * @default 16
+   */
+  readonly rootSize?: number;
+  /**
+   * The Amazon EBS volume type to be attached to the instance.
+   * @default gp2
+   */
+  readonly volumeType?: string;
+  /**
+   * Create an EBS Optimized Instance, instance type must support it.
+   */
+  readonly useEbsOptimizedInstance?: boolean;
 }
