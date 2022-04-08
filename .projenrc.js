@@ -64,4 +64,6 @@ const project = new AwsCdkConstructLibrary({
   // },
 });
 
+project.tasks.tryFind("package:python")?.prependExec("pip3 install packaging");
+
 project.synth();
