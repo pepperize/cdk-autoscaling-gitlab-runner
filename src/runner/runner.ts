@@ -191,6 +191,7 @@ export class GitlabRunnerAutoscaling extends Construct {
       minCapacity: 1,
       desiredCapacity: 1,
       signals: Signals.waitForCount(1, { timeout: Duration.minutes(15) }),
+      requireImdsv2: true,
     });
   }
 }

@@ -684,6 +684,9 @@ token = \\"",
           "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664ebsC96584B6F00A464EAD1953AFF4B05118Parameter",
         },
         "InstanceType": "t3.nano",
+        "MetadataOptions": Object {
+          "HttpTokens": "required",
+        },
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -2088,6 +2091,9 @@ token = \\"",
           "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664ebsC96584B6F00A464EAD1953AFF4B05118Parameter",
         },
         "InstanceType": "t3.nano",
+        "MetadataOptions": Object {
+          "HttpTokens": "required",
+        },
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
