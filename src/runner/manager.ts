@@ -273,6 +273,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                       serverAddress: `s3.${scope.urlSuffix}`,
                       bucketName: `${this.cacheBucket.bucketName}`,
                       bucketLocation: `${scope.region}`,
+                      authenticationType: "iam",
                     },
                   },
                 } as RunnerConfiguration;
