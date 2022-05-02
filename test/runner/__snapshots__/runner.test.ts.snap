@@ -371,6 +371,7 @@ token = \\"",
                       },
                       "\\"
     bucketLocation = \\"us-east-1\\"
+    authenticationType = \\"iam\\"
 
 [[runners]]
 url = \\"https://gitlab.com\\"
@@ -459,6 +460,7 @@ token = \\"",
                       },
                       "\\"
     bucketLocation = \\"us-east-1\\"
+    authenticationType = \\"iam\\"
 
 [[runners]]
 url = \\"https://gitlab.com\\"
@@ -536,6 +538,7 @@ token = \\"",
                       },
                       "\\"
     bucketLocation = \\"us-east-1\\"
+    authenticationType = \\"iam\\"
 
   [runners.docker]
   tls_verify = false
@@ -702,7 +705,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 093c70b8ffcd1ddb
+# fingerprint: 0e9842638daa06c0
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1864,6 +1867,7 @@ token = \\"",
                       },
                       "\\"
     bucketLocation = \\"us-east-1\\"
+    authenticationType = \\"iam\\"
 
   [runners.docker]
   tls_verify = false
@@ -1945,6 +1949,7 @@ token = \\"",
                       },
                       "\\"
     bucketLocation = \\"us-east-1\\"
+    authenticationType = \\"iam\\"
 
   [runners.docker]
   tls_verify = false
@@ -2109,7 +2114,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: b79d5b2c2a784afa
+# fingerprint: 54d26dd992f4ef64
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

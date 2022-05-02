@@ -733,6 +733,10 @@ The number of days after which the created cache objects are deleted from S3.
 
 ### CacheS3Configuration <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration" id="pepperizecdkautoscalinggitlabrunnercaches3configuration"></a>
 
+Define cache configuration for S3 storage.
+
+> https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnerscaches3-section
+
 #### Initializer <a name="[object Object].Initializer" id="object-objectinitializer"></a>
 
 ```typescript
@@ -746,8 +750,10 @@ const cacheS3Configuration: CacheS3Configuration = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | [`accessKey`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyaccesskey) | `string` | *No description.* |
+| [`authenticationType`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyauthenticationtype) | `string` | In GitLab 15.0 and later, explicitly set AuthenticationType to iam or access-key. |
 | [`bucketLocation`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertybucketlocation) | `string` | The name of the S3 region. |
 | [`bucketName`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertybucketname) | `string` | The name of the storage bucket where cache is stored. |
+| [`insecure`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyinsecure) | `boolean` | Set to true if the S3 service is available by HTTP. |
 | [`secretKey`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertysecretkey) | `string` | *No description.* |
 | [`serverAddress`](#pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyserveraddress) | `string` | The AWS S3 host. |
 
@@ -760,6 +766,21 @@ public readonly accessKey: string;
 ```
 
 - *Type:* `string`
+
+---
+
+##### `authenticationType`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.authenticationType" id="pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyauthenticationtype"></a>
+
+```typescript
+public readonly authenticationType: string;
+```
+
+- *Type:* `string`
+- *Default:* "iam"
+
+In GitLab 15.0 and later, explicitly set AuthenticationType to iam or access-key.
+
+> https://gitlab.com/gitlab-org/gitlab-runner/-/issues/28171
 
 ---
 
@@ -785,6 +806,19 @@ public readonly bucketName: string;
 - *Default:* "runners-cache"
 
 The name of the storage bucket where cache is stored.
+
+---
+
+##### `insecure`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.CacheS3Configuration.property.insecure" id="pepperizecdkautoscalinggitlabrunnercaches3configurationpropertyinsecure"></a>
+
+```typescript
+public readonly insecure: boolean;
+```
+
+- *Type:* `boolean`
+- *Default:* false
+
+Set to true if the S3 service is available by HTTP.
 
 ---
 
