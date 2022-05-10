@@ -2161,6 +2161,8 @@ const machineOptions: MachineOptions = { ... }
 | [`iamInstanceProfile`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyiaminstanceprofile) | `string` | *No description.* |
 | [`instanceType`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyinstancetype) | `string` | *No description.* |
 | [`keypairName`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertykeypairname) | `string` | The amazonec2-keypair-name parameter. |
+| [`metadataToken`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertymetadatatoken) | `string` | Whether the metadata token is required or optional. |
+| [`metadataTokenResponseHopLimit`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertymetadatatokenresponsehoplimit) | `number` | The number of network hops that the metadata token can travel. |
 | [`privateAddressOnly`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyprivateaddressonly) | `boolean` | The amazonec2-private-address-only parameter. |
 | [`region`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyregion) | `string` | *No description.* |
 | [`requestSpotInstance`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrequestspotinstance) | `boolean` | The amazonec2-request-spot-instance parameter. |
@@ -2235,6 +2237,34 @@ The amazonec2-keypair-name parameter.
 A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance.
 
 > https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go#L398
+
+---
+
+##### `metadataToken`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.metadataToken" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertymetadatatoken"></a>
+
+```typescript
+public readonly metadataToken: string;
+```
+
+- *Type:* `string`
+- *Default:* required
+
+Whether the metadata token is required or optional.
+
+> https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html
+
+---
+
+##### `metadataTokenResponseHopLimit`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.metadataTokenResponseHopLimit" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertymetadatatokenresponsehoplimit"></a>
+
+```typescript
+public readonly metadataTokenResponseHopLimit: number;
+```
+
+- *Type:* `number`
+- *Default:* 2
+
+The number of network hops that the metadata token can travel.
 
 ---
 
