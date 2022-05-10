@@ -2160,11 +2160,11 @@ const machineOptions: MachineOptions = { ... }
 | [`blockDurationMinutes`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyblockdurationminutes) | `number` | The amazonec2-block-duration-minutes parameter. |
 | [`iamInstanceProfile`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyiaminstanceprofile) | `string` | *No description.* |
 | [`instanceType`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyinstancetype) | `string` | *No description.* |
+| [`keypairName`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertykeypairname) | `string` | The amazonec2-keypair-name parameter. |
 | [`privateAddressOnly`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyprivateaddressonly) | `boolean` | The amazonec2-private-address-only parameter. |
 | [`region`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyregion) | `string` | *No description.* |
 | [`requestSpotInstance`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrequestspotinstance) | `boolean` | The amazonec2-request-spot-instance parameter. |
 | [`rootSize`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrootsize) | `number` | The root disk size of the instance (in GB). |
-| [`keypairName`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertykeypairname) | `string` | The amazonec2-keypair-name parameter. |
 | [`securityGroup`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysecuritygroup) | `string` | The SecurityGroup's GroupName, not the GroupId. |
 | [`spotPrice`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyspotprice) | `number` | The amazonec2-spot-price parameter. |
 | [`subnetId`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysubnetid) | `string` | *No description.* |
@@ -2219,6 +2219,22 @@ public readonly instanceType: string;
 ```
 
 - *Type:* `string`
+
+---
+
+##### `keypairName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.keypairName" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertykeypairname"></a>
+
+```typescript
+public readonly keypairName: string;
+```
+
+- *Type:* `string`
+
+The amazonec2-keypair-name parameter.
+
+A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance.
+
+> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go#L398
 
 ---
 
@@ -2277,22 +2293,6 @@ public readonly rootSize: number;
 The root disk size of the instance (in GB).
 
 > https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/docs/drivers/aws.md#options
-
----
-
-##### `keypairName`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.keypairName" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertykeypairname"></a>
-
-```typescript
-public readonly keypairName: string;
-```
-
-- *Type:* `string`
-
-The amazonec2-keypair-name parameter.
-
-A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance.
-
-> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go#L398
 
 ---
 
