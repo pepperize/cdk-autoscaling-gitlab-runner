@@ -58,6 +58,11 @@ export interface MachineOptions {
    */
   readonly rootSize?: number;
   /**
+   * The amazonec2-keypair-name parameter. A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance.
+   * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go#L398
+   */
+  readonly keypairName?: string;
+  /**
    * The Amazon EBS volume type to be attached to the instance.
    * @default gp2
    */
