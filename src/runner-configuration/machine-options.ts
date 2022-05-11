@@ -71,4 +71,15 @@ export interface MachineOptions {
    * Create an EBS Optimized Instance, instance type must support it.
    */
   readonly useEbsOptimizedInstance?: boolean;
+  /**
+   * Whether the metadata token is required or optional.
+   * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html
+   * @default required
+   */
+  readonly metadataToken?: string;
+  /**
+   * The number of network hops that the metadata token can travel.
+   * @default 2
+   */
+  readonly metadataTokenResponseHopLimit?: number;
 }

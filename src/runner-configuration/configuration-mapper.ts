@@ -52,6 +52,8 @@ export class ConfigurationMapper {
             machineOptions: {
               requestSpotInstance: true,
               spotPrice: 0.03,
+              metadataToken: "required",
+              metadataTokenResponseHopLimit: 2,
               ...item.machine?.machineOptions,
             },
             autoscaling: item.machine?.autoscaling
