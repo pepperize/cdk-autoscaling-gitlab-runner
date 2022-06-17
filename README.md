@@ -2,6 +2,7 @@
 [![npm (scoped)](https://img.shields.io/npm/v/@pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)](https://www.npmjs.com/package/@pepperize/cdk-autoscaling-gitlab-runner)
 [![PyPI](https://img.shields.io/pypi/v/pepperize.cdk-autoscaling-gitlab-runner?style=flat-square)](https://pypi.org/project/pepperize.cdk-autoscaling-gitlab-runner/)
 [![Nuget](https://img.shields.io/nuget/v/Pepperize.CDK.AutoscalingGitlabRunner?style=flat-square)](https://www.nuget.org/packages/Pepperize.CDK.AutoscalingGitlabRunner/)
+[![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.pepperize/cdk-autoscaling-gitlab-runner?server=https%3A%2F%2Fs01.oss.sonatype.org%2F&style=flat-square)](https://s01.oss.sonatype.org/content/repositories/releases/com/pepperize/cdk-autoscaling-gitlab-runner/)
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/pepperize/cdk-autoscaling-gitlab-runner/release/main?label=release&style=flat-square)](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/actions/workflows/release.yml)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pepperize/cdk-autoscaling-gitlab-runner?sort=semver&style=flat-square)](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/releases)
 
@@ -42,6 +43,16 @@ pip install pepperize.cdk-autoscaling-gitlab-runner
 
 ```
 dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
+```
+
+### Java
+
+```xml
+<dependency>
+  <groupId>com.pepperize</groupId>
+  <artifactId>cdk-autoscaling-gitlab-runner</artifactId>
+  <version>${cdkAutoscalingGitlabRunner.version}</version>
+</dependency>
 ```
 
 ## Quickstart

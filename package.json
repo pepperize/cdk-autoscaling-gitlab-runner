@@ -18,6 +18,7 @@
     "package": "npx projen package",
     "package-all": "npx projen package-all",
     "package:dotnet": "npx projen package:dotnet",
+    "package:java": "npx projen package:java",
     "package:js": "npx projen package:js",
     "package:python": "npx projen package:python",
     "post-compile": "npx projen post-compile",
@@ -39,7 +40,7 @@
   },
   "devDependencies": {
     "@pepperize/cdk-private-bucket": "^0.0.143",
-    "@pepperize/cdk-security-group": "^0.0.26",
+    "@pepperize/cdk-security-group": "^0.0.115",
     "@pepperize/cdk-vpc": "^0.0.210",
     "@pepperize/projen-awscdk-construct": "^0.0.78",
     "@types/jest": "^27.4.0",
@@ -69,7 +70,7 @@
   },
   "peerDependencies": {
     "@pepperize/cdk-private-bucket": "^0.0.143",
-    "@pepperize/cdk-security-group": "^0.0.26",
+    "@pepperize/cdk-security-group": "^0.0.115",
     "@pepperize/cdk-vpc": "^0.0.210",
     "aws-cdk-lib": "^2.8.0",
     "constructs": "^10.0.5"
@@ -156,6 +157,13 @@
   "jsii": {
     "outdir": "dist",
     "targets": {
+      "java": {
+        "package": "com.pepperize.cdk.autoscaling_gitlab_runner",
+        "maven": {
+          "groupId": "com.pepperize",
+          "artifactId": "cdk-autoscaling-gitlab-runner"
+        }
+      },
       "python": {
         "distName": "pepperize.cdk-autoscaling-gitlab-runner",
         "module": "pepperize_cdk_autoscaling_gitlab_runner"
