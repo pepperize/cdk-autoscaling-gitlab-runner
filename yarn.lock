@@ -678,10 +678,10 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.8.tgz#10f65fe1891fd8cde4957360835e78fd1936bfdd"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
-"@pepperize/cdk-private-bucket@^0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@pepperize/cdk-private-bucket/-/cdk-private-bucket-0.0.34.tgz#93ee2bd07980515f9bfea344be8ca3901a66ce3e"
-  integrity sha512-DsBesFJLGPigFPTpz17oEvjRxHkKrCC+ZwP+NjMkSS2Rw/XqvBgP53RZS/l8hV63jldCUWOLSNFeOg7ztj+15w==
+"@pepperize/cdk-private-bucket@^0.0.143":
+  version "0.0.143"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-private-bucket/-/cdk-private-bucket-0.0.143.tgz#e8c7c85af5a1e49ff4a9ac27fb5cfe1fa2927bd6"
+  integrity sha512-Vgp7+jQnJQOu0gPvMGnfl6V2YXeX5leJ4EPpemjjUG+uwhEsaXwn02+n6DGjN+g+M0ftfvoWK3enLHKOVsk4JA==
 
 "@pepperize/cdk-security-group@^0.0.26":
   version "0.0.26"
