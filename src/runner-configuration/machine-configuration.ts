@@ -42,6 +42,16 @@ export interface MachineConfiguration {
   readonly machineOptions?: MachineOptions;
 
   readonly autoscaling?: AutoscalingConfiguration[];
+
+  /**
+   * The path of the runner machine's userdata file on the manager instance used by the amazonec2 driver to create a new instance.
+   *
+   * @see https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/
+   * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go
+   *
+   * @default /etc/gitlab-runner/user_data_runners
+   */
+  readonly userData?: string;
 }
 
 export type MachineDriver = "amazonec2" | string;

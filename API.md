@@ -2052,6 +2052,7 @@ const machineConfiguration: MachineConfiguration = { ... }
 | [`machineName`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymachinename) | `string` | *No description.* |
 | [`machineOptions`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymachineoptions) | [`@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions`](#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions) | Docker Machine options passed to the Docker Machine driver. |
 | [`maxBuilds`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertymaxbuilds) | `number` | Maximum job (build) count before machine is removed. |
+| [`userData`](#pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertyuserdata) | `string` | The path of the runner machine's userdata file on the manager instance used by the amazonec2 driver to create a new instance. |
 
 ---
 
@@ -2137,6 +2138,21 @@ public readonly maxBuilds: number;
 - *Default:* 20
 
 Maximum job (build) count before machine is removed.
+
+---
+
+##### `userData`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineConfiguration.property.userData" id="pepperizecdkautoscalinggitlabrunnermachineconfigurationpropertyuserdata"></a>
+
+```typescript
+public readonly userData: string;
+```
+
+- *Type:* `string`
+- *Default:* /etc/gitlab-runner/user_data_runners
+
+The path of the runner machine's userdata file on the manager instance used by the amazonec2 driver to create a new instance.
+
+> https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go
 
 ---
 
