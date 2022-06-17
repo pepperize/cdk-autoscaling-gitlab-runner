@@ -462,8 +462,7 @@ See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example
 
 ### Vpc
 
-If no existing Vpc is passed, a [VPC that spans a whole region](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.Vpc.html) on will be created.
-This can become costly, because AWS CDK configured also the routing for the private subnets and creates NAT Gateways (one per AZ).
+If no existing Vpc is passed, a cheap [VPC](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.Vpc.html) with a NatInstance (t3.nano) and a single AZ will be created.
 
 ```typescript
 const natInstanceProvider = aws_ec2.NatProvider.instance({
@@ -472,7 +471,7 @@ const natInstanceProvider = aws_ec2.NatProvider.instance({
 const vpc = new Vpc(this, "Vpc", {
   // Your custom vpc, i.e.:
   natGatewayProvider: natInstanceProvider,
-  maxAzs: 2,
+  maxAzs: 1,
 });
 
 const token = StringParameter.fromStringParameterAttributes(stack, "Token", {

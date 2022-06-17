@@ -5,6 +5,10 @@
       "type": "build"
     },
     {
+      "name": "@pepperize/cdk-vpc",
+      "type": "build"
+    },
+    {
       "name": "@pepperize/projen-awscdk-construct",
       "type": "build"
     },
@@ -131,6 +135,10 @@
     },
     {
       "name": "@pepperize/cdk-security-group",
+      "type": "peer"
+    },
+    {
+      "name": "@pepperize/cdk-vpc",
       "type": "peer"
     },
     {

@@ -688,6 +688,11 @@
   resolved "https://registry.yarnpkg.com/@pepperize/cdk-security-group/-/cdk-security-group-0.0.26.tgz#d060cda9e3ef7c86f32a8f2f177fc4fed75f0bcd"
   integrity sha512-Jd4jPhTxHWLtf7lPpQHEyygzBdx3FbzDIvn/p9QwVXNDPATySO6xk3+v4MWnaEiEyp8rvaQttq5SikAFTuVfnw==
 
+"@pepperize/cdk-vpc@^0.0.210":
+  version "0.0.210"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-vpc/-/cdk-vpc-0.0.210.tgz#61002f24a817aac949a8e8e73d1ce2b6f7801270"
+  integrity sha512-sev5FfTE2SNNA4g0/4BkqxUOxHssfWlhQ1kieS3DMU+TguSS/opJhdavajuQn96KmNoHkieMCkIbYLRt1qq/5A==
+
 "@pepperize/projen-awscdk-construct@^0.0.78":
   version "0.0.78"
   resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.0.78.tgz#9d9fcc397058bd33f36fd50023aca62a8259b6e0"

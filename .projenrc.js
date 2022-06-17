@@ -33,7 +33,7 @@ const project = new AwsCdkConstructLibrary({
   cdkVersionPinning: false,
   deps: ["@iarna/toml", "@pepperize/cdk-private-bucket", "pascal-case", "param-case", "snake-case"],
   devDeps: ["@pepperize/projen-awscdk-construct"],
-  peerDeps: ["@pepperize/cdk-security-group"],
+  peerDeps: ["@pepperize/cdk-security-group", "@pepperize/cdk-vpc"],
   bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
   testDeps: ["@aws-cdk/assertions"] /* AWS CDK modules required for testing. */,
 

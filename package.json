@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@pepperize/cdk-security-group": "^0.0.26",
+    "@pepperize/cdk-vpc": "^0.0.210",
     "@pepperize/projen-awscdk-construct": "^0.0.78",
     "@types/jest": "^27.4.0",
     "@types/node": "^12",
@@ -67,6 +68,7 @@
   },
   "peerDependencies": {
     "@pepperize/cdk-security-group": "^0.0.26",
+    "@pepperize/cdk-vpc": "^0.0.210",
     "aws-cdk-lib": "^2.8.0",
     "constructs": "^10.0.5"
   },
