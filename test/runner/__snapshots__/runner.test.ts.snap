@@ -1309,11 +1309,63 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::EC2::InternetGateway",
     },
+    "VpcNatRoleA1B5D171": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "VpcNatSecurityGroup8DA26EDC": Object {
+      "Properties": Object {
+        "GroupDescription": "Security Group for NAT instances",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:ALL TRAFFIC",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
     "VpcPrivateSubnet1DefaultRouteBE02A9ED": Object {
       "Properties": Object {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": Object {
-          "Ref": "VpcPublicSubnet1NATGateway4D7517AA",
+        "InstanceId": Object {
+          "Ref": "VpcPublicSubnet1NatInstance57B636B8",
         },
         "RouteTableId": Object {
           "Ref": "VpcPrivateSubnet1RouteTableB2C5B500",
@@ -1386,37 +1438,50 @@ yum update -y aws-cfn-bootstrap
       },
       "Type": "AWS::EC2::Route",
     },
-    "VpcPublicSubnet1EIPD7E02669": Object {
+    "VpcPublicSubnet1NatInstance57B636B8": Object {
+      "DependsOn": Array [
+        "VpcNatRoleA1B5D171",
+      ],
       "Properties": Object {
-        "Domain": "vpc",
-        "Tags": Array [
+        "AvailabilityZone": "dummy1a",
+        "IamInstanceProfile": Object {
+          "Ref": "VpcPublicSubnet1NatInstanceInstanceProfileEE10C485",
+        },
+        "ImageId": "ami-1234",
+        "InstanceType": "t3.nano",
+        "SecurityGroupIds": Array [
           Object {
-            "Key": "Name",
-            "Value": "MockStack/Vpc/PublicSubnet1",
+            "Fn::GetAtt": Array [
+              "VpcNatSecurityGroup8DA26EDC",
+              "GroupId",
+            ],
           },
         ],
-      },
-      "Type": "AWS::EC2::EIP",
-    },
-    "VpcPublicSubnet1NATGateway4D7517AA": Object {
-      "Properties": Object {
-        "AllocationId": Object {
-          "Fn::GetAtt": Array [
-            "VpcPublicSubnet1EIPD7E02669",
-            "AllocationId",
-          ],
-        },
+        "SourceDestCheck": false,
         "SubnetId": Object {
           "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
         },
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "MockStack/Vpc/PublicSubnet1",
+            "Value": "MockStack/Vpc/PublicSubnet1/NatInstance",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "VpcPublicSubnet1NatInstanceInstanceProfileEE10C485": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "VpcNatRoleA1B5D171",
           },
         ],
       },
-      "Type": "AWS::EC2::NatGateway",
+      "Type": "AWS::IAM::InstanceProfile",
     },
     "VpcPublicSubnet1RouteTable6C95E38E": Object {
       "Properties": Object {
