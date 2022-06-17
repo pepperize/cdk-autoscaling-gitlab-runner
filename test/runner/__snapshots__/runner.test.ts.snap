@@ -294,7 +294,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"gitlab-runner1\\"
 token = \\"",
                       Object {
@@ -345,7 +349,8 @@ token = \\"",
                       Object {
                         "Ref": "RunnersInstanceProfileForGitlabRunner1",
                       },
-                      "\\"
+                      "\\",
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -386,7 +391,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"gitlab-runner2\\"
 token = \\"",
                       Object {
@@ -437,7 +446,8 @@ token = \\"",
                       Object {
                         "Ref": "RunnersInstanceProfileForGitlabRunner2",
                       },
-                      "\\"
+                      "\\",
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -478,7 +488,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"gitlab-runner3\\"
 token = \\"",
                       Object {
@@ -529,7 +543,8 @@ token = \\"",
                       Object {
                         "Ref": "RunnersInstanceProfileForGitlabRunner3",
                       },
-                      "\\"
+                      "\\",
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -567,6 +582,15 @@ token = \\"",
                     ],
                   ],
                 },
+                "encoding": "plain",
+                "group": "gitlab-runner",
+                "mode": "000600",
+                "owner": "gitlab-runner",
+              },
+              "/etc/gitlab-runner/user_data_runners": Object {
+                "content": "#!/bin/bash
+[ ! -z \\"$(which apt-get)\\" ] && apt-get install -y amazon-ecr-credential-helper
+[ ! -z \\"$(which yum)\\" ] && yum install -y amazon-ecr-credential-helper",
                 "encoding": "plain",
                 "group": "gitlab-runner",
                 "mode": "000600",
@@ -720,7 +744,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 6f56ce28e78e2660
+# fingerprint: d1a6225a46fa9f0e
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1887,7 +1911,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"runner-one\\"
 token = \\"",
                       Object {
@@ -1930,7 +1958,8 @@ token = \\"",
                       Object {
                         "Ref": "RunnersInstanceProfileForRunnerOne",
                       },
-                      "\\"
+                      "\\",
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -1972,7 +2001,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"runner-two\\"
 token = \\"",
                       Object {
@@ -2015,7 +2048,8 @@ token = \\"",
                       Object {
                         "Ref": "RunnersInstanceProfileForRunnerTwo",
                       },
-                      "\\"
+                      "\\",
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -2055,6 +2089,15 @@ token = \\"",
                     ],
                   ],
                 },
+                "encoding": "plain",
+                "group": "gitlab-runner",
+                "mode": "000600",
+                "owner": "gitlab-runner",
+              },
+              "/etc/gitlab-runner/user_data_runners": Object {
+                "content": "#!/bin/bash
+[ ! -z \\"$(which apt-get)\\" ] && apt-get install -y amazon-ecr-credential-helper
+[ ! -z \\"$(which yum)\\" ] && yum install -y amazon-ecr-credential-helper",
                 "encoding": "plain",
                 "group": "gitlab-runner",
                 "mode": "000600",
@@ -2206,7 +2249,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 88081e1e06f4ef9a
+# fingerprint: 97f81ce72f78662d
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

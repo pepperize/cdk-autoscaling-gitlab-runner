@@ -559,6 +559,29 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/zero-config.ts),
 [GitlabRunnerAutoscalingProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingProps)
 
+### ECR Credentials Helper
+
+By default, the GitLab [amzonec2 driver](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go) will be configured to install the 
+[amazon-ecr-credential-helper](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html#registry-auth-credential-helper) 
+on the runner's instances.
+
+To configure, override the default job runners environment:
+
+```typescript
+new GitlabRunnerAutoscaling(this, "Runner", {
+  runners: [
+    {
+      // ...
+       environment: [
+         "DOCKER_DRIVER=overlay2",
+         "DOCKER_TLS_CERTDIR=/certs",
+         'DOCKER_AUTH_CONFIG={"credHelpers": { "public.ecr.aws": "ecr-login", "<aws_account_id>.dkr.ecr.<region>.amazonaws.com": "ecr-login" } }',
+      ],
+    },
+  ],
+});
+```
+
 ## Projen
 
 This project uses [projen](https://github.com/projen/projen) to maintain project configuration through code. Thus, the synthesized files with projen should never be manually edited (in fact, projen enforces that).

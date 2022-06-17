@@ -205,6 +205,13 @@ export class GitlabRunnerAutoscalingManager extends Construct {
       `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
     );
 
+    // https://github.com/awslabs/amazon-ecr-credential-helper
+    const userDataRunners = UserData.forLinux({});
+    userDataRunners.addCommands(
+      `[ ! -z "$(which apt-get)" ] && apt-get install -y amazon-ecr-credential-helper`,
+      `[ ! -z "$(which yum)" ] && yum install -y amazon-ecr-credential-helper`
+    );
+
     const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
     gitlabRunnerConfigRestartHandle._addFile("/etc/gitlab-runner/config.toml");
 
@@ -270,6 +277,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                         configuration.machine?.machineOptions?.privateAddressOnly ?? this.network.hasPrivateSubnets(),
                       usePrivateAddress: configuration.machine?.machineOptions?.usePrivateAddress ?? true,
                       iamInstanceProfile: runner.instanceProfile.ref,
+                      userdata: "/etc/gitlab-runner/user_data_runners",
                     },
                   },
                   cache: {
@@ -335,6 +343,11 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               key: "999-retrieve-ec2-key-pair",
             }
           ),
+          InitFile.fromString("/etc/gitlab-runner/user_data_runners", userDataRunners.render(), {
+            owner: "gitlab-runner",
+            group: "gitlab-runner",
+            mode: "000600",
+          }),
         ]),
         [RESTART]: new InitConfig([
           InitCommand.shellCommand("gitlab-runner restart", {

@@ -2501,6 +2501,7 @@ const machineOptions: MachineOptions = { ... }
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.subnetId">subnetId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.useEbsOptimizedInstance">useEbsOptimizedInstance</a></code> | <code>boolean</code> | Create an EBS Optimized Instance, instance type must support it. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.usePrivateAddress">usePrivateAddress</a></code> | <code>boolean</code> | Use the private IP address of Docker Machines, but still create a public IP address. |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.userdata">userdata</a></code> | <code>string</code> | The path of the runner machine's userdata file on the manager instance used by the amazonec2 driver to create a new instance. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.volumeType">volumeType</a></code> | <code>string</code> | The Amazon EBS volume type to be attached to the instance. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.vpcId">vpcId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.zone">zone</a></code> | <code>string</code> | Extract the availabilityZone last character for the needs of gitlab configuration. |
@@ -2734,6 +2735,21 @@ Use the private IP address of Docker Machines, but still create a public IP addr
 Useful to keep the traffic internal and avoid extra costs.
 
 > [https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section](https://docs.gitlab.com/runner/configuration/runner_autoscale_aws/#the-runnersmachine-section)
+
+---
+
+##### `userdata`<sup>Optional</sup> <a name="userdata" id="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.userdata"></a>
+
+```typescript
+public readonly userdata: string;
+```
+
+- *Type:* string
+- *Default:* /etc/gitlab-runner/user_data_runners
+
+The path of the runner machine's userdata file on the manager instance used by the amazonec2 driver to create a new instance.
+
+> [https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go)
 
 ---
 
