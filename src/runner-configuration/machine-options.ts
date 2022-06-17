@@ -58,7 +58,16 @@ export interface MachineOptions {
    */
   readonly rootSize?: number;
   /**
+   * The amazonec2-ssh-keypath parameter.
+   *
+   * @default /etc/gitlab-runner/ssh
+   */
+  readonly sshKeypath?: string;
+  /**
    * The amazonec2-keypair-name parameter. A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance.
+   *
+   * <b>using --amazonec2-keypair-name also requires --amazonec2-ssh-keypath</b>
+   *
    * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go#L398
    */
   readonly keypairName?: string;

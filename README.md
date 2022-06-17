@@ -173,6 +173,34 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/cache.ts),
 [GitlabRunnerAutoscalingCacheProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingcacheprops-)
 
+### Custom EC2 key pair
+
+By default, the [amazonec2](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go) driver will create an EC2 key pair for each runner. To use custom ssh credentials provide a SecretsManager Secret with the private and public key file:
+
+```shell
+aws secretsmanager create-secret --name CustomEC2KeyPair --secret-string "{\"theKeyPairName\":\"<the private key>\",\"theKeyPairName.pub\":\"<the public key>\"}"
+```
+
+```typescript
+const keyPair = Secret.fromSecretNameV2(stack, "Secret", "CustomEC2KeyPair")
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  runners: [
+    {
+      keyPair: keyPair,
+       configuration: {
+        machine: {
+          machineOptions: {
+            keypairName: "theKeyPairName",
+          },
+        },
+       },
+    },
+  ],
+  cache: { bucket: cache },
+});
+```
+
 ### Configure Docker Machine
 
 By default, docker machine is configured to run privileged with `CAP_SYS_ADMIN` to support [Docker-in-Docker using the OverlayFS driver](https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-overlayfs-driver)

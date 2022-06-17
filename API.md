@@ -246,6 +246,7 @@ new GitlabRunnerAutoscalingJobRunner(scope: Stack, id: string, props: GitlabRunn
 | [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertyinstancetype)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | *No description.* |
 | [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertymachineimage)<span title="Required">*</span> | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | *No description.* |
 | [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertyrole)<span title="Required">*</span> | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | *No description.* |
+| [`keyPair`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertykeypair) | [`aws-cdk-lib.aws_secretsmanager.ISecret`](#aws-cdk-lib.aws_secretsmanager.ISecret) | *No description.* |
 
 ---
 
@@ -296,6 +297,16 @@ public readonly role: IRole;
 ```
 
 - *Type:* [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole)
+
+---
+
+##### `keyPair`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.property.keyPair" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropertykeypair"></a>
+
+```typescript
+public readonly keyPair: ISecret;
+```
+
+- *Type:* [`aws-cdk-lib.aws_secretsmanager.ISecret`](#aws-cdk-lib.aws_secretsmanager.ISecret)
 
 ---
 
@@ -1537,6 +1548,7 @@ const gitlabRunnerAutoscalingJobRunnerProps: GitlabRunnerAutoscalingJobRunnerPro
 | [`configuration`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyconfiguration)<span title="Required">*</span> | [`@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration`](#@pepperize/cdk-autoscaling-gitlab-runner.RunnerConfiguration) | The runner EC2 instances configuration. |
 | [`token`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertytoken)<span title="Required">*</span> | [`aws-cdk-lib.aws_ssm.IStringParameter`](#aws-cdk-lib.aws_ssm.IStringParameter) | The runner’s authentication token, which is obtained during runner registration. |
 | [`instanceType`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyinstancetype) | [`aws-cdk-lib.aws_ec2.InstanceType`](#aws-cdk-lib.aws_ec2.InstanceType) | Instance type for runner EC2 instances. |
+| [`keyPair`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertykeypair) | [`aws-cdk-lib.aws_secretsmanager.ISecret`](#aws-cdk-lib.aws_secretsmanager.ISecret) | Optionally pass a custom EC2 KeyPair, that will be used by the manager to connect to the job runner instances. |
 | [`machineImage`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertymachineimage) | [`aws-cdk-lib.aws_ec2.IMachineImage`](#aws-cdk-lib.aws_ec2.IMachineImage) | An Amazon Machine Image ID for the Runners EC2 instances. |
 | [`role`](#pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertyrole) | [`aws-cdk-lib.aws_iam.IRole`](#aws-cdk-lib.aws_iam.IRole) | Optionally pass an IAM role, that get's assigned to the EC2 runner instances via Instance Profile. |
 
@@ -1586,6 +1598,20 @@ public readonly instanceType: InstanceType;
 Instance type for runner EC2 instances.
 
 It's a combination of a class and size.
+
+---
+
+##### `keyPair`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps.property.keyPair" id="pepperizecdkautoscalinggitlabrunnergitlabrunnerautoscalingjobrunnerpropspropertykeypair"></a>
+
+```typescript
+public readonly keyPair: ISecret;
+```
+
+- *Type:* [`aws-cdk-lib.aws_secretsmanager.ISecret`](#aws-cdk-lib.aws_secretsmanager.ISecret)
+
+Optionally pass a custom EC2 KeyPair, that will be used by the manager to connect to the job runner instances.
+
+<ol>    <li>Example: <b>aws secretsmanager create-secret --name AnyKeyPairSecret --secret-string "{\"theKeyPairName\":\"<the private key>\",\"theKeyPairName.pub\":\"<the public key>\"}"</b></li>    <li><b>Additionally configure an unique key pair configuration.machine.machineOptions.keypairName</b></li> </ol>
 
 ---
 
@@ -2169,6 +2195,7 @@ const machineOptions: MachineOptions = { ... }
 | [`rootSize`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyrootsize) | `number` | The root disk size of the instance (in GB). |
 | [`securityGroup`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysecuritygroup) | `string` | The SecurityGroup's GroupName, not the GroupId. |
 | [`spotPrice`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyspotprice) | `number` | The amazonec2-spot-price parameter. |
+| [`sshKeypath`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysshkeypath) | `string` | The amazonec2-ssh-keypath parameter. |
 | [`subnetId`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertysubnetid) | `string` | *No description.* |
 | [`useEbsOptimizedInstance`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseebsoptimizedinstance) | `boolean` | Create an EBS Optimized Instance, instance type must support it. |
 | [`usePrivateAddress`](#pepperizecdkautoscalinggitlabrunnermachineoptionspropertyuseprivateaddress) | `boolean` | Use the private IP address of Docker Machines, but still create a public IP address. |
@@ -2234,7 +2261,7 @@ public readonly keypairName: string;
 
 The amazonec2-keypair-name parameter.
 
-A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance.
+A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance.  <b>using --amazonec2-keypair-name also requires --amazonec2-ssh-keypath</b>
 
 > https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go#L398
 
@@ -2352,6 +2379,19 @@ The amazonec2-spot-price parameter.
 The bidding price for spot instances.
 
 > https://aws.amazon.com/ec2/spot/pricing/
+
+---
+
+##### `sshKeypath`<sup>Optional</sup> <a name="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.sshKeypath" id="pepperizecdkautoscalinggitlabrunnermachineoptionspropertysshkeypath"></a>
+
+```typescript
+public readonly sshKeypath: string;
+```
+
+- *Type:* `string`
+- *Default:* /etc/gitlab-runner/ssh
+
+The amazonec2-ssh-keypath parameter.
 
 ---
 
