@@ -273,6 +273,11 @@ Object {
       "Metadata": Object {
         "AWS::CloudFormation::Init": Object {
           "config": Object {
+            "commands": Object {
+              "999-retrieve-ec2-key-pair": Object {
+                "command": "",
+              },
+            },
             "files": Object {
               "/etc/gitlab-runner/config.toml": Object {
                 "content": Object {
@@ -311,6 +316,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
+  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
   \\"amazonec2-instance-type=t3.medium\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -402,6 +408,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
+  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
   \\"amazonec2-instance-type=t3.small\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -493,6 +500,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
+  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
   \\"amazonec2-instance-type=t3.xlarge\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -612,6 +620,7 @@ token = \\"",
               "yum": Object {
                 "docker": Array [],
                 "gitlab-runner": Array [],
+                "jq": Array [],
                 "tzdata": Array [],
               },
             },
@@ -711,7 +720,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: fd727e38cfcd946c
+# fingerprint: a205a4162d96ae77
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1857,6 +1866,11 @@ Object {
       "Metadata": Object {
         "AWS::CloudFormation::Init": Object {
           "config": Object {
+            "commands": Object {
+              "999-retrieve-ec2-key-pair": Object {
+                "command": "",
+              },
+            },
             "files": Object {
               "/etc/gitlab-runner/config.toml": Object {
                 "content": Object {
@@ -1895,6 +1909,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
+  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
   \\"amazonec2-instance-type=t3.micro\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -1979,6 +1994,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
+  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
   \\"amazonec2-instance-type=t3.micro\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -2092,6 +2108,7 @@ token = \\"",
               "yum": Object {
                 "docker": Array [],
                 "gitlab-runner": Array [],
+                "jq": Array [],
                 "tzdata": Array [],
               },
             },
@@ -2189,7 +2206,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: aa2de18ac84f92cd
+# fingerprint: 36cfa3f6c5414c72
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
