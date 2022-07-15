@@ -257,7 +257,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                   machine: {
                     ...configuration.machine,
                     machineOptions: {
-                      sshKeypath: DEFAULT_SSH_KEY_PATH,
+                      sshKeypath: runner.keyPair ? DEFAULT_SSH_KEY_PATH : "",
                       ...configuration.machine?.machineOptions,
                       instanceType: runner.instanceType.toString(),
                       ami: runner.machineImage.getImage(scope).imageId,

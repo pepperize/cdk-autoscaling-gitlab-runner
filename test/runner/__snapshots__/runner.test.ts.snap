@@ -316,7 +316,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
-  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
+  \\"amazonec2-ssh-keypath=\\",
   \\"amazonec2-instance-type=t3.medium\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -408,7 +408,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
-  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
+  \\"amazonec2-ssh-keypath=\\",
   \\"amazonec2-instance-type=t3.small\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -500,7 +500,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
-  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
+  \\"amazonec2-ssh-keypath=\\",
   \\"amazonec2-instance-type=t3.xlarge\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -720,7 +720,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: a205a4162d96ae77
+# fingerprint: 6f56ce28e78e2660
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1909,7 +1909,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
-  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
+  \\"amazonec2-ssh-keypath=\\",
   \\"amazonec2-instance-type=t3.micro\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -1994,7 +1994,7 @@ token = \\"",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
   \\"amazonec2-metadata-token-response-hop-limit=2\\",
-  \\"amazonec2-ssh-keypath=/etc/gitlab-runner/ssh\\",
+  \\"amazonec2-ssh-keypath=\\",
   \\"amazonec2-instance-type=t3.micro\\",
   \\"amazonec2-ami=ami-1234\\",
   \\"amazonec2-region=us-east-1\\",
@@ -2206,7 +2206,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 36cfa3f6c5414c72
+# fingerprint: 88081e1e06f4ef9a
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
