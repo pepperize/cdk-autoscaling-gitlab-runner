@@ -294,7 +294,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"gitlab-runner1\\"
 token = \\"",
                       Object {
@@ -386,7 +390,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"gitlab-runner2\\"
 token = \\"",
                       Object {
@@ -478,7 +486,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"gitlab-runner3\\"
 token = \\"",
                       Object {
@@ -720,7 +732,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: a205a4162d96ae77
+# fingerprint: c1c20aa01f110687
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1887,7 +1899,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"runner-one\\"
 token = \\"",
                       Object {
@@ -1972,7 +1988,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 name = \\"runner-two\\"
 token = \\"",
                       Object {
@@ -2206,7 +2226,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 36cfa3f6c5414c72
+# fingerprint: b88b1c01571f074b
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

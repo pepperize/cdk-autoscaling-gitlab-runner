@@ -29,7 +29,11 @@ export class ConfigurationMapper {
           limit: 10,
           outputLimit: 52428800,
           executor: "docker+machine",
-          environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
+          environment: [
+            "DOCKER_DRIVER=overlay2",
+            "DOCKER_TLS_CERTDIR=/certs",
+            'DOCKER_AUTH_CONFIG={"credsStore": "ecr-login"}',
+          ],
           ...item,
           docker: {
             tlsVerify: false,

@@ -86,7 +86,11 @@ describe("ConfigurationMapper", () => {
       log_level: "info",
       runners: [
         {
-          environment: ["DOCKER_DRIVER=overlay2", "DOCKER_TLS_CERTDIR=/certs"],
+          environment: [
+            "DOCKER_DRIVER=overlay2",
+            "DOCKER_TLS_CERTDIR=/certs",
+            'DOCKER_AUTH_CONFIG={"credsStore": "ecr-login"}',
+          ],
           executor: "docker+machine",
           limit: 10,
           output_limit: 52428800,
