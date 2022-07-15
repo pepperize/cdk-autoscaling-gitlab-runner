@@ -56,3 +56,5 @@ tsconfig.json
 !/API.md
 .idea/
 *.iml
+.vscode/
+!/.editorconfig

@@ -2,6 +2,7 @@
 [![npm (scoped)](https://img.shields.io/npm/v/@pepperize/cdk-autoscaling-gitlab-runner?style=flat-square)](https://www.npmjs.com/package/@pepperize/cdk-autoscaling-gitlab-runner)
 [![PyPI](https://img.shields.io/pypi/v/pepperize.cdk-autoscaling-gitlab-runner?style=flat-square)](https://pypi.org/project/pepperize.cdk-autoscaling-gitlab-runner/)
 [![Nuget](https://img.shields.io/nuget/v/Pepperize.CDK.AutoscalingGitlabRunner?style=flat-square)](https://www.nuget.org/packages/Pepperize.CDK.AutoscalingGitlabRunner/)
+[![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.pepperize/cdk-autoscaling-gitlab-runner?server=https%3A%2F%2Fs01.oss.sonatype.org%2F&style=flat-square)](https://s01.oss.sonatype.org/content/repositories/releases/com/pepperize/cdk-autoscaling-gitlab-runner/)
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/pepperize/cdk-autoscaling-gitlab-runner/release/main?label=release&style=flat-square)](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/actions/workflows/release.yml)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pepperize/cdk-autoscaling-gitlab-runner?sort=semver&style=flat-square)](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/releases)
 
@@ -42,6 +43,16 @@ pip install pepperize.cdk-autoscaling-gitlab-runner
 
 ```
 dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
+```
+
+### Java
+
+```xml
+<dependency>
+  <groupId>com.pepperize</groupId>
+  <artifactId>cdk-autoscaling-gitlab-runner</artifactId>
+  <version>${cdkAutoscalingGitlabRunner.version}</version>
+</dependency>
 ```
 
 ## Quickstart
@@ -172,6 +183,34 @@ new GitlabRunnerAutoscaling(this, "Runner", {
 
 See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example/blob/main/src/cache.ts),
 [GitlabRunnerAutoscalingCacheProps](https://github.com/pepperize/cdk-autoscaling-gitlab-runner/blob/main/API.md#gitlabrunnerautoscalingcacheprops-)
+
+### Custom EC2 key pair
+
+By default, the [amazonec2](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go) driver will create an EC2 key pair for each runner. To use custom ssh credentials provide a SecretsManager Secret with the private and public key file:
+
+```shell
+aws secretsmanager create-secret --name CustomEC2KeyPair --secret-string "{\"theKeyPairName\":\"<the private key>\",\"theKeyPairName.pub\":\"<the public key>\"}"
+```
+
+```typescript
+const keyPair = Secret.fromSecretNameV2(stack, "Secret", "CustomEC2KeyPair")
+
+new GitlabRunnerAutoscaling(this, "Runner", {
+  runners: [
+    {
+      keyPair: keyPair,
+       configuration: {
+        machine: {
+          machineOptions: {
+            keypairName: "theKeyPairName",
+          },
+        },
+       },
+    },
+  ],
+  cache: { bucket: cache },
+});
+```
 
 ### Configure Docker Machine
 
@@ -462,8 +501,7 @@ See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example
 
 ### Vpc
 
-If no existing Vpc is passed, a [VPC that spans a whole region](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.Vpc.html) on will be created.
-This can become costly, because AWS CDK configured also the routing for the private subnets and creates NAT Gateways (one per AZ).
+If no existing Vpc is passed, a cheap [VPC](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.Vpc.html) with a NatInstance (t3.nano) and a single AZ will be created.
 
 ```typescript
 const natInstanceProvider = aws_ec2.NatProvider.instance({
@@ -472,7 +510,7 @@ const natInstanceProvider = aws_ec2.NatProvider.instance({
 const vpc = new Vpc(this, "Vpc", {
   // Your custom vpc, i.e.:
   natGatewayProvider: natInstanceProvider,
-  maxAzs: 2,
+  maxAzs: 1,
 });
 
 const token = StringParameter.fromStringParameterAttributes(stack, "Token", {

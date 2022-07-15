@@ -1,4 +1,4 @@
-import { Stack, Tags } from "aws-cdk-lib";
+import { Annotations, Stack, Tags } from "aws-cdk-lib";
 import {
   IMachineImage,
   InstanceClass,
@@ -8,6 +8,7 @@ import {
   MachineImage,
 } from "aws-cdk-lib/aws-ec2";
 import { CfnInstanceProfile, IRole, ManagedPolicy, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { ISecret } from "aws-cdk-lib/aws-secretsmanager";
 import { IStringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { pascalCase } from "pascal-case";
@@ -47,6 +48,15 @@ export interface GitlabRunnerAutoscalingJobRunnerProps {
    * Optionally pass an IAM role, that get's assigned to the EC2 runner instances via Instance Profile.
    */
   readonly role?: IRole;
+  /**
+   * Optionally pass a custom EC2 KeyPair, that will be used by the manager to connect to the job runner instances.
+   *
+   * <ol>
+   *   <li>Example: <b>aws secretsmanager create-secret --name AnyKeyPairSecret --secret-string "{\"theKeyPairName\":\"<the private key>\",\"theKeyPairName.pub\":\"<the public key>\"}"</b></li>
+   *   <li><b>Additionally configure an unique key pair configuration.machine.machineOptions.keypairName</b></li>
+   * </ol>
+   */
+  readonly keyPair?: ISecret;
 }
 
 export class GitlabRunnerAutoscalingJobRunner extends Construct {
@@ -58,6 +68,7 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
   readonly machineImage: IMachineImage;
   readonly role: IRole;
   readonly instanceProfile: CfnInstanceProfile;
+  readonly keyPair?: ISecret;
 
   constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingJobRunnerProps) {
     super(scope, id);
@@ -96,7 +107,12 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
       }
     );
 
-    Tags.of(this.instanceProfile).add("RunnersInstanceProfile", "RunnersInstanceProfile");
+    if (props.keyPair && !props.configuration.machine?.machineOptions?.keypairName) {
+      Annotations.of(this).addError(
+        "If runner.keyPair is configured, then props.configuration.machine.machineOptions.keypairName must also be set."
+      );
+    }
+    this.keyPair = props.keyPair;
 
     Tags.of(this.role).add("RunnersRole", "RunnersRole");
   }

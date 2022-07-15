@@ -59,6 +59,8 @@ export interface GitlabRunnerAutoscalingManagerProps extends GitlabRunnerAutosca
   readonly runnersSecurityGroup: SecurityGroup;
 }
 
+const DEFAULT_SSH_KEY_PATH = "/etc/gitlab-runner/ssh";
+
 /**
  * Settings for the manager (coordinator)
  *
@@ -203,13 +205,6 @@ export class GitlabRunnerAutoscalingManager extends Construct {
       `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
     );
 
-    // https://github.com/awslabs/amazon-ecr-credential-helper
-    const userDataRunners = UserData.forLinux({});
-    userDataRunners.addCommands(
-      `[ ! -z "$(which apt-get)" ] && apt-get install -y amazon-ecr-credential-helper`,
-      `[ ! -z "$(which yum)" ] && yum install -y amazon-ecr-credential-helper`
-    );
-
     const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
     gitlabRunnerConfigRestartHandle._addFile("/etc/gitlab-runner/config.toml");
 
@@ -240,6 +235,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
           InitPackage.yum("docker"),
           InitPackage.yum("gitlab-runner"),
           InitPackage.yum("tzdata"),
+          InitPackage.yum("jq"),
           InitCommand.shellCommand(
             "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
             //"curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
@@ -261,6 +257,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                   machine: {
                     ...configuration.machine,
                     machineOptions: {
+                      sshKeypath: DEFAULT_SSH_KEY_PATH,
                       ...configuration.machine?.machineOptions,
                       instanceType: runner.instanceType.toString(),
                       ami: runner.machineImage.getImage(scope).imageId,
@@ -273,7 +270,6 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                         configuration.machine?.machineOptions?.privateAddressOnly ?? this.network.hasPrivateSubnets(),
                       usePrivateAddress: configuration.machine?.machineOptions?.usePrivateAddress ?? true,
                       iamInstanceProfile: runner.instanceProfile.ref,
-                      userData: "/etc/gitlab-runner/user_data_runners",
                     },
                   },
                   cache: {
@@ -312,11 +308,33 @@ export class GitlabRunnerAutoscalingManager extends Construct {
             enabled: true,
             serviceRestartHandle: rsyslogConfigRestartHandle,
           }),
-          InitFile.fromString("/etc/gitlab-runner/user_data_runners", userDataRunners.render(), {
-            owner: "gitlab-runner",
-            group: "gitlab-runner",
-            mode: "000600",
-          }),
+          InitCommand.shellCommand(
+            // Download custom EC2 key pair for manager <> runner ssh connect
+            this.runners
+              .map((runner) => {
+                if (!runner.keyPair) {
+                  return "";
+                }
+
+                runner.keyPair.grantRead(this.role);
+
+                const region = Stack.of(this).region;
+                const secretArn = runner.keyPair.secretArn;
+                const keyPairName = runner.configuration.machine!.machineOptions!.keypairName;
+                const sshKeyPath = runner.configuration.machine!.machineOptions!.sshKeypath ?? DEFAULT_SSH_KEY_PATH;
+
+                return [
+                  `mkdir -p ${sshKeyPath};`,
+                  `$(aws secretsmanager get-secret-value --region ${region} --secret-id ${secretArn} --query SecretString --output text | jq -r ."${keyPairName}") > ${sshKeyPath}/${keyPairName};`,
+                  `$(aws secretsmanager get-secret-value --region ${region} --secret-id ${secretArn} --query SecretString --output text | jq -r ."${keyPairName}.pub") > ${sshKeyPath}/${keyPairName}.pub;`,
+                ].join("\n");
+              })
+              .filter((s) => s.length > 0)
+              .join("\n"),
+            {
+              key: "999-retrieve-ec2-key-pair",
+            }
+          ),
         ]),
         [RESTART]: new InitConfig([
           InitCommand.shellCommand("gitlab-runner restart", {

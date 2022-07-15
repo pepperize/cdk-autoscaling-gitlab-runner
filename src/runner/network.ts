@@ -1,5 +1,6 @@
+import { CheapVpc } from "@pepperize/cdk-vpc";
 import { Annotations, Stack } from "aws-cdk-lib";
-import { ISubnet, IVpc, SubnetSelection, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
+import { ISubnet, IVpc, SubnetSelection, SubnetType } from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
 
 export interface NetworkProps {
@@ -35,7 +36,7 @@ export class Network extends Construct {
 
     this.vpc =
       props?.vpc ??
-      new Vpc(scope, `Vpc`, {
+      new CheapVpc(scope, `Vpc`, {
         maxAzs: 1,
       });
 

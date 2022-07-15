@@ -1,16 +1,13 @@
-const { AwsCdkConstructLibrary } = require("@pepperize/projen-awscdk-construct");
-const { javascript } = require("projen");
+import { AwsCdkConstructLibrary } from "@pepperize/projen-awscdk-construct";
+import { javascript } from "projen";
 
 const project = new AwsCdkConstructLibrary({
-  authorName: "Patrick Florek",
+  author: "Patrick Florek",
   authorAddress: "patrick.florek@gmail.com",
-  license: "MIT",
-
   repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
   packageManager: javascript.NodePackageManager.YARN,
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
   description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
-
   keywords: [
     "AWS",
     "CDK",
@@ -29,25 +26,16 @@ const project = new AwsCdkConstructLibrary({
     "Graviton",
   ],
 
+  projenrcTs: true,
+
   cdkVersion: "2.8.0",
   cdkVersionPinning: false,
-  deps: ["@iarna/toml", "@pepperize/cdk-private-bucket", "pascal-case", "param-case", "snake-case"],
+  deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
   devDeps: ["@pepperize/projen-awscdk-construct"],
-  peerDeps: ["@pepperize/cdk-security-group"],
+  peerDeps: ["@pepperize/cdk-private-bucket", "@pepperize/cdk-security-group", "@pepperize/cdk-vpc"],
   bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
-  testDeps: ["@aws-cdk/assertions"] /* AWS CDK modules required for testing. */,
 
-  autoApproveUpgrades: true,
-  autoApproveOptions: { allowedUsernames: ["pflorek"], secret: "GITHUB_TOKEN" },
-  depsUpgradeOptions: {
-    workflowOptions: {
-      secret: "PROJEN_GITHUB_TOKEN",
-    },
-  },
-
-  release: {
-    releaseEveryCommit: true,
-  },
+  defaultReleaseBranch: "main",
   releaseToNpm: true,
   publishToNuget: {
     dotNetNamespace: "Pepperize.CDK",
@@ -57,12 +45,15 @@ const project = new AwsCdkConstructLibrary({
     distName: "pepperize.cdk-autoscaling-gitlab-runner",
     module: "pepperize_cdk_autoscaling_gitlab_runner",
   },
-  // publishToMaven: {
-  //   javaPackage: "your_java_package",
-  //   mavenGroupId: "your_package_group_id",
-  //   mavenArtifactId: "your_package_target_id",
-  // },
+  publishToMaven: {
+    mavenEndpoint: "https://s01.oss.sonatype.org",
+    mavenGroupId: "com.pepperize",
+    mavenArtifactId: "cdk-autoscaling-gitlab-runner",
+    javaPackage: "com.pepperize.cdk.autoscaling_gitlab_runner",
+  },
 });
+
+project.addDevDeps("npm-check-updates@^15.3.3")
 
 project.tasks.tryFind("package:python")?.prependExec("pip3 install packaging");
 
