@@ -233,4 +233,56 @@ describe("GitlabRunnerAutoscaling", () => {
     const template = Template.fromStack(stack);
     template.hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {});
   });
+
+  it("Should set amazonec2-ssh-keypath only if custom key pair is given", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "MockStack", {
+      env: {
+        account: "0",
+        region: "us-east-1",
+      },
+    });
+
+    const token = new StringParameter(stack, "imported-token", {
+      parameterName: "/gitlab-runner/token",
+      stringValue: "auth-token",
+      type: ParameterType.SECURE_STRING,
+      tier: ParameterTier.STANDARD,
+    });
+
+    // When
+    new GitlabRunnerAutoscaling(stack, "Runner", {
+      runners: [
+        {
+          token: token,
+          configuration: {
+            machine: {
+              machineOptions: {
+                requestSpotInstance: false,
+              },
+            },
+          },
+        },
+      ],
+    });
+
+    // Then
+    const template = Template.fromStack(stack);
+    expect(template.toJSON()).toMatchSnapshot();
+
+    const capture = new Capture();
+    template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      Metadata: {
+        "AWS::CloudFormation::Init": {
+          config: {
+            files: {
+              "/etc/gitlab-runner/config.toml": capture,
+            },
+          },
+        },
+      },
+    });
+    expect(JSON.stringify(capture.asObject())).toContain('\\"amazonec2-ssh-keypath=\\"');
+  });
 });
