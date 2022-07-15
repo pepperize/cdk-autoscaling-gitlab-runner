@@ -269,7 +269,6 @@ describe("GitlabRunnerAutoscaling", () => {
 
     // Then
     const template = Template.fromStack(stack);
-    expect(template.toJSON()).toMatchSnapshot();
 
     const capture = new Capture();
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
