@@ -97,7 +97,7 @@
     },
     {
       "name": "npm-check-updates",
-      "version": "^12",
+      "version": "^15.3.3",
       "type": "build"
     },
     {
@@ -115,6 +115,11 @@
     },
     {
       "name": "ts-jest",
+      "type": "build"
+    },
+    {
+      "name": "ts-node",
+      "version": "^10",
       "type": "build"
     },
     {

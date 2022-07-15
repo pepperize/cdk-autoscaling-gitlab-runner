@@ -95,7 +95,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "node .projenrc.js"
+          "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
         }
       ]
     },
@@ -122,7 +122,7 @@
       "description": "Format with prettier",
       "steps": [
         {
-          "exec": "prettier --write src/{**/,}*.ts test/{**/,}*.ts .projenrc.js README.md"
+          "exec": "prettier --write src/**/*.ts test/**/*.ts .projenrc.js README.md"
         }
       ]
     },
