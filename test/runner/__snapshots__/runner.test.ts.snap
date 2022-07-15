@@ -3059,7 +3059,7 @@ token = \\"",
                         ],
                       },
                       "\\"
-name = \\"gitlab-runner-165790922196131477\\"
+name = \\"gitlab-runner-165790942436056350\\"
 
   [runners.machine]
   IdleCount = 0
@@ -3099,7 +3099,7 @@ name = \\"gitlab-runner-165790922196131477\\"
   \\"amazonec2-use-private-address=true\\",
   \\"amazonec2-iam-instance-profile=",
                       Object {
-                        "Ref": "RunnersInstanceProfileForGitlabRunner165790922196131477",
+                        "Ref": "RunnersInstanceProfileForGitlabRunner165790942436056350",
                       },
                       "\\"
 ]
@@ -3294,7 +3294,7 @@ name = \\"gitlab-runner-165790922196131477\\"
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 95e3d474e2f437d4
+# fingerprint: 09287598f40b7b15
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -3604,17 +3604,17 @@ yum update -y aws-cfn-bootstrap
       "Type": "Custom::AWS",
       "UpdateReplacePolicy": "Delete",
     },
-    "RunnersInstanceProfileForGitlabRunner165790922196131477": Object {
+    "RunnersInstanceProfileForGitlabRunner165790942436056350": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "RunnersRoleForGitlabRunner1657909221961314771956976C",
+            "Ref": "RunnersRoleForGitlabRunner1657909424360563501B6849D7",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersRoleForGitlabRunner1657909221961314771956976C": Object {
+    "RunnersRoleForGitlabRunner1657909424360563501B6849D7": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
