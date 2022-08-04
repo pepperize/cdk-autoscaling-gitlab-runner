@@ -11,7 +11,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 token = \\"foo+bar\\"
 
   [runners.docker]
@@ -67,7 +71,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 token = \\"foo+bar\\"
 
   [runners.docker]
@@ -115,7 +123,11 @@ url = \\"https://gitlab.com\\"
 limit = 10
 output_limit = 52_428_800
 executor = \\"docker+machine\\"
-environment = [ \\"DOCKER_DRIVER=overlay2\\", \\"DOCKER_TLS_CERTDIR=/certs\\" ]
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
 token = \\"2foo+bar\\"
 
   [runners.docker]
