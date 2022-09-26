@@ -53,9 +53,9 @@ describe("Cache", () => {
   it("Should substring last 63 characters of bucket name when provided a very long bucket name", () => {
     // Given
     const app = new App();
-    const stack = new Stack(app, "a-very-very-long-stack-name", stackProps);
+    const stack = new Stack(app, "Stack", stackProps);
     const props: CacheConstructProps = {
-      bucketName: "and-a-very-very-long-bucket-name",
+      bucketName: "and-a-very-very-very-very-long-bucket-name",
       expiration: Duration.days(0),
     };
     new CacheConstruct(stack, "cache", props);
@@ -65,7 +65,7 @@ describe("Cache", () => {
 
     // Then
     template.hasResourceProperties("AWS::S3::Bucket", {
-      BucketName: "ck-name-and-a-very-very-long-bucket-name-123456789012-us-east-1",
+      BucketName: "and-a-very-very-very-very-long-bucket-name-stackcache7109cbe1",
     });
   });
 

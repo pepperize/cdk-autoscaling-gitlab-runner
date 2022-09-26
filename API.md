@@ -13,12 +13,12 @@ The bucket is encrypted with a KMS managed master key, it has public access bloc
 ```typescript
 import { Cache } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
-new Cache(scope: Stack, id: string, props?: CacheProps)
+new Cache(scope: Construct, id: string, props?: CacheProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Cache.Initializer.parameter.scope">scope</a></code> | <code>aws-cdk-lib.Stack</code> | *No description.* |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Cache.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Cache.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Cache.Initializer.parameter.props">props</a></code> | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.CacheProps">CacheProps</a></code> | *No description.* |
 
@@ -26,7 +26,7 @@ new Cache(scope: Stack, id: string, props?: CacheProps)
 
 ##### `scope`<sup>Required</sup> <a name="scope" id="@pepperize/cdk-autoscaling-gitlab-runner.Cache.Initializer.parameter.scope"></a>
 
-- *Type:* aws-cdk-lib.Stack
+- *Type:* constructs.Construct
 
 ---
 
@@ -339,12 +339,12 @@ public readonly logLevel: string;
 ```typescript
 import { GitlabRunnerAutoscalingJobRunner } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
-new GitlabRunnerAutoscalingJobRunner(scope: Stack, id: string, props: GitlabRunnerAutoscalingJobRunnerProps)
+new GitlabRunnerAutoscalingJobRunner(scope: Construct, id: string, props: GitlabRunnerAutoscalingJobRunnerProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.Initializer.parameter.scope">scope</a></code> | <code>aws-cdk-lib.Stack</code> | *No description.* |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.Initializer.parameter.props">props</a></code> | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunnerProps">GitlabRunnerAutoscalingJobRunnerProps</a></code> | *No description.* |
 
@@ -352,7 +352,7 @@ new GitlabRunnerAutoscalingJobRunner(scope: Stack, id: string, props: GitlabRunn
 
 ##### `scope`<sup>Required</sup> <a name="scope" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.Initializer.parameter.scope"></a>
 
-- *Type:* aws-cdk-lib.Stack
+- *Type:* constructs.Construct
 
 ---
 
@@ -508,12 +508,12 @@ Manager coordinates the placement of runner (job executor) instances
 ```typescript
 import { GitlabRunnerAutoscalingManager } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
-new GitlabRunnerAutoscalingManager(scope: Stack, id: string, props: GitlabRunnerAutoscalingManagerProps)
+new GitlabRunnerAutoscalingManager(scope: Construct, id: string, props: GitlabRunnerAutoscalingManagerProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.Initializer.parameter.scope">scope</a></code> | <code>aws-cdk-lib.Stack</code> | *No description.* |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.Initializer.parameter.props">props</a></code> | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps">GitlabRunnerAutoscalingManagerProps</a></code> | *No description.* |
 
@@ -521,7 +521,7 @@ new GitlabRunnerAutoscalingManager(scope: Stack, id: string, props: GitlabRunner
 
 ##### `scope`<sup>Required</sup> <a name="scope" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.Initializer.parameter.scope"></a>
 
-- *Type:* aws-cdk-lib.Stack
+- *Type:* constructs.Construct
 
 ---
 
@@ -732,12 +732,12 @@ All EC2 instances should belong to the same subnet, availability zone and vpc.
 ```typescript
 import { Network } from '@pepperize/cdk-autoscaling-gitlab-runner'
 
-new Network(scope: Stack, id: string, props?: NetworkProps)
+new Network(scope: Construct, id: string, props?: NetworkProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Network.Initializer.parameter.scope">scope</a></code> | <code>aws-cdk-lib.Stack</code> | *No description.* |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Network.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Network.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Network.Initializer.parameter.props">props</a></code> | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.NetworkProps">NetworkProps</a></code> | *No description.* |
 
@@ -745,7 +745,7 @@ new Network(scope: Stack, id: string, props?: NetworkProps)
 
 ##### `scope`<sup>Required</sup> <a name="scope" id="@pepperize/cdk-autoscaling-gitlab-runner.Network.Initializer.parameter.scope"></a>
 
-- *Type:* aws-cdk-lib.Stack
+- *Type:* constructs.Construct
 
 ---
 

@@ -22,7 +22,7 @@ Object {
             },
           ],
         },
-        "BucketName": "stack-runner-cache-123456789012-us-east-1",
+        "BucketName": "runner-cache-stackcache7109cbe1",
         "LifecycleConfiguration": Object {
           "Rules": Array [
             Object {

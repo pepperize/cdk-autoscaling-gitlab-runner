@@ -128,21 +128,21 @@ export class GitlabRunnerAutoscaling extends Construct {
     /**
      * S3 Bucket for Runners' cache
      */
-    this.cacheBucket = cache?.bucket || new Cache(scope, "Cache", cache?.options).bucket;
+    this.cacheBucket = cache?.bucket || new Cache(this, "Cache", cache?.options).bucket;
 
     /**
      * Network
      */
-    this.network = new Network(scope, "Network", network);
+    this.network = new Network(this, "Network", network);
 
     /**
      * Security groups
      */
-    const runnersSecurityGroup = new SecurityGroup(scope, "RunnersSecurityGroup", {
+    const runnersSecurityGroup = new SecurityGroup(this, "RunnersSecurityGroup", {
       description: "Security group for GitLab Runners.",
       vpc: this.network.vpc,
     });
-    const managerSecurityGroup = new SecurityGroup(scope, "ManagerSecurityGroup", {
+    const managerSecurityGroup = new SecurityGroup(this, "ManagerSecurityGroup", {
       vpc: this.network.vpc,
       description: "Security group for GitLab Runners Manager.",
     });
@@ -150,13 +150,13 @@ export class GitlabRunnerAutoscaling extends Construct {
     managerSecurityGroup.connections.allowTo(runnersSecurityGroup, Port.tcp(2376), "SSH traffic from Docker");
 
     this.runners = runners.map((runnerProps, index): GitlabRunnerAutoscalingJobRunner => {
-      return new GitlabRunnerAutoscalingJobRunner(scope, `GitlabRunnerAutoscalingJobRunner${index}`, runnerProps);
+      return new GitlabRunnerAutoscalingJobRunner(this, `GitlabRunnerAutoscalingJobRunner${index}`, runnerProps);
     });
 
     /**
      * GitLab Manager
      */
-    this.manager = new GitlabRunnerAutoscalingManager(scope, "Manager", {
+    this.manager = new GitlabRunnerAutoscalingManager(this, "Manager", {
       ...manager,
       globalConfiguration: {
         concurrent: this.concurrent,
@@ -170,7 +170,7 @@ export class GitlabRunnerAutoscaling extends Construct {
       runners: this.runners,
     });
 
-    new AutoScalingGroup(scope, "ManagerAutoscalingGroup", {
+    new AutoScalingGroup(this, "ManagerAutoscalingGroup", {
       vpc: this.network.vpc,
       vpcSubnets: {
         subnets: [this.network.subnet],

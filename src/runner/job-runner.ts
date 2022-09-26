@@ -70,7 +70,7 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
   readonly instanceProfile: CfnInstanceProfile;
   readonly keyPair?: ISecret;
 
-  constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingJobRunnerProps) {
+  constructor(scope: Construct, id: string, props: GitlabRunnerAutoscalingJobRunnerProps) {
     super(scope, id);
     this.configuration = {
       ...props.configuration,
@@ -81,7 +81,7 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
     this.machineImage =
       props.machineImage ||
       MachineImage.genericLinux({
-        [scope.region]: new LookupMachineImage({
+        [Stack.of(this).region]: new LookupMachineImage({
           name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
           owners: ["099720109477"],
           filters: {
