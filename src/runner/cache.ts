@@ -1,5 +1,5 @@
 import { PrivateBucket } from "@pepperize/cdk-private-bucket";
-import { Duration, Names, RemovalPolicy, Stack } from "aws-cdk-lib";
+import { Duration, Names, RemovalPolicy } from "aws-cdk-lib";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
 
@@ -29,9 +29,7 @@ export class Cache extends Construct {
     super(scope, id);
 
     const bucketName = props.bucketName || "runner-cache";
-    const uniqueCacheBucketName = `${Stack.of(this).stackName}-${bucketName}-${Names.uniqueId(this)}`
-      .slice(-63)
-      .toLocaleLowerCase();
+    const uniqueCacheBucketName = `${bucketName}-${Names.uniqueId(this)}`.slice(-63).toLocaleLowerCase();
 
     /* Enabled if not 0. If 0 - cache doesn't expire. If undefined - expiration sets to expire in 30 days */
     const expiration = props.expiration ?? Duration.days(30);
