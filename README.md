@@ -188,29 +188,36 @@ See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example
 
 By default, the [amazonec2](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go) driver will create an EC2 key pair for each runner. To use custom ssh credentials provide a SecretsManager Secret with the private and public key file:
 
-```shell
-aws secretsmanager create-secret --name CustomEC2KeyPair --secret-string "{\"theKeyPairName\":\"<the private key>\",\"theKeyPairName.pub\":\"<the public key>\"}"
-```
+1. [Create a key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html), download the private key file and remember the created key pair name
+2. Generate the public key file
+   ```
+   ssh-keygen -f <the downloaded private key file> -y
+   ```
+3. Create an AWS SecretsManager Secret from the key pair
+   ```shell
+   aws secretsmanager create-secret --name <the secret name> --secret-string "{\"<the key pair name>\":\"<the private key>\",\"<the key pair name>.pub\":\"<the public key>\"}"
+   ```
+4. Configure the job runner
 
-```typescript
-const keyPair = Secret.fromSecretNameV2(stack, "Secret", "CustomEC2KeyPair")
+   ```typescript
+   const keyPair = Secret.fromSecretNameV2(stack, "Secret", "CustomEC2KeyPair");
 
-new GitlabRunnerAutoscaling(this, "Runner", {
-  runners: [
-    {
-      keyPair: keyPair,
-       configuration: {
-        machine: {
-          machineOptions: {
-            keypairName: "theKeyPairName",
-          },
-        },
+   new GitlabRunnerAutoscaling(this, "Runner", {
+     runners: [
+       {
+         keyPair: keyPair,
+         configuration: {
+           machine: {
+             machineOptions: {
+               keypairName: "<the key pair name>",
+             },
+           },
+         },
        },
-    },
-  ],
-  cache: { bucket: cache },
-});
-```
+     ],
+     cache: { bucket: cache },
+   });
+   ```
 
 ### Configure Docker Machine
 
@@ -561,8 +568,8 @@ See [example](https://github.com/pepperize/cdk-autoscaling-gitlab-runner-example
 
 ### ECR Credentials Helper
 
-By default, the GitLab [amzonec2 driver](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go) will be configured to install the 
-[amazon-ecr-credential-helper](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html#registry-auth-credential-helper) 
+By default, the GitLab [amzonec2 driver](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go) will be configured to install the
+[amazon-ecr-credential-helper](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html#registry-auth-credential-helper)
 on the runner's instances.
 
 To configure, override the default job runners environment:
@@ -572,10 +579,10 @@ new GitlabRunnerAutoscaling(this, "Runner", {
   runners: [
     {
       // ...
-       environment: [
-         "DOCKER_DRIVER=overlay2",
-         "DOCKER_TLS_CERTDIR=/certs",
-         'DOCKER_AUTH_CONFIG={"credHelpers": { "public.ecr.aws": "ecr-login", "<aws_account_id>.dkr.ecr.<region>.amazonaws.com": "ecr-login" } }',
+      environment: [
+        "DOCKER_DRIVER=overlay2",
+        "DOCKER_TLS_CERTDIR=/certs",
+        'DOCKER_AUTH_CONFIG={"credHelpers": { "public.ecr.aws": "ecr-login", "<aws_account_id>.dkr.ecr.<region>.amazonaws.com": "ecr-login" } }',
       ],
     },
   ],
