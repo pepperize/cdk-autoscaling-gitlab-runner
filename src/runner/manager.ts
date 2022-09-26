@@ -59,7 +59,7 @@ export interface GitlabRunnerAutoscalingManagerProps extends GitlabRunnerAutosca
   readonly runnersSecurityGroup: SecurityGroup;
 }
 
-const DEFAULT_SSH_KEY_PATH = "/etc/gitlab-runner/ssh";
+const DEFAULT_SSH_KEY_PATH = "/etc/gitlab-runner/ssh-custom";
 
 /**
  * Settings for the manager (coordinator)
@@ -266,7 +266,11 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                   machine: {
                     ...configuration.machine,
                     machineOptions: {
-                      sshKeypath: runner.keyPair ? DEFAULT_SSH_KEY_PATH : "",
+                      sshKeypath:
+                        // drivers/amazonec2/amazonec2.go SSHPrivateKeyPath
+                        runner.keyPair
+                          ? `${DEFAULT_SSH_KEY_PATH}/${configuration.machine?.machineOptions?.keypairName}`
+                          : "",
                       ...configuration.machine?.machineOptions,
                       instanceType: runner.instanceType.toString(),
                       ami: runner.machineImage.getImage(scope).imageId,
