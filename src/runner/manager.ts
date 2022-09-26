@@ -79,7 +79,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
   readonly cacheBucket: IBucket;
   readonly globalConfiguration: GlobalConfiguration;
 
-  constructor(scope: Stack, id: string, props: GitlabRunnerAutoscalingManagerProps) {
+  constructor(scope: Construct, id: string, props: GitlabRunnerAutoscalingManagerProps) {
     super(scope, id);
     this.globalConfiguration =
       props.globalConfiguration ||
@@ -153,10 +153,12 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                 Resource: ["*"],
                 Condition: {
                   StringEqualsIfExists: {
-                    "ec2:Region": `${scope.region}`,
+                    "ec2:Region": `${Stack.of(this).region}`,
                   },
                   ArnEqualsIfExists: {
-                    "ec2:Vpc": `arn:aws:ec2:${scope.region}:${scope.account}:vpc/${this.network.vpc.vpcId}`,
+                    "ec2:Vpc": `arn:aws:ec2:${Stack.of(this).region}:${Stack.of(this).account}:vpc/${
+                      this.network.vpc.vpcId
+                    }`,
                   },
                 },
               },
@@ -268,7 +270,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                       ...configuration.machine?.machineOptions,
                       instanceType: runner.instanceType.toString(),
                       ami: runner.machineImage.getImage(scope).imageId,
-                      region: scope.region,
+                      region: Stack.of(this).region,
                       vpcId: this.network.vpc.vpcId,
                       zone: this.network.availabilityZone.slice(-1),
                       subnetId: this.network.subnet.subnetId,
@@ -282,9 +284,9 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                   },
                   cache: {
                     s3: {
-                      serverAddress: `s3.${scope.urlSuffix}`,
+                      serverAddress: `s3.${Stack.of(this).urlSuffix}`,
                       bucketName: `${this.cacheBucket.bucketName}`,
-                      bucketLocation: `${scope.region}`,
+                      bucketLocation: `${Stack.of(this).region}`,
                       authenticationType: "iam",
                     },
                   },

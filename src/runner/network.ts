@@ -1,5 +1,5 @@
 import { CheapVpc } from "@pepperize/cdk-vpc";
-import { Annotations, Stack } from "aws-cdk-lib";
+import { Annotations } from "aws-cdk-lib";
 import { ISubnet, IVpc, SubnetSelection, SubnetType } from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
 
@@ -31,7 +31,7 @@ export class Network extends Construct {
   readonly availabilityZone: string;
   readonly subnet: ISubnet;
 
-  constructor(scope: Stack, id: string, props?: NetworkProps) {
+  constructor(scope: Construct, id: string, props?: NetworkProps) {
     super(scope, id);
 
     this.vpc =

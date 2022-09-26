@@ -1,5 +1,5 @@
 import { PrivateBucket } from "@pepperize/cdk-private-bucket";
-import { Duration, RemovalPolicy, Stack } from "aws-cdk-lib";
+import { Duration, Names, RemovalPolicy, Stack } from "aws-cdk-lib";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
 
@@ -25,11 +25,11 @@ export interface CacheProps {
 export class Cache extends Construct {
   readonly bucket: IBucket;
 
-  constructor(scope: Stack, id: string, props: CacheProps = {}) {
+  constructor(scope: Construct, id: string, props: CacheProps = {}) {
     super(scope, id);
 
     const bucketName = props.bucketName || "runner-cache";
-    const uniqueCacheBucketName = `${scope.stackName}-${bucketName}-${scope.account}-${scope.region}`
+    const uniqueCacheBucketName = `${Stack.of(this).stackName}-${bucketName}-${Names.uniqueId(this)}`
       .slice(-63)
       .toLocaleLowerCase();
 

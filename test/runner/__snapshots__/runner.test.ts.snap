@@ -1,5 +1,2501 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GitlabRunnerAutoscaling Should deploy two manager instances 1`] = `
+Object {
+  "Parameters": Object {
+    "BootstrapVersion": Object {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664ebsC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-ebs",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": Object {
+      "DependsOn": Array [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-0-us-east-1",
+          "S3Key": "4a575666d1c2c6412590d2a56f328e040a81ad1ef59aecee31ae9b393d05f659.zip",
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": Object {
+      "DependsOn": Array [
+        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-0-us-east-1",
+          "S3Key": "bdb08b9984816ecf43301a0c6d8913e270ee2448940b6b95e430dd222a4d90be.zip",
+        },
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Lambda function for auto-deleting objects in ",
+              Object {
+                "Ref": "ManagerOneCacheBucket7D1EC7F6",
+              },
+              " S3 bucket.",
+            ],
+          ],
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerOneCacheBucket7D1EC7F6": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "BucketName": "mockstack-runner-cache-mockstackmanageronecache086c0c6b",
+        "LifecycleConfiguration": Object {
+          "Rules": Array [
+            Object {
+              "ExpirationInDays": 30,
+              "Status": "Enabled",
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ManagerOneCacheBucketAutoDeleteObjectsCustomResource0B298BED": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "ManagerOneCacheBucketPolicy86472BEE",
+      ],
+      "Properties": Object {
+        "BucketName": Object {
+          "Ref": "ManagerOneCacheBucket7D1EC7F6",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ManagerOneCacheBucketPolicy86472BEE": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "ManagerOneCacheBucket7D1EC7F6",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ManagerOneCacheBucket7D1EC7F6",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ManagerOneCacheBucket7D1EC7F6",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::GetAtt": Array [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn",
+                  ],
+                },
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ManagerOneCacheBucket7D1EC7F6",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ManagerOneCacheBucket7D1EC7F6",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "ManagerOneManagerAutoscalingGroupASG60352B71": Object {
+      "CreationPolicy": Object {
+        "ResourceSignal": Object {
+          "Count": 1,
+          "Timeout": "PT15M",
+        },
+      },
+      "Metadata": Object {
+        "AWS::CloudFormation::Init": Object {
+          "config": Object {
+            "commands": Object {
+              "999-retrieve-ec2-key-pair": Object {
+                "command": "",
+              },
+            },
+            "files": Object {
+              "/etc/gitlab-runner/config.toml": Object {
+                "content": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "concurrent = 10
+check_interval = 0
+log_format = \\"runner\\"
+log_level = \\"info\\"
+
+[[runners]]
+url = \\"https://gitlab.com\\"
+limit = 10
+output_limit = 52_428_800
+executor = \\"docker+machine\\"
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
+name = \\"runner-one\\"
+token = \\"",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "importedtokenE9189228",
+                          "Value",
+                        ],
+                      },
+                      "\\"
+
+  [runners.machine]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 20
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%s\\"
+  MachineOptions = [
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\",
+  \\"amazonec2-metadata-token=required\\",
+  \\"amazonec2-metadata-token-response-hop-limit=2\\",
+  \\"amazonec2-ssh-keypath=\\",
+  \\"amazonec2-instance-type=t3.micro\\",
+  \\"amazonec2-ami=ami-1234\\",
+  \\"amazonec2-region=us-east-1\\",
+  \\"amazonec2-vpc-id=",
+                      Object {
+                        "Ref": "ManagerOneVpcB457C5A9",
+                      },
+                      "\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=",
+                      Object {
+                        "Ref": "ManagerOneVpcPrivateSubnet1Subnet5C068AA1",
+                      },
+                      "\\",
+  \\"amazonec2-security-group=",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ManagerOneRunnersSecurityGroupDescribeSGCustomResource1562179B",
+                          "SecurityGroups.0.GroupName",
+                        ],
+                      },
+                      "\\",
+  \\"amazonec2-private-address-only=true\\",
+  \\"amazonec2-use-private-address=true\\",
+  \\"amazonec2-iam-instance-profile=",
+                      Object {
+                        "Ref": "ManagerOneRunnersInstanceProfileForRunnerOne8C333B53",
+                      },
+                      "\\",
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+]
+
+    [[runners.machine.autoscaling]]
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
+
+  [runners.cache]
+  Type = \\"s3\\"
+  Shared = true
+
+    [runners.cache.S3]
+    serverAddress = \\"s3.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                      "\\"
+    bucketName = \\"",
+                      Object {
+                        "Ref": "ManagerOneCacheBucket7D1EC7F6",
+                      },
+                      "\\"
+    bucketLocation = \\"us-east-1\\"
+    authenticationType = \\"iam\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
+",
+                    ],
+                  ],
+                },
+                "encoding": "plain",
+                "group": "gitlab-runner",
+                "mode": "000600",
+                "owner": "gitlab-runner",
+              },
+              "/etc/gitlab-runner/user_data_runners": Object {
+                "content": "#!/bin/bash
+[ ! -z \\"$(which apt-get)\\" ] && apt-get install -y amazon-ecr-credential-helper
+[ ! -z \\"$(which yum)\\" ] && yum install -y amazon-ecr-credential-helper",
+                "encoding": "plain",
+                "group": "gitlab-runner",
+                "mode": "000600",
+                "owner": "gitlab-runner",
+              },
+              "/etc/rsyslog.d/25-gitlab-runner.conf": Object {
+                "content": ":programname, isequal, \\"gitlab-runner\\" /var/log/gitlab-runner.log",
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+            },
+            "services": Object {
+              "sysvinit": Object {
+                "gitlab-runner": Object {
+                  "enabled": true,
+                  "ensureRunning": true,
+                  "files": Array [
+                    "/etc/gitlab-runner/config.toml",
+                  ],
+                },
+                "rsyslog": Object {
+                  "enabled": true,
+                  "ensureRunning": true,
+                  "files": Array [
+                    "/etc/rsyslog.d/25-gitlab-runner.conf",
+                  ],
+                },
+              },
+            },
+          },
+          "configSets": Object {
+            "default": Array [
+              "repositories",
+              "packages",
+              "config",
+              "restart",
+            ],
+          },
+          "packages": Object {
+            "commands": Object {
+              "10-docker-machine": Object {
+                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+              },
+              "20-gitlab-runner-start": Object {
+                "command": "gitlab-runner start",
+              },
+            },
+            "packages": Object {
+              "yum": Object {
+                "docker": Array [],
+                "gitlab-runner": Array [],
+                "jq": Array [],
+                "tzdata": Array [],
+              },
+            },
+          },
+          "repositories": Object {
+            "commands": Object {
+              "10-gitlab-runner": Object {
+                "command": "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash",
+              },
+            },
+          },
+          "restart": Object {
+            "commands": Object {
+              "10-gitlab-runner-restart": Object {
+                "command": "gitlab-runner restart",
+              },
+            },
+          },
+        },
+      },
+      "Properties": Object {
+        "DesiredCapacity": "1",
+        "LaunchConfigurationName": Object {
+          "Ref": "ManagerOneManagerAutoscalingGroupLaunchConfigCC159997",
+        },
+        "MaxSize": "1",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "MockStack/ManagerOne/ManagerAutoscalingGroup",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          Object {
+            "Ref": "ManagerOneVpcPrivateSubnet1Subnet5C068AA1",
+          },
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingRollingUpdate": Object {
+          "PauseTime": "PT15M",
+          "SuspendProcesses": Array [
+            "HealthCheck",
+            "ReplaceUnhealthy",
+            "AZRebalance",
+            "AlarmNotification",
+            "ScheduledActions",
+          ],
+          "WaitOnResourceSignals": true,
+        },
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "ManagerOneManagerAutoscalingGroupInstanceProfile7FB82497": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerOneManagerRole391F9F33",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ManagerOneManagerAutoscalingGroupLaunchConfigCC159997": Object {
+      "DependsOn": Array [
+        "ManagerOneManagerRoleDefaultPolicy96F0317E",
+        "ManagerOneManagerRole391F9F33",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "ManagerOneManagerAutoscalingGroupInstanceProfile7FB82497",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664ebsC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.nano",
+        "MetadataOptions": Object {
+          "HttpTokens": "required",
+        },
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ManagerOneManagerSecurityGroup767A0491",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash
+yum update -y aws-cfn-bootstrap
+# fingerprint: 2557a57ba9fde88c
+(
+  set +e
+  /opt/aws/bin/cfn-init -v --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource ManagerOneManagerAutoscalingGroupASG60352B71 -c default
+  /opt/aws/bin/cfn-signal -e $? --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource ManagerOneManagerAutoscalingGroupASG60352B71
+  cat /var/log/cfn-init.log >&2
+)",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "ManagerOneManagerRole391F9F33": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "s3:ListObjects*",
+                    "s3:GetObject*",
+                    "s3:DeleteObject*",
+                    "s3:PutObject*",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        Object {
+                          "Fn::GetAtt": Array [
+                            "ManagerOneCacheBucket7D1EC7F6",
+                            "Arn",
+                          ],
+                        },
+                        "/*",
+                      ],
+                    ],
+                  },
+                },
+                Object {
+                  "Action": "s3:ListBucket",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::GetAtt": Array [
+                      "ManagerOneCacheBucket7D1EC7F6",
+                      "Arn",
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Cache",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "ec2:CreateKeyPair",
+                    "ec2:DeleteKeyPair",
+                    "ec2:ImportKeyPair",
+                    "ec2:Describe*",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:CreateTags",
+                    "ssm:UpdateInstanceInformation",
+                  ],
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "Name",
+                      ],
+                    },
+                    "StringLike": Object {
+                      "aws:RequestTag/Name": "*gitlab-runner-*",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:RequestSpotInstances",
+                    "ec2:CancelSpotInstanceRequests",
+                  ],
+                  "Condition": Object {
+                    "ArnEqualsIfExists": Object {
+                      "ec2:Vpc": Object {
+                        "Fn::Join": Array [
+                          "",
+                          Array [
+                            "arn:aws:ec2:us-east-1:0:vpc/",
+                            Object {
+                              "Ref": "ManagerOneVpcB457C5A9",
+                            },
+                          ],
+                        ],
+                      },
+                    },
+                    "StringEqualsIfExists": Object {
+                      "ec2:Region": "us-east-1",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": "ec2:RunInstances",
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "InstanceProfile",
+                      ],
+                      "ec2:InstanceType": Array [
+                        "t3.micro",
+                      ],
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:TerminateInstances",
+                    "ec2:StopInstances",
+                    "ec2:StartInstances",
+                    "ec2:RebootInstances",
+                  ],
+                  "Condition": Object {
+                    "StringLike": Object {
+                      "ec2:ResourceTag/Name": "*gitlab-runner-*",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": "iam:PassRole",
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "RunnersRole",
+                      ],
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Runners",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerOneManagerRoleDefaultPolicy96F0317E": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "cloudformation:DescribeStackResource",
+                "cloudformation:SignalResource",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "AWS::StackId",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ManagerOneManagerRoleDefaultPolicy96F0317E",
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerOneManagerRole391F9F33",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ManagerOneManagerSecurityGroup767A0491": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for GitLab Runners Manager.",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerOneVpcB457C5A9",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ManagerOneManagerSecurityGroupDescribeSGCustomResourceCustomResourcePolicy64EDDCFD": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "ec2:DescribeSecurityGroups",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ManagerOneManagerSecurityGroupDescribeSGCustomResourceCustomResourcePolicy64EDDCFD",
+        "Roles": Array [
+          Object {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ManagerOneManagerSecurityGroupDescribeSGCustomResourceF024C512": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "ManagerOneManagerSecurityGroupDescribeSGCustomResourceCustomResourcePolicy64EDDCFD",
+      ],
+      "Properties": Object {
+        "Create": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerOneManagerSecurityGroup767A0491",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerOneManagerSecurityGroup767A0491",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
+          ],
+        },
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ManagerOneRunnersInstanceProfileForRunnerOne8C333B53": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerOneRunnersRoleForRunnerOne5FCF6A45",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ManagerOneRunnersRoleForRunnerOne5FCF6A45": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "RunnersRole",
+            "Value": "RunnersRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerOneRunnersSecurityGroup19532344": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for GitLab Runners.",
+        "GroupName": "MockStack-RunnersSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerOneVpcB457C5A9",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ManagerOneRunnersSecurityGroupDescribeSGCustomResource1562179B": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "ManagerOneRunnersSecurityGroupDescribeSGCustomResourceCustomResourcePolicy98550EFE",
+      ],
+      "Properties": Object {
+        "Create": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerOneRunnersSecurityGroup19532344",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerOneRunnersSecurityGroup19532344",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
+          ],
+        },
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ManagerOneRunnersSecurityGroupDescribeSGCustomResourceCustomResourcePolicy98550EFE": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "ec2:DescribeSecurityGroups",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ManagerOneRunnersSecurityGroupDescribeSGCustomResourceCustomResourcePolicy98550EFE",
+        "Roles": Array [
+          Object {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ManagerOneRunnersSecurityGroupfromMockStackManagerOneManagerSecurityGroup92736F0E2267B0E9BE": Object {
+      "Properties": Object {
+        "Description": "SSH traffic from Manager",
+        "FromPort": 22,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerOneRunnersSecurityGroup19532344",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerOneManagerSecurityGroup767A0491",
+            "GroupId",
+          ],
+        },
+        "ToPort": 22,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ManagerOneRunnersSecurityGroupfromMockStackManagerOneManagerSecurityGroup92736F0E2376C67315E1": Object {
+      "Properties": Object {
+        "Description": "SSH traffic from Docker",
+        "FromPort": 2376,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerOneRunnersSecurityGroup19532344",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerOneManagerSecurityGroup767A0491",
+            "GroupId",
+          ],
+        },
+        "ToPort": 2376,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ManagerOneVpcB457C5A9": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "ManagerOneVpcIGW3BE14D96": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "ManagerOneVpcNatRole76C0A7D8": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerOneVpcNatSecurityGroupE3F6E254": Object {
+      "Properties": Object {
+        "GroupDescription": "Security Group for NAT instances",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:ALL TRAFFIC",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerOneVpcB457C5A9",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ManagerOneVpcPrivateSubnet1DefaultRoute47A4DCC8": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "InstanceId": Object {
+          "Ref": "ManagerOneVpcPublicSubnet1NatInstance4CF0ED24",
+        },
+        "RouteTableId": Object {
+          "Ref": "ManagerOneVpcPrivateSubnet1RouteTableDF253E8C",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ManagerOneVpcPrivateSubnet1RouteTableAssociation56DA2449": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ManagerOneVpcPrivateSubnet1RouteTableDF253E8C",
+        },
+        "SubnetId": Object {
+          "Ref": "ManagerOneVpcPrivateSubnet1Subnet5C068AA1",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ManagerOneVpcPrivateSubnet1RouteTableDF253E8C": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerOneVpcB457C5A9",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ManagerOneVpcPrivateSubnet1Subnet5C068AA1": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.128.0/17",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerOneVpcB457C5A9",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ManagerOneVpcPublicSubnet1DefaultRoute5CEEE40D": Object {
+      "DependsOn": Array [
+        "ManagerOneVpcVPCGW563D9164",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "ManagerOneVpcIGW3BE14D96",
+        },
+        "RouteTableId": Object {
+          "Ref": "ManagerOneVpcPublicSubnet1RouteTableFAEAC82C",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ManagerOneVpcPublicSubnet1NatInstance4CF0ED24": Object {
+      "DependsOn": Array [
+        "ManagerOneVpcNatRole76C0A7D8",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "IamInstanceProfile": Object {
+          "Ref": "ManagerOneVpcPublicSubnet1NatInstanceInstanceProfileFF70A3FB",
+        },
+        "ImageId": "ami-1234",
+        "InstanceType": "t3.nano",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ManagerOneVpcNatSecurityGroupE3F6E254",
+              "GroupId",
+            ],
+          },
+        ],
+        "SourceDestCheck": false,
+        "SubnetId": Object {
+          "Ref": "ManagerOneVpcPublicSubnet1Subnet86B0BEB2",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc/PublicSubnet1/NatInstance",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "ManagerOneVpcPublicSubnet1NatInstanceInstanceProfileFF70A3FB": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerOneVpcNatRole76C0A7D8",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ManagerOneVpcPublicSubnet1RouteTableAssociationA691ED16": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ManagerOneVpcPublicSubnet1RouteTableFAEAC82C",
+        },
+        "SubnetId": Object {
+          "Ref": "ManagerOneVpcPublicSubnet1Subnet86B0BEB2",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ManagerOneVpcPublicSubnet1RouteTableFAEAC82C": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerOneVpcB457C5A9",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ManagerOneVpcPublicSubnet1Subnet86B0BEB2": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.0.0/17",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerOne/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerOneVpcB457C5A9",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ManagerOneVpcVPCGW563D9164": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "ManagerOneVpcIGW3BE14D96",
+        },
+        "VpcId": Object {
+          "Ref": "ManagerOneVpcB457C5A9",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "ManagerTwoCacheBucket0A25CC1D": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "BucketName": "mockstack-runner-cache-mockstackmanagertwocacheca6b3cde",
+        "LifecycleConfiguration": Object {
+          "Rules": Array [
+            Object {
+              "ExpirationInDays": 30,
+              "Status": "Enabled",
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ManagerTwoCacheBucketAutoDeleteObjectsCustomResource7C67542C": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "ManagerTwoCacheBucketPolicyE7CFDE94",
+      ],
+      "Properties": Object {
+        "BucketName": Object {
+          "Ref": "ManagerTwoCacheBucket0A25CC1D",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ManagerTwoCacheBucketPolicyE7CFDE94": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "ManagerTwoCacheBucket0A25CC1D",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ManagerTwoCacheBucket0A25CC1D",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ManagerTwoCacheBucket0A25CC1D",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::GetAtt": Array [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn",
+                  ],
+                },
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ManagerTwoCacheBucket0A25CC1D",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ManagerTwoCacheBucket0A25CC1D",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "ManagerTwoManagerAutoscalingGroupASG16251EEB": Object {
+      "CreationPolicy": Object {
+        "ResourceSignal": Object {
+          "Count": 1,
+          "Timeout": "PT15M",
+        },
+      },
+      "Metadata": Object {
+        "AWS::CloudFormation::Init": Object {
+          "config": Object {
+            "commands": Object {
+              "999-retrieve-ec2-key-pair": Object {
+                "command": "",
+              },
+            },
+            "files": Object {
+              "/etc/gitlab-runner/config.toml": Object {
+                "content": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "concurrent = 10
+check_interval = 0
+log_format = \\"runner\\"
+log_level = \\"info\\"
+
+[[runners]]
+url = \\"https://gitlab.com\\"
+limit = 10
+output_limit = 52_428_800
+executor = \\"docker+machine\\"
+environment = [
+  \\"DOCKER_DRIVER=overlay2\\",
+  \\"DOCKER_TLS_CERTDIR=/certs\\",
+  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+]
+name = \\"runner-one\\"
+token = \\"",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "importedtokenE9189228",
+                          "Value",
+                        ],
+                      },
+                      "\\"
+
+  [runners.machine]
+  IdleCount = 0
+  IdleTime = 300
+  MaxBuilds = 20
+  MachineDriver = \\"amazonec2\\"
+  MachineName = \\"gitlab-runner-%s\\"
+  MachineOptions = [
+  \\"amazonec2-request-spot-instance=true\\",
+  \\"amazonec2-spot-price=0.03\\",
+  \\"amazonec2-metadata-token=required\\",
+  \\"amazonec2-metadata-token-response-hop-limit=2\\",
+  \\"amazonec2-ssh-keypath=\\",
+  \\"amazonec2-instance-type=t3.micro\\",
+  \\"amazonec2-ami=ami-1234\\",
+  \\"amazonec2-region=us-east-1\\",
+  \\"amazonec2-vpc-id=",
+                      Object {
+                        "Ref": "ManagerTwoVpc4C220DA4",
+                      },
+                      "\\",
+  \\"amazonec2-zone=a\\",
+  \\"amazonec2-subnet-id=",
+                      Object {
+                        "Ref": "ManagerTwoVpcPrivateSubnet1Subnet96D69511",
+                      },
+                      "\\",
+  \\"amazonec2-security-group=",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ManagerTwoRunnersSecurityGroupDescribeSGCustomResource3257464D",
+                          "SecurityGroups.0.GroupName",
+                        ],
+                      },
+                      "\\",
+  \\"amazonec2-private-address-only=true\\",
+  \\"amazonec2-use-private-address=true\\",
+  \\"amazonec2-iam-instance-profile=",
+                      Object {
+                        "Ref": "ManagerTwoRunnersInstanceProfileForRunnerOneD18ACCDC",
+                      },
+                      "\\",
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+]
+
+    [[runners.machine.autoscaling]]
+    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    IdleCount = 1
+    IdleTime = 1_800
+    Timezone = \\"Etc/UTC\\"
+
+  [runners.cache]
+  Type = \\"s3\\"
+  Shared = true
+
+    [runners.cache.S3]
+    serverAddress = \\"s3.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                      "\\"
+    bucketName = \\"",
+                      Object {
+                        "Ref": "ManagerTwoCacheBucket0A25CC1D",
+                      },
+                      "\\"
+    bucketLocation = \\"us-east-1\\"
+    authenticationType = \\"iam\\"
+
+  [runners.docker]
+  tls_verify = false
+  image = \\"docker:19.03.5\\"
+  privileged = true
+  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  wait_for_services_timeout = 300
+  disable_cache = false
+  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  shm_size = 0
+",
+                    ],
+                  ],
+                },
+                "encoding": "plain",
+                "group": "gitlab-runner",
+                "mode": "000600",
+                "owner": "gitlab-runner",
+              },
+              "/etc/gitlab-runner/user_data_runners": Object {
+                "content": "#!/bin/bash
+[ ! -z \\"$(which apt-get)\\" ] && apt-get install -y amazon-ecr-credential-helper
+[ ! -z \\"$(which yum)\\" ] && yum install -y amazon-ecr-credential-helper",
+                "encoding": "plain",
+                "group": "gitlab-runner",
+                "mode": "000600",
+                "owner": "gitlab-runner",
+              },
+              "/etc/rsyslog.d/25-gitlab-runner.conf": Object {
+                "content": ":programname, isequal, \\"gitlab-runner\\" /var/log/gitlab-runner.log",
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+            },
+            "services": Object {
+              "sysvinit": Object {
+                "gitlab-runner": Object {
+                  "enabled": true,
+                  "ensureRunning": true,
+                  "files": Array [
+                    "/etc/gitlab-runner/config.toml",
+                  ],
+                },
+                "rsyslog": Object {
+                  "enabled": true,
+                  "ensureRunning": true,
+                  "files": Array [
+                    "/etc/rsyslog.d/25-gitlab-runner.conf",
+                  ],
+                },
+              },
+            },
+          },
+          "configSets": Object {
+            "default": Array [
+              "repositories",
+              "packages",
+              "config",
+              "restart",
+            ],
+          },
+          "packages": Object {
+            "commands": Object {
+              "10-docker-machine": Object {
+                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+              },
+              "20-gitlab-runner-start": Object {
+                "command": "gitlab-runner start",
+              },
+            },
+            "packages": Object {
+              "yum": Object {
+                "docker": Array [],
+                "gitlab-runner": Array [],
+                "jq": Array [],
+                "tzdata": Array [],
+              },
+            },
+          },
+          "repositories": Object {
+            "commands": Object {
+              "10-gitlab-runner": Object {
+                "command": "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash",
+              },
+            },
+          },
+          "restart": Object {
+            "commands": Object {
+              "10-gitlab-runner-restart": Object {
+                "command": "gitlab-runner restart",
+              },
+            },
+          },
+        },
+      },
+      "Properties": Object {
+        "DesiredCapacity": "1",
+        "LaunchConfigurationName": Object {
+          "Ref": "ManagerTwoManagerAutoscalingGroupLaunchConfig68B1FDE9",
+        },
+        "MaxSize": "1",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "MockStack/ManagerTwo/ManagerAutoscalingGroup",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          Object {
+            "Ref": "ManagerTwoVpcPrivateSubnet1Subnet96D69511",
+          },
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingRollingUpdate": Object {
+          "PauseTime": "PT15M",
+          "SuspendProcesses": Array [
+            "HealthCheck",
+            "ReplaceUnhealthy",
+            "AZRebalance",
+            "AlarmNotification",
+            "ScheduledActions",
+          ],
+          "WaitOnResourceSignals": true,
+        },
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "ManagerTwoManagerAutoscalingGroupInstanceProfile0DACCA1F": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerTwoManagerRole234A56B1",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ManagerTwoManagerAutoscalingGroupLaunchConfig68B1FDE9": Object {
+      "DependsOn": Array [
+        "ManagerTwoManagerRoleDefaultPolicy83A09D51",
+        "ManagerTwoManagerRole234A56B1",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "ManagerTwoManagerAutoscalingGroupInstanceProfile0DACCA1F",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664ebsC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.nano",
+        "MetadataOptions": Object {
+          "HttpTokens": "required",
+        },
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ManagerTwoManagerSecurityGroup0099379D",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash
+yum update -y aws-cfn-bootstrap
+# fingerprint: dffde2c0b4431c8b
+(
+  set +e
+  /opt/aws/bin/cfn-init -v --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource ManagerTwoManagerAutoscalingGroupASG16251EEB -c default
+  /opt/aws/bin/cfn-signal -e $? --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource ManagerTwoManagerAutoscalingGroupASG16251EEB
+  cat /var/log/cfn-init.log >&2
+)",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "ManagerTwoManagerRole234A56B1": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "s3:ListObjects*",
+                    "s3:GetObject*",
+                    "s3:DeleteObject*",
+                    "s3:PutObject*",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        Object {
+                          "Fn::GetAtt": Array [
+                            "ManagerTwoCacheBucket0A25CC1D",
+                            "Arn",
+                          ],
+                        },
+                        "/*",
+                      ],
+                    ],
+                  },
+                },
+                Object {
+                  "Action": "s3:ListBucket",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::GetAtt": Array [
+                      "ManagerTwoCacheBucket0A25CC1D",
+                      "Arn",
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Cache",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "ec2:CreateKeyPair",
+                    "ec2:DeleteKeyPair",
+                    "ec2:ImportKeyPair",
+                    "ec2:Describe*",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:CreateTags",
+                    "ssm:UpdateInstanceInformation",
+                  ],
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "Name",
+                      ],
+                    },
+                    "StringLike": Object {
+                      "aws:RequestTag/Name": "*gitlab-runner-*",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:RequestSpotInstances",
+                    "ec2:CancelSpotInstanceRequests",
+                  ],
+                  "Condition": Object {
+                    "ArnEqualsIfExists": Object {
+                      "ec2:Vpc": Object {
+                        "Fn::Join": Array [
+                          "",
+                          Array [
+                            "arn:aws:ec2:us-east-1:0:vpc/",
+                            Object {
+                              "Ref": "ManagerTwoVpc4C220DA4",
+                            },
+                          ],
+                        ],
+                      },
+                    },
+                    "StringEqualsIfExists": Object {
+                      "ec2:Region": "us-east-1",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": "ec2:RunInstances",
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "InstanceProfile",
+                      ],
+                      "ec2:InstanceType": Array [
+                        "t3.micro",
+                      ],
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "ec2:TerminateInstances",
+                    "ec2:StopInstances",
+                    "ec2:StartInstances",
+                    "ec2:RebootInstances",
+                  ],
+                  "Condition": Object {
+                    "StringLike": Object {
+                      "ec2:ResourceTag/Name": "*gitlab-runner-*",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": "iam:PassRole",
+                  "Condition": Object {
+                    "ForAllValues:StringEquals": Object {
+                      "aws:TagKeys": Array [
+                        "RunnersRole",
+                      ],
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Runners",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerTwoManagerRoleDefaultPolicy83A09D51": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "cloudformation:DescribeStackResource",
+                "cloudformation:SignalResource",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "AWS::StackId",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ManagerTwoManagerRoleDefaultPolicy83A09D51",
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerTwoManagerRole234A56B1",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ManagerTwoManagerSecurityGroup0099379D": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for GitLab Runners Manager.",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerTwoVpc4C220DA4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ManagerTwoManagerSecurityGroupDescribeSGCustomResourceA85DFE7B": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "ManagerTwoManagerSecurityGroupDescribeSGCustomResourceCustomResourcePolicyD0630570",
+      ],
+      "Properties": Object {
+        "Create": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerTwoManagerSecurityGroup0099379D",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerTwoManagerSecurityGroup0099379D",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
+          ],
+        },
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ManagerTwoManagerSecurityGroupDescribeSGCustomResourceCustomResourcePolicyD0630570": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "ec2:DescribeSecurityGroups",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ManagerTwoManagerSecurityGroupDescribeSGCustomResourceCustomResourcePolicyD0630570",
+        "Roles": Array [
+          Object {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ManagerTwoRunnersInstanceProfileForRunnerOneD18ACCDC": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerTwoRunnersRoleForRunnerOne82C1FB17",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ManagerTwoRunnersRoleForRunnerOne82C1FB17": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "RunnersRole",
+            "Value": "RunnersRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerTwoRunnersSecurityGroup3F6A17EC": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for GitLab Runners.",
+        "GroupName": "MockStack-RunnersSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerTwoVpc4C220DA4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ManagerTwoRunnersSecurityGroupDescribeSGCustomResource3257464D": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "ManagerTwoRunnersSecurityGroupDescribeSGCustomResourceCustomResourcePolicy88C556AE",
+      ],
+      "Properties": Object {
+        "Create": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerTwoRunnersSecurityGroup3F6A17EC",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerTwoRunnersSecurityGroup3F6A17EC",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
+          ],
+        },
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ManagerTwoRunnersSecurityGroupDescribeSGCustomResourceCustomResourcePolicy88C556AE": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "ec2:DescribeSecurityGroups",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ManagerTwoRunnersSecurityGroupDescribeSGCustomResourceCustomResourcePolicy88C556AE",
+        "Roles": Array [
+          Object {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ManagerTwoRunnersSecurityGroupfromMockStackManagerTwoManagerSecurityGroup76111A3F224D09C8B1": Object {
+      "Properties": Object {
+        "Description": "SSH traffic from Manager",
+        "FromPort": 22,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerTwoRunnersSecurityGroup3F6A17EC",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerTwoManagerSecurityGroup0099379D",
+            "GroupId",
+          ],
+        },
+        "ToPort": 22,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ManagerTwoRunnersSecurityGroupfromMockStackManagerTwoManagerSecurityGroup76111A3F23763ECF33C7": Object {
+      "Properties": Object {
+        "Description": "SSH traffic from Docker",
+        "FromPort": 2376,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerTwoRunnersSecurityGroup3F6A17EC",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ManagerTwoManagerSecurityGroup0099379D",
+            "GroupId",
+          ],
+        },
+        "ToPort": 2376,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ManagerTwoVpc4C220DA4": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "ManagerTwoVpcIGW3EF69E3C": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "ManagerTwoVpcNatRoleE96A7153": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ManagerTwoVpcNatSecurityGroup13247D4E": Object {
+      "Properties": Object {
+        "GroupDescription": "Security Group for NAT instances",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:ALL TRAFFIC",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerTwoVpc4C220DA4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ManagerTwoVpcPrivateSubnet1DefaultRouteFE537C0C": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "InstanceId": Object {
+          "Ref": "ManagerTwoVpcPublicSubnet1NatInstance900865FF",
+        },
+        "RouteTableId": Object {
+          "Ref": "ManagerTwoVpcPrivateSubnet1RouteTableF85FD1CF",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ManagerTwoVpcPrivateSubnet1RouteTableAssociation89E33EEF": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ManagerTwoVpcPrivateSubnet1RouteTableF85FD1CF",
+        },
+        "SubnetId": Object {
+          "Ref": "ManagerTwoVpcPrivateSubnet1Subnet96D69511",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ManagerTwoVpcPrivateSubnet1RouteTableF85FD1CF": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerTwoVpc4C220DA4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ManagerTwoVpcPrivateSubnet1Subnet96D69511": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.128.0/17",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerTwoVpc4C220DA4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ManagerTwoVpcPublicSubnet1DefaultRoute23656861": Object {
+      "DependsOn": Array [
+        "ManagerTwoVpcVPCGWFFDBC8A2",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "ManagerTwoVpcIGW3EF69E3C",
+        },
+        "RouteTableId": Object {
+          "Ref": "ManagerTwoVpcPublicSubnet1RouteTable15EF511A",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ManagerTwoVpcPublicSubnet1NatInstance900865FF": Object {
+      "DependsOn": Array [
+        "ManagerTwoVpcNatRoleE96A7153",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "IamInstanceProfile": Object {
+          "Ref": "ManagerTwoVpcPublicSubnet1NatInstanceInstanceProfileDD57FE87",
+        },
+        "ImageId": "ami-1234",
+        "InstanceType": "t3.nano",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ManagerTwoVpcNatSecurityGroup13247D4E",
+              "GroupId",
+            ],
+          },
+        ],
+        "SourceDestCheck": false,
+        "SubnetId": Object {
+          "Ref": "ManagerTwoVpcPublicSubnet1Subnet38FF7CF0",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc/PublicSubnet1/NatInstance",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "ManagerTwoVpcPublicSubnet1NatInstanceInstanceProfileDD57FE87": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ManagerTwoVpcNatRoleE96A7153",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ManagerTwoVpcPublicSubnet1RouteTable15EF511A": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerTwoVpc4C220DA4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ManagerTwoVpcPublicSubnet1RouteTableAssociation7F32EF21": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ManagerTwoVpcPublicSubnet1RouteTable15EF511A",
+        },
+        "SubnetId": Object {
+          "Ref": "ManagerTwoVpcPublicSubnet1Subnet38FF7CF0",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ManagerTwoVpcPublicSubnet1Subnet38FF7CF0": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.0.0/17",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "MockStack/ManagerTwo/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ManagerTwoVpc4C220DA4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ManagerTwoVpcVPCGWFFDBC8A2": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "ManagerTwoVpcIGW3EF69E3C",
+        },
+        "VpcId": Object {
+          "Ref": "ManagerTwoVpc4C220DA4",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "importedtokenE9189228": Object {
+      "Properties": Object {
+        "Name": "/gitlab-runner/token",
+        "Tier": "Standard",
+        "Type": "SecureString",
+        "Value": "auth-token",
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+  },
+  "Rules": Object {
+    "CheckBootstrapVersion": Object {
+      "Assertions": Array [
+        Object {
+          "Assert": Object {
+            "Fn::Not": Array [
+              Object {
+                "Fn::Contains": Array [
+                  Array [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  Object {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`GitlabRunnerAutoscaling Should have multiple runner configuration when it's set through props 1`] = `
 Object {
   "Parameters": Object {
