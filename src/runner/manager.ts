@@ -339,8 +339,8 @@ export class GitlabRunnerAutoscalingManager extends Construct {
 
                 return [
                   `mkdir -p ${sshKeyPath};`,
-                  `echo $(aws secretsmanager get-secret-value --region ${region} --secret-id ${secretArn} --query SecretString --output text | jq -r ."${keyPairName}") > ${sshKeyPath}/${keyPairName};`,
-                  `echo $(aws secretsmanager get-secret-value --region ${region} --secret-id ${secretArn} --query SecretString --output text | jq -r ."${keyPairName}.pub") > ${sshKeyPath}/${keyPairName}.pub;`,
+                  `echo $(aws secretsmanager get-secret-value --region ${region} --secret-id ${secretArn} --query SecretString --output text) | jq -r '."${keyPairName}"' > ${sshKeyPath}/${keyPairName};`,
+                  `echo $(aws secretsmanager get-secret-value --region ${region} --secret-id ${secretArn} --query SecretString --output text) | jq -r '."${keyPairName}.pub"' > ${sshKeyPath}/${keyPairName}.pub;`,
                 ].join("\n");
               })
               .filter((s) => s.length > 0)
