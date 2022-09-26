@@ -138,9 +138,7 @@ export class GitlabRunnerAutoscaling extends Construct {
     /**
      * Security groups
      */
-    const runnersSecurityGroupName = `${scope.stackName}-RunnersSecurityGroup`;
     const runnersSecurityGroup = new SecurityGroup(scope, "RunnersSecurityGroup", {
-      securityGroupName: runnersSecurityGroupName,
       description: "Security group for GitLab Runners.",
       vpc: this.network.vpc,
     });
