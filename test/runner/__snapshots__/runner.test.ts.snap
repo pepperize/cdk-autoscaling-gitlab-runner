@@ -3696,7 +3696,6 @@ yum update -y aws-cfn-bootstrap
     "RunnersSecurityGroup2A22C282": Object {
       "Properties": Object {
         "GroupDescription": "Security group for GitLab Runners.",
-        "GroupName": "MockStack-RunnersSecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -5141,7 +5140,6 @@ yum update -y aws-cfn-bootstrap
     "RunnersSecurityGroup2A22C282": Object {
       "Properties": Object {
         "GroupDescription": "Security group for GitLab Runners.",
-        "GroupName": "MockStack-RunnersSecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
