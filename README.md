@@ -336,11 +336,11 @@ const restrictedRole = new Role(this, "RestrictedRunnersRole", {
   // role 2
 });
 
-const token1 = StringParameter.fromStringParameterAttributes(stack, "Token", {
+const token1 = StringParameter.fromStringParameterAttributes(stack, "Token1", {
   parameterName: "/gitlab-runner/token1",
 });
 
-const token2 = StringParameter.fromStringParameterAttributes(stack, "Token", {
+const token2 = StringParameter.fromStringParameterAttributes(stack, "Token2", {
   parameterName: "/gitlab-runner/token2",
 });
 
