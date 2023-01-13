@@ -4,11 +4,11 @@ import { AutoScalingGroup, Signals } from "aws-cdk-lib/aws-autoscaling";
 import { Port } from "aws-cdk-lib/aws-ec2";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
-import { GlobalConfiguration, LogFormat, LogLevel } from "../runner-configuration";
 import { Cache, CacheProps } from "./cache";
 import { GitlabRunnerAutoscalingJobRunner, GitlabRunnerAutoscalingJobRunnerProps } from "./job-runner";
 import { GitlabRunnerAutoscalingManager, GitlabRunnerAutoscalingManagerBaseProps } from "./manager";
 import { Network, NetworkProps } from "./network";
+import { GlobalConfiguration, LogFormat, LogLevel } from "../runner-configuration";
 
 /**
  * This is a AWS CDK Construct that may be used to deploy a GitLab runner with Docker executor and auto-scaling.

@@ -23,9 +23,9 @@ import {
 import { IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
-import { ConfigurationMapper, GlobalConfiguration, RunnerConfiguration } from "../runner-configuration";
 import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
 import { Network } from "./network";
+import { ConfigurationMapper, GlobalConfiguration, RunnerConfiguration } from "../runner-configuration";
 
 export interface GitlabRunnerAutoscalingManagerBaseProps {
   /**
