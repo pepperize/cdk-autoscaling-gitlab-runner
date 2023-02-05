@@ -552,7 +552,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 2557a57ba9fde88c
+# fingerprint: d59c265e87ccab6a
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1718,7 +1718,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: dffde2c0b4431c8b
+# fingerprint: 3642f51926ff0e1e
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -3238,7 +3238,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: fcf09d1d67c4aed1
+# fingerprint: f829e1d0de4faa6a
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -4742,7 +4742,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 7e336b73a6658195
+# fingerprint: a0566e8352ab3971
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
