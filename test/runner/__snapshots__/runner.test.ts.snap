@@ -351,7 +351,7 @@ token = \\"",
                       },
                       "\\",
   \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
-  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
+  \\"engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -553,7 +553,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 70b3527e89c1151d
+# fingerprint: 8a53c062a66b4b23
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -714,9 +714,6 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                       ],
@@ -1518,7 +1515,7 @@ token = \\"",
                       },
                       "\\",
   \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
-  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
+  \\"engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -1720,7 +1717,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 1f2682aa849e823a
+# fingerprint: 1ed979455fff587c
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1881,9 +1878,6 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                       ],
@@ -2847,7 +2841,7 @@ token = \\"",
                       },
                       "\\",
   \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
-  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
+  \\"engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -2945,7 +2939,7 @@ token = \\"",
                       },
                       "\\",
   \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
-  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
+  \\"engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -3043,7 +3037,7 @@ token = \\"",
                       },
                       "\\",
   \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
-  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
+  \\"engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -3243,7 +3237,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 63e7d4b4c946287e
+# fingerprint: 2c57a1fc4560027e
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -3404,9 +3398,6 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.medium",
                         "t3.small",
@@ -4458,7 +4449,7 @@ token = \\"",
                       },
                       "\\",
   \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
-  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
+  \\"engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -4549,7 +4540,7 @@ token = \\"",
                       },
                       "\\",
   \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
-  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
+  \\"engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -4749,7 +4740,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 8597b8c1b919b6e6
+# fingerprint: 6a8314cab0d96d12
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -4900,9 +4891,6 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                         "t3.micro",

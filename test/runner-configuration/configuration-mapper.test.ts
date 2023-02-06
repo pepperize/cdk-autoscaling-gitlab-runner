@@ -188,6 +188,9 @@ describe("ConfigurationMapper", () => {
           docker: {},
           machine: {
             autoscaling: [],
+            machineOptions: {
+              engineInstallUrl: "https://get.docker.com",
+            },
           },
           cache: {
             s3: {

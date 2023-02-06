@@ -144,7 +144,14 @@ export class ConfigurationMapper {
   }
 
   private _mapMachineOptions(machineOptions: MachineOptions): string[] {
-    return toProperties(machineOptions, (key) => `amazonec2-${paramCase(key)}`);
+    return toProperties(machineOptions, (key) => {
+      switch (true) {
+        case key == "engineInstallUrl":
+          return paramCase(key);
+        default:
+          return `amazonec2-${paramCase(key)}`;
+      }
+    });
   }
 }
 
