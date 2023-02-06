@@ -171,7 +171,6 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                 Resource: ["*"],
                 Condition: {
                   "ForAllValues:StringEquals": {
-                    "aws:TagKeys": ["InstanceProfile"],
                     "ec2:InstanceType": (this.runners || []).map((runner) => {
                       const runnersInstanceType =
                         (this.runners && runner.instanceType) || InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
