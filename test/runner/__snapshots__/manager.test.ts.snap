@@ -198,9 +198,6 @@ Object {
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                       ],
