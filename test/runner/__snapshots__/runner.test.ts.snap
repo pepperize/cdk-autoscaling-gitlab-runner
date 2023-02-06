@@ -714,9 +714,6 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                       ],
@@ -1881,9 +1878,6 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                       ],
@@ -3404,9 +3398,6 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.medium",
                         "t3.small",
@@ -4900,9 +4891,6 @@ yum update -y aws-cfn-bootstrap
                   "Action": "ec2:RunInstances",
                   "Condition": Object {
                     "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
-                        "InstanceProfile",
-                      ],
                       "ec2:InstanceType": Array [
                         "t3.micro",
                         "t3.micro",
