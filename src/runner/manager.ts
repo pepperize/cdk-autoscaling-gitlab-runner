@@ -249,7 +249,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
           InitPackage.yum("jq"),
           InitCommand.shellCommand(
             `curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/${
-              props.dockerMachineVersion?.version ?? DockerMachineVersion.V0_16_2_GITLAB_15
+              props.dockerMachineVersion?.version ?? DockerMachineVersion.V0_16_2_GITLAB_15.version
             }/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine`,
             //"curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
             { key: "10-docker-machine" }
