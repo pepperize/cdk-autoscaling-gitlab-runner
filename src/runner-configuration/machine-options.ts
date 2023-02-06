@@ -1,8 +1,20 @@
 /**
+ * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/commands/create.go
+ */
+export interface SharedCreateOptions {
+  /**
+   * Custom URL to use for engine installation
+   *
+   * @default https://releases.rancher.com/install-docker/20.10.21.sh
+   */
+  readonly engineInstallUrl?: string;
+}
+
+/**
  * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/docs/drivers/aws.md#options
  * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/drivers/amazonec2/amazonec2.go
  */
-export interface MachineOptions {
+export interface MachineOptions extends SharedCreateOptions {
   readonly instanceType?: string;
   readonly ami?: string;
   readonly region?: string;

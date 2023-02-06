@@ -350,7 +350,8 @@ token = \\"",
                         "Ref": "ManagerOneRunnersInstanceProfileForRunnerOne8C333B53",
                       },
                       "\\",
-  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
+  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -442,7 +443,7 @@ token = \\"",
           "packages": Object {
             "commands": Object {
               "10-docker-machine": Object {
-                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/[object Object]/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
               },
               "20-gitlab-runner-start": Object {
                 "command": "gitlab-runner start",
@@ -552,7 +553,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 2557a57ba9fde88c
+# fingerprint: 70b3527e89c1151d
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -1516,7 +1517,8 @@ token = \\"",
                         "Ref": "ManagerTwoRunnersInstanceProfileForRunnerOneD18ACCDC",
                       },
                       "\\",
-  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
+  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -1608,7 +1610,7 @@ token = \\"",
           "packages": Object {
             "commands": Object {
               "10-docker-machine": Object {
-                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/[object Object]/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
               },
               "20-gitlab-runner-start": Object {
                 "command": "gitlab-runner start",
@@ -1718,7 +1720,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: dffde2c0b4431c8b
+# fingerprint: 1f2682aa849e823a
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -2844,7 +2846,8 @@ token = \\"",
                         "Ref": "RunnerRunnersInstanceProfileForGitlabRunner183666A78",
                       },
                       "\\",
-  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
+  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -2941,7 +2944,8 @@ token = \\"",
                         "Ref": "RunnerRunnersInstanceProfileForGitlabRunner2EC1381F2",
                       },
                       "\\",
-  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
+  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -3038,7 +3042,8 @@ token = \\"",
                         "Ref": "RunnerRunnersInstanceProfileForGitlabRunner393C3B998",
                       },
                       "\\",
-  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
+  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -3128,7 +3133,7 @@ token = \\"",
           "packages": Object {
             "commands": Object {
               "10-docker-machine": Object {
-                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/[object Object]/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
               },
               "20-gitlab-runner-start": Object {
                 "command": "gitlab-runner start",
@@ -3238,7 +3243,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: fcf09d1d67c4aed1
+# fingerprint: 63e7d4b4c946287e
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -4452,7 +4457,8 @@ token = \\"",
                         "Ref": "RunnerRunnersInstanceProfileForRunnerOne6C939C81",
                       },
                       "\\",
-  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
+  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -4542,7 +4548,8 @@ token = \\"",
                         "Ref": "RunnerRunnersInstanceProfileForRunnerTwo0AF7F9C7",
                       },
                       "\\",
-  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\"
+  \\"amazonec2-userdata=/etc/gitlab-runner/user_data_runners\\",
+  \\"amazonec2-engine-install-url=https://releases.rancher.com/install-docker/20.10.21.sh\\"
 ]
 
     [[runners.machine.autoscaling]]
@@ -4634,7 +4641,7 @@ token = \\"",
           "packages": Object {
             "commands": Object {
               "10-docker-machine": Object {
-                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.12/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+                "command": "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/[object Object]/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
               },
               "20-gitlab-runner-start": Object {
                 "command": "gitlab-runner start",
@@ -4742,7 +4749,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
-# fingerprint: 7e336b73a6658195
+# fingerprint: 8597b8c1b919b6e6
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",

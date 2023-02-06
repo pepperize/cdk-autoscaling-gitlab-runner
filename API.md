@@ -1955,9 +1955,20 @@ const gitlabRunnerAutoscalingManagerBaseProps: GitlabRunnerAutoscalingManagerBas
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps.property.dockerMachineVersion">dockerMachineVersion</a></code> | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion">DockerMachineVersion</a></code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps.property.instanceType">instanceType</a></code> | <code>aws-cdk-lib.aws_ec2.InstanceType</code> | Instance type for manager EC2 instance. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps.property.keyPairName">keyPairName</a></code> | <code>string</code> | A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps.property.machineImage">machineImage</a></code> | <code>aws-cdk-lib.aws_ec2.IMachineImage</code> | An Amazon Machine Image ID for the Manager EC2 instance. |
+
+---
+
+##### `dockerMachineVersion`<sup>Optional</sup> <a name="dockerMachineVersion" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerBaseProps.property.dockerMachineVersion"></a>
+
+```typescript
+public readonly dockerMachineVersion: DockerMachineVersion;
+```
+
+- *Type:* <a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion">DockerMachineVersion</a>
 
 ---
 
@@ -2022,6 +2033,7 @@ const gitlabRunnerAutoscalingManagerProps: GitlabRunnerAutoscalingManagerProps =
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.dockerMachineVersion">dockerMachineVersion</a></code> | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion">DockerMachineVersion</a></code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.instanceType">instanceType</a></code> | <code>aws-cdk-lib.aws_ec2.InstanceType</code> | Instance type for manager EC2 instance. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.keyPairName">keyPairName</a></code> | <code>string</code> | A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.machineImage">machineImage</a></code> | <code>aws-cdk-lib.aws_ec2.IMachineImage</code> | An Amazon Machine Image ID for the Manager EC2 instance. |
@@ -2031,6 +2043,16 @@ const gitlabRunnerAutoscalingManagerProps: GitlabRunnerAutoscalingManagerProps =
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.runnersSecurityGroup">runnersSecurityGroup</a></code> | <code>@pepperize/cdk-security-group.SecurityGroup</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.globalConfiguration">globalConfiguration</a></code> | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GlobalConfiguration">GlobalConfiguration</a></code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | *No description.* |
+
+---
+
+##### `dockerMachineVersion`<sup>Optional</sup> <a name="dockerMachineVersion" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManagerProps.property.dockerMachineVersion"></a>
+
+```typescript
+public readonly dockerMachineVersion: DockerMachineVersion;
+```
+
+- *Type:* <a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion">DockerMachineVersion</a>
 
 ---
 
@@ -2484,6 +2506,7 @@ const machineOptions: MachineOptions = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.engineInstallUrl">engineInstallUrl</a></code> | <code>string</code> | Custom URL to use for engine installation. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.ami">ami</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.blockDurationMinutes">blockDurationMinutes</a></code> | <code>number</code> | The amazonec2-block-duration-minutes parameter. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.iamInstanceProfile">iamInstanceProfile</a></code> | <code>string</code> | *No description.* |
@@ -2505,6 +2528,19 @@ const machineOptions: MachineOptions = { ... }
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.volumeType">volumeType</a></code> | <code>string</code> | The Amazon EBS volume type to be attached to the instance. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.vpcId">vpcId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.zone">zone</a></code> | <code>string</code> | Extract the availabilityZone last character for the needs of gitlab configuration. |
+
+---
+
+##### `engineInstallUrl`<sup>Optional</sup> <a name="engineInstallUrl" id="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.engineInstallUrl"></a>
+
+```typescript
+public readonly engineInstallUrl: string;
+```
+
+- *Type:* string
+- *Default:* https://releases.rancher.com/install-docker/20.10.21.sh
+
+Custom URL to use for engine installation.
 
 ---
 
@@ -3195,6 +3231,39 @@ GitLab instance URL.
 
 ---
 
+### SharedCreateOptions <a name="SharedCreateOptions" id="@pepperize/cdk-autoscaling-gitlab-runner.SharedCreateOptions"></a>
+
+> [https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/commands/create.go](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/commands/create.go)
+
+#### Initializer <a name="Initializer" id="@pepperize/cdk-autoscaling-gitlab-runner.SharedCreateOptions.Initializer"></a>
+
+```typescript
+import { SharedCreateOptions } from '@pepperize/cdk-autoscaling-gitlab-runner'
+
+const sharedCreateOptions: SharedCreateOptions = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.SharedCreateOptions.property.engineInstallUrl">engineInstallUrl</a></code> | <code>string</code> | Custom URL to use for engine installation. |
+
+---
+
+##### `engineInstallUrl`<sup>Optional</sup> <a name="engineInstallUrl" id="@pepperize/cdk-autoscaling-gitlab-runner.SharedCreateOptions.property.engineInstallUrl"></a>
+
+```typescript
+public readonly engineInstallUrl: string;
+```
+
+- *Type:* string
+- *Default:* https://releases.rancher.com/install-docker/20.10.21.sh
+
+Custom URL to use for engine installation.
+
+---
+
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### ConfigurationMapper <a name="ConfigurationMapper" id="@pepperize/cdk-autoscaling-gitlab-runner.ConfigurationMapper"></a>
@@ -3268,5 +3337,76 @@ public readonly props: ConfigurationMapperProps;
 
 ---
 
+
+### DockerMachineVersion <a name="DockerMachineVersion" id="@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion"></a>
+
+Docker+machine version.
+
+> [https://gitlab.com/gitlab-org/ci-cd/docker-machine](https://gitlab.com/gitlab-org/ci-cd/docker-machine)
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion.of">of</a></code> | Custom docker+machine version. |
+
+---
+
+##### `of` <a name="of" id="@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion.of"></a>
+
+```typescript
+import { DockerMachineVersion } from '@pepperize/cdk-autoscaling-gitlab-runner'
+
+DockerMachineVersion.of(version: string)
+```
+
+Custom docker+machine version.
+
+###### `version`<sup>Required</sup> <a name="version" id="@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion.of.parameter.version"></a>
+
+- *Type:* string
+
+docker+machine version number.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion.property.version">version</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `version`<sup>Required</sup> <a name="version" id="@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion.property.version"></a>
+
+```typescript
+public readonly version: string;
+```
+
+- *Type:* string
+
+---
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion.property.V0_16_2_GITLAB_15">V0_16_2_GITLAB_15</a></code> | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion">DockerMachineVersion</a></code> | Docker+machine version 0.16.2-gitlab.15. |
+
+---
+
+##### `V0_16_2_GITLAB_15`<sup>Required</sup> <a name="V0_16_2_GITLAB_15" id="@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion.property.V0_16_2_GITLAB_15"></a>
+
+```typescript
+public readonly V0_16_2_GITLAB_15: DockerMachineVersion;
+```
+
+- *Type:* <a href="#@pepperize/cdk-autoscaling-gitlab-runner.DockerMachineVersion">DockerMachineVersion</a>
+
+Docker+machine version 0.16.2-gitlab.15.
+
+---
 
 
