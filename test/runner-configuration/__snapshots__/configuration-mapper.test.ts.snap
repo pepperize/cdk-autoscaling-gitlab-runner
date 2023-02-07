@@ -150,7 +150,8 @@ token = \\"2foo+bar\\"
   \\"amazonec2-request-spot-instance=true\\",
   \\"amazonec2-spot-price=0.03\\",
   \\"amazonec2-metadata-token=required\\",
-  \\"amazonec2-metadata-token-response-hop-limit=2\\"
+  \\"amazonec2-metadata-token-response-hop-limit=2\\",
+  \\"engine-install-url=https://get.docker.com\\"
 ]
 
   [runners.cache]

@@ -23,6 +23,7 @@ import {
 import { IRole, ManagedPolicy, PolicyDocument, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
+import { DockerMachineVersion } from "./docker-machine-version";
 import { GitlabRunnerAutoscalingJobRunner } from "./job-runner";
 import { Network } from "./network";
 import { ConfigurationMapper, GlobalConfiguration, RunnerConfiguration } from "../runner-configuration";
@@ -48,6 +49,8 @@ export interface GitlabRunnerAutoscalingManagerBaseProps {
    * A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. You won't be able to ssh into an instance without the Key Pair.
    */
   readonly keyPairName?: string;
+
+  readonly dockerMachineVersion?: DockerMachineVersion;
 }
 
 export interface GitlabRunnerAutoscalingManagerProps extends GitlabRunnerAutoscalingManagerBaseProps {
@@ -245,7 +248,9 @@ export class GitlabRunnerAutoscalingManager extends Construct {
           InitPackage.yum("tzdata"),
           InitPackage.yum("jq"),
           InitCommand.shellCommand(
-            "curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v0.16.2-gitlab.19/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
+            `curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/${
+              props.dockerMachineVersion?.version ?? DockerMachineVersion.V0_16_2_GITLAB_15.version
+            }/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine`,
             //"curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
             { key: "10-docker-machine" }
           ),
@@ -283,6 +288,9 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                       usePrivateAddress: configuration.machine?.machineOptions?.usePrivateAddress ?? true,
                       iamInstanceProfile: runner.instanceProfile.ref,
                       userdata: "/etc/gitlab-runner/user_data_runners",
+                      engineInstallUrl:
+                        configuration.machine?.machineOptions?.engineInstallUrl ??
+                        "https://releases.rancher.com/install-docker/20.10.21.sh",
                     },
                   },
                   cache: {
