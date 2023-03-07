@@ -1919,10 +1919,10 @@ co@^4.6.0:
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
   integrity sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=
 
-codemaker@^1.76.0:
-  version "1.76.0"
-  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.76.0.tgz#28a2c517ee53bdcfb02030c82520f669db6e5286"
-  integrity sha512-EqnBOOiEV+kjyRghA5Z0TX22VnVH2Mgo2diOSYelcmntlTSiQkZimGof6jxE5j1buzjEVBK1d1W7bhRKYGegUg==
+codemaker@^1.77.0:
+  version "1.77.0"
+  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.77.0.tgz#8fa150ab21c8fcb0f6ee557bbc3160529c03499c"
+  integrity sha512-XSHAqkXMn5OtcebJLVMFEW9puB+4ZmmChBFspEf62ZeYzs+ggSXEHW9GrjC/ZyX+sfxql6ciJP3z25sSp4VsVQ==
   dependencies:
     camelcase "^6.3.0"
     decamelize "^5.0.1"
@@ -4453,19 +4453,19 @@ jsii-docgen@^7.0.225:
     yargs "^16.2.0"
 
 jsii-pacmak@^1.74.0:
-  version "1.76.0"
-  resolved "https://registry.yarnpkg.com/jsii-pacmak/-/jsii-pacmak-1.76.0.tgz#e0d95bc20f757f7b067dc545587bc38795611b09"
-  integrity sha512-70h0puIRpDeDyYk/jLxQk7vPbg3w3ppJRATlF0qPntMk/WnSo4uvr8hlz1BmRzOOvQ7JqXBuNOaVd+bp7Xolbw==
+  version "1.77.0"
+  resolved "https://registry.yarnpkg.com/jsii-pacmak/-/jsii-pacmak-1.77.0.tgz#f6253a871bccc8a0617a032235a8cdbf33bffd03"
+  integrity sha512-mYrITqM/fTiS1rzGFYeIK90/Ab7S39/4wFlBlhVYqqxbeAwiOFS1+zfx2m5RBYGvJMw5rd6S4zoWg6CnK2kpPg==
   dependencies:
-    "@jsii/check-node" "1.76.0"
-    "@jsii/spec" "^1.76.0"
+    "@jsii/check-node" "1.77.0"
+    "@jsii/spec" "^1.77.0"
     clone "^2.1.2"
-    codemaker "^1.76.0"
+    codemaker "^1.77.0"
     commonmark "^0.30.0"
     escape-string-regexp "^4.0.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.76.0"
-    jsii-rosetta "^1.76.0"
+    jsii-reflect "^1.77.0"
+    jsii-rosetta "^1.77.0"
     semver "^7.3.8"
     spdx-license-list "^6.6.0"
     xmlbuilder "^15.1.1"
@@ -4483,7 +4483,7 @@ jsii-reflect@^1.76.0, jsii-reflect@^1.77.0:
     oo-ascii-tree "^1.77.0"
     yargs "^16.2.0"
 
-jsii-rosetta@^1.76.0, jsii-rosetta@^1.77.0:
+jsii-rosetta@^1.77.0:
   version "1.77.0"
   resolved "https://registry.yarnpkg.com/jsii-rosetta/-/jsii-rosetta-1.77.0.tgz#12e99f0e43c5028456883f46d3ac92bd8c77a22e"
   integrity sha512-gOpK7YxGb64Fwy6zvEpRV3umC3u77HAmltP3kSF/eGPmM04ggTQ17UEfN+XsEO4NXJh1LDniMDyMjOIa3QViBw==
