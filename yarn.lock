@@ -4426,15 +4426,15 @@ jsesc@^2.5.1:
   integrity sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
 
 jsii-diff@^1.74.0:
-  version "1.76.0"
-  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.76.0.tgz#8aba54481e1ac7dcd7e2c592d1ef11defe244b2a"
-  integrity sha512-i3U753ae5WzaiGLJV8ZFTu9rlGQGVuSJADCHxteP2UuHuFSWRSPY2iMhtyg7tEoQmdNYjPznM7fesqrDHLxBOg==
+  version "1.77.0"
+  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.77.0.tgz#f56c72ff22918dbcf2dcdfd10ad3c15815833aa0"
+  integrity sha512-H/ujCkMXM1VrZJQJVOfkz+t1S9CAVTut0HSENuXrDdxdIUgIIIT7gnap7LNFVxKwOU9E54Ya+hEnSwjO3sw1FQ==
   dependencies:
-    "@jsii/check-node" "1.76.0"
-    "@jsii/spec" "^1.76.0"
+    "@jsii/check-node" "1.77.0"
+    "@jsii/spec" "^1.77.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.76.0"
-    log4js "^6.7.1"
+    jsii-reflect "^1.77.0"
+    log4js "^6.8.0"
     yargs "^16.2.0"
 
 jsii-docgen@^7.0.225:
@@ -4749,18 +4749,7 @@ lodash@^4.17.15, lodash@^4.17.21, lodash@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
-log4js@^6.7.1:
-  version "6.7.1"
-  resolved "https://registry.yarnpkg.com/log4js/-/log4js-6.7.1.tgz#06e12b1ac915dd1067146ffad8215f666f7d2c51"
-  integrity sha512-lzbd0Eq1HRdWM2abSD7mk6YIVY0AogGJzb/z+lqzRk+8+XJP+M6L1MS5FUSc3jjGru4dbKjEMJmqlsoYYpuivQ==
-  dependencies:
-    date-format "^4.0.14"
-    debug "^4.3.4"
-    flatted "^3.2.7"
-    rfdc "^1.3.0"
-    streamroller "^3.1.3"
-
-log4js@^6.8.0:
+log4js@^6.7.1, log4js@^6.8.0:
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/log4js/-/log4js-6.8.0.tgz#f0fe9b2b82725aaf97f20692e23381a5c5722448"
   integrity sha512-g+V8gZyurIexrOvWQ+AcZsIvuK/lBnx2argejZxL4gVZ4Hq02kUYH6WZOnqxgBml+zzQZYdaEoTN84B6Hzm8Fg==
@@ -6291,15 +6280,6 @@ standard-version@^9:
     semver "^7.1.1"
     stringify-package "^1.0.1"
     yargs "^16.0.0"
-
-streamroller@^3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/streamroller/-/streamroller-3.1.3.tgz#d95689a8c29b30d093525d0baffe6616fd62ca7e"
-  integrity sha512-CphIJyFx2SALGHeINanjFRKQ4l7x2c+rXYJ4BMq0gd+ZK0gi4VT8b+eHe2wi58x4UayBAKx4xtHpXT/ea1cz8w==
-  dependencies:
-    date-format "^4.0.14"
-    debug "^4.3.4"
-    fs-extra "^8.1.0"
 
 streamroller@^3.1.5:
   version "3.1.5"
