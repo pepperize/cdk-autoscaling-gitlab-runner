@@ -794,7 +794,7 @@
     chalk "^4.1.2"
     semver "^7.3.8"
 
-"@jsii/spec@1.78.1", "@jsii/spec@^1.74.0", "@jsii/spec@^1.77.0", "@jsii/spec@^1.78.1":
+"@jsii/spec@1.78.1", "@jsii/spec@^1.74.0", "@jsii/spec@^1.78.1":
   version "1.78.1"
   resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.78.1.tgz#e4c4dd8b7a39a5c6381cd33b170ad40301a757c6"
   integrity sha512-pp8R/ihRX/9KrKBnLO9naLVZsyF3K30Ibzd8nUK1fzDu3QV5FhVoGVRCspoB0U10TJAsxxaI0HL0dk5qpGPzKQ==
@@ -4430,17 +4430,17 @@ jsii-diff@^1.74.0:
     yargs "^16.2.0"
 
 jsii-docgen@^7.0.225:
-  version "7.1.27"
-  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-7.1.27.tgz#cfdae19f3a663deb819992318c8a02c63759e3b0"
-  integrity sha512-6k6IQeudilLE7LyJC7o9cymhRReI2GWMDiJkdcBgg0s7QVejVdLCKAhyVXoAICduNrCRwZ4Xc7xh+MsTTLKnhQ==
+  version "7.1.28"
+  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-7.1.28.tgz#2f05462e8c7ccfd32f11d3bec285927d481921b5"
+  integrity sha512-XHVxvOH08eOm+gUk3YRrOBFMUIYE2/3s+NHA3R8PWZyArSUDjAMH0pKN7hqYb99dJTf7sfl099EEWhCLozwuEQ==
   dependencies:
-    "@jsii/spec" "^1.77.0"
+    "@jsii/spec" "^1.78.1"
     case "^1.6.3"
     fs-extra "^10.1.0"
     glob "^7.2.3"
     glob-promise "^3.4.0"
-    jsii-reflect "^1.77.0"
-    jsii-rosetta "^1.77.0"
+    jsii-reflect "^1.78.1"
+    jsii-rosetta "^1.78.1"
     semver "^7.3.8"
     yargs "^16.2.0"
 
@@ -4463,7 +4463,7 @@ jsii-pacmak@^1.74.0:
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.77.0, jsii-reflect@^1.78.1:
+jsii-reflect@^1.78.1:
   version "1.78.1"
   resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.78.1.tgz#8d32a9378294f8af27eaeb84abb3d8f1ffe2f1eb"
   integrity sha512-fdlUOAua7Qj/mPTdHIBYUVpZ+LMs+BJCzPQZEF3wheFYJK5p9mQpn83zums5adFwV1R+5yjaqPnfb748GDCBzw==
@@ -4475,7 +4475,7 @@ jsii-reflect@^1.77.0, jsii-reflect@^1.78.1:
     oo-ascii-tree "^1.78.1"
     yargs "^16.2.0"
 
-jsii-rosetta@^1.77.0, jsii-rosetta@^1.78.1:
+jsii-rosetta@^1.78.1:
   version "1.78.1"
   resolved "https://registry.yarnpkg.com/jsii-rosetta/-/jsii-rosetta-1.78.1.tgz#e3bba787263135e96d80a503e27e7ce61ba3c343"
   integrity sha512-HljTgK3/Pnvjm6raHuTr8aQL1V/y+ZxHb8fEQEHCE+HshwUYdxz5j4LGdS8E6ZBReHYMPCbtMVGWnwxjXcsoGQ==
