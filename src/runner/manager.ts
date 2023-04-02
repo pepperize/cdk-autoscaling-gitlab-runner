@@ -212,7 +212,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
     // https://github.com/awslabs/amazon-ecr-credential-helper
     const userDataRunners = UserData.forLinux({});
     userDataRunners.addCommands(
-      `[ ! -z "$(which apt-get)" ] && apt-get install -y amazon-ecr-credential-helper`,
+      `[ ! -z "$(which apt-get)" ] && apt-get update && apt-get install -y amazon-ecr-credential-helper`,
       `[ ! -z "$(which yum)" ] && yum install -y amazon-ecr-credential-helper`
     );
 
