@@ -98,15 +98,6 @@
       "type": "build"
     },
     {
-      "name": "json-schema",
-      "type": "build"
-    },
-    {
-      "name": "npm-check-updates",
-      "version": "^15.3.3",
-      "type": "build"
-    },
-    {
       "name": "prettier",
       "type": "build"
     },
@@ -147,6 +138,11 @@
     {
       "name": "snake-case",
       "type": "bundled"
+    },
+    {
+      "name": "projen",
+      "version": "^0.67.74",
+      "type": "devenv"
     },
     {
       "name": "@types/babel__traverse",
