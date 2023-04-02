@@ -1,5 +1,5 @@
 import { AwsCdkConstructLibrary } from "@pepperize/projen-awscdk-construct";
-import { javascript } from "projen";
+import { awscdk, javascript } from "projen";
 
 const project = new AwsCdkConstructLibrary({
   author: "Patrick Florek",
@@ -50,6 +50,10 @@ const project = new AwsCdkConstructLibrary({
     mavenGroupId: "com.pepperize",
     mavenArtifactId: "cdk-autoscaling-gitlab-runner",
     javaPackage: "com.pepperize.cdk.autoscaling_gitlab_runner",
+  },
+
+  lambdaOptions: {
+    runtime: awscdk.LambdaRuntime.NODEJS_16_X,
   },
 });
 
