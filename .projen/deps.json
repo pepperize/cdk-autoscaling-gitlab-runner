@@ -23,7 +23,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^14",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -73,16 +73,12 @@
     },
     {
       "name": "jest-junit",
-      "version": "^13",
+      "version": "^15",
       "type": "build"
     },
     {
       "name": "jest",
       "version": "^27",
-      "type": "build"
-    },
-    {
-      "name": "jsii",
       "type": "build"
     },
     {
@@ -98,12 +94,8 @@
       "type": "build"
     },
     {
-      "name": "json-schema",
-      "type": "build"
-    },
-    {
-      "name": "npm-check-updates",
-      "version": "^15.3.3",
+      "name": "jsii",
+      "version": "1.x",
       "type": "build"
     },
     {
@@ -147,6 +139,11 @@
     {
       "name": "snake-case",
       "type": "bundled"
+    },
+    {
+      "name": "projen",
+      "version": "^0.67.74",
+      "type": "devenv"
     },
     {
       "name": "@types/babel__traverse",

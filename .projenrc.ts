@@ -53,8 +53,4 @@ const project = new AwsCdkConstructLibrary({
   },
 });
 
-project.addDevDeps("npm-check-updates@^15.3.3");
-
-project.tasks.tryFind("package:python")?.prependExec("pip3 install packaging");
-
 project.synth();
