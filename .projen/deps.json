@@ -6,6 +6,7 @@
     },
     {
       "name": "@pepperize/cdk-security-group",
+      "version": "0.0.439",
       "type": "build"
     },
     {
@@ -160,6 +161,7 @@
     },
     {
       "name": "@pepperize/cdk-security-group",
+      "version": "^v0.0.439",
       "type": "peer"
     },
     {
