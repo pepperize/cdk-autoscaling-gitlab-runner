@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@pepperize/cdk-private-bucket": "^0.0.351",
-    "@pepperize/cdk-security-group": "^0.0.424",
+    "@pepperize/cdk-security-group": "0.0.439",
     "@pepperize/cdk-vpc": "^0.0.558",
     "@pepperize/projen-awscdk-construct": "^0.0.497",
     "@types/jest": "^27",
@@ -68,7 +68,7 @@
   },
   "peerDependencies": {
     "@pepperize/cdk-private-bucket": "^0.0.351",
-    "@pepperize/cdk-security-group": "^0.0.424",
+    "@pepperize/cdk-security-group": "^v0.0.439",
     "@pepperize/cdk-vpc": "^0.0.558",
     "aws-cdk-lib": "^2.8.0",
     "constructs": "^10.0.5"
