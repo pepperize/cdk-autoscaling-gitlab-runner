@@ -856,6 +856,28 @@ yum update -y aws-cfn-bootstrap
             "Arn",
           ],
         },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerOneManagerSecurityGroup767A0491",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerOneManagerSecurityGroup767A0491",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
+          ],
+        },
       },
       "Type": "Custom::AWS",
       "UpdateReplacePolicy": "Delete",
@@ -956,6 +978,28 @@ yum update -y aws-cfn-bootstrap
           "Fn::GetAtt": Array [
             "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
             "Arn",
+          ],
+        },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerOneRunnersSecurityGroup19532344",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerOneRunnersSecurityGroup19532344",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
           ],
         },
       },
@@ -1999,6 +2043,28 @@ yum update -y aws-cfn-bootstrap
             "Arn",
           ],
         },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerTwoManagerSecurityGroup0099379D",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerTwoManagerSecurityGroup0099379D",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
+          ],
+        },
       },
       "Type": "Custom::AWS",
       "UpdateReplacePolicy": "Delete",
@@ -2120,6 +2186,28 @@ yum update -y aws-cfn-bootstrap
           "Fn::GetAtt": Array [
             "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
             "Arn",
+          ],
+        },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerTwoRunnersSecurityGroup3F6A17EC",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ManagerTwoRunnersSecurityGroup3F6A17EC",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
           ],
         },
       },
@@ -3521,6 +3609,28 @@ yum update -y aws-cfn-bootstrap
             "Arn",
           ],
         },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "RunnerManagerSecurityGroup5680231E",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "RunnerManagerSecurityGroup5680231E",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
+          ],
+        },
       },
       "Type": "Custom::AWS",
       "UpdateReplacePolicy": "Delete",
@@ -3736,6 +3846,28 @@ yum update -y aws-cfn-bootstrap
           "Fn::GetAtt": Array [
             "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
             "Arn",
+          ],
+        },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "RunnerRunnersSecurityGroupB2AFE08F",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "RunnerRunnersSecurityGroupB2AFE08F",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
           ],
         },
       },
@@ -5011,6 +5143,28 @@ yum update -y aws-cfn-bootstrap
             "Arn",
           ],
         },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "RunnerManagerSecurityGroup5680231E",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "RunnerManagerSecurityGroup5680231E",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
+          ],
+        },
       },
       "Type": "Custom::AWS",
       "UpdateReplacePolicy": "Delete",
@@ -5177,6 +5331,28 @@ yum update -y aws-cfn-bootstrap
           "Fn::GetAtt": Array [
             "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
             "Arn",
+          ],
+        },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "RunnerRunnersSecurityGroupB2AFE08F",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "RunnerRunnersSecurityGroupB2AFE08F",
+                  "GroupId",
+                ],
+              },
+              "\\"}}",
+            ],
           ],
         },
       },
