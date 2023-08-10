@@ -824,18 +824,6 @@
   resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.0.497.tgz#a884d7cfb21f38347999f86a11f41a7bbc9a6b30"
   integrity sha512-JU0pVTbdlOvY66J0EYW21K55bTNajN25QZG9InJFrsBuZea1dukx+zcxOhMCFUXEYLTYFroSNkalFwM09hcb7Q==
 
-"@pkgr/utils@^2.3.1":
-  version "2.3.1"
-  resolved "https://registry.npmjs.org/@pkgr/utils/-/utils-2.3.1.tgz"
-  integrity sha512-wfzX8kc1PMyUILA+1Z/EqoE4UCXGy0iRGMhPwdfae1+f0OXlLqCk+By+aMzgJBzR9AzS4CDizioG6Ss1gvAFJw==
-  dependencies:
-    cross-spawn "^7.0.3"
-    is-glob "^4.0.3"
-    open "^8.4.0"
-    picocolors "^1.0.0"
-    tiny-glob "^0.2.9"
-    tslib "^2.4.0"
-
 "@sinonjs/commons@^1.7.0":
   version "1.8.6"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.6.tgz#80c516a4dc264c2a69115e7578d62581ff455ed9"
@@ -1964,11 +1952,6 @@ deepmerge@^4.2.2:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
   integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
 
-define-lazy-prop@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/define-lazy-prop/-/define-lazy-prop-2.0.0.tgz#3f7ae421129bcaaac9bc74905c98a0009ec9ee7f"
-  integrity sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==
-
 define-properties@^1.1.3, define-properties@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/define-properties/-/define-properties-1.1.4.tgz#0b14d7bd7fbeb2f3572c3a7eda80ea5d57fb05b1"
@@ -2291,18 +2274,17 @@ eslint-import-resolver-node@^0.3.7:
     resolve "^1.22.4"
 
 eslint-import-resolver-typescript@^3.5.4:
-  version "3.5.5"
-  resolved "https://registry.yarnpkg.com/eslint-import-resolver-typescript/-/eslint-import-resolver-typescript-3.5.5.tgz#0a9034ae7ed94b254a360fbea89187b60ea7456d"
-  integrity sha512-TdJqPHs2lW5J9Zpe17DZNQuDnox4xo2o+0tE7Pggain9Rbc19ik8kFtXdxZ250FVx2kF4vlt2RSf4qlUpG7bhw==
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/eslint-import-resolver-typescript/-/eslint-import-resolver-typescript-3.6.0.tgz#36f93e1eb65a635e688e16cae4bead54552e3bbd"
+  integrity sha512-QTHR9ddNnn35RTxlaEnx2gCxqFlF2SEN0SE2d17SqwyM7YOSI2GHWRYp5BiRkObTUNYPupC/3Fq2a0PpT+EKpg==
   dependencies:
     debug "^4.3.4"
     enhanced-resolve "^5.12.0"
     eslint-module-utils "^2.7.4"
+    fast-glob "^3.3.1"
     get-tsconfig "^4.5.0"
-    globby "^13.1.3"
     is-core-module "^2.11.0"
     is-glob "^4.0.3"
-    synckit "^0.8.5"
 
 eslint-module-utils@^2.7.4, eslint-module-utils@^2.8.0:
   version "2.8.0"
@@ -2489,18 +2471,7 @@ fast-diff@^1.1.2:
   resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.2.0.tgz#73ee11982d86caaf7959828d519cfe927fac5f03"
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
 
-fast-glob@^3.2.11, fast-glob@^3.2.9:
-  version "3.2.12"
-  resolved "https://registry.npmjs.org/fast-glob/-/fast-glob-3.2.12.tgz"
-  integrity sha512-DVj4CQIYYow0BlaelwK1pHl5n5cRSJfM60UA0zK891sVInoPri2Ekj7+e1CT3/3qxXenpI+nBBmQAcJPJgaj4w==
-  dependencies:
-    "@nodelib/fs.stat" "^2.0.2"
-    "@nodelib/fs.walk" "^1.2.3"
-    glob-parent "^5.1.2"
-    merge2 "^1.3.0"
-    micromatch "^4.0.4"
-
-fast-glob@^3.3.1:
+fast-glob@^3.2.9, fast-glob@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.1.tgz#784b4e897340f3dbbef17413b3f11acf03c874c4"
   integrity sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==
@@ -2846,11 +2817,6 @@ globalthis@^1.0.3:
   dependencies:
     define-properties "^1.1.3"
 
-globalyzer@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/globalyzer/-/globalyzer-0.1.0.tgz"
-  integrity sha512-40oNTM9UfG6aBmuKxk/giHn5nQ8RVz/SS4Ir6zgzOv9/qC3kKZ9v4etGTcJbEl/NyVQH7FGU7d+X1egr57Md2Q==
-
 globby@^11.1.0:
   version "11.1.0"
   resolved "https://registry.npmjs.org/globby/-/globby-11.1.0.tgz"
@@ -2862,22 +2828,6 @@ globby@^11.1.0:
     ignore "^5.2.0"
     merge2 "^1.4.1"
     slash "^3.0.0"
-
-globby@^13.1.3:
-  version "13.1.3"
-  resolved "https://registry.yarnpkg.com/globby/-/globby-13.1.3.tgz#f62baf5720bcb2c1330c8d4ef222ee12318563ff"
-  integrity sha512-8krCNHXvlCgHDpegPzleMq07yMYTO2sXKASmZmquEYWEmCx6J5UTRbp5RwMJkTJGtcQ44YpiUYUiN0b9mzy8Bw==
-  dependencies:
-    dir-glob "^3.0.1"
-    fast-glob "^3.2.11"
-    ignore "^5.2.0"
-    merge2 "^1.4.1"
-    slash "^4.0.0"
-
-globrex@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.npmjs.org/globrex/-/globrex-0.1.2.tgz"
-  integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
 
 gopd@^1.0.1:
   version "1.0.1"
@@ -3151,11 +3101,6 @@ is-date-object@^1.0.1:
   dependencies:
     has-tostringtag "^1.0.0"
 
-is-docker@^2.0.0, is-docker@^2.1.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/is-docker/-/is-docker-2.2.1.tgz#33eeabe23cfe86f14bde4408a02c0cfb853acdaa"
-  integrity sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ==
-
 is-extglob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/is-extglob/-/is-extglob-2.1.1.tgz#a88c02535791f02ed37c76a1b9ea9773c833f8c2"
@@ -3278,13 +3223,6 @@ is-weakref@^1.0.2:
   integrity sha512-qctsuLZmIQ0+vSSMfoVvyFe2+GSEvnmZ2ezTup1SBse9+twCCeial6EEi3Nc2KFcf6+qz2FBPnjXsk8xhKSaPQ==
   dependencies:
     call-bind "^1.0.2"
-
-is-wsl@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/is-wsl/-/is-wsl-2.2.0.tgz"
-  integrity sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==
-  dependencies:
-    is-docker "^2.0.0"
 
 isarray@^2.0.5:
   version "2.0.5"
@@ -4411,15 +4349,6 @@ oo-ascii-tree@^1.86.1:
   resolved "https://registry.yarnpkg.com/oo-ascii-tree/-/oo-ascii-tree-1.86.1.tgz#ae924ed69d3699c8495ceb1ff36d5c2b2cc76a99"
   integrity sha512-pM4jJfP+5cWCOqoSN3RUgNNcOPqLYhmwzbw9QOHNZjCWAfrlgq2D/CSxer0vKDDm5AMkCBzlcknxQLKx9zNqXA==
 
-open@^8.4.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/open/-/open-8.4.0.tgz#345321ae18f8138f82565a910fdc6b39e8c244f8"
-  integrity sha512-XgFPPM+B28FtCCgSb9I+s9szOC1vZRSwgWsRUA5ylIxRTgKozqjOCrVOqGsYABPYK5qnfqClxZTFBa8PKt2v6Q==
-  dependencies:
-    define-lazy-prop "^2.0.0"
-    is-docker "^2.1.1"
-    is-wsl "^2.2.0"
-
 optionator@^0.8.1:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/optionator/-/optionator-0.8.3.tgz#84fa1d036fe9d3c7e21d99884b601167ec8fb495"
@@ -5007,11 +4936,6 @@ slash@^3.0.0:
   resolved "https://registry.npmjs.org/slash/-/slash-3.0.0.tgz"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
-slash@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/slash/-/slash-4.0.0.tgz#2422372176c4c6c5addb5e2ada885af984b396a7"
-  integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
-
 snake-case@^3.0.4:
   version "3.0.4"
   resolved "https://registry.npmjs.org/snake-case/-/snake-case-3.0.4.tgz"
@@ -5304,14 +5228,6 @@ symbol-tree@^3.2.4:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-synckit@^0.8.5:
-  version "0.8.5"
-  resolved "https://registry.yarnpkg.com/synckit/-/synckit-0.8.5.tgz#b7f4358f9bb559437f9f167eb6bc46b3c9818fa3"
-  integrity sha512-L1dapNV6vu2s/4Sputv8xGsCdAVlb5nRDMFU/E27D44l5U6cw1g0dGd45uLc+OXjNMmF4ntiMdCimzcjFKQI8Q==
-  dependencies:
-    "@pkgr/utils" "^2.3.1"
-    tslib "^2.5.0"
-
 tapable@^2.2.0:
   version "2.2.1"
   resolved "https://registry.npmjs.org/tapable/-/tapable-2.2.1.tgz"
@@ -5368,14 +5284,6 @@ through@2, "through@>=2.2.7 <3":
   version "2.3.8"
   resolved "https://registry.npmjs.org/through/-/through-2.3.8.tgz"
   integrity "sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU= sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg=="
-
-tiny-glob@^0.2.9:
-  version "0.2.9"
-  resolved "https://registry.npmjs.org/tiny-glob/-/tiny-glob-0.2.9.tgz"
-  integrity sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==
-  dependencies:
-    globalyzer "0.1.0"
-    globrex "^0.1.2"
 
 tmpl@1.0.5:
   version "1.0.5"
@@ -5468,11 +5376,6 @@ tslib@^2.0.3:
   version "2.3.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
-
-tslib@^2.4.0, tslib@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
-  integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
 
 tsutils@^3.21.0:
   version "3.21.0"
