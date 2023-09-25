@@ -975,9 +975,9 @@
   integrity sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==
 
 "@types/node@^14":
-  version "14.18.62"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.62.tgz#cc691367ad9a09994a36be41cbc9f44e414cf77c"
-  integrity sha512-53Fhb08qfKwSNCIUtysIqw0ye+v1d5QCdL2kl8liKQFlOZTAo+nEYr/FztzMaHBFwB5H0ugF0PF0gmtojaNNiQ==
+  version "14.18.63"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.63.tgz#1788fa8da838dbb5f9ea994b834278205db6ca2b"
+  integrity sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
