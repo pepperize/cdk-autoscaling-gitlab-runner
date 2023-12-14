@@ -206,8 +206,11 @@ export class GitlabRunnerAutoscalingManager extends Construct {
 
     this.userData = UserData.forLinux({});
     this.userData.addCommands(
-      `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
+      `yum update -y aws-cfn-bootstrap`, // !/bin/bash -xe
+      `yum install -y amazon-ecr-credential-helper`
     );
+
+    const addEcrCommands 
 
     // https://github.com/awslabs/amazon-ecr-credential-helper
     const userDataRunners = UserData.forLinux({});
