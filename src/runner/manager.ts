@@ -207,9 +207,9 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               {
                 Effect: "Allow",
                 Action: ["ecr:BatchGetImage", "ecr:GetAuthorizationToken", "ecr:GetDownloadUrlForLayer"],
-                Resource: "*"
-              }
-            ]
+                Resource: "*",
+              },
+            ],
           }),
         },
       });

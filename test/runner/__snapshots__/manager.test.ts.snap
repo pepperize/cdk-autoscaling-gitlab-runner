@@ -238,6 +238,23 @@ Object {
             },
             "PolicyName": "Runners",
           },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "ecr:BatchGetImage",
+                    "ecr:GetAuthorizationToken",
+                    "ecr:GetDownloadUrlForLayer",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "ECRLogin",
+          },
         ],
       },
       "Type": "AWS::IAM::Role",
