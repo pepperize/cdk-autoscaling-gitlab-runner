@@ -553,6 +553,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
+yum install -y amazon-ecr-credential-helper
 # fingerprint: f928611447f57f37
 (
   set +e
@@ -753,6 +754,23 @@ yum update -y aws-cfn-bootstrap
               "Version": "2012-10-17",
             },
             "PolicyName": "Runners",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "ecr:BatchGetImage",
+                    "ecr:GetAuthorizationToken",
+                    "ecr:GetDownloadUrlForLayer",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "ECRLogin",
           },
         ],
       },
@@ -1761,6 +1779,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
+yum install -y amazon-ecr-credential-helper
 # fingerprint: 8d35c76383269b1a
 (
   set +e
@@ -1961,6 +1980,23 @@ yum update -y aws-cfn-bootstrap
               "Version": "2012-10-17",
             },
             "PolicyName": "Runners",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "ecr:BatchGetImage",
+                    "ecr:GetAuthorizationToken",
+                    "ecr:GetDownloadUrlForLayer",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "ECRLogin",
           },
         ],
       },
@@ -3325,6 +3361,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
+yum install -y amazon-ecr-credential-helper
 # fingerprint: 7a9eacc3e399a1c8
 (
   set +e
@@ -3527,6 +3564,23 @@ yum update -y aws-cfn-bootstrap
               "Version": "2012-10-17",
             },
             "PolicyName": "Runners",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "ecr:BatchGetImage",
+                    "ecr:GetAuthorizationToken",
+                    "ecr:GetDownloadUrlForLayer",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "ECRLogin",
           },
         ],
       },
@@ -4872,6 +4926,7 @@ token = \\"",
               Array [
                 "#!/bin/bash
 yum update -y aws-cfn-bootstrap
+yum install -y amazon-ecr-credential-helper
 # fingerprint: fe8cb4550968c746
 (
   set +e
@@ -5063,6 +5118,23 @@ yum update -y aws-cfn-bootstrap
               "Version": "2012-10-17",
             },
             "PolicyName": "Runners",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "ecr:BatchGetImage",
+                    "ecr:GetAuthorizationToken",
+                    "ecr:GetDownloadUrlForLayer",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "ECRLogin",
           },
         ],
       },

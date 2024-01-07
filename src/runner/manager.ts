@@ -201,12 +201,23 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               },
             ],
           }),
+          ECRLogin: PolicyDocument.fromJson({
+            Version: "2012-10-17",
+            Statement: [
+              {
+                Effect: "Allow",
+                Action: ["ecr:BatchGetImage", "ecr:GetAuthorizationToken", "ecr:GetDownloadUrlForLayer"],
+                Resource: "*",
+              },
+            ],
+          }),
         },
       });
 
     this.userData = UserData.forLinux({});
     this.userData.addCommands(
-      `yum update -y aws-cfn-bootstrap` // !/bin/bash -xe
+      `yum update -y aws-cfn-bootstrap`, // !/bin/bash -xe
+      `yum install -y amazon-ecr-credential-helper`
     );
 
     // https://github.com/awslabs/amazon-ecr-credential-helper
