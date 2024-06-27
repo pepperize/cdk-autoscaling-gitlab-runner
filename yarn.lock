@@ -4047,14 +4047,14 @@ jsesc@^2.5.1:
   integrity sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
 
 jsii-diff@^1.79.0:
-  version "1.100.0"
-  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.100.0.tgz#aea28ca2360cc6a1f1089c7105fb61076d7b3f4a"
-  integrity sha512-/Rs2jPmIlcQTwHEuse8SGx/ztSh4F0JYE4OnIBmRZ4ljppPqSGSOoa7pp10IpSmmF2ac+2sgOGuEadwjrDDi4w==
+  version "1.101.0"
+  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.101.0.tgz#d8bf59c522aaf419e9465170db78810a9795f8a9"
+  integrity sha512-7DvBiLireA91AnWCxt7EcKd04/zp8Rhk8oTYSGtIM57ZNZ+FV7cbrgxmXqja6P1ZXz67N3UAjKC8KdtFXeOqRA==
   dependencies:
-    "@jsii/check-node" "1.100.0"
-    "@jsii/spec" "^1.100.0"
+    "@jsii/check-node" "1.101.0"
+    "@jsii/spec" "^1.101.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.100.0"
+    jsii-reflect "^1.101.0"
     log4js "^6.9.1"
     yargs "^16.2.0"
 
