@@ -3890,12 +3890,12 @@ jsii@1.97.0:
     yargs "^16.2.0"
 
 jsii@1.x:
-  version "1.102.0"
-  resolved "https://registry.yarnpkg.com/jsii/-/jsii-1.102.0.tgz#7d0f01497c84ffe52be7d4a5a075387a2596cf16"
-  integrity sha512-XwNFkuC1dU6CiA7toiffUPuRj86hThk9T617ZGyKrrdwQ3Q0VbS+nHv4oq1WcmG0O+2EaZMgyfbNTFurHDkquA==
+  version "1.103.0"
+  resolved "https://registry.yarnpkg.com/jsii/-/jsii-1.103.0.tgz#fa1545745fe1bf98ea29c02c560cf3e4df84a0e0"
+  integrity sha512-VOx//ltn+xFEjqLUszj7S4RQ5BpVe6PvneodYxcoHb79Z52kC9IsDx26cEsaizXZcnWtJjIK2XjnT5dPM2TNCw==
   dependencies:
-    "@jsii/check-node" "1.102.0"
-    "@jsii/spec" "^1.102.0"
+    "@jsii/check-node" "1.103.0"
+    "@jsii/spec" "^1.103.0"
     case "^1.6.3"
     chalk "^4"
     fast-deep-equal "^3.1.3"
