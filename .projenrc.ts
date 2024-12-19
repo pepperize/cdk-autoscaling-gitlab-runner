@@ -31,7 +31,7 @@ const project = new AwsCdkConstructLibrary({
   cdkVersion: "2.8.0",
   cdkVersionPinning: false,
   deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
-  devDeps: ["@pepperize/projen-awscdk-construct"],
+  devDeps: ["@pepperize/projen-awscdk-construct@~0.0.730"],
   peerDeps: ["@pepperize/cdk-private-bucket", "@pepperize/cdk-security-group@^v0.0.439", "@pepperize/cdk-vpc"],
   bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
 
