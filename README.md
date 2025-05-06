@@ -72,6 +72,7 @@ dotnet add package Pepperize.CDK.AutoscalingGitlabRunner
 2. **Configure your project in `.projenrc.js`**
 
    - Add `deps: ["@pepperize/cdk-autoscaling-gitlab-runner"],`
+   - Add `context: { "@aws-cdk/aws-autoscaling:generateLaunchTemplateInsteadOfLaunchConfig": true },`
 
 3. **Update project files and install dependencies**
 
