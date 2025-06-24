@@ -298,7 +298,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                         configuration.machine?.machineOptions?.privateAddressOnly ?? this.network.hasPrivateSubnets(),
                       usePrivateAddress: configuration.machine?.machineOptions?.usePrivateAddress ?? true,
                       iamInstanceProfile: runner.instanceProfile.ref,
-                      userdata: "/etc/gitlab-runner/user_data_runners",
+                      userdata: configuration.machine?.machineOptions?.userdata ?? "/etc/gitlab-runner/user_data_runners",
                       engineInstallUrl:
                         configuration.machine?.machineOptions?.engineInstallUrl ??
                         "https://releases.rancher.com/install-docker/20.10.21.sh",
