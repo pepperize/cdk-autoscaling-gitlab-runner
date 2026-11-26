@@ -1,57 +1,57 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Manager Should match snapshot when Manager launch configuration is being set 1`] = `
-Object {
-  "Parameters": Object {
-    "BootstrapVersion": Object {
+{
+  "Parameters": {
+    "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": Object {
-      "DependsOn": Array [
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
         "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
       ],
-      "Properties": Object {
-        "Code": Object {
+      "Properties": {
+        "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-123456789012-us-east-1",
-          "S3Key": "4a575666d1c2c6412590d2a56f328e040a81ad1ef59aecee31ae9b393d05f659.zip",
+          "S3Key": "107fad8963264825cc449bcfac9d72effef186dd868b2c29670e8eb13ddcaee0.zip",
         },
         "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
+        "Role": {
+          "Fn::GetAtt": [
             "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
             "Arn",
           ],
         },
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 120,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "lambda.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
@@ -62,32 +62,32 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CacheBucket41D9D0B0": Object {
+    "CacheBucket41D9D0B0": {
       "DeletionPolicy": "Retain",
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "ManagerRole08FB5B64": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ManagerRole08FB5B64": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/AmazonSSMManagedInstanceCore",
@@ -95,24 +95,24 @@ Object {
             ],
           },
         ],
-        "Policies": Array [
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
                     "s3:ListObjects*",
                     "s3:GetObject*",
                     "s3:DeleteObject*",
                     "s3:PutObject*",
                   ],
                   "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::Join": Array [
+                  "Resource": {
+                    "Fn::Join": [
                       "",
-                      Array [
-                        Object {
-                          "Fn::GetAtt": Array [
+                      [
+                        {
+                          "Fn::GetAtt": [
                             "CacheBucket41D9D0B0",
                             "Arn",
                           ],
@@ -122,11 +122,11 @@ Object {
                     ],
                   },
                 },
-                Object {
+                {
                   "Action": "s3:ListBucket",
                   "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::GetAtt": Array [
+                  "Resource": {
+                    "Fn::GetAtt": [
                       "CacheBucket41D9D0B0",
                       "Arn",
                     ],
@@ -137,11 +137,11 @@ Object {
             },
             "PolicyName": "Cache",
           },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
                     "ec2:CreateKeyPair",
                     "ec2:DeleteKeyPair",
                     "ec2:ImportKeyPair",
@@ -150,55 +150,55 @@ Object {
                   "Effect": "Allow",
                   "Resource": "*",
                 },
-                Object {
-                  "Action": Array [
+                {
+                  "Action": [
                     "ec2:CreateTags",
                     "ssm:UpdateInstanceInformation",
                   ],
-                  "Condition": Object {
-                    "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
+                  "Condition": {
+                    "ForAllValues:StringEquals": {
+                      "aws:TagKeys": [
                         "Name",
                       ],
                     },
-                    "StringLike": Object {
+                    "StringLike": {
                       "aws:RequestTag/Name": "*gitlab-runner-*",
                     },
                   },
                   "Effect": "Allow",
                   "Resource": "*",
                 },
-                Object {
-                  "Action": Array [
+                {
+                  "Action": [
                     "ec2:RequestSpotInstances",
                     "ec2:CancelSpotInstanceRequests",
                   ],
-                  "Condition": Object {
-                    "ArnEqualsIfExists": Object {
-                      "ec2:Vpc": Object {
-                        "Fn::Join": Array [
+                  "Condition": {
+                    "ArnEqualsIfExists": {
+                      "ec2:Vpc": {
+                        "Fn::Join": [
                           "",
-                          Array [
+                          [
                             "arn:aws:ec2:us-east-1:123456789012:vpc/",
-                            Object {
+                            {
                               "Ref": "Vpc8378EB38",
                             },
                           ],
                         ],
                       },
                     },
-                    "StringEqualsIfExists": Object {
+                    "StringEqualsIfExists": {
                       "ec2:Region": "us-east-1",
                     },
                   },
                   "Effect": "Allow",
                   "Resource": "*",
                 },
-                Object {
+                {
                   "Action": "ec2:RunInstances",
-                  "Condition": Object {
-                    "ForAllValues:StringEquals": Object {
-                      "ec2:InstanceType": Array [
+                  "Condition": {
+                    "ForAllValues:StringEquals": {
+                      "ec2:InstanceType": [
                         "t3.micro",
                       ],
                     },
@@ -206,26 +206,26 @@ Object {
                   "Effect": "Allow",
                   "Resource": "*",
                 },
-                Object {
-                  "Action": Array [
+                {
+                  "Action": [
                     "ec2:TerminateInstances",
                     "ec2:StopInstances",
                     "ec2:StartInstances",
                     "ec2:RebootInstances",
                   ],
-                  "Condition": Object {
-                    "StringLike": Object {
+                  "Condition": {
+                    "StringLike": {
                       "ec2:ResourceTag/Name": "*gitlab-runner-*",
                     },
                   },
                   "Effect": "Allow",
                   "Resource": "*",
                 },
-                Object {
+                {
                   "Action": "iam:PassRole",
-                  "Condition": Object {
-                    "ForAllValues:StringEquals": Object {
-                      "aws:TagKeys": Array [
+                  "Condition": {
+                    "ForAllValues:StringEquals": {
+                      "aws:TagKeys": [
                         "RunnersRole",
                       ],
                     },
@@ -238,11 +238,11 @@ Object {
             },
             "PolicyName": "Runners",
           },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
                     "ecr:BatchGetImage",
                     "ecr:GetAuthorizationToken",
                     "ecr:GetDownloadUrlForLayer",
@@ -259,37 +259,37 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "RunnersInstanceProfileForRunner1": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
+    "RunnersInstanceProfileForRunner1": {
+      "Properties": {
+        "Roles": [
+          {
             "Ref": "RunnersRoleForRunner1802B765C",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "RunnersRoleForRunner1802B765C": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "RunnersRoleForRunner1802B765C": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/AmazonSSMManagedInstanceCore",
@@ -297,8 +297,8 @@ Object {
             ],
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "RunnersRole",
             "Value": "RunnersRole",
           },
@@ -306,11 +306,11 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "SGADB53937": Object {
-      "Properties": Object {
+    "SGADB53937": {
+      "Properties": {
         "GroupDescription": "Stack/SG",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1",
@@ -320,60 +320,60 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "SGDescribeSGCustomResource81C6C0CF": Object {
+    "SGDescribeSGCustomResource81C6C0CF": {
       "DeletionPolicy": "Delete",
-      "DependsOn": Array [
+      "DependsOn": [
         "SGDescribeSGCustomResourceCustomResourcePolicyA3B16016",
       ],
-      "Properties": Object {
-        "Create": Object {
-          "Fn::Join": Array [
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
             "",
-            Array [
-              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
-              Object {
-                "Fn::GetAtt": Array [
+            [
+              "{"service":"EC2","action":"describeSecurityGroups","parameters":{"GroupIds":["",
+              {
+                "Fn::GetAtt": [
                   "SGADB53937",
                   "GroupId",
                 ],
               },
-              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
-              Object {
-                "Fn::GetAtt": Array [
+              ""]},"physicalResourceId":{"id":"",
+              {
+                "Fn::GetAtt": [
                   "SGADB53937",
                   "GroupId",
                 ],
               },
-              "\\"}}",
+              ""}}",
             ],
           ],
         },
         "InstallLatestAwsSdk": true,
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
+        "ServiceToken": {
+          "Fn::GetAtt": [
             "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
             "Arn",
           ],
         },
-        "Update": Object {
-          "Fn::Join": Array [
+        "Update": {
+          "Fn::Join": [
             "",
-            Array [
-              "{\\"service\\":\\"EC2\\",\\"action\\":\\"describeSecurityGroups\\",\\"parameters\\":{\\"GroupIds\\":[\\"",
-              Object {
-                "Fn::GetAtt": Array [
+            [
+              "{"service":"EC2","action":"describeSecurityGroups","parameters":{"GroupIds":["",
+              {
+                "Fn::GetAtt": [
                   "SGADB53937",
                   "GroupId",
                 ],
               },
-              "\\"]},\\"physicalResourceId\\":{\\"id\\":\\"",
-              Object {
-                "Fn::GetAtt": Array [
+              ""]},"physicalResourceId":{"id":"",
+              {
+                "Fn::GetAtt": [
                   "SGADB53937",
                   "GroupId",
                 ],
               },
-              "\\"}}",
+              ""}}",
             ],
           ],
         },
@@ -381,11 +381,11 @@ Object {
       "Type": "Custom::AWS",
       "UpdateReplacePolicy": "Delete",
     },
-    "SGDescribeSGCustomResourceCustomResourcePolicyA3B16016": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "SGDescribeSGCustomResourceCustomResourcePolicyA3B16016": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ec2:DescribeSecurityGroups",
               "Effect": "Allow",
               "Resource": "*",
@@ -394,22 +394,22 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "SGDescribeSGCustomResourceCustomResourcePolicyA3B16016",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "Vpc8378EB38": Object {
-      "Properties": Object {
+    "Vpc8378EB38": {
+      "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "EnableDnsHostnames": true,
         "EnableDnsSupport": true,
         "InstanceTenancy": "default",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "Stack/Vpc",
           },
@@ -417,10 +417,10 @@ Object {
       },
       "Type": "AWS::EC2::VPC",
     },
-    "VpcIGWD7BA715C": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "VpcIGWD7BA715C": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "Stack/Vpc",
           },
@@ -428,22 +428,22 @@ Object {
       },
       "Type": "AWS::EC2::InternetGateway",
     },
-    "VpcNatRoleA1B5D171": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "VpcNatRoleA1B5D171": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "Stack/Vpc",
           },
@@ -451,220 +451,220 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "VpcNatSecurityGroup8DA26EDC": Object {
-      "Properties": Object {
+    "VpcNatSecurityGroup8DA26EDC": {
+      "Properties": {
         "GroupDescription": "Security Group for NAT instances",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1",
           },
         ],
-        "SecurityGroupIngress": Array [
-          Object {
+        "SecurityGroupIngress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "from 0.0.0.0/0:ALL TRAFFIC",
             "IpProtocol": "-1",
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "Stack/Vpc",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcPrivateSubnet1DefaultRouteBE02A9ED": Object {
-      "Properties": Object {
+    "VpcPrivateSubnet1DefaultRouteBE02A9ED": {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "InstanceId": Object {
+        "InstanceId": {
           "Ref": "VpcPublicSubnet1NatInstance57B636B8",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "VpcPrivateSubnet1RouteTableB2C5B500",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "VpcPrivateSubnet1RouteTableAssociation70C59FA6": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
+    "VpcPrivateSubnet1RouteTableAssociation70C59FA6": {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "VpcPrivateSubnet1RouteTableB2C5B500",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "VpcPrivateSubnet1Subnet536B997A",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcPrivateSubnet1RouteTableB2C5B500": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "VpcPrivateSubnet1RouteTableB2C5B500": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "Stack/Vpc/PrivateSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcPrivateSubnet1Subnet536B997A": Object {
-      "Properties": Object {
+    "VpcPrivateSubnet1Subnet536B997A": {
+      "Properties": {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.128.0/17",
         "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "Private",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Private",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Stack/Vpc/PrivateSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcPublicSubnet1DefaultRoute3DA9E72A": Object {
-      "DependsOn": Array [
+    "VpcPublicSubnet1DefaultRoute3DA9E72A": {
+      "DependsOn": [
         "VpcVPCGWBF912B6E",
       ],
-      "Properties": Object {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
+        "GatewayId": {
           "Ref": "VpcIGWD7BA715C",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "VpcPublicSubnet1NatInstance57B636B8": Object {
-      "DependsOn": Array [
+    "VpcPublicSubnet1NatInstance57B636B8": {
+      "DependsOn": [
         "VpcNatRoleA1B5D171",
       ],
-      "Properties": Object {
+      "Properties": {
         "AvailabilityZone": "dummy1a",
-        "IamInstanceProfile": Object {
+        "IamInstanceProfile": {
           "Ref": "VpcPublicSubnet1NatInstanceInstanceProfileEE10C485",
         },
         "ImageId": "ami-1234",
         "InstanceType": "t3.nano",
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
               "VpcNatSecurityGroup8DA26EDC",
               "GroupId",
             ],
           },
         ],
         "SourceDestCheck": false,
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "Stack/Vpc/PublicSubnet1/NatInstance",
           },
         ],
-        "UserData": Object {
+        "UserData": {
           "Fn::Base64": "#!/bin/bash",
         },
       },
       "Type": "AWS::EC2::Instance",
     },
-    "VpcPublicSubnet1NatInstanceInstanceProfileEE10C485": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
+    "VpcPublicSubnet1NatInstanceInstanceProfileEE10C485": {
+      "Properties": {
+        "Roles": [
+          {
             "Ref": "VpcNatRoleA1B5D171",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "VpcPublicSubnet1RouteTable6C95E38E": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "VpcPublicSubnet1RouteTable6C95E38E": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "Stack/Vpc/PublicSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcPublicSubnet1RouteTableAssociation97140677": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
+    "VpcPublicSubnet1RouteTableAssociation97140677": {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcPublicSubnet1Subnet5C2D37C4": Object {
-      "Properties": Object {
+    "VpcPublicSubnet1Subnet5C2D37C4": {
+      "Properties": {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.0.0/17",
         "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Stack/Vpc/PublicSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcVPCGWBF912B6E": Object {
-      "Properties": Object {
-        "InternetGatewayId": Object {
+    "VpcVPCGWBF912B6E": {
+      "Properties": {
+        "InternetGatewayId": {
           "Ref": "VpcIGWD7BA715C",
         },
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::VPCGatewayAttachment",
     },
-    "importedtokenE9189228": Object {
-      "Properties": Object {
+    "importedtokenE9189228": {
+      "Properties": {
         "Name": "/gitlab-runner/token",
         "Tier": "Standard",
         "Type": "SecureString",
@@ -673,22 +673,22 @@ Object {
       "Type": "AWS::SSM::Parameter",
     },
   },
-  "Rules": Object {
-    "CheckBootstrapVersion": Object {
-      "Assertions": Array [
-        Object {
-          "Assert": Object {
-            "Fn::Not": Array [
-              Object {
-                "Fn::Contains": Array [
-                  Array [
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
                     "1",
                     "2",
                     "3",
                     "4",
                     "5",
                   ],
-                  Object {
+                  {
                     "Ref": "BootstrapVersion",
                   },
                 ],

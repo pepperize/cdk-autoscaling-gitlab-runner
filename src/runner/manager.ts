@@ -217,14 +217,14 @@ export class GitlabRunnerAutoscalingManager extends Construct {
     this.userData = UserData.forLinux({});
     this.userData.addCommands(
       `yum update -y aws-cfn-bootstrap`, // !/bin/bash -xe
-      `yum install -y amazon-ecr-credential-helper`
+      `yum install -y amazon-ecr-credential-helper`,
     );
 
     // https://github.com/awslabs/amazon-ecr-credential-helper
     const userDataRunners = UserData.forLinux({});
     userDataRunners.addCommands(
       `[ ! -z "$(which apt-get)" ] && apt-get update && apt-get install -y amazon-ecr-credential-helper`,
-      `[ ! -z "$(which yum)" ] && yum install -y amazon-ecr-credential-helper`
+      `[ ! -z "$(which yum)" ] && yum install -y amazon-ecr-credential-helper`,
     );
 
     const gitlabRunnerConfigRestartHandle = new InitServiceRestartHandle();
@@ -250,7 +250,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
         [REPOSITORIES]: new InitConfig([
           InitCommand.shellCommand(
             "curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash",
-            { key: "10-gitlab-runner" }
+            { key: "10-gitlab-runner" },
           ),
         ]),
         [PACKAGES]: new InitConfig([
@@ -263,7 +263,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               props.dockerMachineVersion?.version ?? DockerMachineVersion.V0_16_2_GITLAB_15.version
             }/docker-machine-\`uname -s\`-\`uname -m\` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine`,
             //"curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` > /tmp/docker-machine && install /tmp/docker-machine /usr/bin/docker-machine",
-            { key: "10-docker-machine" }
+            { key: "10-docker-machine" },
           ),
           InitCommand.shellCommand("gitlab-runner start", {
             key: "20-gitlab-runner-start",
@@ -319,7 +319,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               owner: "gitlab-runner",
               group: "gitlab-runner",
               mode: "000600",
-            }
+            },
           ),
           InitFile.fromString(
             "/etc/rsyslog.d/25-gitlab-runner.conf",
@@ -328,7 +328,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               owner: "root",
               group: "root",
               mode: "000644",
-            }
+            },
           ),
           InitService.enable("gitlab-runner", {
             ensureRunning: true,
@@ -365,7 +365,7 @@ export class GitlabRunnerAutoscalingManager extends Construct {
               .join("\n"),
             {
               key: "999-retrieve-ec2-key-pair",
-            }
+            },
           ),
           InitFile.fromString("/etc/gitlab-runner/user_data_runners", userDataRunners.render(), {
             owner: "gitlab-runner",

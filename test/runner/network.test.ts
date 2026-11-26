@@ -48,7 +48,7 @@ describe("Network", () => {
       "AWS::EC2::Subnet",
       Match.objectLike({
         AvailabilityZone: Match.anyValue(),
-      })
+      }),
     );
   });
 });

@@ -47,6 +47,7 @@ new Cache(scope: Construct, id: string, props?: CacheProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Cache.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Cache.with">with</a></code> | Applies one or more mixins to this construct. |
 
 ---
 
@@ -58,6 +59,27 @@ public toString(): string
 
 Returns a string representation of this construct.
 
+##### `with` <a name="with" id="@pepperize/cdk-autoscaling-gitlab-runner.Cache.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="@pepperize/cdk-autoscaling-gitlab-runner.Cache.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
@@ -66,7 +88,7 @@ Returns a string representation of this construct.
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.Cache.isConstruct"></a>
+##### `isConstruct` <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.Cache.isConstruct"></a>
 
 ```typescript
 import { Cache } from '@pepperize/cdk-autoscaling-gitlab-runner'
@@ -75,6 +97,20 @@ Cache.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@pepperize/cdk-autoscaling-gitlab-runner.Cache.isConstruct.parameter.x"></a>
 
@@ -186,6 +222,7 @@ new GitlabRunnerAutoscaling(scope: Stack, id: string, props: GitlabRunnerAutosca
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.with">with</a></code> | Applies one or more mixins to this construct. |
 
 ---
 
@@ -197,6 +234,27 @@ public toString(): string
 
 Returns a string representation of this construct.
 
+##### `with` <a name="with" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
@@ -205,7 +263,7 @@ Returns a string representation of this construct.
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.isConstruct"></a>
+##### `isConstruct` <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.isConstruct"></a>
 
 ```typescript
 import { GitlabRunnerAutoscaling } from '@pepperize/cdk-autoscaling-gitlab-runner'
@@ -214,6 +272,20 @@ GitlabRunnerAutoscaling.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling.isConstruct.parameter.x"></a>
 
@@ -373,6 +445,7 @@ new GitlabRunnerAutoscalingJobRunner(scope: Construct, id: string, props: Gitlab
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.with">with</a></code> | Applies one or more mixins to this construct. |
 
 ---
 
@@ -384,6 +457,27 @@ public toString(): string
 
 Returns a string representation of this construct.
 
+##### `with` <a name="with" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
@@ -392,7 +486,7 @@ Returns a string representation of this construct.
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.isConstruct"></a>
+##### `isConstruct` <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.isConstruct"></a>
 
 ```typescript
 import { GitlabRunnerAutoscalingJobRunner } from '@pepperize/cdk-autoscaling-gitlab-runner'
@@ -401,6 +495,20 @@ GitlabRunnerAutoscalingJobRunner.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.isConstruct.parameter.x"></a>
 
@@ -542,6 +650,7 @@ new GitlabRunnerAutoscalingManager(scope: Construct, id: string, props: GitlabRu
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.with">with</a></code> | Applies one or more mixins to this construct. |
 
 ---
 
@@ -553,6 +662,27 @@ public toString(): string
 
 Returns a string representation of this construct.
 
+##### `with` <a name="with" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
@@ -561,7 +691,7 @@ Returns a string representation of this construct.
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.isConstruct"></a>
+##### `isConstruct` <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.isConstruct"></a>
 
 ```typescript
 import { GitlabRunnerAutoscalingManager } from '@pepperize/cdk-autoscaling-gitlab-runner'
@@ -570,6 +700,20 @@ GitlabRunnerAutoscalingManager.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager.isConstruct.parameter.x"></a>
 
@@ -766,6 +910,7 @@ new Network(scope: Construct, id: string, props?: NetworkProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Network.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Network.with">with</a></code> | Applies one or more mixins to this construct. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.Network.hasPrivateSubnets">hasPrivateSubnets</a></code> | *No description.* |
 
 ---
@@ -777,6 +922,27 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `with` <a name="with" id="@pepperize/cdk-autoscaling-gitlab-runner.Network.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="@pepperize/cdk-autoscaling-gitlab-runner.Network.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
 
 ##### `hasPrivateSubnets` <a name="hasPrivateSubnets" id="@pepperize/cdk-autoscaling-gitlab-runner.Network.hasPrivateSubnets"></a>
 
@@ -792,7 +958,7 @@ public hasPrivateSubnets(): boolean
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.Network.isConstruct"></a>
+##### `isConstruct` <a name="isConstruct" id="@pepperize/cdk-autoscaling-gitlab-runner.Network.isConstruct"></a>
 
 ```typescript
 import { Network } from '@pepperize/cdk-autoscaling-gitlab-runner'
@@ -801,6 +967,20 @@ Network.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@pepperize/cdk-autoscaling-gitlab-runner.Network.isConstruct.parameter.x"></a>
 
