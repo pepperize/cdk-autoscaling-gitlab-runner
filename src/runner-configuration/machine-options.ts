@@ -76,6 +76,13 @@ export interface MachineOptions extends SharedCreateOptions {
    */
   readonly sshKeypath?: string;
   /**
+   * The amazonec2-ssh-user parameter. The SSH login username, which must match the default SSH user set in the ami used.
+   *
+   * @see https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/docs/drivers/aws.md#options
+   * @default ubuntu
+   */
+  readonly sshUser?: string;
+  /**
    * The amazonec2-keypair-name parameter. A set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance.
    *
    * <b>using --amazonec2-keypair-name also requires --amazonec2-ssh-keypath</b>
