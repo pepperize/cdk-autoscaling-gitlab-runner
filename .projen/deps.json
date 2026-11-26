@@ -2,15 +2,17 @@
   "dependencies": [
     {
       "name": "@pepperize/projen-awscdk-construct",
-      "version": "~0.0.730",
+      "version": "~0.1.1",
       "type": "build"
     },
     {
       "name": "@types/jest",
+      "version": "^30",
       "type": "build"
     },
     {
       "name": "@types/node",
+      "version": "^22",
       "type": "build"
     },
     {
@@ -25,7 +27,7 @@
     },
     {
       "name": "commit-and-tag-version",
-      "version": "^12",
+      "version": "^13",
       "type": "build"
     },
     {
@@ -50,12 +52,13 @@
       "type": "build"
     },
     {
-      "name": "jest",
+      "name": "jest-junit",
+      "version": "^17",
       "type": "build"
     },
     {
-      "name": "jest-junit",
-      "version": "^15",
+      "name": "jest",
+      "version": "^30",
       "type": "build"
     },
     {
@@ -73,12 +76,12 @@
     },
     {
       "name": "jsii-rosetta",
-      "version": "~5.6.0",
+      "version": "~6.0.0",
       "type": "build"
     },
     {
       "name": "jsii",
-      "version": "~5.6.0",
+      "version": "~6.0.0",
       "type": "build"
     },
     {
@@ -91,6 +94,7 @@
     },
     {
       "name": "ts-jest",
+      "version": "^29",
       "type": "build"
     },
     {
@@ -99,6 +103,7 @@
     },
     {
       "name": "typescript",
+      "version": "~6.0",
       "type": "build"
     },
     {
@@ -107,42 +112,47 @@
     },
     {
       "name": "param-case",
+      "version": "^3",
       "type": "bundled"
     },
     {
       "name": "pascal-case",
+      "version": "^3",
       "type": "bundled"
     },
     {
       "name": "snake-case",
+      "version": "^3",
       "type": "bundled"
     },
     {
       "name": "projen",
-      "version": "~0.91.1",
+      "version": "~0.105.12",
       "type": "devenv"
     },
     {
       "name": "@pepperize/cdk-private-bucket",
+      "version": "^0.0.599",
       "type": "peer"
     },
     {
       "name": "@pepperize/cdk-security-group",
-      "version": "^v0.0.439",
+      "version": "^0.0.662",
       "type": "peer"
     },
     {
       "name": "@pepperize/cdk-vpc",
+      "version": "^0.0.1165",
       "type": "peer"
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.8.0",
+      "version": "^2.278.0",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "^10.0.5",
+      "version": "^10.5.1",
       "type": "peer"
     },
     {
@@ -151,14 +161,17 @@
     },
     {
       "name": "param-case",
+      "version": "^3",
       "type": "runtime"
     },
     {
       "name": "pascal-case",
+      "version": "^3",
       "type": "runtime"
     },
     {
       "name": "snake-case",
+      "version": "^3",
       "type": "runtime"
     }
   ],

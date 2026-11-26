@@ -124,7 +124,7 @@ export class ConfigurationMapper {
       }
       if (config.machine?.autoscaling?.length) {
         runner.machine.autoscaling = config.machine?.autoscaling.map((autoscaling) =>
-          toJsonMap(autoscaling, pascalCase)
+          toJsonMap(autoscaling, pascalCase),
         );
       }
       delete runner.machine.Autoscaling;

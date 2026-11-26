@@ -1,168 +1,168 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ConfigurationMapper Should map snapshot with defaults only at empty values when provided a configuration consisting of a mix of empty and defined values 1`] = `
 "concurrent = 10
 check_interval = 0
-log_format = \\"runner\\"
-log_level = \\"info\\"
+log_format = "runner"
+log_level = "info"
 
 [[runners]]
-url = \\"https://gitlab.com\\"
+url = "https://gitlab.com"
 limit = 10
 output_limit = 52_428_800
-executor = \\"docker+machine\\"
+executor = "docker+machine"
 environment = [
-  \\"DOCKER_DRIVER=overlay2\\",
-  \\"DOCKER_TLS_CERTDIR=/certs\\",
-  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+  "DOCKER_DRIVER=overlay2",
+  "DOCKER_TLS_CERTDIR=/certs",
+  "DOCKER_AUTH_CONFIG={\\"credsStore\\": \\"ecr-login\\"}"
 ]
-token = \\"foo+bar\\"
+token = "foo+bar"
 
   [runners.docker]
   tls_verify = false
-  image = \\"docker:19.03.5\\"
+  image = "docker:19.03.5"
   privileged = true
-  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  cap_add = [ "CAP_SYS_ADMIN" ]
   wait_for_services_timeout = 300
   disable_cache = false
-  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  volumes = [ "/certs/client", "/cache" ]
   shm_size = 0
 
   [runners.machine]
   IdleCount = 0
   IdleTime = 300
   MaxBuilds = 20
-  MachineDriver = \\"amazonec2\\"
-  MachineName = \\"gitlab-runner-%s\\"
+  MachineDriver = "amazonec2"
+  MachineName = "gitlab-runner-%s"
   MachineOptions = [
-  \\"amazonec2-request-spot-instance=true\\",
-  \\"amazonec2-spot-price=0.03\\",
-  \\"amazonec2-metadata-token=required\\",
-  \\"amazonec2-metadata-token-response-hop-limit=2\\"
+  "amazonec2-request-spot-instance=true",
+  "amazonec2-spot-price=0.03",
+  "amazonec2-metadata-token=required",
+  "amazonec2-metadata-token-response-hop-limit=2"
 ]
 
     [[runners.machine.autoscaling]]
-    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    Periods = [ "* * 7-22 * * mon-fri *" ]
     IdleCount = 1
     IdleTime = 1_800
-    Timezone = \\"Etc/UTC\\"
+    Timezone = "Etc/UTC"
 
   [runners.cache]
-  Type = \\"s3\\"
+  Type = "s3"
   Shared = true
 
     [runners.cache.S3]
-    serverAddress = \\"s3.amazonaws.com\\"
-    bucketName = \\"gitlab-runner-cache-bucket-test-us-east-1\\"
-    bucketLocation = \\"us-east-1\\"
-    accessKey = \\"AKIAIOSFODNN7EXAMPLE\\"
-    secretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
+    serverAddress = "s3.amazonaws.com"
+    bucketName = "gitlab-runner-cache-bucket-test-us-east-1"
+    bucketLocation = "us-east-1"
+    accessKey = "AKIAIOSFODNN7EXAMPLE"
+    secretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 "
 `;
 
 exports[`ConfigurationMapper Should match snapshot when provided multiple runners configuration 1`] = `
 "concurrent = 10
 check_interval = 0
-log_format = \\"runner\\"
-log_level = \\"info\\"
+log_format = "runner"
+log_level = "info"
 
 [[runners]]
-url = \\"https://gitlab.com\\"
+url = "https://gitlab.com"
 limit = 10
 output_limit = 52_428_800
-executor = \\"docker+machine\\"
+executor = "docker+machine"
 environment = [
-  \\"DOCKER_DRIVER=overlay2\\",
-  \\"DOCKER_TLS_CERTDIR=/certs\\",
-  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+  "DOCKER_DRIVER=overlay2",
+  "DOCKER_TLS_CERTDIR=/certs",
+  "DOCKER_AUTH_CONFIG={\\"credsStore\\": \\"ecr-login\\"}"
 ]
-token = \\"foo+bar\\"
+token = "foo+bar"
 
   [runners.docker]
   tls_verify = false
-  image = \\"docker:19.03.5\\"
+  image = "docker:19.03.5"
   privileged = true
-  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  cap_add = [ "CAP_SYS_ADMIN" ]
   wait_for_services_timeout = 300
   disable_cache = false
-  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  volumes = [ "/certs/client", "/cache" ]
   shm_size = 0
 
   [runners.machine]
   IdleCount = 0
   IdleTime = 300
   MaxBuilds = 20
-  MachineDriver = \\"amazonec2\\"
-  MachineName = \\"gitlab-runner-%s\\"
+  MachineDriver = "amazonec2"
+  MachineName = "gitlab-runner-%s"
   MachineOptions = [
-  \\"amazonec2-request-spot-instance=true\\",
-  \\"amazonec2-spot-price=0.03\\",
-  \\"amazonec2-metadata-token=required\\",
-  \\"amazonec2-metadata-token-response-hop-limit=2\\"
+  "amazonec2-request-spot-instance=true",
+  "amazonec2-spot-price=0.03",
+  "amazonec2-metadata-token=required",
+  "amazonec2-metadata-token-response-hop-limit=2"
 ]
 
     [[runners.machine.autoscaling]]
-    Periods = [ \\"* * 7-22 * * mon-fri *\\" ]
+    Periods = [ "* * 7-22 * * mon-fri *" ]
     IdleCount = 1
     IdleTime = 1_800
-    Timezone = \\"Etc/UTC\\"
+    Timezone = "Etc/UTC"
 
   [runners.cache]
-  Type = \\"s3\\"
+  Type = "s3"
   Shared = true
 
     [runners.cache.S3]
-    serverAddress = \\"s3.amazonaws.com\\"
-    bucketName = \\"gitlab-runner-cache-bucket-test-us-east-1\\"
-    bucketLocation = \\"us-east-1\\"
-    accessKey = \\"AKIAIOSFODNN7EXAMPLE\\"
-    secretKey = \\"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
+    serverAddress = "s3.amazonaws.com"
+    bucketName = "gitlab-runner-cache-bucket-test-us-east-1"
+    bucketLocation = "us-east-1"
+    accessKey = "AKIAIOSFODNN7EXAMPLE"
+    secretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 
 [[runners]]
-url = \\"https://gitlab.com\\"
+url = "https://gitlab.com"
 limit = 10
 output_limit = 52_428_800
-executor = \\"docker+machine\\"
+executor = "docker+machine"
 environment = [
-  \\"DOCKER_DRIVER=overlay2\\",
-  \\"DOCKER_TLS_CERTDIR=/certs\\",
-  \\"DOCKER_AUTH_CONFIG={\\\\\\"credsStore\\\\\\": \\\\\\"ecr-login\\\\\\"}\\"
+  "DOCKER_DRIVER=overlay2",
+  "DOCKER_TLS_CERTDIR=/certs",
+  "DOCKER_AUTH_CONFIG={\\"credsStore\\": \\"ecr-login\\"}"
 ]
-token = \\"2foo+bar\\"
+token = "2foo+bar"
 
   [runners.docker]
   tls_verify = false
-  image = \\"docker:19.03.5\\"
+  image = "docker:19.03.5"
   privileged = true
-  cap_add = [ \\"CAP_SYS_ADMIN\\" ]
+  cap_add = [ "CAP_SYS_ADMIN" ]
   wait_for_services_timeout = 300
   disable_cache = false
-  volumes = [ \\"/certs/client\\", \\"/cache\\" ]
+  volumes = [ "/certs/client", "/cache" ]
   shm_size = 0
 
   [runners.machine]
   IdleCount = 0
   IdleTime = 300
   MaxBuilds = 20
-  MachineDriver = \\"amazonec2\\"
-  MachineName = \\"gitlab-runner-%s\\"
+  MachineDriver = "amazonec2"
+  MachineName = "gitlab-runner-%s"
   MachineOptions = [
-  \\"amazonec2-request-spot-instance=true\\",
-  \\"amazonec2-spot-price=0.03\\",
-  \\"amazonec2-metadata-token=required\\",
-  \\"amazonec2-metadata-token-response-hop-limit=2\\",
-  \\"engine-install-url=https://get.docker.com\\"
+  "amazonec2-request-spot-instance=true",
+  "amazonec2-spot-price=0.03",
+  "amazonec2-metadata-token=required",
+  "amazonec2-metadata-token-response-hop-limit=2",
+  "engine-install-url=https://get.docker.com"
 ]
 
   [runners.cache]
-  Type = \\"s3\\"
+  Type = "s3"
   Shared = true
 
     [runners.cache.S3]
-    serverAddress = \\"2s3.amazonaws.com\\"
-    bucketName = \\"2gitlab-runner-cache-bucket-test-us-east-1\\"
-    bucketLocation = \\"2us-east-1\\"
-    accessKey = \\"2AKIAIOSFODNN7EXAMPLE\\"
-    secretKey = \\"2wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\\"
+    serverAddress = "2s3.amazonaws.com"
+    bucketName = "2gitlab-runner-cache-bucket-test-us-east-1"
+    bucketLocation = "2us-east-1"
+    accessKey = "2AKIAIOSFODNN7EXAMPLE"
+    secretKey = "2wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 "
 `;

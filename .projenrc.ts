@@ -5,7 +5,6 @@ const project = new AwsCdkConstructLibrary({
   author: "Patrick Florek",
   authorAddress: "patrick.florek@gmail.com",
   repositoryUrl: "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git",
-  packageManager: javascript.NodePackageManager.YARN,
   name: "@pepperize/cdk-autoscaling-gitlab-runner",
   description: "AWS CDK GitLab Runner autoscaling on EC2 instances using docker+machine executor.",
   keywords: [
@@ -27,13 +26,25 @@ const project = new AwsCdkConstructLibrary({
   ],
 
   projenrcTs: true,
+  minNodeVersion: "22.13.0",
+  workflowNodeVersion: "24.x",
+  jestOptions: {
+    jestVersion: "^30",
+  },
+  packageManager: javascript.NodePackageManager.YARN_CLASSIC,
 
-  cdkVersion: "2.8.0",
+  cdkVersion: "2.278.0",
   cdkVersionPinning: false,
-  deps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
-  devDeps: ["@pepperize/projen-awscdk-construct@~0.0.730"],
-  peerDeps: ["@pepperize/cdk-private-bucket", "@pepperize/cdk-security-group@^v0.0.439", "@pepperize/cdk-vpc"],
-  bundledDeps: ["@iarna/toml", "pascal-case", "param-case", "snake-case"],
+  jsiiVersion: "~6.0.0",
+  typescriptVersion: "~6.0",
+  deps: ["@iarna/toml", "pascal-case@^3", "param-case@^3", "snake-case@^3"],
+  devDeps: ["@pepperize/projen-awscdk-construct@~0.1.1", "@types/node@^22"],
+  peerDeps: [
+    "@pepperize/cdk-private-bucket@^0.0.599",
+    "@pepperize/cdk-security-group@^0.0.662",
+    "@pepperize/cdk-vpc@^0.0.1165",
+  ],
+  bundledDeps: ["@iarna/toml", "pascal-case@^3", "param-case@^3", "snake-case@^3"],
 
   defaultReleaseBranch: "main",
   releaseToNpm: true,
@@ -46,14 +57,13 @@ const project = new AwsCdkConstructLibrary({
     module: "pepperize_cdk_autoscaling_gitlab_runner",
   },
   publishToMaven: {
-    mavenEndpoint: "https://s01.oss.sonatype.org",
     mavenGroupId: "com.pepperize",
     mavenArtifactId: "cdk-autoscaling-gitlab-runner",
     javaPackage: "com.pepperize.cdk.autoscaling_gitlab_runner",
   },
 
   lambdaOptions: {
-    runtime: awscdk.LambdaRuntime.NODEJS_16_X,
+    runtime: awscdk.LambdaRuntime.NODEJS_26_X,
   },
 });
 

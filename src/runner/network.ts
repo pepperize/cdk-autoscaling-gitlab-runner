@@ -63,7 +63,7 @@ export class Network extends Construct {
       subnetSelection || {
         subnetType: this.hasPrivateSubnets() ? SubnetType.PRIVATE_WITH_NAT : SubnetType.PUBLIC,
         availabilityZones: vpc.availabilityZones,
-      }
+      },
     );
 
     const subnet = selectedSubnets.subnets.find(() => true);

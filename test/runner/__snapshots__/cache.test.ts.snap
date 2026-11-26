@@ -1,44 +1,44 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Cache Should match snapshot when Cache is being set 1`] = `
-Object {
-  "Parameters": Object {
-    "BootstrapVersion": Object {
+{
+  "Parameters": {
+    "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "CacheBucket41D9D0B0": Object {
+  "Resources": {
+    "CacheBucket41D9D0B0": {
       "DeletionPolicy": "Delete",
-      "Properties": Object {
-        "BucketEncryption": Object {
-          "ServerSideEncryptionConfiguration": Array [
-            Object {
-              "ServerSideEncryptionByDefault": Object {
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
                 "SSEAlgorithm": "AES256",
               },
             },
           ],
         },
         "BucketName": "runner-cache-stackcache7109cbe1",
-        "LifecycleConfiguration": Object {
-          "Rules": Array [
-            Object {
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
               "ExpirationInDays": 30,
               "Status": "Enabled",
             },
           ],
         },
-        "PublicAccessBlockConfiguration": Object {
+        "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": true,
           "BlockPublicPolicy": true,
           "IgnorePublicAcls": true,
           "RestrictPublicBuckets": true,
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:auto-delete-objects",
             "Value": "true",
           },
@@ -47,17 +47,17 @@ Object {
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
     },
-    "CacheBucketAutoDeleteObjectsCustomResource12E72BBC": Object {
+    "CacheBucketAutoDeleteObjectsCustomResource12E72BBC": {
       "DeletionPolicy": "Delete",
-      "DependsOn": Array [
+      "DependsOn": [
         "CacheBucketPolicyE2F00ED4",
       ],
-      "Properties": Object {
-        "BucketName": Object {
+      "Properties": {
+        "BucketName": {
           "Ref": "CacheBucket41D9D0B0",
         },
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
+        "ServiceToken": {
+          "Fn::GetAtt": [
             "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
             "Arn",
           ],
@@ -66,37 +66,37 @@ Object {
       "Type": "Custom::S3AutoDeleteObjects",
       "UpdateReplacePolicy": "Delete",
     },
-    "CacheBucketPolicyE2F00ED4": Object {
-      "Properties": Object {
-        "Bucket": Object {
+    "CacheBucketPolicyE2F00ED4": {
+      "Properties": {
+        "Bucket": {
           "Ref": "CacheBucket41D9D0B0",
         },
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:*",
-              "Condition": Object {
-                "Bool": Object {
+              "Condition": {
+                "Bool": {
                   "aws:SecureTransport": "false",
                 },
               },
               "Effect": "Deny",
-              "Principal": Object {
+              "Principal": {
                 "AWS": "*",
               },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
                     "CacheBucket41D9D0B0",
                     "Arn",
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
+                    [
+                      {
+                        "Fn::GetAtt": [
                           "CacheBucket41D9D0B0",
                           "Arn",
                         ],
@@ -107,34 +107,35 @@ Object {
                 },
               ],
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
+                "s3:PutBucketPolicy",
                 "s3:GetBucket*",
                 "s3:List*",
                 "s3:DeleteObject*",
               ],
               "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::GetAtt": Array [
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
                     "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
                     "Arn",
                   ],
                 },
               },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
                     "CacheBucket41D9D0B0",
                     "Arn",
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
+                    [
+                      {
+                        "Fn::GetAtt": [
                           "CacheBucket41D9D0B0",
                           "Arn",
                         ],
@@ -151,56 +152,56 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": Object {
-      "DependsOn": Array [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+      "DependsOn": [
         "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
       ],
-      "Properties": Object {
-        "Code": Object {
+      "Properties": {
+        "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-123456789012-us-east-1",
-          "S3Key": "bdb08b9984816ecf43301a0c6d8913e270ee2448940b6b95e430dd222a4d90be.zip",
+          "S3Key": "6dba3da2af96b69a187d689b326e5272b9abc8671c0427845a8bed243e02877d.zip",
         },
-        "Description": Object {
-          "Fn::Join": Array [
+        "Description": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "Lambda function for auto-deleting objects in ",
-              Object {
+              {
                 "Ref": "CacheBucket41D9D0B0",
               },
               " S3 bucket.",
             ],
           ],
         },
-        "Handler": "__entrypoint__.handler",
+        "Handler": "index.handler",
         "MemorySize": 128,
-        "Role": Object {
-          "Fn::GetAtt": Array [
+        "Role": {
+          "Fn::GetAtt": [
             "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
             "Arn",
           ],
         },
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "lambda.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
+        "ManagedPolicyArns": [
+          {
             "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
           },
         ],
@@ -208,22 +209,22 @@ Object {
       "Type": "AWS::IAM::Role",
     },
   },
-  "Rules": Object {
-    "CheckBootstrapVersion": Object {
-      "Assertions": Array [
-        Object {
-          "Assert": Object {
-            "Fn::Not": Array [
-              Object {
-                "Fn::Contains": Array [
-                  Array [
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
                     "1",
                     "2",
                     "3",
                     "4",
                     "5",
                   ],
-                  Object {
+                  {
                     "Ref": "BootstrapVersion",
                   },
                 ],

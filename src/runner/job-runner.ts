@@ -104,12 +104,12 @@ export class GitlabRunnerAutoscalingJobRunner extends Construct {
       `RunnersInstanceProfileFor${pascalCase(this.configuration.name!)}`,
       {
         roles: [this.role.roleName],
-      }
+      },
     );
 
     if (props.keyPair && !props.configuration.machine?.machineOptions?.keypairName) {
       Annotations.of(this).addError(
-        "If runner.keyPair is configured, then props.configuration.machine.machineOptions.keypairName must also be set."
+        "If runner.keyPair is configured, then props.configuration.machine.machineOptions.keypairName must also be set.",
       );
     }
     this.keyPair = props.keyPair;

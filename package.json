@@ -6,30 +6,31 @@
     "url": "https://github.com/pepperize/cdk-autoscaling-gitlab-runner.git"
   },
   "scripts": {
-    "build": "npx projen build",
-    "bump": "npx projen bump",
-    "clobber": "npx projen clobber",
-    "compat": "npx projen compat",
-    "compile": "npx projen compile",
-    "default": "npx projen default",
-    "docgen": "npx projen docgen",
-    "eject": "npx projen eject",
-    "eslint": "npx projen eslint",
-    "format": "npx projen format",
-    "package": "npx projen package",
-    "package-all": "npx projen package-all",
-    "package:dotnet": "npx projen package:dotnet",
-    "package:java": "npx projen package:java",
-    "package:js": "npx projen package:js",
-    "package:python": "npx projen package:python",
-    "post-compile": "npx projen post-compile",
-    "pre-compile": "npx projen pre-compile",
-    "release": "npx projen release",
-    "test": "npx projen test",
-    "test:watch": "npx projen test:watch",
-    "unbump": "npx projen unbump",
-    "watch": "npx projen watch",
-    "projen": "npx projen"
+    "build": "projen build",
+    "bump": "projen bump",
+    "bump:releasable-commits": "projen bump:releasable-commits",
+    "clobber": "projen clobber",
+    "compat": "projen compat",
+    "compile": "projen compile",
+    "default": "projen default",
+    "docgen": "projen docgen",
+    "eject": "projen eject",
+    "eslint": "projen eslint",
+    "format": "projen format",
+    "package": "projen package",
+    "package-all": "projen package-all",
+    "package:dotnet": "projen package:dotnet",
+    "package:java": "projen package:java",
+    "package:js": "projen package:js",
+    "package:python": "projen package:python",
+    "post-compile": "projen post-compile",
+    "pre-compile": "projen pre-compile",
+    "release": "projen release",
+    "test": "projen test",
+    "test:watch": "projen test:watch",
+    "unbump": "projen unbump",
+    "watch": "projen watch",
+    "projen": "projen"
   },
   "author": {
     "name": "Patrick Florek",
@@ -37,47 +38,47 @@
     "organization": true
   },
   "devDependencies": {
-    "@pepperize/cdk-private-bucket": "^0.0.351",
-    "@pepperize/cdk-security-group": "0.0.439",
-    "@pepperize/cdk-vpc": "^0.0.558",
-    "@pepperize/projen-awscdk-construct": "~0.0.730",
-    "@types/jest": "^27",
-    "@types/node": "^14",
+    "@pepperize/cdk-private-bucket": "0.0.599",
+    "@pepperize/cdk-security-group": "0.0.662",
+    "@pepperize/cdk-vpc": "0.0.1165",
+    "@pepperize/projen-awscdk-construct": "~0.1.1",
+    "@types/jest": "^30",
+    "@types/node": "^22",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
-    "aws-cdk-lib": "2.8.0",
-    "commit-and-tag-version": "^12",
-    "constructs": "10.0.5",
+    "aws-cdk-lib": "2.278.0",
+    "commit-and-tag-version": "^13",
+    "constructs": "10.5.1",
     "eslint": "^9",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-import-resolver-typescript": "^3.5.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^4.2.1",
-    "jest": "^27",
-    "jest-junit": "^15",
-    "jsii": "~5.6.0",
-    "jsii-diff": "^1.79.0",
+    "eslint-plugin-prettier": "^5.5.7",
+    "jest": "^30",
+    "jest-junit": "^17",
+    "jsii": "~6.0.0",
+    "jsii-diff": "^1.143.0",
     "jsii-docgen": "^10.5.0",
-    "jsii-pacmak": "^1.79.0",
-    "jsii-rosetta": "~5.6.0",
-    "prettier": "^2.8.7",
-    "projen": "~0.91.1",
-    "ts-jest": "^27",
+    "jsii-pacmak": "^1.143.0",
+    "jsii-rosetta": "~6.0.0",
+    "prettier": "^3.10.1",
+    "projen": "~0.105.12",
+    "ts-jest": "^29",
     "ts-node": "^10",
-    "typescript": "^5.0.3"
+    "typescript": "~6.0"
   },
   "peerDependencies": {
-    "@pepperize/cdk-private-bucket": "^0.0.351",
-    "@pepperize/cdk-security-group": "^v0.0.439",
-    "@pepperize/cdk-vpc": "^0.0.558",
-    "aws-cdk-lib": "^2.8.0",
-    "constructs": "^10.0.5"
+    "@pepperize/cdk-private-bucket": "^0.0.599",
+    "@pepperize/cdk-security-group": "^0.0.662",
+    "@pepperize/cdk-vpc": "^0.0.1165",
+    "aws-cdk-lib": "^2.278.0",
+    "constructs": "^10.5.1"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
-    "param-case": "^3.0.4",
-    "pascal-case": "^3.1.2",
-    "snake-case": "^3.0.4"
+    "param-case": "^3",
+    "pascal-case": "^3",
+    "snake-case": "^3"
   },
   "bundledDependencies": [
     "@iarna/toml",
@@ -103,8 +104,19 @@
     "Utilities",
     "cdk"
   ],
+  "engines": {
+    "node": ">= 22.13.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "yarn",
+      "version": "1.22.22",
+      "onFail": "ignore"
+    }
+  },
   "main": "lib/index.js",
   "license": "MIT",
+  "stability": "stable",
   "publishConfig": {
     "access": "public"
   },
@@ -145,15 +157,16 @@
         }
       ]
     ],
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.dev.json"
-      }
+    "transform": {
+      "^.+\\.[t]sx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "test/tsconfig.json"
+        }
+      ]
     }
   },
   "types": "lib/index.d.ts",
-  "stability": "stable",
   "jsii": {
     "outdir": "dist",
     "targets": {
@@ -173,10 +186,8 @@
         "packageId": "Pepperize.CDK.AutoscalingGitlabRunner"
       }
     },
-    "tsc": {
-      "outDir": "lib",
-      "rootDir": "src"
-    }
+    "tsconfig": "tsconfig.json",
+    "validateTsconfig": "strict"
   },
   "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \"npx projen\"."
 }
