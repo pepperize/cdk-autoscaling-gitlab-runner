@@ -41,7 +41,7 @@
     "@pepperize/cdk-private-bucket": "0.0.599",
     "@pepperize/cdk-security-group": "0.0.662",
     "@pepperize/cdk-vpc": "0.0.1165",
-    "@pepperize/projen-awscdk-construct": "~0.1.1",
+    "@pepperize/projen-awscdk-construct": "~0.1.2",
     "@types/jest": "^30",
     "@types/node": "^22",
     "@typescript-eslint/eslint-plugin": "^8",
