@@ -212,4 +212,27 @@ describe("ConfigurationMapper", () => {
     // Then
     expect(actual).toMatchSnapshot();
   });
+
+  it("Should map the ssh user to amazonec2-ssh-user", () => {
+    // Given
+    const props: ConfigurationMapperProps = {
+      globalConfiguration: {},
+      runnersConfiguration: [
+        {
+          machine: {
+            machineOptions: {
+              sshUser: "ec2-user",
+            },
+          },
+        },
+      ],
+    };
+
+    // When
+    const mapper = ConfigurationMapper.withDefaults(props);
+    const actual = mapper._toJsonMap();
+
+    // Then
+    expect((actual.runners as any)[0].machine.MachineOptions).toContain("amazonec2-ssh-user=ec2-user");
+  });
 });

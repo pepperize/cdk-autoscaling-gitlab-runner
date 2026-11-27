@@ -2701,6 +2701,7 @@ const machineOptions: MachineOptions = { ... }
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.securityGroup">securityGroup</a></code> | <code>string</code> | The SecurityGroup's GroupName, not the GroupId. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.spotPrice">spotPrice</a></code> | <code>number</code> | The amazonec2-spot-price parameter. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.sshKeypath">sshKeypath</a></code> | <code>string</code> | The amazonec2-ssh-keypath parameter. |
+| <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.sshUser">sshUser</a></code> | <code>string</code> | The amazonec2-ssh-user parameter. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.subnetId">subnetId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.useEbsOptimizedInstance">useEbsOptimizedInstance</a></code> | <code>boolean</code> | Create an EBS Optimized Instance, instance type must support it. |
 | <code><a href="#@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.usePrivateAddress">usePrivateAddress</a></code> | <code>boolean</code> | Use the private IP address of Docker Machines, but still create a public IP address. |
@@ -2913,6 +2914,23 @@ public readonly sshKeypath: string;
 - *Default:* /etc/gitlab-runner/ssh
 
 The amazonec2-ssh-keypath parameter.
+
+---
+
+##### `sshUser`<sup>Optional</sup> <a name="sshUser" id="@pepperize/cdk-autoscaling-gitlab-runner.MachineOptions.property.sshUser"></a>
+
+```typescript
+public readonly sshUser: string;
+```
+
+- *Type:* string
+- *Default:* ubuntu
+
+The amazonec2-ssh-user parameter.
+
+The SSH login username, which must match the default SSH user set in the ami used.
+
+> [https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/docs/drivers/aws.md#options](https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/blob/main/docs/drivers/aws.md#options)
 
 ---
 
