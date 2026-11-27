@@ -4,6 +4,8 @@
 
 ### Cache <a name="Cache" id="@pepperize/cdk-autoscaling-gitlab-runner.Cache"></a>
 
+- *Implements:* constructs.IConstruct, constructs.IDependable
+
 A GitLab Runner cache consisting of an Amazon S3 bucket.
 
 The bucket is encrypted with a KMS managed master key, it has public access blocked and will be cleared and deleted on CFN stack deletion.
@@ -153,6 +155,8 @@ public readonly bucket: IBucket;
 
 
 ### GitlabRunnerAutoscaling <a name="GitlabRunnerAutoscaling" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscaling"></a>
+
+- *Implements:* constructs.IConstruct, constructs.IDependable
 
 The Gitlab Runner autoscaling on EC2 by Docker Machine.
 
@@ -406,6 +410,8 @@ public readonly logLevel: string;
 
 ### GitlabRunnerAutoscalingJobRunner <a name="GitlabRunnerAutoscalingJobRunner" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner"></a>
 
+- *Implements:* constructs.IConstruct, constructs.IDependable
+
 #### Initializers <a name="Initializers" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingJobRunner.Initializer"></a>
 
 ```typescript
@@ -606,6 +612,8 @@ public readonly keyPair: ISecret;
 
 
 ### GitlabRunnerAutoscalingManager <a name="GitlabRunnerAutoscalingManager" id="@pepperize/cdk-autoscaling-gitlab-runner.GitlabRunnerAutoscalingManager"></a>
+
+- *Implements:* constructs.IConstruct, constructs.IDependable
 
 Settings for the manager (coordinator).
 
@@ -866,6 +874,8 @@ public readonly keyPairName: string;
 
 
 ### Network <a name="Network" id="@pepperize/cdk-autoscaling-gitlab-runner.Network"></a>
+
+- *Implements:* constructs.IConstruct, constructs.IDependable
 
 Network settings for the manager and runners.
 
