@@ -38,7 +38,7 @@ const project = new AwsCdkConstructLibrary({
   jsiiVersion: "~6.0.0",
   typescriptVersion: "~6.0",
   deps: ["@iarna/toml", "pascal-case@^3", "param-case@^3", "snake-case@^3"],
-  devDeps: ["@pepperize/projen-awscdk-construct@~0.1.1", "@types/node@^22"],
+  devDeps: ["@pepperize/projen-awscdk-construct@~0.1.2", "@types/node@^22"],
   peerDeps: [
     "@pepperize/cdk-private-bucket@^0.0.599",
     "@pepperize/cdk-security-group@^0.0.662",

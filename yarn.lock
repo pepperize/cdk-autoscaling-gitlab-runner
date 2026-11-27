@@ -1029,10 +1029,10 @@
   resolved "https://registry.yarnpkg.com/@pepperize/cdk-vpc/-/cdk-vpc-0.0.1165.tgz#1f162ecde2a3b7345ed8679151cbdc2465817a28"
   integrity sha512-Zh2USkT9PrE3qRub9NX9Q1faDI5Qod6c8JtqwL/qDcKaYfbbMdTSXSqouFGQvmO6187ntPiCvBYKoknav4aUmA==
 
-"@pepperize/projen-awscdk-construct@~0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.1.1.tgz#60d1d5432181b38ecd8078499fad2273094d1e1b"
-  integrity sha512-CoxF/NC3EMc6L9L1yZ6Ex/DBTEYAZhl027dvEm8s2xEz4G8uRUPJWl0uzrzaOTPtBVcg1mzMR5a8f3Xssc3z9w==
+"@pepperize/projen-awscdk-construct@~0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@pepperize/projen-awscdk-construct/-/projen-awscdk-construct-0.1.2.tgz#b4f7d8af698f6d8fd57f6ace8099b46e6a97f87c"
+  integrity sha512-dkx5tPCMWOX+7m6u9jKiJxg+HA5xhoMUMym6tyLsHZxEnZO9kEgA+jNFYGXXm80J6fX8/+uYMtnlU4FsTb0vGA==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
