@@ -285,6 +285,59 @@ describe("GitlabRunnerAutoscaling", () => {
     expect(JSON.stringify(capture.asObject())).toContain('\\"amazonec2-ssh-keypath=\\"');
   });
 
+  it("Should pass the runner's userdata machine option", () => {
+    // Given
+    const app = new App();
+    const stack = new Stack(app, "MockStack", {
+      env: {
+        account: "0",
+        region: "us-east-1",
+      },
+    });
+
+    const token = new StringParameter(stack, "imported-token", {
+      parameterName: "/gitlab-runner/token",
+      stringValue: "auth-token",
+      type: ParameterType.SECURE_STRING,
+      tier: ParameterTier.STANDARD,
+    });
+
+    // When
+    new GitlabRunnerAutoscaling(stack, "Runner", {
+      runners: [
+        {
+          token: token,
+          configuration: {
+            machine: {
+              machineOptions: {
+                userdata: "/etc/gitlab-runner/custom_user_data",
+              },
+            },
+          },
+        },
+      ],
+    });
+
+    // Then
+    const template = Template.fromStack(stack);
+
+    const capture = new Capture();
+    template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      Metadata: {
+        "AWS::CloudFormation::Init": {
+          config: {
+            files: {
+              "/etc/gitlab-runner/config.toml": capture,
+            },
+          },
+        },
+      },
+    });
+    expect(JSON.stringify(capture.asObject())).toContain(
+      '\\"amazonec2-userdata=/etc/gitlab-runner/custom_user_data\\"',
+    );
+  });
+
   it("Should deploy two manager instances", () => {
     // Given
     const app = new App();
