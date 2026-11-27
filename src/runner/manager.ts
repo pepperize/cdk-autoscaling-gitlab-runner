@@ -159,9 +159,9 @@ export class GitlabRunnerAutoscalingManager extends Construct {
                     "ec2:Region": `${Stack.of(this).region}`,
                   },
                   ArnEqualsIfExists: {
-                    "ec2:Vpc": `arn:aws:ec2:${Stack.of(this).region}:${Stack.of(this).account}:vpc/${
-                      this.network.vpc.vpcId
-                    }`,
+                    "ec2:Vpc": `arn:${Stack.of(this).partition}:ec2:${Stack.of(this).region}:${
+                      Stack.of(this).account
+                    }:vpc/${this.network.vpc.vpcId}`,
                   },
                 },
               },

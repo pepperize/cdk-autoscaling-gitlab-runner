@@ -179,7 +179,11 @@ exports[`Manager Should match snapshot when Manager launch configuration is bein
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:ec2:us-east-1:123456789012:vpc/",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":ec2:us-east-1:123456789012:vpc/",
                             {
                               "Ref": "Vpc8378EB38",
                             },

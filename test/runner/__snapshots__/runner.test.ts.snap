@@ -698,7 +698,11 @@ yum install -y amazon-ecr-credential-helper
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:ec2:us-east-1:0:vpc/",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":ec2:us-east-1:0:vpc/",
                             {
                               "Ref": "ManagerOneVpcB457C5A9",
                             },
@@ -1926,7 +1930,11 @@ yum install -y amazon-ecr-credential-helper
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:ec2:us-east-1:0:vpc/",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":ec2:us-east-1:0:vpc/",
                             {
                               "Ref": "ManagerTwoVpc4C220DA4",
                             },
@@ -3510,7 +3518,11 @@ yum install -y amazon-ecr-credential-helper
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:ec2:us-east-1:0:vpc/",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":ec2:us-east-1:0:vpc/",
                             {
                               "Ref": "RunnerVpcCAA2D684",
                             },
@@ -5073,7 +5085,18 @@ yum install -y amazon-ecr-credential-helper
                   ],
                   "Condition": {
                     "ArnEqualsIfExists": {
-                      "ec2:Vpc": "arn:aws:ec2:us-east-1:0:vpc/vpc123",
+                      "ec2:Vpc": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":ec2:us-east-1:0:vpc/vpc123",
+                          ],
+                        ],
+                      },
                     },
                     "StringEqualsIfExists": {
                       "ec2:Region": "us-east-1",
